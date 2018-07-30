@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+  <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
+  <!-- Good default declaration:
+  * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+  * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+  * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+  * Enable inline JS: add 'unsafe-inline' to default-src
+  * Enable eval(): add 'unsafe-eval' to default-src
+  * Create your own at http://cspisawesome.com
+-->
+<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+<title>Hunting Party</title>
+</head>
+
+<body>
+  <div id="loading">
+    <div class="" style="width: 100%; line-height: 80vh; text-align: center; font-size: 8vh;">
+      <p style="">Loading...</p>
+    </div>
+  </div>
+  <div id="login-view" class="inactive">
+    <h1>HUNTING PARTY</h1>
+    <div class="instructions">
+      Log in with your EF Assembly account credentials.
+    </div>
+    <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
+    <input class="login-field" type="password" id="password" name="" value="" placeholder="Password">
+    <div class="" style="width: 100%; position: relative;">
+      <button class="center-absolute" type="button" name="button" onclick=login()>LOG IN</button>
+    </div>
+  </div>
+  <div id="fbo-view" class="inactive">
+    <div class="topbar">
+      <div id="profile-circle" class="circle" style="top: 0px; left: 1px;" onclick="openProfileDropdown()">
+        <div class="" style="position: relative; width: 100%; height: 100%;">
+          <img class="circle-img" src="./img/profile.png" alt="">
+        </div>
+      </div>
+      <div id="profile-dropdown" class="inactive">
+        <h1 id="user-name"></h1>
+        <div class="" style="position: relative; height: 8vh; width: 45vw; float: left;">
+          <button class="c" type="button" name="button" style="height: 5vh; width: 39vw; margin-left: 3vw; margin-top: 1vh;" onclick="logOut()">LOG OUT</button>
+        </div>
+      </div>
+      <div class="bar bar-left">
+        Pipeline Health
+      </div>
+      <div class="circle" style="top: 0px; right: 1px;">
+        #
+      </div>
+      <div class="bar bar-right">
+        For Another Invite
+      </div>
+    </div>
+    <div class="iconbar">
+      <div class="iconbar-icon">
+        1
+      </div>
+      <div class="iconbar-icon">
+        <img class="iconbar-img" src="./img/search.png" alt="">
+      </div>
+      <div class="iconbar-icon">
+        3
+      </div>
+      <div class="iconbar-icon">
+        4
+      </div>
+    </div>
+    <div class="buttonbar">
+      <div style="float: left; width: 100%; height: 7vh;">
+        <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+      </div>
+      <div class="big-circle-box">
+        <div class="big-circle" id="no-button" onclick='vote(false)'>
+          𝗫
+        </div>
+      </div>
+      <div class="big-circle-box">
+        <div class="big-circle" id="time-button" style="line-height: 1vh; font-size: 2vh;">
+          T
+        </div>
+      </div>
+      <div class="big-circle-box">
+        <div class="big-circle" id="yes-button" onclick='vote(true)'>
+          ✔
+        </div>
+      </div>
+      <div class="" style="width: 100%; height: calc(4vh+12px)">
+        <div class="buttonbar-tab buttonbar-tab-active" onclick='switchTab(this, 0)'>
+          Abstract/data
+        </div>
+        <div class="buttonbar-tab" onclick='switchTab(this, 1)'>
+          Refer
+        </div>
+        <div class="buttonbar-tab" onclick='switchTab(this, 2)'>
+          Comments
+        </div>
+      </div>
+    </div>
+    <div class="lower" id="lower-1">
+      <div class="databar" id="databar-1">
+        <div class="databar-inner" onclick='expandData(1)'>
+          ABSTRACT
+          <div class="info-circle">
+            i
+          </div>
+          <div class="arrow" id="arrow-1">
+            ▼
+            <!-- ▲ -->
+          </div>
+        </div>
+        <div class="data-box data-box-inactive" id="data-box-1">
+          <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+      <div class="databar" id="databar-2">
+        <div class="databar-inner" onclick='expandData(2)'>
+          DATA
+          <div class="info-circle">
+            i
+          </div>
+          <div class="arrow" id="arrow-2">
+            ▼
+            <!-- ▲ -->
+          </div>
+        </div>
+        <div class="data-box data-box-inactive" id="data-box-2">
+          <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+    </div>
+    <div class="lower inactive" id="lower-2">
+      <div class="databar" id="databar-3">
+        <div class="databar-inner" onclick='expandData(3)'>
+          REFER
+          <div class="info-circle">
+            i
+          </div>
+          <div class="arrow" id="arrow-3">
+            ▼
+            <!-- ▲ -->
+          </div>
+        </div>
+        <div class="data-box data-box-bigger data-box-inactive" id="data-box-3">
+          <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+    </div>
+    <div class="lower inactive" id="lower-3">
+      <div class="databar" id="databar-4">
+        <div class="databar-inner" onclick='expandData(4)'>
+          COMMENTS AND QUESTIONS
+          <div class="info-circle">
+            i
+          </div>
+          <div class="arrow" id="arrow-4">
+            ▼
+            <!-- ▲ -->
+          </div>
+        </div>
+        <div class="data-box data-box-bigger data-box-inactive" id="data-box-4">
+          <div class="chat-box" id="chat-box">
+
+          </div>
+          <div class="chat-window">
+            <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 75vw; float: left; margin: 0px;">
+            <button style="height: 100%; width: 23vw; float: left; margin: 0px;" onclick='sendComment()'>SEND</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
+    <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
+      <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
+      <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
+    </div>
+  </div>
+
+
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript">
+    app.initialize();
+  </script>
+</body>
+
+</html>
