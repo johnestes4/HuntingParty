@@ -30,6 +30,7 @@ var tabIds = [
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
   var password = document.getElementById("password").value
+  document.getElementById("loading-details").innerHTML = 'Checking if email has account...'
   document.getElementById("loading").classList.remove('inactive');
   document.getElementById("fbo-view").classList.add('inactive');
   document.getElementById("login-view").classList.add('inactive');
@@ -37,16 +38,18 @@ function login() {
   xhttp.onload = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       // Typical action to be performed when the document is ready:
+      document.getElementById("loading-details").innerHTML = 'Sending login request...'
       var res = JSON.parse(xhttp.responseText)
       if (res.id) {
         var xhttp2 = new XMLHttpRequest();
         xhttp2.onreadystatechange = function() {
           if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-            console.log('login pt 2 worked')
+            document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...'
             // console.log(res.id)
             var xhttp3 = new XMLHttpRequest();
             xhttp3.onreadystatechange = function() {
               if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                document.getElementById("loading-details").innerHTML = 'Profile info found, finishing up...'
                 localStorage.setItem('uid', res.id)
                 loggedIn = true
                 currentUser = JSON.parse(xhttp3.responseText)
@@ -70,12 +73,6 @@ function login() {
       } else {
         emailNotFound = true
       }
-    } else {
-      console.log('EMAIL IS NO')
-      console.log(xhttp.readyState)
-      console.log(xhttp.status)
-      console.log(xhttp.responseText)
-
     }
   };
   console.log(username)
@@ -177,9 +174,9 @@ function setActiveFbo(index) {
   } else {
     document.getElementById("time-button").innerHTML = "No Due Date"
   }
-  checkVote(proxy)
-  updateComments(proxy)
   fboIndex = index
+  updateComments(proxy)
+  checkVote(proxy)
 }
 
 function checkVote(proxy) {
@@ -405,6 +402,10 @@ var app = {
       document.getElementById("login-view").classList.remove('inactive');
     }
     this.bindEvents();
+    // window.plugins.uniqueDeviceID.get(success, fail);
+    // function success(uuid) {
+    //   console.log('ID IS THIS: ' + uuid);
+    // };
   },
   // Bind Event Listeners
   //
@@ -419,6 +420,44 @@ var app = {
   // function, we must explicitly call 'app.receivedEvent(...);'
   onDeviceReady: function() {
     // app.receivedEvent('deviceready');
+    app.push = PushNotification.init({
+      "android": {
+        "senderID": "416059724231"
+      },
+      "ios": {
+        "sound": true,
+        "vibration": true,
+        "badge": true
+      },
+      "windows": {}
+    });
+
+    app.push.on('registration', function(data) {
+      console.log("registration event: " + data.registrationId);
+      var oldRegId = localStorage.getItem('registrationId');
+      if (oldRegId !== data.registrationId) {
+        // Save new registration ID
+        localStorage.setItem('registrationId', data.registrationId);
+        // Post registrationId to your app server as the value has changed
+      }
+      console.log('reg id: ' + localStorage.getItem('registrationId'))
+    });
+
+    app.push.on('error', function(e) {
+      console.log("push error = " + e.message);
+    });
+
+    app.push.on('notification', function(data) {
+      console.log('notification event');
+      navigator.notification.alert(
+        data.message,         // message
+        null,                 // callback
+        data.title,           // title
+        'Ok'                  // buttonName
+      );
+
+    });
+
   },
   // Update DOM on a Received Event
   receivedEvent: function(id) {

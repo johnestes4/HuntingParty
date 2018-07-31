@@ -1,0 +1,414 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
+/* COLORS */
+.copy-colors-from-here {
+  /* BLUE: */ background: rgba(0,177,216,1);
+  /* GREEN 1: */ background: rgba(180,213,178,1);
+  /* GREEN 2: */ background: rgba(155,173,64,1);
+  /* GRAY 2: */ background: rgba(77,98,105,1);
+}
+
+#login-view {
+
+}
+
+#login-view h1 {
+  text-align: center;
+  margin-top: 4vh;
+  margin-bottom: 4vh;
+}
+
+#login-view input {
+  width: 90vw;
+  margin-left: 5vw;
+  margin-bottom: 2vh;
+  height: 6vh;
+  font-size: 3vh;
+  line-height: 6vh;
+}
+
+#login-view button {
+  width: 40vw;
+  margin-left: 30vw;
+  height: 8vh;
+  font-size: 5vh;
+  line-height: 7vh;
+}
+
+.instructions {
+  text-align: center;
+  width: 80vw;
+  margin-left: 10vw;
+  margin-bottom: 4vh;
+}
+
+#fbo-view {
+
+}
+
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+  -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+  -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+  -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+  /* background-color:#E4E4E4;
+  background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+  background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+  background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+  background-image:-webkit-gradient(
+  linear,
+  left top,
+  left bottom,
+  color-stop(0, #A7A7A7),
+  color-stop(0.51, #E4E4E4)
+  );
+  background-attachment:fixed; */
+  background: rgba(223,226,226,1);
+  font-family: 'Fira Sans', sans-serif;
+  font-size:12px;
+  height:100%;
+  margin:0px;
+  padding:0px;
+  width:100%;
+}
+
+/* Portrait layout (default) */
+.app {
+  background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
+  position:absolute;             /* position in the center of the screen */
+  left:50%;
+  top:50%;
+  height:50px;                   /* text area height */
+  width:225px;                   /* text area width */
+  text-align:center;
+  padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+  margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
+  /* offset horizontal: half of text area width */
+}
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+  .app {
+    background-position:left center;
+    padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+    margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
+    /* offset horizontal: half of image width and text area width */
+  }
+}
+
+h1 {
+  font-size:24px;
+  font-weight:normal;
+  margin:0px;
+  overflow:visible;
+  padding:0px;
+  text-align:center;
+}
+
+.event {
+  border-radius:4px;
+  -webkit-border-radius:4px;
+  color:#FFFFFF;
+  font-size:12px;
+  margin:0px 30px;
+  padding:2px 0px;
+}
+
+.event.waiting {
+  background-color:#333333;
+  display:block;
+}
+
+.event.received {
+  background-color:#4B946A;
+  display:none;
+}
+
+.inactive {
+  display: none;
+}
+
+.topbar {
+  position: relative;
+  width: 100%;
+  background: rgba(177,198,205,1);
+  height: 8vh;
+  border-bottom: .25vh solid rgba(20,20,20,1);
+}
+
+.circle {
+  background: white;
+  border: 2px solid rgba(20,20,20,1);
+  border-radius: 90%;
+  height: 7vh;
+  width: 7vh;
+  text-align: center;
+  line-height: 7vh;
+  font-size: 7vh;
+  z-index: 2;
+  position: absolute;
+  overflow: hidden;
+}
+
+.circle-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  height: 100%;
+}
+
+#profile-dropdown {
+  position: absolute;
+  top: 7vh;
+  left: calc(3vh + 1px);
+  width: 45vw;
+  height: 15vh;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
+  z-index: 999;
+}
+
+#profile-circle:active {
+  filter: brightness(90%);
+}
+
+.profile-dropdown h1 {
+  font-size: 3vh;
+  line-height: 7vh;
+}
+
+.bar {
+  z-index: 1;
+  width: 75vw;
+  border: 2px solid rgba(20,20,20,1);
+  text-align: center;
+  height: 2.5vh;
+  line-height: 2.5vh;
+  position: absolute;
+  background: white;
+}
+
+.bar-left {
+  left: 25px;
+  top: 2px;
+}
+
+
+.bar-right {
+  right: 25px;
+  bottom: 4px;
+}
+
+.iconbar {
+  background: rgba(77,98,105,1);
+  color: white;
+  height: 9vh;
+  margin: none;
+  width: 100%;
+}
+
+.iconbar-icon {
+  float: left;
+  width: 25%;
+  height: 9vh;
+  text-align: center;
+  line-height: 100%;
+  font-size: 9vh;
+  position: relative;
+}
+
+.iconbar-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  height: 100%;
+}
+
+.buttonbar {
+  margin: none;
+  color: rgba(20,20,20,1);
+  height: 23.5vh;
+  width: 100vw;
+  position: relative;
+  background: rgba(240,240,240, 1);
+  text-align: center;
+}
+
+.buttonbar-tab {
+  width: calc(100% / 3);
+  float: left;
+  line-height: 3vh;
+  margin-top: 2vh;
+  position: relative;
+  background: rgba(240,240,240, 1);
+  height: 4vh;
+}
+.buttonbar-tab-active {
+  border-bottom: .5vh solid rgba(0,177,216,1);
+}
+
+.big-circle {
+  color: black;
+  background: white;
+  border: 2px solid rgba(20,20,20,1);
+  border-radius: 90%;
+  height: 10vh;
+  width: 10vh;
+  text-align: center;
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.big-circle:active {
+  filter: brightness(80%);
+}
+.databar-inner:active {
+  filter: brightness(90%);
+}
+.buttonbar-tab:active {
+  filter: brightness(90%);
+}
+
+
+#yes-button {
+  line-height: 10vh;
+  font-size: 9vh;
+}
+#no-button {
+  line-height: 11vh;
+  font-size: 10vh;
+}
+
+.big-circle-box {
+  width: 33%;
+  float: left;
+  height: 10vh;
+  position: relative;
+}
+
+.databar {
+  position: relative;
+  width: 100%;
+  height: 6vh;
+  float: left;
+  text-align: center;
+  border-bottom: .25vh solid rgba(20,20,20,1);
+}
+
+.databar-inner {
+  background: rgba(155,173,64,1);
+  float: left;
+  width: 100%;
+  height: 6vh;
+  line-height: 6vh;
+  color: white;
+}
+
+.databar-active {
+  height: 48.75vh;
+}
+
+.data-box {
+  height: 42.75vh;
+  background: white;
+  overflow-y: auto;
+  float: left;
+  width: 100%;
+}
+
+.data-box-bigger {
+  height: 49.25vh!important;
+}
+
+.data-box-inactive {
+  display: none;
+}
+
+.info-circle {
+  border-radius: 90%;
+  background: rgba(255,255,255,0.6);
+  height: 3.5vh;
+  width: 3.5vh;
+  line-height: 3.5vh;
+  font-size: 3.5vh;
+  color: rgba(155,173,64,1);
+  position: absolute;
+  top: 1.25vh;
+  right: 15vw;
+}
+
+.arrow {
+  position: absolute;
+  color: rgba(255,255,255,0.6);
+  height: 3.5vh;
+  width: 3.5vh;
+  line-height: 3.5vh;
+  font-size: 3.5vh;
+  top: 1.25vh;
+  right: 3vw;
+}
+
+.chat-box {
+  height: calc(100% - 6vh - 4px);
+  border: 2px solid rgba(20,20,20,1);
+  width: calc(100% - 4px);
+  overflow-y: auto;
+}
+.chat-window {
+  width: 100%;
+  height: 6vh;
+}
+
+.comment {
+  text-align: left;
+}
+
+.voted-button {
+  background: rgba(0,177,216,1);
+}
+
+
+@keyframes fade {
+  from { opacity: 1.0; }
+  50% { opacity: 0.4; }
+  to { opacity: 1.0; }
+}
+
+@-webkit-keyframes fade {
+  from { opacity: 1.0; }
+  50% { opacity: 0.4; }
+  to { opacity: 1.0; }
+}
+
+.blink {
+  animation:fade 3000ms infinite;
+  -webkit-animation:fade 3000ms infinite;
+}
