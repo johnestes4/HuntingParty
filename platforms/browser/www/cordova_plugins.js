@@ -334,7 +334,8 @@ module.exports.metadata =
     "cordova-plugin-globalization": "1.0.9",
     "cordova-plugin-inappbrowser": "1.7.2",
     "phonegap-plugin-push": "2.2.3",
-    "cordova-plugin-uniquedeviceid": "1.3.2"
+    "cordova-plugin-uniquedeviceid": "1.3.2",
+    "cordova-plugin-whitelist": "1.3.3"
 }
 // BOTTOM OF METADATA
 });
