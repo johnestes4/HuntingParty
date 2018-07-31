@@ -275,6 +275,14 @@ module.exports = [
       "cordova.InAppBrowser.open",
       "window.open"
     ]
+  },
+  {
+    "id": "cordova-plugin-firebase.FirebasePlugin",
+    "file": "plugins/cordova-plugin-firebase/www/firebase.js",
+    "pluginId": "cordova-plugin-firebase",
+    "clobbers": [
+      "FirebasePlugin"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -288,7 +296,8 @@ module.exports.metadata =
   "cordova-plugin-geolocation": "2.4.3",
   "cordova-plugin-globalization": "1.0.9",
   "cordova-plugin-inappbrowser": "1.7.2",
-  "cordova-plugin-whitelist": "1.3.3"
+  "cordova-plugin-whitelist": "1.3.3",
+  "cordova-plugin-firebase": "1.0.5"
 };
 // BOTTOM OF METADATA
 });

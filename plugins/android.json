@@ -30,6 +30,9 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.efassembly.huntingparty"
+    },
+    "cordova-plugin-firebase": {
+      "PACKAGE_NAME": "com.efassembly.huntingparty"
     }
   },
   "dependent_plugins": {
