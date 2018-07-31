@@ -39,6 +39,9 @@
     },
     "cordova-plugin-firebase": {
       "PACKAGE_NAME": "com.efassembly.huntingparty"
+    },
+    "cordova-android-play-services-gradle-release": {
+      "PACKAGE_NAME": "com.efassembly.huntingparty"
     }
   },
   "dependent_plugins": {

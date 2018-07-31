@@ -297,7 +297,8 @@ module.exports.metadata =
   "cordova-plugin-globalization": "1.0.9",
   "cordova-plugin-inappbrowser": "1.7.2",
   "cordova-plugin-whitelist": "1.3.3",
-  "cordova-plugin-firebase": "1.0.5"
+  "cordova-plugin-firebase": "1.0.5",
+  "cordova-android-play-services-gradle-release": "1.4.3"
 };
 // BOTTOM OF METADATA
 });
