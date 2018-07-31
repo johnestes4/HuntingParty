@@ -37,6 +37,10 @@
     "cordova-android-play-services-gradle-release": {
       "PLAY_SERVICES_VERSION": "15.+",
       "PACKAGE_NAME": "com.efassembly.huntingparty"
+    },
+    "cordova-android-firebase-gradle-release": {
+      "FIREBASE_VERSION": "15.+",
+      "PACKAGE_NAME": "com.efassembly.huntingparty"
     }
   },
   "dependent_plugins": {

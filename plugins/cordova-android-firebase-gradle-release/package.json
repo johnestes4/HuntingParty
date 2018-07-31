@@ -1,0 +1,39 @@
+{
+  "_from": "cordova-android-firebase-gradle-release",
+  "_id": "cordova-android-firebase-gradle-release@1.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-3T5lPKoLj031/Z/4Omyz5xjEZD1URuBgGSI20cKumGQAEfajaSSMpMI9mxjlsMgqIjKSnCS21HQJQUdl2zAdcg==",
+  "_location": "/cordova-android-firebase-gradle-release",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-android-firebase-gradle-release",
+    "name": "cordova-android-firebase-gradle-release",
+    "escapedName": "cordova-android-firebase-gradle-release",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-android-firebase-gradle-release/-/cordova-android-firebase-gradle-release-1.0.2.tgz",
+  "_shasum": "c5470e7e3ac932959801a7bfb6ced6bb453bb5ab",
+  "_spec": "cordova-android-firebase-gradle-release",
+  "_where": "/mnt/c/Users/JohnEstes(4s-llc)/Dropbox/Work/HuntingParty",
+  "author": {
+    "name": "Dave Alden"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "xml2js": "~0.4.19"
+  },
+  "deprecated": false,
+  "description": "Cordova/Phonegap plugin to align versions of the Firebase library specified by other plugins to a specific version",
+  "devDependencies": {},
+  "license": "MIT",
+  "name": "cordova-android-firebase-gradle-release",
+  "version": "1.0.2"
+}

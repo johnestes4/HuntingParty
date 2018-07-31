@@ -345,7 +345,8 @@ module.exports.metadata =
     "cordova-plugin-uniquedeviceid": "1.3.2",
     "cordova-plugin-whitelist": "1.3.3",
     "cordova-plugin-firebase": "1.0.5",
-    "cordova-android-play-services-gradle-release": "1.4.3"
+    "cordova-android-play-services-gradle-release": "1.4.3",
+    "cordova-android-firebase-gradle-release": "1.0.2"
 }
 // BOTTOM OF METADATA
 });
