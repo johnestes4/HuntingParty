@@ -73,6 +73,10 @@ function login() {
       } else {
         emailNotFound = true
       }
+    } else if (xhttp.status !== 200) {
+      document.getElementById("loading-details").innerHTML = 'Status code ' + xhttp.status + ', status ' + xhttp.statusText
+    } else {
+      document.getElementById("loading-details").innerHTML = 'Ready state ' + xhttp.readyState + ', status code ' + xhttp.status
     }
   };
   console.log(username)
