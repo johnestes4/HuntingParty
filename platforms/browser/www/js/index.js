@@ -32,7 +32,10 @@ function login() {
   var password = document.getElementById("password").value
   document.getElementById("loading-details").innerHTML = 'Checking if email has account...'
   document.getElementById("loading").classList.remove('inactive');
+  document.getElementById("main-view").classList.add('inactive');
   document.getElementById("fbo-view").classList.add('inactive');
+  document.getElementById("fbo-list-view").classList.add('inactive');
+  document.getElementById("fbo-detail-view").classList.add('inactive');
   document.getElementById("login-view").classList.add('inactive');
   var xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
@@ -92,7 +95,10 @@ function logOut() {
   fbos = [];
   loggedIn = false;
   document.getElementById("loading").classList.add('inactive');
+  document.getElementById("main-view").classList.add('inactive');
   document.getElementById("fbo-view").classList.add('inactive');
+  document.getElementById("fbo-list-view").classList.add('inactive');
+  document.getElementById("fbo-detail-view").classList.add('inactive');
   document.getElementById("login-view").classList.remove('inactive');
 }
 
@@ -140,6 +146,98 @@ document.addEventListener("click", (evt) => {
 });
 
 function switchTab(elem, num) {
+  if (num == 0) {
+    document.getElementById("news-view").classList.remove('inactive')
+    document.getElementById("search-view").classList.add('inactive')
+    document.getElementById("fbo-view").classList.add('inactive')
+    document.getElementById("fbo-list-view").classList.remove('inactive');
+    document.getElementById("fbo-detail-view").classList.add('inactive');
+  } else if (num == 1) {
+    document.getElementById("news-view").classList.add('inactive')
+    document.getElementById("search-view").classList.remove('inactive')
+    document.getElementById("fbo-view").classList.add('inactive')
+    document.getElementById("fbo-list-view").classList.remove('inactive');
+    document.getElementById("fbo-detail-view").classList.add('inactive');
+  } else if (num == 2) {
+    document.getElementById("news-view").classList.add('inactive')
+    document.getElementById("search-view").classList.add('inactive')
+    document.getElementById("fbo-view").classList.remove('inactive')
+    document.getElementById("fbo-list-view").classList.remove('inactive');
+    document.getElementById("fbo-detail-view").classList.add('inactive');
+    renderFbos()
+
+  } else if (num == 3) {
+
+  }
+  var a = document.getElementsByClassName('iconbar-icon')
+  for (i = 0; i < a.length; i++) {
+    if (i == num) {
+      a[i].classList.add('iconbar-icon-active');
+    } else {
+      a[i].classList.remove('iconbar-icon-active');
+    }
+  }
+}
+
+function renderFbos() {
+  var fboHtml = ''
+  for (i = 0; i < company.fboProxies.length; i++) {
+    proxy = company.fboProxies[i]
+    var comments = ''
+    if (company.fboProxies[i].comments.length == 0) {
+      comments = '<p style="color: gray;">Comments</p>'
+    } else {
+      for (i2 = 0; i2 < proxy.comments.length; i2++) {
+        var comment = proxy.comments[i2];
+        comments = comments + '<p class="comment"><span style="font-weight: bold;">' + comment.name + ': </span>' + comment.comment + '</p>'
+      }
+    }
+    var dueDate = ''
+    if (proxy.fbo.respDate) {
+      dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>"
+    } else {
+      dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
+    }
+    var voteHtml = ''
+    var voteScore = proxy.voteYes.length - proxy.voteNo.length
+    if (voteScore < 0) {
+      voteHtml = '<div class="fbo-item-points" style="color: red;">'+voteScore+'</div>'
+    } else if (voteScore > 0) {
+      voteHtml = '<div class="fbo-item-points" style="color: green;">+'+voteScore+'</div>'
+    }
+
+    fboHtml = fboHtml + '<div class="fbo-item">'+
+      ''+voteHtml+
+      '<div class="fbo-item-title" onclick="goToFbo(i)">'+
+        '<p>'+proxy.fbo.subject+'</p>'+
+      '</div>'+
+      '<div class="fbo-item-comments">'+
+        comments+
+      '</div>'+
+      '<div class="fbo-item-buttons">'+
+        '<div class="medium-circle fbo-item-no-button" onclick="vote(i, false)">'+
+          '𝗫'+
+          '</div>'+
+        '<div class="fbo-item-time-button">'+
+          dueDate+
+        '</div>'+
+        '<div class="medium-circle fbo-item-yes-button" onclick="vote(i, true)">'+
+          '✔'+
+          '</div>'+
+        '</div>'+
+      '</div>'
+  }
+  document.getElementById("fbo-items").innerHTML = fboHtml;
+
+}
+
+function goToFbo(num) {
+  fboIndex = num
+  document.getElementById("fbo-list-view").classList.add('inactive');
+  document.getElementById("fbo-detail-view").classList.remove('inactive');
+}
+
+function switchFboTab(elem, num) {
   var a = document.getElementsByClassName('buttonbar-tab')
   for (i = 0; i < a.length; i++) {
     a[i].classList.remove('buttonbar-tab-active');
@@ -209,9 +307,9 @@ function checkVote(proxy) {
 
 }
 
-function vote(yes) {
+function vote(index, yes) {
   console.log('voting')
-  var fbo = fbos[fboIndex]
+  var fbo = fbos[index]
   var vote = {
     id: currentUser._id,
     name: currentUser.firstName + ' ' + currentUser.lastName,
@@ -378,9 +476,13 @@ function getTheData() {
           company = JSON.parse(xhttp2.responseText);
           fbos = company.fboProxies
           setActiveFbo(fboIndex)
+          renderFbos()
           var promiseFinished = true
           document.getElementById("loading").classList.add('inactive');
-          document.getElementById("fbo-view").classList.remove('inactive');
+          document.getElementById("main-view").classList.remove('inactive');
+          document.getElementById("news-view").classList.remove('inactive');
+          document.getElementById("fbo-view").classList.add('inactive');
+          document.getElementById("search-view").classList.add('inactive');
           document.getElementById("login-view").classList.add('inactive');
 
         }
@@ -402,7 +504,10 @@ var app = {
       getTheData()
     } else {
       document.getElementById("loading").classList.add('inactive');
+      document.getElementById("main-view").classList.add('inactive');
       document.getElementById("fbo-view").classList.add('inactive');
+      document.getElementById("fbo-list-view").classList.add('inactive');
+      document.getElementById("fbo-detail-view").classList.add('inactive');
       document.getElementById("login-view").classList.remove('inactive');
     }
     this.bindEvents();

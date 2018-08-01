@@ -29,19 +29,19 @@ under the License.
   <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
   <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'"/>
   <!-- Good default declaration:
-    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-    * Enable inline JS: add 'unsafe-inline' to default-src
-    * Enable eval(): add 'unsafe-eval' to default-src
-    * Create your own at http://cspisawesome.com
-  -->
+  * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+  * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+  * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+  * Enable inline JS: add 'unsafe-inline' to default-src
+  * Enable eval(): add 'unsafe-eval' to default-src
+  * Create your own at http://cspisawesome.com
+-->
 
 <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
-  <!-- <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet"> -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="css/index.css" />
-  <title>Hunting Party</title>
+<!-- <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet"> -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+<title>Hunting Party</title>
 </head>
 
 <body>
@@ -62,7 +62,7 @@ under the License.
       <button class="center-absolute" type="button" name="button" onclick=login()>LOG IN</button>
     </div>
   </div>
-  <div id="fbo-view" class="inactive">
+  <div id="main-view" class="inactive">
     <div class="topbar">
       <div id="profile-circle" class="circle" style="top: 0px; left: 1px;" onclick="openProfileDropdown()">
         <div class="" style="position: relative; width: 100%; height: 100%;">
@@ -86,126 +86,389 @@ under the License.
       </div>
     </div>
     <div class="iconbar">
-      <div class="iconbar-icon">
+      <div class="iconbar-icon iconbar-icon-active" onclick="switchTab(this, 0)">
         <img class="iconbar-img" src="./img/news.png" alt="">
       </div>
-      <div class="iconbar-icon">
+      <div class="iconbar-icon" onclick="switchTab(this, 1)">
         <img class="iconbar-img" src="./img/search.png" alt="">
       </div>
-      <div class="iconbar-icon">
+      <div class="iconbar-icon" onclick="switchTab(this, 2)">
         <img class="iconbar-img" src="./img/contact.png" alt="">
       </div>
-      <div class="iconbar-icon">
+      <div class="iconbar-icon" onclick="switchTab(this, 3)">
         <img class="iconbar-img" src="./img/settings.png" alt="">
       </div>
     </div>
-    <div class="buttonbar">
-      <div style="float: left; width: 100%; height: 7vh;">
-        <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-      </div>
-      <div class="big-circle-box">
-        <div class="big-circle" id="no-button" onclick='vote(false)'>
-          𝗫
+    <div id="news-view" class="body-block">
+      <div id="todo-block">
+        <div class="news-tab" style="width: 55%; margin-left: 15%; margin-right: 5%; line-height: 12vh;">
+          TO DO
+        </div>
+        <div class="news-tab" style="width: 20%; margin-right: 5%; line-height: calc(8vh / 3); padding-top: 2vh; padding-bottom: 2vh;">
+          Average Completion Time
+        </div>
+        <div class="" style="float: left; width: 100%; height: 2vh;">
+        </div>
+        <div class="" style="color: rgb(255, 163, 150);">
+          <div class="" style="float: left; width: 100%;">
+            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+              <img class="iconbar-img" src="./img/profile2.png" alt="">
+            </div>
+            <div class="todo-left" style="float: left; width: 55%; margin-right: 5%; padding-top: 0.8vh;">
+              <p>Identify 7 more RFPs to stay on growth targets</p>
+            </div>
+            <div class="todo-right" style="float: left; width: 20%; margin-right: 5%; text-align: center; padding-top: 0.8vh;">
+              <p>10/RFP</p>
+            </div>
+          </div>
+          <div class="" style="float: left; width: 100%;">
+            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+              <img class="iconbar-img" src="./img/profile2.png" alt="">
+            </div>
+            <div class="todo-left" style="float: left; width: 55%; margin-right: 5%; padding-top: 0.8vh;">
+              <p>Vote on the 12 RFPs your team has voted on</p>
+            </div>
+            <div class="todo-right" style="float: left; width: 20%; margin-right: 5%; text-align: center; padding-top: 0.8vh;">
+              <p>10/RFP</p>
+            </div>
+          </div>
+          <div class="" style="float: left; width: 100%;">
+            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+              <img class="iconbar-img" src="./img/profile2.png" alt="">
+            </div>
+            <div class="todo-left" style="float: left; width: 55%; margin-right: 5%; padding-top: 0.8vh;">
+              <p>Make pre-select decision on 15 RFPs that have been identified</p>
+            </div>
+            <div class="todo-right" style="float: left; width: 20%; margin-right: 5%; text-align: center; padding-top: 0.8vh;">
+              <p>5/RFP</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="big-circle-box">
-        <div class="big-circle" id="time-button" style="line-height: 1vh; font-size: 2vh;">
-          T
+      <div id="news-block">
+        <div class="" style="width: 100%; text-align: center; float: left; margin-bottom: 2vh;">
+          NEWS
         </div>
-      </div>
-      <div class="big-circle-box">
-        <div class="big-circle" id="yes-button" onclick='vote(true)'>
-          ✔
+        <div class="" style="width: 100%; float: left;">
+          <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+            <img class="iconbar-img" src="./img/profile.png" alt="">
+          </div>
+          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
+            <p>Person joined your company</p>
+          </div>
         </div>
-      </div>
-      <div class="" style="width: 100%; height: calc(4vh+12px)">
-        <div class="buttonbar-tab buttonbar-tab-active" onclick='switchTab(this, 0)'>
-          Abstract/data
+        <div class="" style="width: 100%; float: left;">
+          <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+            <img class="iconbar-img" src="./img/profile.png" alt="">
+          </div>
+          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
+            <p>Person2 left a comment on an RFP</p>
+          </div>
         </div>
-        <div class="buttonbar-tab" onclick='switchTab(this, 1)'>
-          Refer
+        <div class="" style="width: 100%; float: left;">
+          <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+            <img class="iconbar-img" src="./img/profile.png" alt="">
+          </div>
+          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
+            <p>Person3 left a comment on an RFP</p>
+          </div>
         </div>
-        <div class="buttonbar-tab" onclick='switchTab(this, 2)'>
-          Comments
+        <div class="" style="width: 100%; float: left;">
+          <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+            <img class="iconbar-img" src="./img/contact.png" alt="">
+          </div>
+          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
+            <p>Person4: here is some comment text</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="lower" id="lower-1">
-      <div class="databar" id="databar-1">
-        <div class="databar-inner" onclick='expandData(1)'>
-          ABSTRACT
-          <div class="info-circle">
-            i
+    <div id="fbo-view" class="inactive">
+      <div id="fbo-list-view" class="body-block" style="">
+        <div class="" style="padding: 0vh 3vh 0vh 3vh; height: 100%; width: 100%; overflow-y: auto;">
+          <div class="" style="width: 100%; height: 2vh;">
           </div>
-          <div class="arrow" id="arrow-1">
-            ▼
-            <!-- ▲ -->
+          <button type="button" name="button" style="width: 100%; margin-bottom: 4vh;" onclick="renderFbos()">ADD AN OPPORTUNITY</button>
+          <div id="fbo-items">
+            <div class="fbo-item">
+              <div class="fbo-item-title">
+                <p>TITLE XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX  XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX</p>
+              </div>
+              <div class="fbo-item-comments">
+                <p>Comments</p>
+              </div>
+              <div class="fbo-item-buttons">
+                <div class="medium-circle fbo-item-no-button" onclick="vote(false)">
+                  𝗫
+                </div>
+                <div class="fbo-item-time-button">
+                  T
+                </div>
+                <div class="medium-circle fbo-item-yes-button" onclick="vote(true)">
+                  ✔
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="data-box data-box-inactive" id="data-box-1">
-          <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         </div>
       </div>
-      <div class="databar" id="databar-2">
-        <div class="databar-inner" onclick='expandData(2)'>
-          DATA
-          <div class="info-circle">
-            i
+      <div id="fbo-detail-view" class="inactive">
+        <div class="buttonbar">
+          <div style="float: left; width: 100%; height: 7vh;">
+            <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
           </div>
-          <div class="arrow" id="arrow-2">
-            ▼
-            <!-- ▲ -->
+          <div class="big-circle-box">
+            <div class="big-circle" id="no-button" onclick='vote(false)'>
+              𝗫
+            </div>
           </div>
-        </div>
-        <div class="data-box data-box-inactive" id="data-box-2">
-          <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </div>
-      </div>
-    </div>
-    <div class="lower inactive" id="lower-2">
-      <div class="databar" id="databar-3">
-        <div class="databar-inner" onclick='expandData(3)'>
-          REFER
-          <div class="info-circle">
-            i
+          <div class="big-circle-box">
+            <div class="big-circle" id="time-button" style="line-height: 1vh; font-size: 2vh;">
+              T
+            </div>
           </div>
-          <div class="arrow" id="arrow-3">
-            ▼
-            <!-- ▲ -->
+          <div class="big-circle-box">
+            <div class="big-circle" id="yes-button" onclick='vote(true)'>
+              ✔
+            </div>
           </div>
-        </div>
-        <div class="data-box data-box-bigger data-box-inactive" id="data-box-3">
-          <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </div>
-      </div>
-    </div>
-    <div class="lower inactive" id="lower-3">
-      <div class="databar" id="databar-4">
-        <div class="databar-inner" onclick='expandData(4)'>
-          COMMENTS AND QUESTIONS
-          <div class="info-circle">
-            i
-          </div>
-          <div class="arrow" id="arrow-4">
-            ▼
-            <!-- ▲ -->
+          <div class="" style="width: 100%; height: calc(4vh+12px)">
+            <div class="buttonbar-tab buttonbar-tab-active" onclick='switchFboTab(this, 0)'>
+              Abstract/data
+            </div>
+            <div class="buttonbar-tab" onclick='switchFboTab(this, 1)'>
+              Refer
+            </div>
+            <div class="buttonbar-tab" onclick='switchFboTab(this, 2)'>
+              Comments
+            </div>
           </div>
         </div>
-        <div class="data-box data-box-bigger data-box-inactive" id="data-box-4">
-          <div class="chat-box" id="chat-box">
+        <div class="lower" id="lower-1">
+          <div class="databar" id="databar-1">
+            <div class="databar-inner" onclick='expandData(1)'>
+              ABSTRACT
+              <div class="info-circle">
+                i
+              </div>
+              <div class="arrow" id="arrow-1">
+                ▼
+                <!-- ▲ -->
+              </div>
+            </div>
+            <div class="data-box data-box-inactive" id="data-box-1">
+              <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+          </div>
+          <div class="databar" id="databar-2">
+            <div class="databar-inner" onclick='expandData(2)'>
+              DATA
+              <div class="info-circle">
+                i
+              </div>
+              <div class="arrow" id="arrow-2">
+                ▼
+                <!-- ▲ -->
+              </div>
+            </div>
+            <div class="data-box data-box-inactive" id="data-box-2">
+              <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+          </div>
+        </div>
+        <div class="lower inactive" id="lower-2">
+          <div class="databar" id="databar-3">
+            <div class="databar-inner" onclick='expandData(3)'>
+              REFER
+              <div class="info-circle">
+                i
+              </div>
+              <div class="arrow" id="arrow-3">
+                ▼
+                <!-- ▲ -->
+              </div>
+            </div>
+            <div class="data-box data-box-bigger data-box-inactive" id="data-box-3">
+              <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+          </div>
+        </div>
+        <div class="lower inactive" id="lower-3">
+          <div class="databar" id="databar-4">
+            <div class="databar-inner" onclick='expandData(4)'>
+              COMMENTS AND QUESTIONS
+              <div class="info-circle">
+                i
+              </div>
+              <div class="arrow" id="arrow-4">
+                ▼
+                <!-- ▲ -->
+              </div>
+            </div>
+            <div class="data-box data-box-bigger data-box-inactive" id="data-box-4">
+              <div class="chat-box" id="chat-box">
 
+              </div>
+              <div class="chat-window">
+                <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 75vw; float: left; margin: 0px;">
+                <button style="height: 100%; width: 23vw; float: left; margin: 0px;" onclick='sendComment()'>SEND</button>
+              </div>
+            </div>
           </div>
-          <div class="chat-window">
-            <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 75vw; float: left; margin: 0px;">
-            <button style="height: 100%; width: 23vw; float: left; margin: 0px;" onclick='sendComment()'>SEND</button>
-          </div>
+        </div>
+        <!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
+        <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
+          <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
+          <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
         </div>
       </div>
     </div>
-    <!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
-    <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
-      <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
-      <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
+    <div id="search-view" class="inactive">
+      <div id="search-terms-view" class="body-block">
+        <div class="search-box-details">
+          OPPORTUNITY STAGE/TIME AVAILABLE
+        </div>
+        <div class="search-box">
+          <div class="col-xs-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
+            <p>Time til response due / projected to be due</p>
+          </div>
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due Any Time</span>
+              <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div>
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2 Weeks</span>
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2-4 Weeks</span>
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 4 Weeks From Now</span>
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 6 Months From Now</span>
+            </div>
+          </div>
+        </div>
+        <div class="search-box-details">
+          WHAT THE GOVERNMENT WANTS
+        </div>
+        <div class="search-box">
+          <input type="text" name="" value="" placeholder="Relevant industry (NAICS)" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+              <!-- <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div> -->
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+            </div>
+          </div>
+        </div>
+        <div class="search-box">
+          <input type="text" name="" value="" placeholder="Product/service description" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+              <!-- <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div> -->
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+            </div>
+          </div>
+        </div>
+        <input type="text" name="" value="" placeholder="Keyword" style="width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; margin: 0px 0px 0.5vh 0px; border: 2px solid rgba(20,20,20,1);">
+        <div class="search-box-details">
+          CUSTOMER / LOCATION
+        </div>
+        <div class="search-box">
+          <input type="text" name="" value="" placeholder="AGENCY/OFFICE" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+              <!-- <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div> -->
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+            </div>
+          </div>
+        </div>
+        <div class="search-box">
+          <input type="text" name="" value="" placeholder="LOCATION" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+              <!-- <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div> -->
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+            </div>
+          </div>
+        </div>
+        <div class="search-box-details">
+          ADMIN
+        </div>
+        <div class="search-box">
+          <div class="col-xs-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
+            <p>SET-ASIDE</p>
+          </div>
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+              <!-- <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div> -->
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+            </div>
+          </div>
+        </div>
+        <div class="search-box">
+          <div class="col-xs-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
+            <p>PRICING</p>
+          </div>
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+              <!-- <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div> -->
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+            </div>
+          </div>
+        </div>
+        <div class="search-box">
+          <div class="col-xs-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
+            <p>LEVEL OF COMPETITION</p>
+          </div>
+          <div class="col-12 search-sub-box">
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+              <!-- <div class="" style="width: 100%; float: left;">
+                <p style="margin-bottom: 2px;">----------</p>
+              </div> -->
+            </div>
+            <div class="" style="width: 100%; float: left;">
+              <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+            </div>
+          </div>
+        </div>
+        <button type="button" name="button">SEARCH</button>
+      </div>
     </div>
   </div>
 
@@ -218,7 +481,7 @@ under the License.
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
   <script type="text/javascript">
-    app.initialize();
+  app.initialize();
   </script>
 </body>
 
