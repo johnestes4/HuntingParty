@@ -11,7 +11,8 @@ var loggedIn = false
 var currentUser = null
 var localStorage = window.localStorage;
 var profileDropdownOpen = false
-var fboVote = 0
+var voteDropdownOpen = -1
+var fboVote = []
 var tabIds = [
   {
     id: 0,
@@ -121,28 +122,54 @@ function openProfileDropdown() {
 document.addEventListener("click", (evt) => {
   const profileDropdown = document.getElementById("profile-dropdown");
   const profileCircle = document.getElementById("profile-circle");
+  const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
+  const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
   let targetElement = evt.target; // clicked element
-
+  var profileInside = false
   do {
     if (profileDropdownOpen) {
       if (targetElement == profileDropdown) {
         // This is a click inside. Do nothing, just return.
-        return;
+        profileInside = true;
       }
     } else {
       if (targetElement == profileCircle) {
         document.getElementById("profile-dropdown").classList.remove('inactive')
         profileDropdownOpen = true
         // This is a click inside. Do nothing, just return.
-        return;
+        profileInside = true;
       }
     }
     // Go up the DOM
     targetElement = targetElement.parentNode;
   } while (targetElement);
   // This is a click outside.
-  document.getElementById("profile-dropdown").classList.add('inactive')
-  profileDropdownOpen = false
+  if (!profileInside) {
+    document.getElementById("profile-dropdown").classList.add('inactive')
+    profileDropdownOpen = false
+  }
+
+  if (voteDropdownOpen > -1) {
+    targetElement = evt.target
+    do {
+      if (targetElement == voteDropdown) {
+        // This is a click inside. Do nothing, just return.
+        return;
+      } else if (targetElement == voteCircle) {
+        // This is a click inside. Do nothing, just return.
+        return;
+      }
+      // Go up the DOM
+      targetElement = targetElement.parentNode;
+    } while (targetElement);
+    // This is a click outside.
+    document.getElementById("vote-circle-dropdown-"+voteDropdownOpen).classList.add('inactive')
+    // var a = document.getElementsByClassName('fbo-item-points-dropdown')
+    // for (i = 0; i < a.length; i++) {
+    //   a[i].classList.add('inactive');
+    // }
+    voteDropdownOpen = -1
+  }
 });
 
 function switchTab(elem, num) {
@@ -181,6 +208,7 @@ function switchTab(elem, num) {
 
 function renderFbos() {
   var fboHtml = ''
+  fboVote = []
   for (i = 0; i < company.fboProxies.length; i++) {
     proxy = company.fboProxies[i]
     var comments = ''
@@ -201,38 +229,92 @@ function renderFbos() {
     var voteHtml = ''
     var voteScore = proxy.voteYes.length - proxy.voteNo.length
     if (voteScore < 0) {
-      voteHtml = '<div class="fbo-item-points" style="color: red;">'+voteScore+'</div>'
+      voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
+      console.log('vote-circle-' + i)
     } else if (voteScore > 0) {
-      voteHtml = '<div class="fbo-item-points" style="color: green;">+'+voteScore+'</div>'
+      voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
+    } else {
+      voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
     }
-
+    voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
+    for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+      voteHtml = voteHtml + '<div class="fbo-items-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
+    }
+    for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
+      voteHtml = voteHtml + '<div class="fbo-items-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + ': No</div>'
+    }
+    voteHtml = voteHtml + '</div>'
+    var vote = null
+    for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+      if (proxy.voteYes[i2].id == currentUser._id) {
+        vote = 2
+        break;
+      }
+    }
+    if (vote !== 2) {
+      for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
+        if (proxy.voteNo[i2].id == currentUser._id) {
+          vote = 1
+          break;
+        }
+      }
+    }
+    var yesString = ''
+    var noString = ''
+    if (vote == 1) {
+      noString = ' voted-button'
+      fboVote.push(1)
+    } else if (vote == 2) {
+      yesString = ' voted-button'
+      fboVote.push(2)
+    } else {
+      fboVote.push(0)
+    }
     fboHtml = fboHtml + '<div class="fbo-item">'+
       ''+voteHtml+
-      '<div class="fbo-item-title" onclick="goToFbo(i)">'+
+      '<div class="fbo-item-title" onclick="goToFbo(' + i + ')">'+
         '<p>'+proxy.fbo.subject+'</p>'+
       '</div>'+
       '<div class="fbo-item-comments">'+
         comments+
       '</div>'+
       '<div class="fbo-item-buttons">'+
-        '<div class="medium-circle fbo-item-no-button" onclick="vote(i, false)">'+
+        '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="vote('+i+', false)">'+
           '𝗫'+
           '</div>'+
         '<div class="fbo-item-time-button">'+
           dueDate+
         '</div>'+
-        '<div class="medium-circle fbo-item-yes-button" onclick="vote(i, true)">'+
+        '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="vote('+i+', true)">'+
           '✔'+
           '</div>'+
         '</div>'+
       '</div>'
   }
   document.getElementById("fbo-items").innerHTML = fboHtml;
+  console.log(fboVote.length)
+  console.log(company.fboProxies.length)
+  // for (i = 0; i < company.fboProxies.length; i++) {
+  //   checkVote(company.fboProxies[i], i)
+  // }
 
+}
+
+function showVotes(index) {
+  voteDropdownOpen = index
+  var a = document.getElementsByClassName('fbo-item-points-dropdown')
+  for (i = 0; i < a.length; i++) {
+    if (i == index) {
+      a[i].classList.remove('inactive');
+    } else {
+      a[i].classList.add('inactive');
+    }
+  }
 }
 
 function goToFbo(num) {
   fboIndex = num
+  setActiveFbo(num)
   document.getElementById("fbo-list-view").classList.add('inactive');
   document.getElementById("fbo-detail-view").classList.remove('inactive');
 }
@@ -278,31 +360,31 @@ function setActiveFbo(index) {
   }
   fboIndex = index
   updateComments(proxy)
-  checkVote(proxy)
+  checkVote(proxy, index)
 }
 
-function checkVote(proxy) {
+function checkVote(proxy, index) {
   for (i = 0; i < proxy.voteYes.length; i++) {
     if (proxy.voteYes[i].id == currentUser._id) {
       console.log('you voted yes')
-      fboVote = 2
+      fboVote[index] = 2
       break;
     }
   }
-  if (fboVote !== 2) {
+  if (fboVote[index] !== 2) {
     for (i = 0; i < proxy.voteNo.length; i++) {
       if (proxy.voteNo[i].id == currentUser._id) {
-        fboVote = 1
+        fboVote[index] = 1
         break;
       }
     }
   }
-  if (fboVote == 1) {
-    document.getElementById("yes-button").classList.remove('voted-button');
-    document.getElementById("no-button").classList.add('voted-button');
-  } else if (fboVote == 2) {
-    document.getElementById("yes-button").classList.add('voted-button');
-    document.getElementById("no-button").classList.remove('voted-button');
+  if (fboVote[index] == 1) {
+    document.getElementById("big-yes-button").classList.remove('voted-button');
+    document.getElementById("big-no-button").classList.add('voted-button');
+  } else if (fboVote[index] == 2) {
+    document.getElementById("big-yes-button").classList.add('voted-button');
+    document.getElementById("big-no-button").classList.remove('voted-button');
   }
 
 }
@@ -325,23 +407,23 @@ function vote(index, yes) {
   // fbo.voteNo = []
   // fbo.voteYes = []
 
-  if (fboVote !== 2 && yes) {
+  if (fboVote[index] !== 2 && yes) {
     for (var i = 0; i < fbo.voteNo.length; i++) {
       if (fbo.voteNo[i].id == currentUser._id) {
         fbo.voteNo.splice(i,1)
       }
     }
     voteChanged = true
-    fboVote = 2
+    fboVote[index] = 2
     fbo.voteYes.push(vote)
-  } else if (fboVote !== 1 && !yes) {
+  } else if (fboVote[index] !== 1 && !yes) {
     for (var i = 0; i < fbo.voteYes.length; i++) {
       if (fbo.voteYes[i].id == currentUser._id) {
         fbo.voteYes.splice(i,1)
       }
     }
     voteChanged = true
-    fboVote = 1
+    fboVote[index] = 1
     fbo.voteNo.push(vote)
   }
   if (voteChanged) {
@@ -354,7 +436,26 @@ function vote(index, yes) {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         console.log('it voted')
         fbo = JSON.parse(xhttp.responseText)
+        if (yes) {
+          document.getElementById("yes-button-" + index.toString()).classList.add('voted-button');
+          document.getElementById("no-button-" + index.toString()).classList.remove('voted-button');
+        } else {
+          document.getElementById("yes-button-" + index.toString()).classList.remove('voted-button');
+          document.getElementById("no-button-" + index.toString()).classList.add('voted-button');
+        }
         checkVote(fbo)
+        console.log('gonna do it now')
+        var voteScore = fbo.voteYes.length - fbo.voteNo.length
+        if (voteScore < 0) {
+          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: red;">'+voteScore+'</p>'
+          document.getElementById("vote-circle-" + index).classList.remove('inactive')
+        } else if (voteScore > 0) {
+          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
+          document.getElementById("vote-circle-" + index).classList.remove('inactive')
+        } else {
+          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
+          document.getElementById("vote-circle-" + index).classList.add('inactive')
+        }
       }
     };
     var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
@@ -468,6 +569,7 @@ function getTheData() {
       // Typical action to be performed when the document is ready:
       currentUser = JSON.parse(xhttp.responseText);
       document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
+      document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+currentUser.avatar+'" alt="">';
       var xhttp2 = new XMLHttpRequest();
       // xhttp.setRequestHeader("Content-type", "application/json");
       xhttp2.onreadystatechange = function() {
@@ -480,8 +582,10 @@ function getTheData() {
           var promiseFinished = true
           document.getElementById("loading").classList.add('inactive');
           document.getElementById("main-view").classList.remove('inactive');
-          document.getElementById("news-view").classList.remove('inactive');
-          document.getElementById("fbo-view").classList.add('inactive');
+          document.getElementById("news-view").classList.add('inactive');
+          document.getElementById("fbo-view").classList.remove('inactive');
+          document.getElementById("fbo-list-view").classList.add('inactive');
+          document.getElementById("fbo-detail-view").classList.remove('inactive');
           document.getElementById("search-view").classList.add('inactive');
           document.getElementById("login-view").classList.add('inactive');
 

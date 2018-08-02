@@ -144,6 +144,29 @@
   border-radius: 90%;
 }
 
+.fbo-item-points-dropdown {
+  position: absolute;
+  text-align: center;
+  min-height: 30px;
+  min-width: 50px;
+  overflow-y: auto;
+  left: 2px;
+  top: 8px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.1);
+  z-index: 99;
+}
+
+.fbo-item-points-dropdown-item {
+  /* ok i know these names are getting ridiculous but i have kind of a naming convention so what can you do */
+  height: 30px;
+  width: 100%;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  float: left;
+  z-index: 100;
+  background: white;
+}
+
 .fbo-item-buttons {
   float: left;
   background: rgba(185,211,182,1);
@@ -299,6 +322,8 @@ h1 {
   transform: translate(-50%, -50%);
   display: block;
   object-fit: cover;
+  min-width: 7vh;
+  min-height: 7vh;
   height: 100%;
 }
 
@@ -307,11 +332,25 @@ h1 {
   top: 7vh;
   left: calc(3vh + 1px);
   width: 45vw;
-  height: 15vh;
+  min-height: 30px;
   background: white;
   border: 1px solid rgba(0,0,0,0.1);
   box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
   z-index: 999;
+}
+
+.profile-dropdown-item {
+  height: 30px;
+  width: 100%;
+  font-size: 16px;
+  background: white;
+  line-height: 30px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.profile-dropdown-item:active {
+  filter: brightness(95%);
 }
 
 #profile-circle:active {
@@ -321,6 +360,12 @@ h1 {
 .profile-dropdown h1 {
   font-size: 3vh;
   line-height: 7vh;
+}
+
+#fbo-title {
+  font-size: 16px;
+  margin-top: 4px;
+  line-height: 16px;
 }
 
 .bar {
@@ -396,10 +441,11 @@ h1 {
   width: calc(100% / 3);
   float: left;
   line-height: 3vh;
-  margin-top: 2vh;
+  margin-top: 1vh;
+  padding-top: 1vh;
   position: relative;
   background: rgba(157,173,51,1);
-  height: 4vh;
+  height: 5.5vh;
 }
 .buttonbar-tab-active {
   border-bottom: .5vh solid rgba(0,176,218,1);
@@ -412,12 +458,16 @@ h1 {
   border-radius: 90%;
   height: 10vh;
   width: 10vh;
+  font-size: 9vh;
+  line-height: 10vh;
   text-align: center;
   z-index: 2;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
+
+
 .big-circle:active {
   filter: brightness(80%);
 }
@@ -465,11 +515,11 @@ h1 {
 }
 
 .databar-active {
-  height: 49vh;
+  height: 53.5vh;
 }
 
 .data-box {
-  height: 43vh;
+  height: 47.5vh;
   background: white;
   overflow-y: auto;
   border-bottom: .25vh solid rgba(20,20,20,1);
@@ -479,7 +529,7 @@ h1 {
 }
 
 .data-box-bigger {
-  height: 49.25vh!important;
+  height: 53.5vh!important;
 }
 
 .data-box-inactive {
@@ -511,9 +561,9 @@ h1 {
 }
 
 .chat-box {
-  height: calc(100% - 6vh - 4px);
-  border: 2px solid rgba(20,20,20,1);
-  width: calc(100% - 4px);
+  height: calc(100% - 6vh);
+  border-bottom: 2px solid rgba(20,20,20,1);
+  width: 100%;
   overflow-y: auto;
 }
 .chat-window {

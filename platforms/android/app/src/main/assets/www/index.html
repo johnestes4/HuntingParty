@@ -65,14 +65,22 @@ under the License.
   <div id="main-view" class="inactive">
     <div class="topbar">
       <div id="profile-circle" class="circle" style="top: 0px; left: 1px;" onclick="openProfileDropdown()">
-        <div class="" style="position: relative; width: 100%; height: 100%;">
+        <div id="profile-circle-inside" class="" style="position: relative; width: 100%; height: 100%;">
           <img class="circle-img" src="./img/profile.png" alt="">
         </div>
       </div>
       <div id="profile-dropdown" class="inactive">
-        <h1 id="user-name"></h1>
-        <div class="" style="position: relative; height: 8vh; width: 45vw; float: left;">
-          <button class="c" type="button" name="button" style="height: 5vh; width: 39vw; margin-left: 3vw; margin-top: 1vh;" onclick="logOut()">LOG OUT</button>
+        <div class="profile-dropdown-item">
+          <p id="user-name"></p>
+        </div>
+        <div class="profile-dropdown-item">
+          <p>Company Profile</p>
+        </div>
+        <div class="profile-dropdown-item">
+          <p>Points</p>
+        </div>
+        <div class="profile-dropdown-item" onclick="logOut()">
+          <p>Log Out</p>
         </div>
       </div>
       <div class="bar bar-left">
@@ -218,17 +226,17 @@ under the License.
             <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
           </div>
           <div class="big-circle-box">
-            <div class="big-circle" id="no-button" onclick='vote(false)'>
+            <div class="big-circle" id="big-no-button" onclick='vote(fboIndex, false)'>
               𝗫
             </div>
           </div>
           <div class="big-circle-box">
-            <div class="big-circle" id="time-button" style="line-height: 1vh; font-size: 2vh;">
+            <div class="big-circle" id="time-button" style="line-height: 0.5vh; font-size: 2vh; padding-top: 2.5vh;">
               T
             </div>
           </div>
           <div class="big-circle-box">
-            <div class="big-circle" id="yes-button" onclick='vote(true)'>
+            <div class="big-circle" id="big-yes-button" onclick='vote(fboIndex, true)' style="font-size: 8vh;">
               ✔
             </div>
           </div>
@@ -310,17 +318,17 @@ under the License.
 
               </div>
               <div class="chat-window">
-                <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 75vw; float: left; margin: 0px;">
+                <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 77vw; float: left; margin: 0px;">
                 <button style="height: 100%; width: 23vw; float: left; margin: 0px;" onclick='sendComment()'>SEND</button>
               </div>
             </div>
           </div>
         </div>
         <!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
-        <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
+        <!-- <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
           <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
           <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
-        </div>
+        </div> -->
       </div>
     </div>
     <div id="search-view" class="inactive">
