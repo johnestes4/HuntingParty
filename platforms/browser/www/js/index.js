@@ -582,10 +582,8 @@ function getTheData() {
           var promiseFinished = true
           document.getElementById("loading").classList.add('inactive');
           document.getElementById("main-view").classList.remove('inactive');
-          document.getElementById("news-view").classList.add('inactive');
-          document.getElementById("fbo-view").classList.remove('inactive');
-          document.getElementById("fbo-list-view").classList.add('inactive');
-          document.getElementById("fbo-detail-view").classList.remove('inactive');
+          document.getElementById("news-view").classList.remove('inactive');
+          document.getElementById("fbo-view").classList.add('inactive');
           document.getElementById("search-view").classList.add('inactive');
           document.getElementById("login-view").classList.add('inactive');
 
@@ -610,8 +608,6 @@ var app = {
       document.getElementById("loading").classList.add('inactive');
       document.getElementById("main-view").classList.add('inactive');
       document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("fbo-list-view").classList.add('inactive');
-      document.getElementById("fbo-detail-view").classList.add('inactive');
       document.getElementById("login-view").classList.remove('inactive');
     }
     this.bindEvents();

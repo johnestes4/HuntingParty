@@ -584,6 +584,7 @@ h1 {
 .search-box {
   border: 2px solid rgba(20,20,20,1);
   font-size: 14px;
+  text-align: left;
   margin-bottom: 2vh;
   background: white;
 }
