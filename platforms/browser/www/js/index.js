@@ -234,6 +234,7 @@ function hello() {
 }
 
 function openProfileDropdown() {
+  // document.getElementById("profile-sidebar").classList.add('slide-to-right');
   // document.getElementById("profile-dropdown").classList.remove('inactive')
   // profileDropdownOpen = true
 }
