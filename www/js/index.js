@@ -12,6 +12,125 @@ var currentUser = null
 var localStorage = window.localStorage;
 var profileDropdownOpen = false
 var voteDropdownOpen = -1
+var agencyLogos = [
+  {
+    "agency": "Department of the Air Force",
+    "img": "af.png"
+  },
+  {
+    "agency": "Department of the Army",
+    "img": "army.png"
+  },
+  {
+    "agency": "Department of the Interior",
+    "img": "doi.png"
+  },
+  {
+    "agency": "Department of the Navy",
+    "img": "navy.png"
+  },
+  {
+    "agency": "Department of Veterans Affairs",
+    "img": "va.jpg"
+  },
+  {
+    "agency": "Defense Logistics Agency",
+    "img": "dla.png"
+  },
+  {
+    "agency": "Department of Homeland Security",
+    "img": "dhs.png"
+  },
+  {
+    "agency": "Department of Agriculture",
+    "img": ""
+  },
+  {
+    "agency": "Department of Health and Human Services",
+    "img": ""
+  },
+  {
+    "agency": "Department of the Treasury",
+    "img": "treas.png"
+  },
+  {
+    "agency": "Department of State",
+    "img": "state.png"
+  },
+  {
+    "agency": "Social Security Administration",
+    "img": "ssa.png"
+  },
+  {
+    "agency": "Environmental Protection Agency",
+    "img": ""
+  },
+  {
+    "agency": "General Services Administration",
+    "img": "gsa.png"
+  },
+  {
+    "agency": "Department of Commerce",
+    "img": "doc.png"
+  },
+  {
+    "agency": "Department of Justice",
+    "img": "doj.png"
+  },
+  {
+    "agency": "Nuclear Regulatory Commission",
+    "img": "nrc.png"
+  },
+  {
+    "agency": "Department of Transportation",
+    "img": "dot.png"
+  },
+  {
+    "agency": "Defense Information Systems Agency",
+    "img": "disa.png"
+  },
+  {
+    "agency": "Library of Congress",
+    "img": "loc.png"
+  },
+  {
+    "agency": "National Aeronautics and Space Administration",
+    "img": "nasa.png"
+  },
+  {
+    "agency": "Agency for International Development",
+    "img": "usaid.png"
+  },
+  {
+    "agency": "Government Publishing Office",
+    "img": "gpo.png"
+  },
+  {
+    "agency": "Federal Energy Regulatory Commission",
+    "img": "ferc.png"
+  },
+  {
+    "agency": "National Archives and Records Administration",
+    "img": "nara.png"
+  },
+  {
+    "agency": "Federal Retirement Thrift Investment Board",
+    "img": "frtib.png"
+  },
+  {
+    "agency": "Department of Energy",
+    "img": "doe.gif"
+  },
+  {
+    "agency": "Department of Health and Human Services",
+    "img": "dhhs.png"
+  },
+  {
+    "agency": "Department of Agriculture",
+    "img": "doa.png"
+  }
+]
+
 var fboVote = []
 var tabIds = [
   {
@@ -270,10 +389,20 @@ function renderFbos() {
     } else {
       fboVote.push(0)
     }
+    var imgString = ''
+    for (i2 = 0; i2 < agencyLogos.length; i2++) {
+      if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
+        imgString = 'img/agencies/'+agencyLogos[i2].img
+        break;
+      }
+    }
+
     fboHtml = fboHtml + '<div class="fbo-item">'+
       ''+voteHtml+
       '<div class="fbo-item-title" onclick="goToFbo(' + i + ')">'+
-        '<p>'+proxy.fbo.subject+'</p>'+
+        '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+        '<div class="fbo-item-title-bg"></div>'+
+        '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
       '</div>'+
       '<div class="fbo-item-comments">'+
         comments+
@@ -576,17 +705,26 @@ function getTheData() {
         if (xhttp2.readyState == 4 && xhttp2.status == 200) {
           // Typical action to be performed when the document is ready:
           company = JSON.parse(xhttp2.responseText);
-          fbos = company.fboProxies
-          setActiveFbo(fboIndex)
-          renderFbos()
-          var promiseFinished = true
-          document.getElementById("loading").classList.add('inactive');
-          document.getElementById("main-view").classList.remove('inactive');
-          document.getElementById("news-view").classList.remove('inactive');
-          document.getElementById("fbo-view").classList.add('inactive');
-          document.getElementById("search-view").classList.add('inactive');
-          document.getElementById("login-view").classList.add('inactive');
-
+          // var xobj = new XMLHttpRequest();
+          // xobj.overrideMimeType("application/json");
+          // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file
+          // xobj.onreadystatechange = function () {
+            // if (xobj.readyState == 4 && xobj.status == "200") {
+              // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+              // agencyLogos = JSON.parse(xobj.responseText);
+              fbos = company.fboProxies
+              setActiveFbo(fboIndex)
+              renderFbos()
+              var promiseFinished = true
+              document.getElementById("loading").classList.add('inactive');
+              document.getElementById("main-view").classList.remove('inactive');
+              document.getElementById("news-view").classList.remove('inactive');
+              document.getElementById("fbo-view").classList.add('inactive');
+              document.getElementById("search-view").classList.add('inactive');
+              document.getElementById("login-view").classList.add('inactive');
+          //   }
+          // };
+          // xobj.send(null);
         }
       };
       var companyId = currentUser.companyUserProxies[0].company._id
