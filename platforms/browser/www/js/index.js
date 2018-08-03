@@ -357,10 +357,10 @@ function renderFbos() {
     }
     voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
     for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
-      voteHtml = voteHtml + '<div class="fbo-items-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
+      voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
     }
     for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
-      voteHtml = voteHtml + '<div class="fbo-items-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + ': No</div>'
+      voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + ': No</div>'
     }
     voteHtml = voteHtml + '</div>'
     var vote = null
