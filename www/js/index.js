@@ -311,8 +311,8 @@ document.addEventListener("click", (evt) => {
 });
 
 function switchTab(num) {
-  // document.getElementById("fbo-list-view").classList.remove('inactive');
-  // document.getElementById("fbo-detail-view").classList.add('inactive');
+  document.getElementById("fbo-list-view").classList.remove('inactive');
+  document.getElementById("fbo-detail-view").classList.add('inactive');
   if (num == 0) {
     document.getElementById("news-view").classList.remove('inactive')
     document.getElementById("search-view").classList.add('inactive')
@@ -456,18 +456,12 @@ function renderFbos() {
             comments+
           '</div>'+
           '<div class="fbo-item-buttons">'+
-            '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="vote('+i+', false)">'+
-              '𝗫'+
-              '</div>'+
             '<div class="fbo-item-time-button">'+
               dueDate+
             '</div>'+
-            '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="vote('+i+', true)">'+
-              '✔'+
-              '</div>'+
-            '</div>'+
           '</div>'+
-        '</div>'
+        '</div>'+
+      '</div>'
     }
   }
   document.getElementById("fbo-items").innerHTML = fboHtml;
@@ -562,6 +556,9 @@ function checkVote(proxy, index) {
     document.getElementById("big-no-button").classList.add('voted-button');
   } else if (fboVote[index] == 2) {
     document.getElementById("big-yes-button").classList.add('voted-button');
+    document.getElementById("big-no-button").classList.remove('voted-button');
+  } else {
+    document.getElementById("big-yes-button").classList.remove('voted-button');
     document.getElementById("big-no-button").classList.remove('voted-button');
   }
 
@@ -771,7 +768,7 @@ function getTheData() {
               document.getElementById("fbo-view").classList.add('inactive');
               document.getElementById("search-view").classList.add('inactive');
               document.getElementById("login-view").classList.add('inactive');
-              switchTab(3)
+              // switchTab(3)
           //   }
           // };
           // xobj.send(null);
