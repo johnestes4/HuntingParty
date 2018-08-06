@@ -2,6 +2,8 @@ var activeTab = 0
 var dataExpanded = 0
 var company = null
 var fbos = []
+var incomingFbos = []
+var pipelineFbos = []
 var fboIndex = 0
 var promiseFinished = false
 var highestDataNumber = 4
@@ -146,6 +148,22 @@ var tabIds = [
     allowed: [4]
   }
 ]
+
+
+$( document ).on( "pageinit", "#whole-page", function() {
+    $( document ).on( "swipeleft swiperight", "#whole-page", function( e ) {
+        // We check if there is no open panel on the page because otherwise
+        // a swipe to close the left panel would also open the right panel (and v.v.).
+        // We do this by checking the data that the framework stores on the page element (panel: open).
+        if ( $.mobile.activePage.jqmData( "panel" ) !== "open" ) {
+            if ( e.type === "swipeleft"  ) {
+                // $( "#right-panel" ).panel( "open" );
+            } else if ( e.type === "swiperight" ) {
+                $( "#mypanel" ).panel( "open" );
+            }
+        }
+    });
+});
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -292,29 +310,30 @@ document.addEventListener("click", (evt) => {
   }
 });
 
-function switchTab(elem, num) {
+function switchTab(num) {
+  // document.getElementById("fbo-list-view").classList.remove('inactive');
+  // document.getElementById("fbo-detail-view").classList.add('inactive');
   if (num == 0) {
     document.getElementById("news-view").classList.remove('inactive')
     document.getElementById("search-view").classList.add('inactive')
     document.getElementById("fbo-view").classList.add('inactive')
-    document.getElementById("fbo-list-view").classList.remove('inactive');
-    document.getElementById("fbo-detail-view").classList.add('inactive');
+    document.getElementById("pipeline-view").classList.add('inactive')
   } else if (num == 1) {
     document.getElementById("news-view").classList.add('inactive')
     document.getElementById("search-view").classList.remove('inactive')
     document.getElementById("fbo-view").classList.add('inactive')
-    document.getElementById("fbo-list-view").classList.remove('inactive');
-    document.getElementById("fbo-detail-view").classList.add('inactive');
+    document.getElementById("pipeline-view").classList.add('inactive')
   } else if (num == 2) {
     document.getElementById("news-view").classList.add('inactive')
     document.getElementById("search-view").classList.add('inactive')
     document.getElementById("fbo-view").classList.remove('inactive')
-    document.getElementById("fbo-list-view").classList.remove('inactive');
-    document.getElementById("fbo-detail-view").classList.add('inactive');
+    document.getElementById("pipeline-view").classList.add('inactive')
     renderFbos()
-
   } else if (num == 3) {
-
+    document.getElementById("news-view").classList.add('inactive')
+    document.getElementById("search-view").classList.add('inactive')
+    document.getElementById("fbo-view").classList.add('inactive')
+    document.getElementById("pipeline-view").classList.remove('inactive')
   }
   var a = document.getElementsByClassName('iconbar-icon')
   for (i = 0; i < a.length; i++) {
@@ -328,6 +347,7 @@ function switchTab(elem, num) {
 
 function renderFbos() {
   var fboHtml = ''
+  var pipelineHtml = ''
   fboVote = []
   for (i = 0; i < company.fboProxies.length; i++) {
     proxy = company.fboProxies[i]
@@ -398,32 +418,60 @@ function renderFbos() {
       }
     }
 
-    fboHtml = fboHtml + '<div class="fbo-item">'+
-      ''+voteHtml+
-      '<div class="fbo-item-title" onclick="goToFbo(' + i + ')">'+
-        '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-        '<div class="fbo-item-title-bg"></div>'+
-        '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
-      '</div>'+
-      '<div class="fbo-item-comments">'+
-        comments+
-      '</div>'+
-      '<div class="fbo-item-buttons">'+
-        '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="vote('+i+', false)">'+
-          '𝗫'+
+    if (proxy.voteYes.length < 1 && vote !== 1) {
+      fboHtml = fboHtml + '<div class="fbo-item">'+
+        '<div class="second-border">'+
+          ''+voteHtml+
+          '<div class="fbo-item-title" onclick="goToFbo(' + i + ')">'+
+            '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+            '<div class="fbo-item-title-bg"></div>'+
+            '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
           '</div>'+
-        '<div class="fbo-item-time-button">'+
-          dueDate+
-        '</div>'+
-        '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="vote('+i+', true)">'+
-          '✔'+
+          '<div class="fbo-item-comments">'+
+            comments+
           '</div>'+
-        '</div>'+
-      '</div>'
+          '<div class="fbo-item-buttons">'+
+            '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="vote('+i+', false)">'+
+              '𝗫'+
+              '</div>'+
+            '<div class="fbo-item-time-button">'+
+              dueDate+
+            '</div>'+
+            '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="vote('+i+', true)">'+
+              '✔'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>'
+    } else if (proxy.voteYes.length > 0 && vote !== 1) {
+      pipelineHtml = pipelineHtml + '<div class="fbo-item">'+
+        '<div class="second-border">'+
+          ''+voteHtml+
+          '<div class="fbo-item-title" onclick="goToFbo(' + i + ')">'+
+            '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+            '<div class="fbo-item-title-bg"></div>'+
+            '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
+          '</div>'+
+          '<div class="fbo-item-comments">'+
+            comments+
+          '</div>'+
+          '<div class="fbo-item-buttons">'+
+            '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="vote('+i+', false)">'+
+              '𝗫'+
+              '</div>'+
+            '<div class="fbo-item-time-button">'+
+              dueDate+
+            '</div>'+
+            '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="vote('+i+', true)">'+
+              '✔'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>'
+    }
   }
   document.getElementById("fbo-items").innerHTML = fboHtml;
-  console.log(fboVote.length)
-  console.log(company.fboProxies.length)
+  document.getElementById("pipeline-items").innerHTML = pipelineHtml;
   // for (i = 0; i < company.fboProxies.length; i++) {
   //   checkVote(company.fboProxies[i], i)
   // }
@@ -723,6 +771,7 @@ function getTheData() {
               document.getElementById("fbo-view").classList.add('inactive');
               document.getElementById("search-view").classList.add('inactive');
               document.getElementById("login-view").classList.add('inactive');
+              switchTab(3)
           //   }
           // };
           // xobj.send(null);
