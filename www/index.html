@@ -373,6 +373,36 @@ under the License.
       </div>
     </div>
     <div id="fbo-view" class="body-block inactive">
+      <div class="vote-popup yes-popup inactive">
+        <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
+          <button class="popup-close" type="button" name="button" onclick="closePopups(2)">X</button>
+          <p>You voted YES on this opportunity!</p>
+          <p>We moved it to your Pipeline. Anyone else you want to send it to?</p>
+          <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+            <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+            <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
+          </div>
+          <div class="" style="width: 100%; height: 40vh; border: 1px solid rgba(0,0,0,0.75); margin-bottom: 1vh;">
+
+          </div>
+          <button type="button" name="button" onclick="closePopups(2)" style="width: 30vw; color: white;">Send</button>
+        </div>
+      </div>
+      <div class="vote-popup no-popup inactive">
+        <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
+          <button class="popup-close" type="button" name="button" onclick="closePopups(2)">X</button>
+          <p>Sounds like this one isn't right for you.</p>
+          <p>Know anyone it would be a better fit for? Send it their way.</p>
+          <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+            <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+            <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
+          </div>
+          <div class="" style="width: 100%; height: 40vh; border: 1px solid rgba(0,0,0,0.75); margin-bottom: 1vh;">
+
+          </div>
+          <button type="button" name="button" onclick="closePopups(2)" style="width: 30vw; color: white;">Send</button>
+        </div>
+      </div>
       <div id="fbo-list-view" class="body-block" style="">
         <div class="" style="padding: 0vh 3vh 0vh 3vh; height: 100%; width: 100%; overflow-y: auto;">
           <div class="" style="width: 100%; height: 2vh;">
@@ -402,148 +432,7 @@ under the License.
           </div>
         </div>
       </div>
-      <div id="fbo-detail-view" class="inactive">
-        <div class="buttonbar">
-          <div style="float: left; width: 100%; height: 7vh;">
-            <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-          </div>
-          <div class="big-circle-box">
-            <div class="big-circle" id="big-no-button" onclick='vote(fboIndex, false)'>
-              𝗫
-            </div>
-          </div>
-          <div class="big-circle-box">
-            <div class="big-circle" id="time-button" style="line-height: 0.5vh; font-size: 2vh; padding-top: 2.5vh;">
-              T
-            </div>
-          </div>
-          <div class="big-circle-box">
-            <div class="big-circle" id="big-yes-button" onclick='vote(fboIndex, true)' style="font-size: 8vh;">
-              ✔
-            </div>
-          </div>
-          <!-- <div class="" style="width: 100%; height: calc(4vh+12px)">
-            <div class="buttonbar-tab buttonbar-tab-active" onclick='switchFboTab(this, 0)'>
-              Abstract/data
-            </div>
-            <div class="buttonbar-tab" onclick='switchFboTab(this, 1)'>
-              Refer
-            </div>
-            <div class="buttonbar-tab" onclick='switchFboTab(this, 2)'>
-              Comments
-            </div>
-          </div> -->
-        </div>
-        <div class="lower" id="lower-1">
-          <div class="databar" id="databar-1">
-            <div class="databar-inner" onclick='expandData(1)'>
-              ABSTRACT
-              <div class="info-circle">
-                i
-              </div>
-              <div class="arrow" id="arrow-1">
-                ▼
-                <!-- ▲ -->
-              </div>
-            </div>
-            <div class="data-box data-box-inactive" id="data-box-1">
-              <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </div>
-          </div>
-          <div class="databar" id="databar-2">
-            <div class="databar-inner" onclick='expandData(2)'>
-              DATA
-              <div class="info-circle">
-                i
-              </div>
-              <div class="arrow" id="arrow-2">
-                ▼
-                <!-- ▲ -->
-              </div>
-            </div>
-            <div class="data-box data-box-inactive" id="data-box-2">
-              <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </div>
-          </div>
-          <div class="databar" id="databar-3">
-            <div class="databar-inner" onclick='expandData(3)'>
-              REFER
-              <div class="info-circle">
-                i
-              </div>
-              <div class="arrow" id="arrow-3">
-                ▼
-                <!-- ▲ -->
-              </div>
-            </div>
-            <div class="data-box data-box-bigger data-box-inactive" id="data-box-3" style="padding: 1vh;">
-              <div class="search-box" style="padding-bottom: 1vh;">
-                <div class="col-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
-                  <p>SET-ASIDE</p>
-                </div>
-                <div class="col-12 search-sub-box">
-                  <div class="" style="width: 100%; float: left;">
-                    <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 20px;"> Dummy Text</span>
-                  </div>
-                </div>
-              </div>
-              <div class="" style="height: 5vh; width: 100%; margin-bottom: 2vh;">
-                <input type="text" name="" value="" placeholder="Other email" style="float: left; width: 80%; height: 5vh; margin: 0px;">
-                <button type="button" name="button" style="float: left; width: 20%; height: 5vh; margin: 0px;">ADD</button>
-              </div>
-              <div class="search-box col-12" style="padding-bottom: 1vh;">
-                <div class="col-8" style="height: 20px; float: left; padding: 0px 15px 0px 15px; font-weight: bold;">
-                  <p>INVITE</p>
-                </div>
-                <div class="col-4" style="height: 20px; float: left; padding: 0px 15px 0px 15px; font-weight: bold;">
-                  <p>Invitations</p>
-                </div>
-                <div class="col-8" style="float: left;">
-                  Mr. User
-                </div>
-                <div class="col-4" style="float: left;">
-                  1
-                </div>
-                <div class="col-12 search-sub-box">
-                  <!-- <div class="" style="width: 100%; float: left;">
-                    <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 20px;"> Dummy Text</span>
-                  </div> -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="databar" id="databar-4">
-            <div class="databar-inner" onclick='expandData(4)'>
-              COMMENTS AND QUESTIONS
-              <div class="info-circle">
-                i
-              </div>
-              <div class="arrow" id="arrow-4">
-                ▼
-                <!-- ▲ -->
-              </div>
-            </div>
-            <div class="data-box data-box-bigger data-box-inactive" id="data-box-4">
-              <div class="chat-box" id="chat-box">
 
-              </div>
-              <div class="chat-window">
-                <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 77vw; float: left; margin: 0px;">
-                <button style="height: 100%; width: 23vw; float: left; margin: 0px;" onclick='sendComment()'>SEND</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- <div class="lower inactive" id="lower-2">
-        </div>
-        <div class="lower inactive" id="lower-3">
-        </div> -->
-        <!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
-        <!-- <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
-          <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
-          <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
-        </div> -->
-      </div>
     </div>
     <div id="pipeline-view" class="body-block inactive">
       <div id="opportunities" class="">
@@ -575,6 +464,180 @@ under the License.
         </div>
       </div>
     </div>
+    <div id="fbo-detail-view" class="body-block inactive">
+      <div class="vote-popup yes-popup inactive">
+        <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
+          <button class="popup-close" type="button" name="button" onclick="closePopups(2)">X</button>
+          <p>You voted YES on this opportunity!</p>
+          <p>We moved it to your Pipeline. Anyone else you want to send it to?</p>
+          <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+            <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+            <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
+          </div>
+          <div class="" style="width: 100%; height: 40vh; border: 1px solid rgba(0,0,0,0.75); margin-bottom: 1vh;">
+
+          </div>
+          <button type="button" name="button" onclick="closePopups(2)" style="width: 30vw; color: white;">Send</button>
+        </div>
+      </div>
+      <div class="vote-popup no-popup inactive">
+        <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
+          <button class="popup-close" type="button" name="button" onclick="closePopups(2)">X</button>
+          <p>Sounds like this one isn't right for you.</p>
+          <p>Know anyone it would be a better fit for? Send it their way.</p>
+          <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+            <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+            <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
+          </div>
+          <div class="" style="width: 100%; height: 40vh; border: 1px solid rgba(0,0,0,0.75); margin-bottom: 1vh;">
+
+          </div>
+          <button type="button" name="button" onclick="closePopups(2)" style="width: 30vw; color: white;">Send</button>
+        </div>
+      </div>
+      <div class="buttonbar">
+        <div style="float: left; width: 100%; height: 7vh;">
+          <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+        </div>
+        <div class="big-circle-box">
+          <div class="big-circle" id="big-no-button" onclick='vote(fboIndex, false)'>
+            𝗫
+          </div>
+        </div>
+        <div class="big-circle-box">
+          <div class="big-circle" id="time-button" style="line-height: 0.5vh; font-size: 2vh; padding-top: 2.5vh;">
+            T
+          </div>
+        </div>
+        <div class="big-circle-box">
+          <div class="big-circle" id="big-yes-button" onclick='vote(fboIndex, true)' style="font-size: 8vh;">
+            ✔
+          </div>
+        </div>
+        <!-- <div class="" style="width: 100%; height: calc(4vh+12px)">
+          <div class="buttonbar-tab buttonbar-tab-active" onclick='switchFboTab(this, 0)'>
+            Abstract/data
+          </div>
+          <div class="buttonbar-tab" onclick='switchFboTab(this, 1)'>
+            Refer
+          </div>
+          <div class="buttonbar-tab" onclick='switchFboTab(this, 2)'>
+            Comments
+          </div>
+        </div> -->
+      </div>
+      <div class="lower" id="lower-1">
+        <div class="databar" id="databar-1">
+          <div class="databar-inner" onclick='expandData(1)'>
+            ABSTRACT
+            <div class="info-circle">
+              i
+            </div>
+            <div class="arrow" id="arrow-1">
+              ▼
+              <!-- ▲ -->
+            </div>
+          </div>
+          <div class="data-box data-box-inactive" id="data-box-1">
+            <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+        <div class="databar" id="databar-2">
+          <div class="databar-inner" onclick='expandData(2)'>
+            DATA
+            <div class="info-circle">
+              i
+            </div>
+            <div class="arrow" id="arrow-2">
+              ▼
+              <!-- ▲ -->
+            </div>
+          </div>
+          <div class="data-box data-box-inactive" id="data-box-2">
+            <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+        <div class="databar" id="databar-3">
+          <div class="databar-inner" onclick='expandData(3)'>
+            REFER
+            <div class="info-circle">
+              i
+            </div>
+            <div class="arrow" id="arrow-3">
+              ▼
+              <!-- ▲ -->
+            </div>
+          </div>
+          <div class="data-box data-box-bigger data-box-inactive" id="data-box-3" style="padding: 1vh;">
+            <div class="search-box" style="padding-bottom: 1vh;">
+              <div class="col-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
+                <p>SET-ASIDE</p>
+              </div>
+              <div class="col-12 search-sub-box">
+                <div class="" style="width: 100%; float: left;">
+                  <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 20px;"> Dummy Text</span>
+                </div>
+              </div>
+            </div>
+            <div class="" style="height: 5vh; width: 100%; margin-bottom: 2vh;">
+              <input type="text" name="" value="" placeholder="Other email" style="float: left; width: 80%; height: 5vh; margin: 0px;">
+              <button type="button" name="button" style="float: left; width: 20%; height: 5vh; margin: 0px;">ADD</button>
+            </div>
+            <div class="search-box col-12" style="padding-bottom: 1vh;">
+              <div class="col-8" style="height: 20px; float: left; padding: 0px 15px 0px 15px; font-weight: bold;">
+                <p>INVITE</p>
+              </div>
+              <div class="col-4" style="height: 20px; float: left; padding: 0px 15px 0px 15px; font-weight: bold;">
+                <p>Invitations</p>
+              </div>
+              <div class="col-8" style="float: left;">
+                Mr. User
+              </div>
+              <div class="col-4" style="float: left;">
+                1
+              </div>
+              <div class="col-12 search-sub-box">
+                <!-- <div class="" style="width: 100%; float: left;">
+                  <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 20px;"> Dummy Text</span>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="databar" id="databar-4">
+          <div class="databar-inner" onclick='expandData(4)'>
+            COMMENTS AND QUESTIONS
+            <div class="info-circle">
+              i
+            </div>
+            <div class="arrow" id="arrow-4">
+              ▼
+              <!-- ▲ -->
+            </div>
+          </div>
+          <div class="data-box data-box-bigger data-box-inactive" id="data-box-4">
+            <div class="chat-box" id="chat-box">
+
+            </div>
+            <div class="chat-window">
+              <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 77vw; float: left; margin: 0px;">
+              <button style="height: 100%; width: 23vw; float: left; margin: 0px;" onclick='sendComment()'>SEND</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="lower inactive" id="lower-2">
+      </div>
+      <div class="lower inactive" id="lower-3">
+      </div> -->
+      <!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
+      <!-- <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
+        <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
+        <button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
+      </div> -->
+    </div>
+
+
   </div>
 
 

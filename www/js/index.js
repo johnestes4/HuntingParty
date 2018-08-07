@@ -422,7 +422,7 @@ function renderFbos() {
       fboHtml = fboHtml + '<div class="fbo-item">'+
         '<div class="second-border">'+
           ''+voteHtml+
-          '<div class="fbo-item-title" onclick="goToFbo(' + i + ')">'+
+          '<div class="fbo-item-title" onclick="goToFbo(' + i + ', 0)">'+
             '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
             '<div class="fbo-item-title-bg"></div>'+
             '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
@@ -447,7 +447,7 @@ function renderFbos() {
       pipelineHtml = pipelineHtml + '<div class="fbo-item">'+
         '<div class="second-border">'+
           ''+voteHtml+
-          '<div class="fbo-item-title" onclick="goToFbo(' + i + ')">'+
+          '<div class="fbo-item-title" onclick="goToFbo(' + i + ', 1)">'+
             '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
             '<div class="fbo-item-title-bg"></div>'+
             '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
@@ -484,10 +484,13 @@ function showVotes(index) {
   }
 }
 
-function goToFbo(num) {
+function goToFbo(num, tab) {
   fboIndex = num
-  setActiveFbo(num)
-  document.getElementById("fbo-list-view").classList.add('inactive');
+  setActiveFbo(num, tab)
+  document.getElementById("news-view").classList.add('inactive');
+  document.getElementById("fbo-view").classList.add('inactive');
+  document.getElementById("search-view").classList.add('inactive');
+  document.getElementById("pipeline-view").classList.add('inactive');
   document.getElementById("fbo-detail-view").classList.remove('inactive');
 }
 
@@ -516,7 +519,7 @@ function switchFboTab(elem, num) {
   elem.classList.add('buttonbar-tab-active');
 }
 
-function setActiveFbo(index) {
+function setActiveFbo(index, tab) {
   if (index < 0) {
     index = fbos.length-1
   } else if (index >= fbos.length) {
@@ -529,6 +532,13 @@ function setActiveFbo(index) {
     document.getElementById("time-button").innerHTML = "<p>Due</p><p>"+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
   } else {
     document.getElementById("time-button").innerHTML = "No Due Date"
+  }
+  if (tab == 1) {
+    document.getElementById("big-yes-button").classList.add('inactive');
+    document.getElementById("big-no-button").classList.add('inactive');
+  } else if (tab == 0) {
+    document.getElementById("big-yes-button").classList.remove('inactive');
+    document.getElementById("big-no-button").classList.remove('inactive');
   }
   fboIndex = index
   updateComments(proxy)
@@ -561,7 +571,15 @@ function checkVote(proxy, index) {
     document.getElementById("big-yes-button").classList.remove('voted-button');
     document.getElementById("big-no-button").classList.remove('voted-button');
   }
+}
 
+function closePopups(tab) {
+  var a = document.getElementsByClassName('vote-popup')
+  for (i = 0; i < a.length; i++) {
+    a[i].classList.add('inactive');
+  }
+  renderFbos()
+  switchTab(tab)
 }
 
 function vote(index, yes) {
@@ -606,20 +624,27 @@ function vote(index, yes) {
     req['voteYes'] = fbo.voteYes;
     req['voteNo'] = fbo.voteNo;
     var fboId = fbo._id
-    var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        console.log('it voted')
-        fbo = JSON.parse(xhttp.responseText)
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.onload = function() {
+    //   if (xhttp.readyState == 4 && xhttp.status == 200) {
+    //     console.log('it voted')
+    //     fbo = JSON.parse(xhttp.responseText)
         if (yes) {
           document.getElementById("yes-button-" + index.toString()).classList.add('voted-button');
           document.getElementById("no-button-" + index.toString()).classList.remove('voted-button');
+          var a = document.getElementsByClassName('yes-popup')
+          for (i = 0; i < a.length; i++) {
+            a[i].classList.remove('inactive');
+          }
         } else {
           document.getElementById("yes-button-" + index.toString()).classList.remove('voted-button');
           document.getElementById("no-button-" + index.toString()).classList.add('voted-button');
+          var a = document.getElementsByClassName('no-popup')
+          for (i = 0; i < a.length; i++) {
+            a[i].classList.remove('inactive');
+          }
         }
         checkVote(fbo)
-        console.log('gonna do it now')
         var voteScore = fbo.voteYes.length - fbo.voteNo.length
         if (voteScore < 0) {
           document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: red;">'+voteScore+'</p>'
@@ -631,12 +656,12 @@ function vote(index, yes) {
           document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
           document.getElementById("vote-circle-" + index).classList.add('inactive')
         }
-      }
-    };
-    var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
-    xhttp.open("PUT", url, true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send(JSON.stringify(req));
+    //   }
+    // };
+    // var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
+    // xhttp.open("PUT", url, true);
+    // xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    // xhttp.send(JSON.stringify(req));
   }
 }
 
@@ -768,7 +793,8 @@ function getTheData() {
               document.getElementById("fbo-view").classList.add('inactive');
               document.getElementById("search-view").classList.add('inactive');
               document.getElementById("login-view").classList.add('inactive');
-              // switchTab(3)
+              switchTab(2)
+              goToFbo(3, 0);
           //   }
           // };
           // xobj.send(null);
