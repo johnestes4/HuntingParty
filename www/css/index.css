@@ -367,7 +367,9 @@ h1 {
   color: rgba(20,20,20,1)!important;
   background: rgba(78,96,136,1);
   height: 8vh;
-  border-bottom: 1px solid rgba(0,0,0,0.75);
+  z-index: 99;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.5);
 }
 
 .circle {
@@ -418,28 +420,69 @@ h1 {
   box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.25);
 }
 
-@keyframes slide-to-right {
-  0%   {left: -60vw}
-  100% {left: 0px}
+#hamburger-menu {
+  position: fixed;
+  overflow-y: hidden; /* Disable horizontal scroll */
+  bottom: 0px;
+  right: 0px;
+  height: 140px;
+  z-index: 9;
+  width: 100vw;
+  background: white;
+  box-shadow: 0px -1px 3px 1px rgba(0,0,0,0.25);
+}
+@keyframes hamburger-in {
+  0%   {bottom: -140px}
+  100% {bottom: 9vh}
+}
+@keyframes hamburger-out {
+  0%   {bottom: 9vh}
+  100% {bottom: -140px}
 }
 
-.slide-to-right {
-  animation-name: slide-to-right;
+.hamburger-in {
+  animation-name: hamburger-in;
   animation-duration: 0.5s;
-  display: block;
+  bottom: 9vh!important;
+}
+.hamburger-out {
+  animation-name: hamburger-out;
+  animation-duration: 0.5s;
+  bottom: -300px!important;
 }
 
 #profile-dropdown {
   position: absolute;
-  top: 7vh;
-  left: calc(3vh + 1px);
-  width: 45vw;
-  min-height: 30px;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  top: 0px
+  left: -60vw;
+  width: 60vw;
+  height: 100vh;
   background: white;
   border: 1px solid rgba(0,0,0,0.1);
   box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
   z-index: 999;
 }
+
+@keyframes dropdown-in {
+  0%   {left: -60vw}
+  100% {left: 0px}
+}
+.dropdown-in {
+  animation-name: dropdown-in;
+  animation-duration: 0.5s;
+  left: 0px!important;
+}
+@keyframes dropdown-out {
+  0%   {left: 0px}
+  100% {left: -60vw}
+}
+.dropdown-out {
+  animation-name: dropdown-out;
+  animation-duration: 0.5s;
+  left: -60vw!important;
+}
+
 
 .profile-dropdown-item {
   height: 30px;
@@ -500,28 +543,28 @@ h1 {
   border-top: 1px solid rgba(255,255,255,0.1);
   /* border-bottom: 1px solid rgba(0,0,0,0.05); */
   height: 9vh;
+  z-index: 10;
   margin: none;
   width: 100%;
-  box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.5);
 }
 
 .iconbar-icon {
   float: left;
-  width: 25%;
+  width: 20%;
   height: calc(9vh - 1px);
   text-align: center;
   line-height: 100%;
   font-size: 9vh;
   position: relative;
-  border-bottom: 2px solid rgba(0,176,218,0);
+  border-top: 2px solid rgba(255,198,0,0);
 }
 
 .iconbar-icon-active {
-  border-bottom: 2px solid rgba(255,198,0,1);
+  border-top: 2px solid rgba(255,198,0,1);
 }
 
 .iconbar-icon:active {
-  border-bottom: 2px solid rgba(255,198,0,1);
+  border-top: 2px solid rgba(255,198,0,1);
 }
 
 .iconbar-img {
@@ -639,13 +682,16 @@ h1 {
 }
 
 .databar-inner {
+  position: relative;
   background: rgba(78,96,136,1);
   border-top: 1px solid rgba(255,255,255,0.1);
   border-bottom: 1px solid rgba(0,0,0,0.75);
-  float: left;
   width: 100%;
-  height: 6vh;
-  line-height: 6vh;
+  height: 35px;
+  line-height: 35px;
+  color: white;
+  text-align: center;
+  float: left;
 }
 
 .databar-active {
@@ -653,8 +699,8 @@ h1 {
 }
 
 .data-box {
-  height: 47.5vh;
-  background: rgba(78,96,136,1);
+  height: calc(58vh - 2px);
+  background: rgba(63,85,136,1);
   padding: 1vh 1vw 1vh 1vw;
   overflow-y: auto;
   border-bottom: 1px solid rgba(0,0,0,0.75);
@@ -673,23 +719,23 @@ h1 {
 .info-circle {
   border-radius: 90%;
   background: rgba(255,255,255,0.6);
-  height: 3.5vh;
-  width: 3.5vh;
-  line-height: 3.5vh;
-  font-size: 3.5vh;
+  height: 23px;
+  width: 23px;
+  line-height: 25px;
+  font-size: 20px;
   color: rgba(63,85,136,1);
   position: absolute;
-  top: 1.25vh;
+  top: 5px;
   right: 15vw;
 }
 
 .arrow {
   position: absolute;
   color: rgba(255,255,255,0.6);
-  height: 3.5vh;
-  width: 3.5vh;
-  line-height: 3.5vh;
-  font-size: 3.5vh;
+  height: 23px;
+  width: 23px;
+  line-height: 18px;
+  font-size: 20px;
   top: 1.25vh;
   right: 3vw;
 }

@@ -14,6 +14,8 @@ var currentUser = null
 var localStorage = window.localStorage;
 var profileDropdownOpen = false
 var voteDropdownOpen = -1
+var hamburgerMenuOpen = false
+var hamburgerOpening = false
 var agencyLogos = [
   {
     "agency": "Department of the Air Force",
@@ -257,11 +259,32 @@ function openProfileDropdown() {
   // profileDropdownOpen = true
 }
 
+function toggleHamburgerMenu() {
+  if (hamburgerMenuOpen) {
+    document.getElementById("hamburger-menu").classList.add('hamburger-out');
+    document.getElementById("hamburger-menu").classList.remove('hamburger-in')
+    hamburgerMenuOpen = false
+  } else {
+    document.getElementById("hamburger-menu").classList.add('hamburger-in');
+    document.getElementById("hamburger-menu").classList.remove('hamburger-out')
+    document.getElementById("hamburger-menu").classList.remove('inactive')
+    hamburgerOpening = true
+    hamburgerMenuOpen = true
+    console.log('starting')
+    setTimeout(
+    function () {
+      hamburgerOpening = false
+      console.log('there')
+    }, 500);
+  }
+}
+
 document.addEventListener("click", (evt) => {
   const profileDropdown = document.getElementById("profile-dropdown");
   const profileCircle = document.getElementById("profile-circle");
   const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
   const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
+  const hamburgerMenu = document.getElementById("hamburger-menu");
   let targetElement = evt.target; // clicked element
   var profileInside = false
   do {
@@ -272,9 +295,10 @@ document.addEventListener("click", (evt) => {
       }
     } else {
       if (targetElement == profileCircle) {
-        document.getElementById("profile-dropdown").classList.remove('inactive')
+        profileDropdown.classList.remove('inactive')
+        profileDropdown.classList.remove('dropdown-out');
+        profileDropdown.classList.add('dropdown-in')
         profileDropdownOpen = true
-        // This is a click inside. Do nothing, just return.
         profileInside = true;
       }
     }
@@ -283,7 +307,8 @@ document.addEventListener("click", (evt) => {
   } while (targetElement);
   // This is a click outside.
   if (!profileInside) {
-    document.getElementById("profile-dropdown").classList.add('inactive')
+    profileDropdown.classList.add('dropdown-out');
+    profileDropdown.classList.remove('dropdown-in')
     profileDropdownOpen = false
   }
 
@@ -307,6 +332,19 @@ document.addEventListener("click", (evt) => {
     //   a[i].classList.add('inactive');
     // }
     voteDropdownOpen = -1
+  }
+  if (hamburgerMenuOpen && !hamburgerOpening) {
+    targetElement = evt.target
+    do {
+      if (targetElement == hamburgerMenu) {
+        // This is a click inside. Do nothing, just return.
+          return;
+        // Go up the DOM
+      }
+      targetElement = targetElement.parentNode;
+    } while (targetElement);
+    // This is a click outside.
+    toggleHamburgerMenu()
   }
 });
 
@@ -335,6 +373,7 @@ function switchTab(num) {
     document.getElementById("fbo-view").classList.add('inactive')
     document.getElementById("pipeline-view").classList.remove('inactive')
   }
+  activeTab = num
   var a = document.getElementsByClassName('iconbar-icon')
   for (i = 0; i < a.length; i++) {
     if (i == num) {
@@ -725,32 +764,23 @@ function sendComment() {
 }
 
 function expandData(num) {
-  var a = document.getElementsByClassName('databar')
-  if (dataExpanded == num) {
-    for (i = 1; i <= highestDataNumber; i++) {
-      document.getElementById("arrow-" + i.toString()).innerHTML = "▼";
-      document.getElementById("data-box-" + i.toString()).classList.add('data-box-inactive');
+  var a = document.getElementsByClassName('data-box')
+  for (i = 0; i < a.length; i++) {
+    if (i == num-1) {
+      a[i].classList.remove('inactive');
+    } else {
+      a[i].classList.add('inactive');
     }
-    dataExpanded = 0
-    for (i = 0; i < a.length; i++) {
-      a[i].classList.remove('databar-active');
-    }
-  } else {
-    dataExpanded = num
-    for (i = 1; i <= highestDataNumber; i++) {
-      if (i == num) {
-        document.getElementById("arrow-" + i.toString()).innerHTML = "▲";
-        document.getElementById("data-box-" + i.toString()).classList.remove('data-box-inactive');
-      } else {
-        document.getElementById("arrow-" + i.toString()).innerHTML = "▼";
-        document.getElementById("data-box-" + i.toString()).classList.add('data-box-inactive');
-      }
-    }
-    for (i = 0; i < a.length; i++) {
-      a[i].classList.remove('databar-active');
-    }
-    document.getElementById("databar-" + num).classList.add('databar-active');
   }
+  document.getElementById("databar-active").classList.remove('inactive');
+  var titles = [
+    'ABSTRACT',
+    'DATA',
+    'REFER',
+    'COMMENTS & QUESTIONS'
+  ]
+  document.getElementById("databar-title").innerHTML = titles[num-1]
+  toggleHamburgerMenu()
 }
 
 var commentInput = document.getElementById("chat-input");
