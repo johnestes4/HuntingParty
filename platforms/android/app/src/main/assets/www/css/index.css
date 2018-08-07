@@ -699,7 +699,7 @@ h1 {
 }
 
 .data-box {
-  height: calc(58vh - 2px);
+  height: calc(63.5vh - 36px);
   background: rgba(63,85,136,1);
   padding: 1vh 1vw 1vh 1vw;
   overflow-y: auto;

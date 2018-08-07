@@ -270,11 +270,9 @@ function toggleHamburgerMenu() {
     document.getElementById("hamburger-menu").classList.remove('inactive')
     hamburgerOpening = true
     hamburgerMenuOpen = true
-    console.log('starting')
     setTimeout(
     function () {
       hamburgerOpening = false
-      console.log('there')
     }, 500);
   }
 }
@@ -409,7 +407,6 @@ function renderFbos() {
     var voteScore = proxy.voteYes.length - proxy.voteNo.length
     if (voteScore < 0) {
       voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
-      console.log('vote-circle-' + i)
     } else if (voteScore > 0) {
       voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
     } else {
@@ -663,11 +660,11 @@ function vote(index, yes) {
     req['voteYes'] = fbo.voteYes;
     req['voteNo'] = fbo.voteNo;
     var fboId = fbo._id
-    // var xhttp = new XMLHttpRequest();
-    // xhttp.onload = function() {
-    //   if (xhttp.readyState == 4 && xhttp.status == 200) {
-    //     console.log('it voted')
-    //     fbo = JSON.parse(xhttp.responseText)
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        console.log('it voted')
+        fbo = JSON.parse(xhttp.responseText)
         if (yes) {
           document.getElementById("yes-button-" + index.toString()).classList.add('voted-button');
           document.getElementById("no-button-" + index.toString()).classList.remove('voted-button');
@@ -695,12 +692,12 @@ function vote(index, yes) {
           document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
           document.getElementById("vote-circle-" + index).classList.add('inactive')
         }
-    //   }
-    // };
-    // var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
-    // xhttp.open("PUT", url, true);
-    // xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    // xhttp.send(JSON.stringify(req));
+      }
+    };
+    var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
+    xhttp.open("PUT", url, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(req));
   }
 }
 
@@ -823,8 +820,8 @@ function getTheData() {
               document.getElementById("fbo-view").classList.add('inactive');
               document.getElementById("search-view").classList.add('inactive');
               document.getElementById("login-view").classList.add('inactive');
-              switchTab(2)
-              goToFbo(3, 0);
+              // switchTab(2)
+              // goToFbo(3, 0);
           //   }
           // };
           // xobj.send(null);
@@ -843,7 +840,6 @@ var app = {
   // Application Constructor
   initialize: function() {
     if (localStorage.getItem('uid')) {
-      console.log('we got it')
       getTheData()
     } else {
       document.getElementById("loading").classList.add('inactive');
