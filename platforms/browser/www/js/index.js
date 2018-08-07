@@ -388,15 +388,14 @@ function renderFbos() {
   fboVote = []
   for (i = 0; i < company.fboProxies.length; i++) {
     proxy = company.fboProxies[i]
-    var comments = ''
-    if (company.fboProxies[i].comments.length == 0) {
-      comments = '<p style="color: gray;">Comments</p>'
-    } else {
-      for (i2 = 0; i2 < proxy.comments.length; i2++) {
-        var comment = proxy.comments[i2];
-        comments = comments + '<p class="comment"><span style="font-weight: bold;">' + comment.name + ': </span>' + comment.comment + '</p>'
-      }
-    }
+    // if (company.fboProxies[i].comments.length == 0) {
+    //   comments = '<p style="color: gray;">Comments</p>'
+    // } else {
+    //   for (i2 = 0; i2 < proxy.comments.length; i2++) {
+    //     var comment = proxy.comments[i2];
+    //     comments = comments + '<p class="comment"><span style="font-weight: bold;">' + comment.name + ': </span>' + comment.comment + '</p>'
+    //   }
+    // }
     var dueDate = ''
     if (proxy.fbo.respDate) {
       dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>"
@@ -404,6 +403,7 @@ function renderFbos() {
       dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
     }
     var voteHtml = ''
+    var comments = ''
     var voteScore = proxy.voteYes.length - proxy.voteNo.length
     if (voteScore < 0) {
       voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
@@ -414,10 +414,26 @@ function renderFbos() {
     }
     voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
     for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+      var vote = proxy.voteYes[i2]
+      var voteString = ''
+      if (vote.comment) {
+        console.log('IT HAS ONE')
+        voteString = ' - "'+vote.comment+'"'
+      }
+      comments = comments + '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: YES' + voteString + '</p>'
       voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
     }
     for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
+      var vote = proxy.voteNo[i2]
+      var voteString = ''
+      if (vote.comment) {
+        voteString = ' - "'+vote.comment+'"'
+      }
+      comments = comments + '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: NO' + voteString + '</p>'
       voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + ': No</div>'
+    }
+    if (comments.length < 1) {
+      comments = '<p style="color: gray;">Comments</p>'
     }
     voteHtml = voteHtml + '</div>'
     var vote = null
@@ -467,13 +483,13 @@ function renderFbos() {
             comments+
           '</div>'+
           '<div class="fbo-item-buttons">'+
-            '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="vote('+i+', false)">'+
+            '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(false)">'+
               '𝗫'+
               '</div>'+
             '<div class="fbo-item-time-button">'+
               dueDate+
             '</div>'+
-            '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="vote('+i+', true)">'+
+            '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(true)">'+
               '✔'+
               '</div>'+
             '</div>'+
@@ -614,8 +630,26 @@ function closePopups(tab) {
   for (i = 0; i < a.length; i++) {
     a[i].classList.add('inactive');
   }
+  document.getElementById("yes-refer").classList.add('inactive');
+  document.getElementById("no-refer").classList.add('inactive');
+  document.getElementById("yes-refer-button").classList.remove('inactive');
+  document.getElementById("no-refer-button").classList.remove('inactive');
   renderFbos()
   switchTab(tab)
+}
+
+function openPopups(yes) {
+  if (yes) {
+    var a = document.getElementsByClassName('yes-popup')
+    for (i = 0; i < a.length; i++) {
+      a[i].classList.remove('inactive');
+    }
+  } else {
+    var a = document.getElementsByClassName('no-popup')
+    for (i = 0; i < a.length; i++) {
+      a[i].classList.remove('inactive');
+    }
+  }
 }
 
 function vote(index, yes) {
@@ -624,7 +658,8 @@ function vote(index, yes) {
   var vote = {
     id: currentUser._id,
     name: currentUser.firstName + ' ' + currentUser.lastName,
-    position: ''
+    position: '',
+    comment: ''
   }
   for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
     if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
@@ -644,6 +679,7 @@ function vote(index, yes) {
     }
     voteChanged = true
     fboVote[index] = 2
+    vote.comment = document.getElementById("yes-popup-comment").innerHTML
     fbo.voteYes.push(vote)
   } else if (fboVote[index] !== 1 && !yes) {
     for (var i = 0; i < fbo.voteYes.length; i++) {
@@ -653,52 +689,42 @@ function vote(index, yes) {
     }
     voteChanged = true
     fboVote[index] = 1
+    vote.comment = document.getElementById("no-popup-comment").innerHTML
     fbo.voteNo.push(vote)
   }
-  if (voteChanged) {
-    var req = {};
-    req['voteYes'] = fbo.voteYes;
-    req['voteNo'] = fbo.voteNo;
-    var fboId = fbo._id
-    var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        console.log('it voted')
-        fbo = JSON.parse(xhttp.responseText)
-        if (yes) {
-          document.getElementById("yes-button-" + index.toString()).classList.add('voted-button');
-          document.getElementById("no-button-" + index.toString()).classList.remove('voted-button');
-          var a = document.getElementsByClassName('yes-popup')
-          for (i = 0; i < a.length; i++) {
-            a[i].classList.remove('inactive');
-          }
-        } else {
-          document.getElementById("yes-button-" + index.toString()).classList.remove('voted-button');
-          document.getElementById("no-button-" + index.toString()).classList.add('voted-button');
-          var a = document.getElementsByClassName('no-popup')
-          for (i = 0; i < a.length; i++) {
-            a[i].classList.remove('inactive');
-          }
-        }
-        checkVote(fbo)
-        var voteScore = fbo.voteYes.length - fbo.voteNo.length
-        if (voteScore < 0) {
-          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: red;">'+voteScore+'</p>'
-          document.getElementById("vote-circle-" + index).classList.remove('inactive')
-        } else if (voteScore > 0) {
-          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
-          document.getElementById("vote-circle-" + index).classList.remove('inactive')
-        } else {
-          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
-          document.getElementById("vote-circle-" + index).classList.add('inactive')
-        }
+  var fbo = fbos[index]
+  var req = {};
+  req['voteYes'] = fbo.voteYes;
+  req['voteNo'] = fbo.voteNo;
+  var fboId = fbo._id
+  var xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      console.log('it voted')
+      fbo = JSON.parse(xhttp.responseText)
+      checkVote(fbo)
+      var voteScore = fbo.voteYes.length - fbo.voteNo.length
+      if (voteScore < 0) {
+        document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: red;">'+voteScore+'</p>'
+        document.getElementById("vote-circle-" + index).classList.remove('inactive')
+      } else if (voteScore > 0) {
+        document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
+        document.getElementById("vote-circle-" + index).classList.remove('inactive')
+      } else {
+        document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
+        document.getElementById("vote-circle-" + index).classList.add('inactive')
       }
-    };
-    var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
-    xhttp.open("PUT", url, true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send(JSON.stringify(req));
-  }
+      closePopups(2)
+    }
+  };
+  var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
+  xhttp.open("PUT", url, true);
+  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttp.send(JSON.stringify(req));
+}
+
+function vote2(index, yes) {
+
 }
 
 function updateComments(fbo) {
@@ -707,12 +733,28 @@ function updateComments(fbo) {
     if (xhttp2.readyState == 4 && xhttp2.status == 200) {
       // Typical action to be performed when the document is ready:
       var newFbo = JSON.parse(xhttp2.responseText)
-      fbo.comments = newFbo.comments
+      fbo.voteYes = newFbo.voteYes
+      fbo.voteNo = newFbo.voteNo
       var chatString = ''
-      for (i = 0; i < newFbo.comments.length; i++) {
-        var newString = '<p class="comment"><span style="font-weight: bold;">' + fbo.comments[i].name + ': </span>' + fbo.comments[i].comment + '</p>'
+      for (i = 0; i < newFbo.voteYes.length; i++) {
+        var vote = newFbo.voteYes[i]
+        var voteString = ''
+        if (vote.comment) {
+          voteString = ' - "'+vote.comment+'"'
+        }
+        var newString = '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: YES' + voteString + '</p>'
         chatString = chatString + newString
       }
+      for (i = 0; i < newFbo.voteNo.length; i++) {
+        var vote = newFbo.voteNo[i]
+        var voteString = ''
+        if (vote.comment) {
+          voteString = ' - "'+vote.comment+'"'
+        }
+        var newString = '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: NO' + voteString + '</p>'
+        chatString = chatString + newString
+      }
+
       document.getElementById("chat-box").innerHTML = chatString;
       console.log('comments updated')
     }
@@ -757,6 +799,16 @@ function sendComment() {
     delete toSend['_id'];
     console.log(toSend)
     xhttp3.send(JSON.stringify(toSend));
+  }
+}
+
+function turnOnRefer(which) {
+  if (which == 0) {
+    document.getElementById("yes-refer").classList.remove('inactive');
+    document.getElementById("yes-refer-button").classList.add('inactive');
+  } else if (which == 1) {
+    document.getElementById("no-refer").classList.remove('inactive');
+    document.getElementById("no-refer-button").classList.add('inactive');
   }
 }
 
