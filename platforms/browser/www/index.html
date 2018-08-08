@@ -358,7 +358,7 @@ under the License.
 
       </div>
     </div>
-    <div id="fbo-view" class="body-block inactive">
+    <div id="fbo-popups" class="inactive">
       <div class="vote-popup yes-popup inactive">
         <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
           <button class="popup-close" type="button" name="button" onclick="vote(fboIndex, true)">X</button>
@@ -407,6 +407,8 @@ under the License.
           </div>
         </div>
       </div>
+    </div>
+    <div id="fbo-view" class="body-block inactive">
       <div id="fbo-list-view" class="body-block" style="">
         <div class="" style="padding: 0vh 3vh 0vh 3vh; height: 100%; width: 100%; overflow-y: auto;">
           <div class="" style="width: 100%; height: 2vh;">
@@ -422,13 +424,17 @@ under the License.
                 </div>
                 <div class="fbo-item-buttons">
                   <div class="medium-circle fbo-item-no-button" onclick="openPopups(false)">
-                    𝗫
+                    <div class="second-border">
+                      <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
+                    </div>
                   </div>
                   <div class="fbo-item-time-button">
                     T
                   </div>
                   <div class="medium-circle fbo-item-yes-button" onclick="openPopups(true)">
-                    ✔
+                    <div class="second-border">
+                      <img class="circle-img-2" src="./img/thumbsup.png" alt="">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -507,61 +513,15 @@ under the License.
           </div>
         </div>
       </div>
-      <div class="vote-popup yes-popup inactive">
-        <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-          <button class="popup-close" type="button" name="button" onclick="vote(fboIndex, true)">X</button>
-          <p>You voted YES on this opportunity!</p>
-          <p>Write a quick comment to let your team know why you approve.</p>
-          <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
-          <p>Anyone else you want to send it to?</p>
-          <div class="col-12">
-            <button id="yes-refer-button" type="button" name="button" style="line-height: 26px; width: 30vw; margin-bottom: 1vh; color: white;" onclick="turnOnRefer(0)">Refer</button>
-          </div>
-          <div id="yes-refer" class="inactive">
-            <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-              <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-              <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
-            </div>
-            <div class="" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
-
-            </div>
-          </div>
-          <div class="col-12">
-            <button type="button" name="button" onclick="vote(fboIndex, true)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
-          </div>
-        </div>
-      </div>
-      <div class="vote-popup no-popup inactive">
-        <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-          <button class="popup-close" type="button" name="button" onclick="vote(fboIndex, false)">X</button>
-          <p>Sounds like this one isn't right for you.</p>
-          <p>Write a quick comment to explain to your team why you think that way.</p>
-          <input type="text" id="no-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
-          <p>Know anyone it would be a better fit for? Send it their way.</p>
-          <div class="col-12">
-            <button id="no-refer-button" type="button" name="button" style="line-height: 26px; width: 30vw; margin-bottom: 1vh; color: white;" onclick="turnOnRefer(1)">Refer</button>
-          </div>
-          <div id="no-refer" class="inactive">
-            <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-              <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-              <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
-            </div>
-            <div class="" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
-
-            </div>
-          </div>
-          <div class="col-12">
-            <button type="button" name="button" onclick="vote(fboIndex, false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
-          </div>
-        </div>
-      </div>
       <div class="buttonbar">
         <div style="float: left; width: 100%; height: 7vh;">
           <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
         </div>
         <div class="big-circle-box">
           <div class="big-circle" id="big-no-button" onclick='openPopups(false)'>
-            𝗫
+            <div class="second-border">
+              <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
+            </div>
           </div>
         </div>
         <div class="big-circle-box">
@@ -571,7 +531,9 @@ under the License.
         </div>
         <div class="big-circle-box">
           <div class="big-circle" id="big-yes-button" onclick='openPopups(true)' style="font-size: 8vh;">
-            ✔
+            <div class="second-border">
+              <img class="circle-img-2" src="./img/thumbsup.png" alt="">
+            </div>
           </div>
         </div>
         <!-- <div class="" style="width: 100%; height: calc(4vh+12px)">

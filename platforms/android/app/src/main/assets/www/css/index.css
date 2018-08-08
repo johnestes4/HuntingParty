@@ -406,6 +406,17 @@ h1 {
   min-height: 7vh;
   height: 100%;
 }
+.circle-img-2 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  min-width: 80%;
+  min-height: 80%;
+  height: 80%;
+}
 
 
 #profile-sidebar {
@@ -616,6 +627,7 @@ h1 {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  overflow: hidden;
 }
 
 

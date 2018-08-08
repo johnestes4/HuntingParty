@@ -484,13 +484,17 @@ function renderFbos() {
           '</div>'+
           '<div class="fbo-item-buttons">'+
             '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(false)">'+
-              '𝗫'+
+              '<div class="second-border">'+
+                '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
               '</div>'+
+            '</div>'+
             '<div class="fbo-item-time-button">'+
               dueDate+
             '</div>'+
             '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(true)">'+
-              '✔'+
+            '<div class="second-border">'+
+              '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
+            '</div>'+
               '</div>'+
             '</div>'+
           '</div>'+
@@ -626,6 +630,7 @@ function checkVote(proxy, index) {
 }
 
 function closePopups(tab) {
+  document.getElementById("fbo-popups").classList.add('inactive');
   var a = document.getElementsByClassName('vote-popup')
   for (i = 0; i < a.length; i++) {
     a[i].classList.add('inactive');
@@ -639,6 +644,7 @@ function closePopups(tab) {
 }
 
 function openPopups(yes) {
+  document.getElementById("fbo-popups").classList.remove('inactive');
   if (yes) {
     var a = document.getElementsByClassName('yes-popup')
     for (i = 0; i < a.length; i++) {
@@ -679,7 +685,7 @@ function vote(index, yes) {
     }
     voteChanged = true
     fboVote[index] = 2
-    vote.comment = document.getElementById("yes-popup-comment").innerHTML
+    vote.comment = document.getElementById("yes-popup-comment").value
     fbo.voteYes.push(vote)
   } else if (fboVote[index] !== 1 && !yes) {
     for (var i = 0; i < fbo.voteYes.length; i++) {
@@ -689,9 +695,10 @@ function vote(index, yes) {
     }
     voteChanged = true
     fboVote[index] = 1
-    vote.comment = document.getElementById("no-popup-comment").innerHTML
+    vote.comment = document.getElementById("no-popup-comment").value
     fbo.voteNo.push(vote)
   }
+  console.log(vote)
   var fbo = fbos[index]
   var req = {};
   req['voteYes'] = fbo.voteYes;
@@ -704,15 +711,20 @@ function vote(index, yes) {
       fbo = JSON.parse(xhttp.responseText)
       checkVote(fbo)
       var voteScore = fbo.voteYes.length - fbo.voteNo.length
-      if (voteScore < 0) {
-        document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: red;">'+voteScore+'</p>'
-        document.getElementById("vote-circle-" + index).classList.remove('inactive')
-      } else if (voteScore > 0) {
-        document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
-        document.getElementById("vote-circle-" + index).classList.remove('inactive')
-      } else {
-        document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
-        document.getElementById("vote-circle-" + index).classList.add('inactive')
+      if (document.getElementById("vote-circle-" + index)) {
+        if (voteScore < 0) {
+          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: red;">'+voteScore+'</p>'
+          document.getElementById("vote-circle-" + index).classList.remove('inactive')
+        } else if (voteScore > 0) {
+          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
+          document.getElementById("vote-circle-" + index).classList.remove('inactive')
+        } else if (voteScore == 0 && ((fbo.voteNo.length + fbo.voteYes.length) > 0)) {
+          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: white;">+'+voteScore+'</p>'
+          document.getElementById("vote-circle-" + index).classList.remove('inactive')
+        } else {
+          document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
+          document.getElementById("vote-circle-" + index).classList.add('inactive')
+        }
       }
       closePopups(2)
     }
@@ -721,10 +733,6 @@ function vote(index, yes) {
   xhttp.open("PUT", url, true);
   xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
   xhttp.send(JSON.stringify(req));
-}
-
-function vote2(index, yes) {
-
 }
 
 function updateComments(fbo) {
