@@ -382,6 +382,21 @@ function toggleHamburgerMenu() {
     }
   }
 
+  function getToday() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10) {
+    dd='0'+dd
+    }
+    if(mm<10) {
+    mm='0'+mm
+    }
+    today = yyyy+'/'+mm+'/'+dd;
+    return today
+  }
+
   function renderFbos() {
     var fboHtml = ''
     var pipelineHtml = ''
@@ -397,8 +412,24 @@ function toggleHamburgerMenu() {
       //   }
       // }
       var dueDate = ''
+
       if (proxy.fbo.respDate) {
-        dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>"
+        var today = getToday()
+        var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+        var date2 = new Date(today);
+        var date1 = new Date(due);
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        if (timeToDue >= 365) {
+          dueDate = "<p style='font-weight: bold;'>Due In "+Math.round(timeToDue / 365).toString()+" Years ("+due+")</p>"
+        } else if (timeToDue >= 60) {
+          dueDate = "<p style='font-weight: bold;'>Due In "+Math.round(timeToDue / 30).toString()+" Months ("+due+")</p>"
+        } else if (timeToDue >= 14) {
+          dueDate = "<p style='font-weight: bold;'>Due In "+Math.round(timeToDue / 7).toString()+" Weeks ("+due+")</p>"
+        } else {
+          dueDate = "<p style='font-weight: bold;'>Due In "+timeToDue+" Days ("+due+")</p>"
+        }
+        // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
       } else {
         dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
       }
@@ -597,10 +628,32 @@ function toggleHamburgerMenu() {
     document.getElementById("abstract-text").innerHTML = proxy.fbo.desc;
     document.getElementById("data-text").innerHTML = dataText;
     if (proxy.fbo.respDate) {
-      document.getElementById("time-button").innerHTML = "<p>Due</p><p>"+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
+       "<p>Due</p><p>"+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
     } else {
       document.getElementById("time-button").innerHTML = "<p>No</p><p>Due Date</p>"
     }
+    var dueDate = ''
+    if (proxy.fbo.respDate) {
+      var today = getToday()
+      var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+      var date2 = new Date(today);
+      var date1 = new Date(due);
+      var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      if (timeToDue >= 365) {
+        dueDate = "<p>Due In</p><p>"+Math.round(timeToDue / 365).toString()+" Years </p>"
+      } else if (timeToDue >= 60) {
+        dueDate = "<p>Due In</p><p>"+Math.round(timeToDue / 30).toString()+" Months</p>"
+      } else if (timeToDue >= 14) {
+        dueDate = "<p>Due In</p><p>"+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+      } else {
+        dueDate = "<p>Due In</p><p>"+timeToDue+" Days</p>"
+      }
+      // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
+    } else {
+      dueDate = "<p'>No</p><p>Due Date</p>"
+    }
+    document.getElementById("time-button").innerHTML = dueDate
     if (tab == 1) {
       document.getElementById("big-yes-button").classList.add('inactive');
       document.getElementById("big-no-button").classList.add('inactive');
@@ -616,7 +669,6 @@ function toggleHamburgerMenu() {
   function checkVote(proxy, index) {
     for (i = 0; i < proxy.voteYes.length; i++) {
       if (proxy.voteYes[i].id == currentUser._id) {
-        console.log('you voted yes')
         fboVote[index] = 2
         break;
       }
@@ -894,7 +946,7 @@ function getTheData() {
           document.getElementById("login-view").classList.add('inactive');
           switchTab(2)
           goToFbo(5, 0);
-          expandData(2)
+          // expandData(2)
           //   }
           // };
           // xobj.send(null);
@@ -911,11 +963,9 @@ function getTheData() {
 
 
 function handleExternalURLs() {
-  console.log('it is: ' + device.platform)
   // Handle click events for all external URLs
   if (device.platform.toUpperCase() === 'ANDROID') {
     $(document).on('click', 'a[href^="http"]', function (e) {
-      console.log('CLICKED')
       var url = $(this).attr('href');
       // navigator.app.loadUrl(url, { openExternal: true });
       window.open(url, '_system');
