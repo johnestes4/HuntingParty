@@ -401,6 +401,49 @@ function toggleHamburgerMenu() {
     var fboHtml = ''
     var pipelineHtml = ''
     fboVote = []
+    company.fboProxies.sort(function(proxy1, proxy2){
+      var p1num = 0
+      for (i = 0; i < proxy1.voteYes.length; i++) {
+        var proxy = proxy1.voteYes[i]
+        if(proxy.date) {
+          if (proxy.date > p1num) {
+            p1num = proxy.date
+          }
+        }
+      }
+      for (i = 0; i < proxy1.voteNo.length; i++) {
+        var proxy = proxy1.voteNo[i]
+        if(proxy.date) {
+          if (proxy.date > p1num) {
+            p1num = proxy.date
+          }
+        }
+      }
+      var p2num = 0
+      for (i = 0; i < proxy2.voteYes.length; i++) {
+        var proxy = proxy2.voteYes[i]
+        if(proxy.date) {
+          if (proxy.date > p2num) {
+            p2num = proxy.date
+          }
+        }
+      }
+      for (i = 0; i < proxy2.voteNo.length; i++) {
+        var proxy = proxy2.voteNo[i]
+        if(proxy.date) {
+          if (proxy.date > p2num) {
+            p2num = proxy.date
+          }
+        }
+      }
+      if (p1num == 0) {
+        p1num = proxy1.voteYes.length + proxy1.voteNo.length
+      }
+      if (p2num == 0) {
+        p2num = proxy2.voteYes.length + proxy2.voteNo.length
+      }
+      return p2num - p1num
+    });
     for (i = 0; i < company.fboProxies.length; i++) {
       proxy = company.fboProxies[i]
       // if (company.fboProxies[i].comments.length == 0) {
@@ -421,13 +464,13 @@ function toggleHamburgerMenu() {
         var timeDiff = Math.abs(date2.getTime() - date1.getTime());
         var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
         if (timeToDue >= 365) {
-          dueDate = "<p style='font-weight: bold;'>Due In "+Math.round(timeToDue / 365).toString()+" Years ("+due+")</p>"
+          dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 365).toString()+" Years</p>"
         } else if (timeToDue >= 60) {
-          dueDate = "<p style='font-weight: bold;'>Due In "+Math.round(timeToDue / 30).toString()+" Months ("+due+")</p>"
+          dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
         } else if (timeToDue >= 14) {
-          dueDate = "<p style='font-weight: bold;'>Due In "+Math.round(timeToDue / 7).toString()+" Weeks ("+due+")</p>"
+          dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
         } else {
-          dueDate = "<p style='font-weight: bold;'>Due In "+timeToDue+" Days ("+due+")</p>"
+          dueDate = "<p style='font-weight: bold;'>Due: "+timeToDue+" Days</p>"
         }
         // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
       } else {
@@ -440,6 +483,8 @@ function toggleHamburgerMenu() {
         voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
       } else if (voteScore > 0) {
         voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
+      } else if (voteScore == 0 && ((proxy.voteYes.length + proxy.voteNo.length) > 0)) {
+        voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: black;">+'+voteScore+'</p></div>'
       } else {
         voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
       }
@@ -450,7 +495,7 @@ function toggleHamburgerMenu() {
         if (vote.comment) {
           voteString = ' - "'+vote.comment+'"'
         }
-        comments = comments + '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: YES' + voteString + '</p>'
+        comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
         voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
       }
       for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
@@ -459,8 +504,8 @@ function toggleHamburgerMenu() {
         if (vote.comment) {
           voteString = ' - "'+vote.comment+'"'
         }
-        comments = comments + '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: NO' + voteString + '</p>'
-        voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + ': No</div>'
+        comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+        voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
       }
       if (comments.length < 1) {
         comments = '<p style="color: gray;">Comments</p>'
@@ -580,6 +625,11 @@ function toggleHamburgerMenu() {
     document.getElementById("fbo-detail-view").classList.remove('inactive');
   }
 
+  function getTime() {
+    var i = new Date()
+    document.getElementById("test-button").innerHTML = i.getTime()
+  }
+
   function switchFboTab(elem, num) {
     var a = document.getElementsByClassName('buttonbar-tab')
     for (i = 0; i < a.length; i++) {
@@ -613,15 +663,15 @@ function toggleHamburgerMenu() {
     }
 
     var proxy = fbos[index]
-    var dataText = '<p><span style="font-weight: bold">Solicitation Number:</span>'+
+    var dataText = '<p><span style="font-weight: bold">Solicitation Number: </span>'+
     proxy.fbo.solnbr +
-    '</p><p><span style="font-weight: bold">Agency:</span>'+
+    '</p><p><span style="font-weight: bold">Agency: </span>'+
     proxy.fbo.agency+
-    '</p><p><span style="font-weight: bold">Office:</span>'+
+    '</p><p><span style="font-weight: bold">Office: </span>'+
     proxy.fbo.office+
-    '</p><p><span style="font-weight: bold">Location:</span>'+
+    '</p><p><span style="font-weight: bold">Location: </span>'+
     proxy.fbo.location+
-    '</p><p><span style="font-weight: bold">Contact:</span>'+
+    '</p><p><span style="font-weight: bold">Contact: </span>'+
     proxy.fbo.contact+
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
     document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
@@ -641,13 +691,13 @@ function toggleHamburgerMenu() {
       var timeDiff = Math.abs(date2.getTime() - date1.getTime());
       var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
       if (timeToDue >= 365) {
-        dueDate = "<p>Due In</p><p>"+Math.round(timeToDue / 365).toString()+" Years </p>"
+        dueDate = "<p>Due:</p><p>"+Math.round(timeToDue / 365).toString()+" Years </p>"
       } else if (timeToDue >= 60) {
-        dueDate = "<p>Due In</p><p>"+Math.round(timeToDue / 30).toString()+" Months</p>"
+        dueDate = "<p>Due:</p><p>"+Math.round(timeToDue / 30).toString()+" Months</p>"
       } else if (timeToDue >= 14) {
-        dueDate = "<p>Due In</p><p>"+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+        dueDate = "<p>Due:</p><p>"+Math.round(timeToDue / 7).toString()+" Weeks</p>"
       } else {
-        dueDate = "<p>Due In</p><p>"+timeToDue+" Days</p>"
+        dueDate = "<p>Due:</p><p>"+timeToDue+" Days</p>"
       }
       // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
     } else {
@@ -729,8 +779,12 @@ function toggleHamburgerMenu() {
       id: currentUser._id,
       name: currentUser.firstName + ' ' + currentUser.lastName,
       position: '',
-      comment: ''
+      comment: '',
+      date: ''
     }
+    var now = new Date()
+    now = now.getTime()
+    vote.date = now
     for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
       if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
         vote.position = currentUser.companyUserProxies[i].position
@@ -814,7 +868,8 @@ function toggleHamburgerMenu() {
           if (vote.comment) {
             voteString = ' - "'+vote.comment+'"'
           }
-          var newString = '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: YES' + voteString + '</p>'
+          var newString = '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+
           chatString = chatString + newString
         }
         for (i = 0; i < newFbo.voteNo.length; i++) {
@@ -823,7 +878,7 @@ function toggleHamburgerMenu() {
           if (vote.comment) {
             voteString = ' - "'+vote.comment+'"'
           }
-          var newString = '<p class="comment"><span style="font-weight: bold;">' + vote.name + '</span>: NO' + voteString + '</p>'
+          var newString = '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
           chatString = chatString + newString
         }
 
@@ -944,8 +999,8 @@ function getTheData() {
           document.getElementById("fbo-view").classList.add('inactive');
           document.getElementById("search-view").classList.add('inactive');
           document.getElementById("login-view").classList.add('inactive');
-          switchTab(2)
-          goToFbo(5, 0);
+          // switchTab(3)
+          // goToFbo(5, 0);
           // expandData(2)
           //   }
           // };

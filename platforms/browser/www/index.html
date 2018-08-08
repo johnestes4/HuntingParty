@@ -361,7 +361,7 @@ under the License.
     <div id="fbo-popups" class="inactive">
       <div class="vote-popup yes-popup inactive">
         <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-          <button class="popup-close" type="button" name="button" onclick="vote(fboIndex, true)">X</button>
+          <button class="popup-close" type="button" name="button" onclick="closePopups(2)">X</button>
           <p>You voted YES on this opportunity!</p>
           <p>Write a quick comment to let your team know why you approve.</p>
           <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
@@ -445,6 +445,7 @@ under the License.
 
     </div>
     <div id="pipeline-view" class="body-block inactive">
+      <!-- <button type="button" id="test-button" name="button" onclick="getTime()">click me </button> -->
       <div id="opportunities" class="">
         <div class="col-12">
           <div class="opportunities-title col-12">

@@ -120,7 +120,7 @@
 
 .fbo-item {
   width: 100%;
-  height: 30vh;
+  height: 32vh;
   position: relative;
   background: rgba(78,96,136,1);
   border: 1px solid rgba(0,0,0,0.75);
@@ -173,8 +173,7 @@
 .fbo-item-comments {
   float: left;
   width: 100%;
-  padding: 0.5vh 0.5vw 0px 0.5vw;
-  height: calc(13vh - 4px);
+  height: calc(15vh - 4px);
   overflow-y: auto;
   border-top: 1px solid rgba(255,255,255,0.1);
   border-bottom: 1px solid rgba(0,0,0,0.75);
@@ -187,7 +186,11 @@
   width: 22px;
   left: -11px;
   top: -11px;
-  line-height: 20px;
+  line-height: 21px;
+  padding-right: 2px;
+  padding-top: 0px;
+  font-weight: bold;
+  font-size: 15px;
   z-index: 6;
   background: white;
   border: 1px solid rgba(0,0,0,0.75);
@@ -264,6 +267,10 @@
 
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+a {
+  color: rgb(0, 134, 255);
 }
 
 body {
@@ -766,10 +773,26 @@ h1 {
 .comment {
   text-align: left;
   margin-bottom: 0px;
+  padding: 4px 4px 4px 4px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.375);
+}
+
+.yes-comment {
+  background: rgba(78, 136, 81, 1);
+}
+.no-comment {
+  background: rgba(136, 78, 78, 1);
 }
 
 .voted-button {
   background: rgba(255,198,0,1);
+}
+.comment-icon {
+  height: 15px;
+  width: 15px;
+  float: left;
+  margin-right: 5px;
 }
 
 
