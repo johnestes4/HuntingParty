@@ -364,6 +364,7 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.remove('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("hamburger-menu").classList.remove('hamburger-out')
       renderFbos()
     } else if (num == 3) {
       document.getElementById("news-view").classList.add('inactive')
