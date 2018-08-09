@@ -150,23 +150,75 @@ var tabIds = [
     allowed: [4]
   }
 ]
-
-
-$( document ).on( "pageinit", "#whole-page", function() {
-  $( document ).on( "swipeleft swiperight", "#whole-page", function( e ) {
-    // We check if there is no open panel on the page because otherwise
-    // a swipe to close the left panel would also open the right panel (and v.v.).
-    // We do this by checking the data that the framework stores on the page element (panel: open).
-    if ( $.mobile.activePage.jqmData( "panel" ) !== "open" ) {
-      if ( e.type === "swipeleft"  ) {
-        // $( "#right-panel" ).panel( "open" );
-      } else if ( e.type === "swiperight" ) {
-        $( "#mypanel" ).panel( "open" );
-      }
+var searchTerms = {
+  type: [
+    {
+      name: 'All',
+      value: false
+    },
+    {
+      name: 'Open RFPs',
+      value: false
+    },
+    {
+      name: 'Open RFIs',
+      value: false
+    },
+    {
+      name: 'Historical (closed) and projected RFPs',
+      value: false
     }
-  });
-});
-
+  ],
+  dueDate: [
+    {
+      name: 'Due any time',
+      value: false
+    },{
+      name: 'Due this week',
+      value: false
+    },{
+      name: 'Due next week',
+      value: false
+    },{
+      name: 'Due in next 2-4 weeks',
+      value: false
+    },{
+      name: 'Due more than 4 weeks from now',
+      value: false
+    }
+  ],
+  naics: [
+    {
+      name: 'All',
+      value: false
+    }
+  ],
+  psc: [
+    {
+      name: 'All',
+      value: false
+    }
+  ],
+  agency: [
+    {
+      name: 'All',
+      value: false
+    }
+  ],
+  place: [
+    {
+      name: 'All',
+      value: false
+    }
+  ],
+  setAside: [
+    {
+      name: 'All',
+      value: false
+    }
+  ],
+  keyword: '',
+}
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -258,6 +310,23 @@ function openProfileDropdown() {
   // document.getElementById("profile-sidebar").classList.add('slide-to-right');
   // document.getElementById("profile-dropdown").classList.remove('inactive')
   // profileDropdownOpen = true
+}
+
+function renderSearch() {
+  var timeString = '<div class="" style="width: 100%; float: left;">'+
+    '<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.dueDate[0].name+'</span>'+
+    '<div class="" style="width: 100%; float: left;">'+
+      '<p style="margin-bottom: 2px;">----------</p>'+
+    '</div>'+
+  '</div>'
+
+  for (i = 1; i < searchTerms.dueDate.length; i++) {
+    timeString = timeString + '<div class="" style="width: 100%; float: left;">'+
+      '<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.dueDate[i].name+'</span>'+
+    '</div>'
+
+  }
+  document.getElementById("search-box-time").innerHTML = timeString
 }
 
 function toggleHamburgerMenu() {
@@ -1001,6 +1070,7 @@ function getTheData() {
           if (company.fboProxies.length > 0) {
             fbos = company.fboProxies
             setActiveFbo(fboIndex)
+            renderSearch()
             renderFbos()
             var promiseFinished = true
             document.getElementById("loading").classList.add('inactive');
