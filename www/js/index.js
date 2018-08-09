@@ -389,10 +389,10 @@ function toggleHamburgerMenu() {
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
     if(dd<10) {
-    dd='0'+dd
+      dd='0'+dd
     }
     if(mm<10) {
-    mm='0'+mm
+      mm='0'+mm
     }
     today = yyyy+'/'+mm+'/'+dd;
     return today
@@ -679,7 +679,7 @@ function toggleHamburgerMenu() {
     document.getElementById("abstract-text").innerHTML = proxy.fbo.desc;
     document.getElementById("data-text").innerHTML = dataText;
     if (proxy.fbo.respDate) {
-       "<p>Due</p><p>"+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
+      "<p>Due</p><p>"+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
     } else {
       document.getElementById("time-button").innerHTML = "<p>No</p><p>Due Date</p>"
     }
@@ -1131,3 +1131,27 @@ var app = {
     }
   }
 };
+
+$(function() {
+  $("#sidebar-detector").swipe( {
+    swipeRight:function(event, distance, duration, fingerCount, fingerData, currentDirection) {
+      openSidebar()
+    },
+  });
+  $("#main-view").swipe( {
+    swipeLeft:function(event, distance, duration, fingerCount, fingerData, currentDirection) {
+      closeSidebar()
+    },
+  });
+  function openSidebar() {
+    $("#profile-dropdown").removeClass('inactive')
+    $("#profile-dropdown").removeClass('dropdown-out')
+    $("#profile-dropdown").addClass('dropdown-in')
+    profileDropdownOpen = true
+  }
+  function closeSidebar(){
+    $("#profile-dropdown").addClass('dropdown-out');
+    $("#profile-dropdown").removeClass('dropdown-in')
+    profileDropdownOpen = false
+  }
+});

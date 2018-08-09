@@ -63,6 +63,9 @@ under the License.
     </div>
   </div>
   <div id="main-view" class="inactive">
+    <div id="sidebar-detector" class="" style="position: fixed; left: 0px; top: 0px; height: 100vh; width: 5vw; background: none; z-index: 999999;">
+
+    </div>
     <div class="topbar">
       <div id="profile-circle" class="circle" style="top: 0px; left: 1px;" onclick="openProfileDropdown()">
         <div id="profile-circle-inside" class="circle-inside" style="">
@@ -107,77 +110,55 @@ under the License.
         </div>
         <div class="" style="float: left; width: 100%; height: 2vh;">
         </div>
-        <div class="" style="color: rgb(170, 77, 64);">
-          <div class="" style="float: left; width: 100%;">
-            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-              <img class="iconbar-img" src="./img/profile2.png" alt="">
-            </div>
-            <div class="todo-left" style="float: left; width: 55%; margin-right: 5%; padding-top: 0.8vh;">
-              <p>Identify 7 more RFPs to stay on growth targets</p>
-            </div>
-            <div class="todo-right" style="float: left; width: 20%; margin-right: 5%; text-align: center; padding-top: 0.8vh;">
-              <p>10/RFP</p>
-            </div>
+        <div class="todo-item">
+          <div class="todo-img" style="">
+            <img class="iconbar-img" src="./img/profile2.png" alt="">
           </div>
-          <div class="" style="float: left; width: 100%;">
-            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-              <img class="iconbar-img" src="./img/profile2.png" alt="">
-            </div>
-            <div class="todo-left" style="float: left; width: 55%; margin-right: 5%; padding-top: 0.8vh;">
-              <p>Vote on the 12 RFPs your team has voted on</p>
-            </div>
-            <div class="todo-right" style="float: left; width: 20%; margin-right: 5%; text-align: center; padding-top: 0.8vh;">
-              <p>10/RFP</p>
-            </div>
+          <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
+          <p class="todo-text todo-right">10/RFP</p>
+        </div>
+        <div class="todo-item">
+          <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+            <img class="iconbar-img" src="./img/profile2.png" alt="">
           </div>
-          <div class="" style="float: left; width: 100%;">
-            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-              <img class="iconbar-img" src="./img/profile2.png" alt="">
-            </div>
-            <div class="todo-left" style="float: left; width: 55%; margin-right: 5%; padding-top: 0.8vh;">
-              <p>Make pre-select decision on 15 RFPs that have been identified</p>
-            </div>
-            <div class="todo-right" style="float: left; width: 20%; margin-right: 5%; text-align: center; padding-top: 0.8vh;">
-              <p>5/RFP</p>
-            </div>
+          <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
+          <p class="todo-text todo-right">10/RFP</p>
+        </div>
+        <div class="todo-item">
+          <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+            <img class="iconbar-img" src="./img/profile2.png" alt="">
           </div>
+          <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
+          <p class="todo-text todo-right">5/RFP</p>
         </div>
       </div>
       <div id="news-block">
         <div class="" style="width: 100%; text-align: center; float: left; margin-bottom: 2vh;">
           NEWS
         </div>
-        <div class="" style="width: 100%; float: left;">
+        <div class="news-item">
           <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
             <img class="iconbar-img" src="./img/profile.png" alt="">
           </div>
-          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
-            <p>Person joined your company</p>
-          </div>
+          <p class="news-text">Person joined your company</p>
         </div>
-        <div class="" style="width: 100%; float: left;">
+        <div class="news-item">
           <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
             <img class="iconbar-img" src="./img/profile.png" alt="">
           </div>
-          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
-            <p>Person2 left a comment on an RFP</p>
-          </div>
+          <p class="news-text">Person2 left a comment on an RFP</p>
         </div>
-        <div class="" style="width: 100%; float: left;">
+        <div class="news-item">
           <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
             <img class="iconbar-img" src="./img/profile.png" alt="">
           </div>
-          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
-            <p>Person3 left a comment on an RFP</p>
-          </div>
+          <p class="news-text">Person3 left a comment on an RFP</p>
         </div>
-        <div class="" style="width: 100%; float: left;">
+        <div class="news-item">
           <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
             <img class="iconbar-img" src="./img/contact.png" alt="">
           </div>
-          <div class="" style="width: 85%; float: left; padding-top: 0.8vh;">
-            <p>Person4: here is some comment text</p>
-          </div>
+          <p class="news-text">Person4: here is some comment text</p>
         </div>
       </div>
     </div>
@@ -645,6 +626,7 @@ under the License.
   <script type="text/javascript" src="js/tether.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
   <script type="text/javascript">
     app.initialize();
   </script>
