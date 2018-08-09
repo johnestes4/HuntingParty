@@ -134,7 +134,7 @@ var agencyLogos = [
     "img": "doa.png"
   }
 ]
-
+var searchTerms = []
 var fboVote = []
 var tabIds = [
   {
@@ -166,6 +166,7 @@ $( document ).on( "pageinit", "#whole-page", function() {
     }
   });
 });
+
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -365,12 +366,15 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.remove('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("hamburger-menu").classList.remove('hamburger-out')
+      document.getElementById("hamburger-menu").classList.add('inactive')
       renderFbos()
     } else if (num == 3) {
       document.getElementById("news-view").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.remove('inactive')
+      document.getElementById("hamburger-menu").classList.remove('hamburger-out')
+      document.getElementById("hamburger-menu").classList.add('inactive')
     }
     activeTab = num
     var a = document.getElementsByClassName('iconbar-icon')
@@ -976,7 +980,11 @@ function getTheData() {
       // Typical action to be performed when the document is ready:
       currentUser = JSON.parse(xhttp.responseText);
       document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
-      document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+currentUser.avatar+'" alt="">';
+      var avatar = currentUser.avatar
+      if (avatar == '../../assets/img/user.png') {
+        avatar = './img/user.png'
+      }
+      document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
       var xhttp2 = new XMLHttpRequest();
       // xhttp.setRequestHeader("Content-type", "application/json");
       xhttp2.onreadystatechange = function() {
@@ -990,16 +998,31 @@ function getTheData() {
           // if (xobj.readyState == 4 && xobj.status == "200") {
           // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
           // agencyLogos = JSON.parse(xobj.responseText);
-          fbos = company.fboProxies
-          setActiveFbo(fboIndex)
-          renderFbos()
-          var promiseFinished = true
-          document.getElementById("loading").classList.add('inactive');
-          document.getElementById("main-view").classList.remove('inactive');
-          document.getElementById("news-view").classList.remove('inactive');
-          document.getElementById("fbo-view").classList.add('inactive');
-          document.getElementById("search-view").classList.add('inactive');
-          document.getElementById("login-view").classList.add('inactive');
+          if (company.fboProxies.length > 0) {
+            fbos = company.fboProxies
+            setActiveFbo(fboIndex)
+            renderFbos()
+            var promiseFinished = true
+            document.getElementById("loading").classList.add('inactive');
+            document.getElementById("main-view").classList.remove('inactive');
+            document.getElementById("news-view").classList.remove('inactive');
+            document.getElementById("fbo-view").classList.add('inactive');
+            document.getElementById("search-view").classList.add('inactive');
+            document.getElementById("login-view").classList.add('inactive');
+          } else {
+            document.getElementById("loading").classList.add('inactive');
+            document.getElementById("main-view").classList.remove('inactive');
+            document.getElementById("news-view").classList.remove('inactive');
+            document.getElementById("fbo-view").classList.add('inactive');
+            document.getElementById("search-view").classList.add('inactive');
+            document.getElementById("login-view").classList.add('inactive');
+            document.getElementById("fbo-popups").classList.remove('inactive');
+            document.getElementById("error-popup").classList.remove('inactive');
+            document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
+            // document.getElementById("iconbar-3").classList.add('inactive');
+            // document.getElementById("iconbar-4").classList.add('inactive');
+            // document.getElementById("iconbar-5").classList.add('inactive');
+          }
           // switchTab(3)
           // goToFbo(5, 0);
           // expandData(2)
@@ -1008,9 +1031,13 @@ function getTheData() {
           // xobj.send(null);
         }
       };
-      var companyId = currentUser.companyUserProxies[0].company._id
-      xhttp2.open("GET", "https://efassembly.com:4432/company/" + companyId, true);
-      xhttp2.send();
+      if (currentUser.companyUserProxies.length > 0) {
+        var companyId = currentUser.companyUserProxies[0].company._id
+        xhttp2.open("GET", "https://efassembly.com:4432/company/" + companyId, true);
+        xhttp2.send();
+      } else {
+        document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something in here for this"
+      }
     }
   };
   xhttp.open("GET", "https://efassembly.com:4432/profiles/" + id, true);

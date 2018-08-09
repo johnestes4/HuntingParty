@@ -494,6 +494,17 @@ h1 {
   height: 80%;
 }
 
+#sidebar-detector {
+  /* pointer-events: none; */
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 91vh;
+  width: 5vw;
+  /* background: red; */
+  z-index: 999999;
+}
+
 
 #profile-sidebar {
   position: absolute;
