@@ -191,30 +191,50 @@ var searchTerms = {
     {
       name: 'All',
       value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
     }
   ],
   psc: [
     {
       name: 'All',
       value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
     }
   ],
   agency: [
     {
       name: 'All',
       value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
     }
   ],
   place: [
     {
       name: 'All',
       value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
     }
   ],
   setAside: [
     {
       name: 'All',
       value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
     }
   ],
   keyword: '',
@@ -313,20 +333,238 @@ function openProfileDropdown() {
 }
 
 function renderSearch() {
-  var timeString = '<div class="" style="width: 100%; float: left;">'+
-    '<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.dueDate[0].name+'</span>'+
-    '<div class="" style="width: 100%; float: left;">'+
+  var html = ''
+  for (i = 0; i < searchTerms.dueDate.length; i++) {
+    html = html + '<div class="" style="width: 100%; float: left;">'+
+    '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.dueDate[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.dueDate[i].name+'</span>'
+    if (i == 0) {
+      html = html + '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
-    '</div>'+
-  '</div>'
-
-  for (i = 1; i < searchTerms.dueDate.length; i++) {
-    timeString = timeString + '<div class="" style="width: 100%; float: left;">'+
-      '<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.dueDate[i].name+'</span>'+
-    '</div>'
-
+      '</div>'
+    }
+    html = html + '</div>'
   }
-  document.getElementById("search-box-time").innerHTML = timeString
+  document.getElementById("search-box-time").innerHTML = html
+  html = ''
+  for (i = 0; i < searchTerms.naics.length; i++) {
+    html = html + '<div class="" style="width: 100%; float: left;">'+
+    '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+    if (i == 0) {
+      html = html + '<div class="" style="width: 100%; float: left;">'+
+      '<p style="margin-bottom: 2px;">----------</p>'+
+      '</div>'
+    }
+    html = html + '</div>'
+  }
+  document.getElementById("search-box-naics").innerHTML = html
+  html = ''
+  for (i = 0; i < searchTerms.psc.length; i++) {
+    html = html + '<div class="" style="width: 100%; float: left;">'+
+    '<input class="checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+    if (i == 0) {
+      html = html + '<div class="" style="width: 100%; float: left;">'+
+      '<p style="margin-bottom: 2px;">----------</p>'+
+      '</div>'
+    }
+    html = html + '</div>'
+  }
+  document.getElementById("search-box-psc").innerHTML = html
+  html = ''
+  for (i = 0; i < searchTerms.agency.length; i++) {
+    html = html + '<div class="" style="width: 100%; float: left;">'+
+    '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+    if (i == 0) {
+      html = html + '<div class="" style="width: 100%; float: left;">'+
+      '<p style="margin-bottom: 2px;">----------</p>'+
+      '</div>'
+    }
+    html = html + '</div>'
+  }
+  document.getElementById("search-box-agency").innerHTML = html
+  html = ''
+  for (i = 0; i < searchTerms.place.length; i++) {
+    html = html + '<div class="" style="width: 100%; float: left;">'+
+    '<input class="checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.place[i].name+'</span>'
+    if (i == 0) {
+      html = html + '<div class="" style="width: 100%; float: left;">'+
+      '<p style="margin-bottom: 2px;">----------</p>'+
+      '</div>'
+    }
+    html = html + '</div>'
+  }
+  document.getElementById("search-box-location").innerHTML = html
+  html = ''
+  for (i = 0; i < searchTerms.setAside.length; i++) {
+    html = html + '<div class="" style="width: 100%; float: left;">'+
+    '<input class="checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].value+'" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.setAside[i].name+'</span>'
+    if (i == 0) {
+      html = html + '<div class="" style="width: 100%; float: left;">'+
+      '<p style="margin-bottom: 2px;">----------</p>'+
+      '</div>'
+    }
+    html = html + '</div>'
+  }
+  document.getElementById("search-box-setaside").innerHTML = html
+}
+
+function calculateSearch(elem) {
+  var a = document.getElementsByClassName('checkbox-duedate')
+  var firstClicked = false
+  var anyFalse = false
+  for (i = 0; i < a.length; i++) {
+    firstClicked = (elem == a[0])
+    if (elem == a[i]) {
+      console.log('you just clicked on ' + searchTerms.dueDate[i].name + ' and turned it to ' + a[i].checked)
+    }
+    if (!firstClicked || i == 0) {
+      searchTerms.dueDate[i].value = a[i].checked
+    } else if (firstClicked) {
+      searchTerms.dueDate[i].value = a[0].checked
+      a[i].checked = a[0].checked
+    } else {
+      searchTerms.dueDate[i].value = a[i].checked
+    }
+    if (a[i].checked == false) {
+      a[0].checked = false
+      if (i > 0) {
+        anyFalse = true
+      }
+    }
+    if (i == (a.length-1) && !anyFalse) {
+      a[0].checked = true
+    }
+  }
+  a = document.getElementsByClassName('checkbox-naics')
+  firstClicked = false
+  anyFalse = false
+  for (i = 0; i < a.length; i++) {
+    firstClicked = (elem == a[0])
+    if (elem == a[i]) {
+      console.log('you just clicked on ' + searchTerms.naics[i].name + ' and turned it to ' + a[i].checked)
+    }
+    if (!firstClicked || i == 0) {
+      searchTerms.naics[i].value = a[i].checked
+    } else if (firstClicked) {
+      searchTerms.naics[i].value = a[0].checked
+      a[i].checked = a[0].checked
+    } else {
+      searchTerms.naics[i].value = a[i].checked
+    }
+    if (a[i].checked == false) {
+      a[0].checked = false
+      if (i > 0) {
+        anyFalse = true
+      }
+    }
+    if (i == (a.length-1) && !anyFalse) {
+      a[0].checked = true
+    }
+  }
+  a = document.getElementsByClassName('checkbox-psc')
+  allChecked = false
+  anyFalse = false
+  for (i = 0; i < a.length; i++) {
+    firstClicked = (elem == a[0])
+    if (elem == a[i]) {
+      console.log('you just clicked on ' + searchTerms.psc[i].name + ' and turned it to ' + a[i].checked)
+    }
+    if (!firstClicked || i == 0) {
+      searchTerms.psc[i].value = a[i].checked
+    } else if (firstClicked) {
+      searchTerms.psc[i].value = a[0].checked
+      a[i].checked = a[0].checked
+    } else {
+      searchTerms.psc[i].value = a[i].checked
+    }
+    if (a[i].checked == false) {
+      a[0].checked = false
+      if (i > 0) {
+        anyFalse = true
+      }
+    }
+    if (i == (a.length-1) && !anyFalse) {
+      a[0].checked = true
+    }
+  }
+  a = document.getElementsByClassName('checkbox-agency')
+  allChecked = false
+  anyFalse = false
+  for (i = 0; i < a.length; i++) {
+    firstClicked = (elem == a[0])
+    if (elem == a[i]) {
+      console.log('you just clicked on ' + searchTerms.agency[i].name + ' and turned it to ' + a[i].checked)
+    }
+    if (!firstClicked || i == 0) {
+      searchTerms.agency[i].value = a[i].checked
+    } else if (firstClicked) {
+      searchTerms.agency[i].value = a[0].checked
+      a[i].checked = a[0].checked
+    } else {
+      searchTerms.agency[i].value = a[i].checked
+    }
+    if (a[i].checked == false) {
+      a[0].checked = false
+      if (i > 0) {
+        anyFalse = true
+      }
+    }
+    if (i == (a.length-1) && !anyFalse) {
+      a[0].checked = true
+    }
+  }
+  a = document.getElementsByClassName('checkbox-place')
+  allChecked = false
+  anyFalse = false
+  for (i = 0; i < a.length; i++) {
+    firstClicked = (elem == a[0])
+    if (elem == a[i]) {
+      console.log('you just clicked on ' + searchTerms.place[i].name + ' and turned it to ' + a[i].checked)
+    }
+    if (!firstClicked || i == 0) {
+      searchTerms.place[i].value = a[i].checked
+    } else if (firstClicked) {
+      searchTerms.place[i].value = a[0].checked
+      a[i].checked = a[0].checked
+    } else {
+      searchTerms.place[i].value = a[i].checked
+    }
+    if (a[i].checked == false) {
+      a[0].checked = false
+      if (i > 0) {
+        anyFalse = true
+      }
+    }
+    if (i == (a.length-1) && !anyFalse) {
+      a[0].checked = true
+    }
+  }
+  a = document.getElementsByClassName('checkbox-setaside')
+  allChecked = false
+  anyFalse = false
+  for (i = 0; i < a.length; i++) {
+    firstClicked = (elem == a[0])
+    if (elem == a[i]) {
+      console.log('you just clicked on ' + searchTerms.setAside[i].name + ' and turned it to ' + a[i].checked)
+    }
+    if (!firstClicked || i == 0) {
+      searchTerms.setAside[i].value = a[i].checked
+    } else if (firstClicked) {
+      searchTerms.setAside[i].value = a[0].checked
+      a[i].checked = a[0].checked
+    } else {
+      searchTerms.setAside[i].value = a[i].checked
+    }
+    if (a[i].checked == false) {
+      a[0].checked = false
+      if (i > 0) {
+        anyFalse = true
+      }
+    }
+    if (i == (a.length-1) && !anyFalse) {
+      a[0].checked = true
+    }
+  }
+  console.log(searchTerms)
 }
 
 function toggleHamburgerMenu() {
