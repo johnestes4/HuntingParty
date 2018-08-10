@@ -1,6 +1,7 @@
 var activeTab = 0
 var dataExpanded = 0
 var company = null
+var huntingPartyData = null
 var fbos = []
 var incomingFbos = []
 var pipelineFbos = []
@@ -430,7 +431,7 @@ function calculateSearch(elem) {
         anyFalse = true
       }
     }
-    if (i == (a.length-1) && !anyFalse) {
+    if (i == (a.length-1) && !anyFalse && a.length > 1) {
       a[0].checked = true
     }
   }
@@ -456,7 +457,7 @@ function calculateSearch(elem) {
         anyFalse = true
       }
     }
-    if (i == (a.length-1) && !anyFalse) {
+    if (i == (a.length-1) && !anyFalse && a.length > 1) {
       a[0].checked = true
     }
   }
@@ -482,7 +483,7 @@ function calculateSearch(elem) {
         anyFalse = true
       }
     }
-    if (i == (a.length-1) && !anyFalse) {
+    if (i == (a.length-1) && !anyFalse && a.length > 1) {
       a[0].checked = true
     }
   }
@@ -508,7 +509,7 @@ function calculateSearch(elem) {
         anyFalse = true
       }
     }
-    if (i == (a.length-1) && !anyFalse) {
+    if (i == (a.length-1) && !anyFalse && a.length > 1) {
       a[0].checked = true
     }
   }
@@ -534,7 +535,7 @@ function calculateSearch(elem) {
         anyFalse = true
       }
     }
-    if (i == (a.length-1) && !anyFalse) {
+    if (i == (a.length-1) && !anyFalse && a.length > 1) {
       a[0].checked = true
     }
   }
@@ -560,11 +561,54 @@ function calculateSearch(elem) {
         anyFalse = true
       }
     }
-    if (i == (a.length-1) && !anyFalse) {
+    if (i == (a.length-1) && !anyFalse && a.length > 1) {
       a[0].checked = true
     }
   }
   console.log(searchTerms)
+}
+
+function saveSearchTerms() {
+  if (document.getElementById("search-name").value.length > 0) {
+    var terms = searchTerms
+    var creatingNew = false
+    if (!huntingPartyData) {
+      huntingPartyData = {
+        companyId: company._id,
+        searches: []
+      }
+      creatingNew = true
+    } else {
+    }
+    terms.name = document.getElementById("search-name").value
+    huntingPartyData.searches.push(terms)
+    if (creatingNew) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('CREATED')
+        }
+      };
+      var url = "https://efassembly.com:4432/huntingpartydata/add";
+      xhttp.open("POST", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(huntingPartyData));
+
+    } else {
+      var id = huntingPartyData._id
+      delete huntingPartyData['_id'];
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('UPDATED')
+        }
+      };
+      var url = "https://efassembly.com:4432/huntingpartydata/" + id;
+      xhttp.open("PUT", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(huntingPartyData));
+    }
+  }
 }
 
 function toggleHamburgerMenu() {
@@ -1305,35 +1349,45 @@ function getTheData() {
           // if (xobj.readyState == 4 && xobj.status == "200") {
           // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
           // agencyLogos = JSON.parse(xobj.responseText);
-          if (company.fboProxies.length > 0) {
-            fbos = company.fboProxies
-            setActiveFbo(fboIndex)
-            renderSearch()
-            renderFbos()
-            var promiseFinished = true
-            document.getElementById("loading").classList.add('inactive');
-            document.getElementById("main-view").classList.remove('inactive');
-            document.getElementById("news-view").classList.remove('inactive');
-            document.getElementById("fbo-view").classList.add('inactive');
-            document.getElementById("search-view").classList.add('inactive');
-            document.getElementById("login-view").classList.add('inactive');
-          } else {
-            document.getElementById("loading").classList.add('inactive');
-            document.getElementById("main-view").classList.remove('inactive');
-            document.getElementById("news-view").classList.remove('inactive');
-            document.getElementById("fbo-view").classList.add('inactive');
-            document.getElementById("search-view").classList.add('inactive');
-            document.getElementById("login-view").classList.add('inactive');
-            document.getElementById("fbo-popups").classList.remove('inactive');
-            document.getElementById("error-popup").classList.remove('inactive');
-            document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
-            // document.getElementById("iconbar-3").classList.add('inactive');
-            // document.getElementById("iconbar-4").classList.add('inactive');
-            // document.getElementById("iconbar-5").classList.add('inactive');
+
+          var xhttp3 = new XMLHttpRequest();
+          // xhttp3.setRequestHeader("Content-type", "application/json");
+          xhttp3.onreadystatechange = function() {
+            if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+              searchTerms = JSON.parse(xhttp3.responseText);
+              if (company.fboProxies.length > 0) {
+                fbos = company.fboProxies
+                setActiveFbo(fboIndex)
+                renderSearch()
+                renderFbos()
+                var promiseFinished = true
+                document.getElementById("loading").classList.add('inactive');
+                document.getElementById("main-view").classList.remove('inactive');
+                document.getElementById("news-view").classList.remove('inactive');
+                document.getElementById("fbo-view").classList.add('inactive');
+                document.getElementById("search-view").classList.add('inactive');
+                document.getElementById("login-view").classList.add('inactive');
+              } else {
+                document.getElementById("loading").classList.add('inactive');
+                document.getElementById("main-view").classList.remove('inactive');
+                document.getElementById("news-view").classList.remove('inactive');
+                document.getElementById("fbo-view").classList.add('inactive');
+                document.getElementById("search-view").classList.add('inactive');
+                document.getElementById("login-view").classList.add('inactive');
+                document.getElementById("fbo-popups").classList.remove('inactive');
+                document.getElementById("error-popup").classList.remove('inactive');
+                document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
+                // document.getElementById("iconbar-3").classList.add('inactive');
+                // document.getElementById("iconbar-4").classList.add('inactive');
+                // document.getElementById("iconbar-5").classList.add('inactive');
+              }
+              // switchTab(3)
+              // goToFbo(5, 0);
+              // expandData(2)
+            }
           }
-          // switchTab(3)
-          // goToFbo(5, 0);
-          // expandData(2)
+          xhttp3.open("GET", "https://efassembly.com:4432/fbo/getsearchterms/", true);
+          xhttp3.send();
           //   }
           // };
           // xobj.send(null);
