@@ -240,6 +240,95 @@ var searchTerms = {
   ],
   keyword: '',
 }
+var emptySearchTerms = {
+  type: [
+    {
+      name: 'All',
+      value: false
+    },
+    {
+      name: 'Open RFPs',
+      value: false
+    },
+    {
+      name: 'Open RFIs',
+      value: false
+    },
+    {
+      name: 'Historical (closed) and projected RFPs',
+      value: false
+    }
+  ],
+  dueDate: [
+    {
+      name: 'Due any time',
+      value: false
+    },{
+      name: 'Due this week',
+      value: false
+    },{
+      name: 'Due next week',
+      value: false
+    },{
+      name: 'Due in next 2-4 weeks',
+      value: false
+    },{
+      name: 'Due more than 4 weeks from now',
+      value: false
+    }
+  ],
+  naics: [
+    {
+      name: 'All',
+      value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
+    }
+  ],
+  psc: [
+    {
+      name: 'All',
+      value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
+    }
+  ],
+  agency: [
+    {
+      name: 'All',
+      value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
+    }
+  ],
+  place: [
+    {
+      name: 'All',
+      value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
+    }
+  ],
+  setAside: [
+    {
+      name: 'All',
+      value: false
+    },
+    {
+      name: 'Option 2',
+      value: true
+    }
+  ],
+  keyword: '',
+}
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -331,6 +420,52 @@ function openProfileDropdown() {
   // document.getElementById("profile-sidebar").classList.add('slide-to-right');
   // document.getElementById("profile-dropdown").classList.remove('inactive')
   // profileDropdownOpen = true
+}
+
+function viewSearch() {
+  if (document.getElementById("saved-searches").value > -1) {
+    searchTerms = huntingPartyData.searches[document.getElementById("saved-searches").value]
+    // activeSavedSearch = document.getElementById("saved-searches").value
+  } else {
+    searchTerms = emptySearchTerms
+  }
+  renderSearch()
+  var a = document.getElementsByClassName('checkbox-duedate')
+  for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.dueDate[i].value
+  }
+  a = document.getElementsByClassName('checkbox-naics')
+  for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.naics[i].value
+  }
+  a = document.getElementsByClassName('checkbox-psc')
+  for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.psc[i].value
+  }
+  a = document.getElementsByClassName('checkbox-agency')
+  for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.agency[i].value
+  }
+  a = document.getElementsByClassName('checkbox-place')
+  for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.place[i].value
+  }
+  a = document.getElementsByClassName('checkbox-setaside')
+  for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.setAside[i].value
+  }
+  document.getElementById("search-name").value = searchTerms.name
+
+}
+
+function renderSavedSearches() {
+  var html = '<option value="-1">---Create New Search---</option>'
+  // '<option disabled selected value> -- select an option -- </option>'
+  console.log(huntingPartyData.searches)
+  for (i = 0; i < huntingPartyData.searches.length; i++) {
+    html = html + '<option value="'+i+'">'+huntingPartyData.searches[i].name+'</option>'
+  }
+  document.getElementById("saved-searches").innerHTML = html
 }
 
 function renderSearch() {
@@ -565,6 +700,8 @@ function calculateSearch(elem) {
       a[0].checked = true
     }
   }
+
+
   console.log(searchTerms)
 }
 
@@ -581,7 +718,11 @@ function saveSearchTerms() {
     } else {
     }
     terms.name = document.getElementById("search-name").value
-    huntingPartyData.searches.push(terms)
+    if (document.getElementById("saved-searches").value > -1) {
+      huntingPartyData.searches[document.getElementById("saved-searches").value] = terms
+    } else {
+      huntingPartyData.searches.push(terms)
+    }
     if (creatingNew) {
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
@@ -1355,35 +1496,46 @@ function getTheData() {
           xhttp3.onreadystatechange = function() {
             if (xhttp3.readyState == 4 && xhttp3.status == 200) {
               searchTerms = JSON.parse(xhttp3.responseText);
-              if (company.fboProxies.length > 0) {
-                fbos = company.fboProxies
-                setActiveFbo(fboIndex)
-                renderSearch()
-                renderFbos()
-                var promiseFinished = true
-                document.getElementById("loading").classList.add('inactive');
-                document.getElementById("main-view").classList.remove('inactive');
-                document.getElementById("news-view").classList.remove('inactive');
-                document.getElementById("fbo-view").classList.add('inactive');
-                document.getElementById("search-view").classList.add('inactive');
-                document.getElementById("login-view").classList.add('inactive');
-              } else {
-                document.getElementById("loading").classList.add('inactive');
-                document.getElementById("main-view").classList.remove('inactive');
-                document.getElementById("news-view").classList.remove('inactive');
-                document.getElementById("fbo-view").classList.add('inactive');
-                document.getElementById("search-view").classList.add('inactive');
-                document.getElementById("login-view").classList.add('inactive');
-                document.getElementById("fbo-popups").classList.remove('inactive');
-                document.getElementById("error-popup").classList.remove('inactive');
-                document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
-                // document.getElementById("iconbar-3").classList.add('inactive');
-                // document.getElementById("iconbar-4").classList.add('inactive');
-                // document.getElementById("iconbar-5").classList.add('inactive');
+              emptySearchTerms = JSON.parse(xhttp3.responseText);
+              var xhttp4 = new XMLHttpRequest();
+              // xhttp4.setRequestHeader("Content-type", "application/json");
+              xhttp4.onreadystatechange = function() {
+                if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+                  huntingPartyData = JSON.parse(xhttp4.responseText);
+                  if (company.fboProxies.length > 0) {
+                    fbos = company.fboProxies
+                    setActiveFbo(fboIndex)
+                    renderSavedSearches()
+                    renderSearch()
+                    renderFbos()
+                    var promiseFinished = true
+                    document.getElementById("loading").classList.add('inactive');
+                    document.getElementById("main-view").classList.remove('inactive');
+                    document.getElementById("news-view").classList.remove('inactive');
+                    document.getElementById("fbo-view").classList.add('inactive');
+                    document.getElementById("search-view").classList.add('inactive');
+                    document.getElementById("login-view").classList.add('inactive');
+                  } else {
+                    document.getElementById("loading").classList.add('inactive');
+                    document.getElementById("main-view").classList.remove('inactive');
+                    document.getElementById("news-view").classList.remove('inactive');
+                    document.getElementById("fbo-view").classList.add('inactive');
+                    document.getElementById("search-view").classList.add('inactive');
+                    document.getElementById("login-view").classList.add('inactive');
+                    document.getElementById("fbo-popups").classList.remove('inactive');
+                    document.getElementById("error-popup").classList.remove('inactive');
+                    document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
+                    // document.getElementById("iconbar-3").classList.add('inactive');
+                    // document.getElementById("iconbar-4").classList.add('inactive');
+                    // document.getElementById("iconbar-5").classList.add('inactive');
+                  }
+                  // switchTab(3)
+                  // goToFbo(5, 0);
+                  // expandData(2)
+                }
               }
-              // switchTab(3)
-              // goToFbo(5, 0);
-              // expandData(2)
+              xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
+              xhttp4.send();
             }
           }
           xhttp3.open("GET", "https://efassembly.com:4432/fbo/getsearchterms/", true);
