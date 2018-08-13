@@ -125,7 +125,9 @@
       "id": "cordova-android-play-services-gradle-release"
     },
     "is_top_level": true,
-    "variables": {}
+    "variables": {
+      "PLAY_SERVICES_VERSION": "15.+"
+    }
   },
   "cordova-android-firebase-gradle-release": {
     "source": {
@@ -133,6 +135,8 @@
       "id": "cordova-android-firebase-gradle-release"
     },
     "is_top_level": true,
-    "variables": {}
+    "variables": {
+      "FIREBASE_VERSION": "15.+"
+    }
   }
 }

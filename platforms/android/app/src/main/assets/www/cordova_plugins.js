@@ -238,6 +238,14 @@ module.exports = [
     "runs": true
   },
   {
+    "id": "cordova-plugin-firebase.FirebasePlugin",
+    "file": "plugins/cordova-plugin-firebase/www/firebase.js",
+    "pluginId": "cordova-plugin-firebase",
+    "clobbers": [
+      "FirebasePlugin"
+    ]
+  },
+  {
     "id": "cordova-plugin-geolocation.geolocation",
     "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
     "pluginId": "cordova-plugin-geolocation",
@@ -277,29 +285,58 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-firebase.FirebasePlugin",
-    "file": "plugins/cordova-plugin-firebase/www/firebase.js",
-    "pluginId": "cordova-plugin-firebase",
+    "id": "cordova-plugin-network-information.network",
+    "file": "plugins/cordova-plugin-network-information/www/network.js",
+    "pluginId": "cordova-plugin-network-information",
     "clobbers": [
-      "FirebasePlugin"
+      "navigator.connection",
+      "navigator.network.connection"
+    ]
+  },
+  {
+    "id": "cordova-plugin-network-information.Connection",
+    "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+    "pluginId": "cordova-plugin-network-information",
+    "clobbers": [
+      "Connection"
+    ]
+  },
+  {
+    "id": "cordova-plugin-uniquedeviceid.UniqueDeviceID",
+    "file": "plugins/cordova-plugin-uniquedeviceid/www/uniqueid.js",
+    "pluginId": "cordova-plugin-uniquedeviceid",
+    "merges": [
+      "window.plugins.uniqueDeviceID"
+    ]
+  },
+  {
+    "id": "cordova-plugin-vibration.notification",
+    "file": "plugins/cordova-plugin-vibration/www/vibration.js",
+    "pluginId": "cordova-plugin-vibration",
+    "merges": [
+      "navigator.notification",
+      "navigator"
     ]
   }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
+  "cordova-android-firebase-gradle-release": "1.0.2",
+  "cordova-android-play-services-gradle-release": "1.4.3",
   "cordova-plugin-battery-status": "1.2.5",
   "cordova-plugin-camera": "2.4.1",
   "cordova-plugin-device": "1.1.7",
   "cordova-plugin-dialogs": "1.3.4",
   "cordova-plugin-file": "6.0.1",
+  "cordova-plugin-firebase": "1.0.5",
   "cordova-plugin-geolocation": "2.4.3",
   "cordova-plugin-globalization": "1.0.9",
   "cordova-plugin-inappbrowser": "1.7.2",
-  "cordova-plugin-whitelist": "1.3.3",
-  "cordova-plugin-firebase": "1.0.5",
-  "cordova-android-play-services-gradle-release": "1.4.3",
-  "cordova-android-firebase-gradle-release": "1.0.2"
+  "cordova-plugin-network-information": "1.3.4",
+  "cordova-plugin-uniquedeviceid": "1.3.2",
+  "cordova-plugin-vibration": "2.1.6",
+  "cordova-plugin-whitelist": "1.3.3"
 };
 // BOTTOM OF METADATA
 });

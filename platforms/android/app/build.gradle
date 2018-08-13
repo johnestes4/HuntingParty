@@ -91,9 +91,9 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
-apply from: "../cordova-plugin-firebase/huntingparty-build.gradle"
-apply from: "../cordova-android-play-services-gradle-release/huntingparty-cordova-android-play-services-gradle-release.gradle"
 apply from: "../cordova-android-firebase-gradle-release/huntingparty-cordova-android-firebase-gradle-release.gradle"
+apply from: "../cordova-android-play-services-gradle-release/huntingparty-cordova-android-play-services-gradle-release.gradle"
+apply from: "../cordova-plugin-firebase/huntingparty-build.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
