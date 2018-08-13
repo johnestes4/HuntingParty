@@ -195,7 +195,7 @@
   border: 1px solid rgba(0,0,0,0.75);
   border-radius: 2px;
   box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
-  margin-bottom: 2vh;
+  margin-bottom: calc(2vh + 10px);
 }
 
 .fbo-item-title {
@@ -264,6 +264,21 @@
   background: white;
   border: 1px solid rgba(0,0,0,0.75);
   border-radius: 90%;
+}
+
+.fbo-item-origin {
+  position: absolute;
+  background: white;
+  height: 20px;
+  line-height: 16px;
+  padding: 2px 4px 2px 4px;
+  width: auto;
+  z-index: 9;
+  color: black;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.75);
+  right: -10px;
+  top: -15px;
 }
 
 .fbo-item-points-dropdown {

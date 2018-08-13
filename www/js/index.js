@@ -455,7 +455,6 @@ function viewSearch() {
     a[i].checked = searchTerms.setAside[i].value
   }
   document.getElementById("search-name").value = searchTerms.name
-
 }
 
 function renderSavedSearches() {
@@ -466,6 +465,63 @@ function renderSavedSearches() {
     html = html + '<option value="'+i+'">'+huntingPartyData.searches[i].name+'</option>'
   }
   document.getElementById("saved-searches").innerHTML = html
+}
+
+
+function searchFilter(which) {
+  var string = document.getElementById("search-filter-" + which).value
+  var html = ''
+  if (which == 0) {
+    for (i = 0; i < searchTerms.naics.length; i++) {
+      if (i == 0) {
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<p style="margin-bottom: 2px;">----------</p>'+
+        '</div>'
+        html = html + '</div>'
+      } else if (searchTerms.naics[i].name.includes(string)) {
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+        html = html + '</div>'
+      }
+    }
+    document.getElementById("search-box-naics").innerHTML = html
+  }
+  if (which == 1) {
+    for (i = 0; i < searchTerms.psc.length; i++) {
+      if (i == 0) {
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.psc[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<p style="margin-bottom: 2px;">----------</p>'+
+        '</div>'
+        html = html + '</div>'
+      } else if (searchTerms.psc[i].name.includes(string)) {
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.psc[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+        html = html + '</div>'
+      }
+    }
+    document.getElementById("search-box-psc").innerHTML = html
+  }
+  if (which == 2) {
+    for (i = 0; i < searchTerms.agency.length; i++) {
+      if (i == 0) {
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.agency[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<p style="margin-bottom: 2px;">----------</p>'+
+        '</div>'
+        html = html + '</div>'
+      } else if (searchTerms.agency[i].name.includes(string)) {
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.agency[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+        html = html + '</div>'
+      }
+    }
+    document.getElementById("search-box-agency").innerHTML = html
+  }
 }
 
 function renderSearch() {
@@ -903,16 +959,16 @@ function toggleHamburgerMenu() {
       for (i = 0; i < proxy1.voteYes.length; i++) {
         var proxy = proxy1.voteYes[i]
         if(proxy.date) {
-          if (proxy.date > p1num) {
-            p1num = proxy.date
+          if (proxy.date * 10 > p1num) {
+            p1num = proxy.date * 10
           }
         }
       }
       for (i = 0; i < proxy1.voteNo.length; i++) {
         var proxy = proxy1.voteNo[i]
         if(proxy.date) {
-          if (proxy.date > p1num) {
-            p1num = proxy.date
+          if (proxy.date * 10 > p1num) {
+            p1num = proxy.date * 10
           }
         }
       }
@@ -920,24 +976,28 @@ function toggleHamburgerMenu() {
       for (i = 0; i < proxy2.voteYes.length; i++) {
         var proxy = proxy2.voteYes[i]
         if(proxy.date) {
-          if (proxy.date > p2num) {
-            p2num = proxy.date
+          if (proxy.date * 10 > p2num) {
+            p2num = proxy.date * 10
           }
         }
       }
       for (i = 0; i < proxy2.voteNo.length; i++) {
         var proxy = proxy2.voteNo[i]
         if(proxy.date) {
-          if (proxy.date > p2num) {
+          if (proxy.date * 10 > p2num) {
             p2num = proxy.date
           }
         }
       }
-      if (p1num == 0) {
+      if (p1num == 0 && ((proxy1.voteYes.length + proxy1.voteNo.length) > 0)) {
         p1num = proxy1.voteYes.length + proxy1.voteNo.length
+      } else if (p1num == 0 && proxy1.date) {
+        p1num = proxy1.date
       }
-      if (p2num == 0) {
+      if (p2num == 0 && ((proxy2.voteYes.length + proxy2.voteNo.length) > 0)) {
         p2num = proxy2.voteYes.length + proxy2.voteNo.length
+      } else if (p2num == 0 && proxy2.date){
+        p2num = proxy2.date
       }
       return p2num - p1num
     });
@@ -1041,11 +1101,16 @@ function toggleHamburgerMenu() {
           break;
         }
       }
+      var originHtml = ''
+      if (proxy.originSearch) {
+        originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
+      }
 
       if (proxy.voteYes.length < 1 && vote !== 1) {
         fboHtml = fboHtml + '<div class="fbo-item">'+
         '<div class="second-border">'+
         ''+voteHtml+
+        ''+originHtml+
         '<div class="fbo-item-title" onclick="goToFbo(' + i + ', 0)">'+
         '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
         '<div class="fbo-item-title-bg"></div>'+
@@ -1113,6 +1178,11 @@ function toggleHamburgerMenu() {
   }
 
   function goToFbo(num, tab) {
+    for (i = 0; i < fbos.length; i++) {
+      if (fbos[i].date) {
+        console.log(fbos[i])
+      }
+    }
     fboIndex = num
     setActiveFbo(num, tab)
     document.getElementById("news-view").classList.add('inactive');
