@@ -473,52 +473,72 @@ function searchFilter(which) {
   var html = ''
   if (which == 0) {
     for (i = 0; i < searchTerms.naics.length; i++) {
+      var checkedHtml = ''
+      if (searchTerms.naics[i].value) {
+        checkedHtml = ' checked'
+      }
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
-        html = html + '</div>'
-      } else if (searchTerms.naics[i].name.includes(string)) {
+      } else if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
-        html = html + '</div>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+      } else {
+        html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
       }
+      html = html + '</div>'
     }
     document.getElementById("search-box-naics").innerHTML = html
   }
   if (which == 1) {
     for (i = 0; i < searchTerms.psc.length; i++) {
+      var checkedHtml = ''
+      if (searchTerms.psc[i].value) {
+        checkedHtml = ' checked'
+      }
+
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.psc[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
-        html = html + '</div>'
-      } else if (searchTerms.psc[i].name.includes(string)) {
+      } else if (searchTerms.psc[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.psc[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
-        html = html + '</div>'
+        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+      } else {
+        html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
+        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
       }
+      html = html + '</div>'
     }
     document.getElementById("search-box-psc").innerHTML = html
   }
   if (which == 2) {
     for (i = 0; i < searchTerms.agency.length; i++) {
+      var checkedHtml = ''
+      if (searchTerms.agency[i].value) {
+        checkedHtml = ' checked'
+      }
+
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.agency[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
-        html = html + '</div>'
-      } else if (searchTerms.agency[i].name.includes(string)) {
+      } else if (searchTerms.agency[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.agency[i].value == true) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.agency[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
-        html = html + '</div>'
+        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+      } else {
+        html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
+        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
       }
+      html = html + '</div>'
     }
     document.getElementById("search-box-agency").innerHTML = html
   }
