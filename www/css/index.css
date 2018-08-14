@@ -44,8 +44,31 @@
   color: black!important;
 }
 
-#login-view {
+#login-view .button-alt{
+  background-color: rgba(255,198,0,1);
+  transition: .1s;
+  /* background-color: black; */
+}
 
+#login-view button:hover{
+  background-color: rgb(30, 48, 90);
+  /* color: black; */
+}
+#login-view .button-alt:hover{
+  background-color: orange;
+}
+
+#login-view .login-field{
+  border: 0;
+  border-bottom: 1px solid rgba(63,85,136,1);
+}
+
+#login-view :focus{
+  outline: none;
+  border-bottom: 1px solid rgba(255,198,0,1);
+  -webkit-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
 }
 
 #login-view h1 {
@@ -64,11 +87,13 @@
 }
 
 #login-view button {
+  /* Positions */
   width: 40vw;
   margin-left: 30vw;
   height: 8vh;
   font-size: 5vh;
   line-height: 7vh;
+  margin-top: 5%;
 }
 
 .instructions {
@@ -76,6 +101,9 @@
   width: 80vw;
   margin-left: 10vw;
   margin-bottom: 4vh;
+}
+h1, .instructions{
+  color: black;
 }
 
 #news-view {
@@ -390,6 +418,11 @@ button {
   font-weight: bold;
   line-height: 5vh;
   height: 6vh;
+
+  /* Styles */
+  border: none;
+  color: white;
+  transition: .1s;
 }
 
 /* Portrait layout (default) */
@@ -567,7 +600,7 @@ h1 {
 #profile-dropdown {
   position: absolute;
   overflow-x: hidden; /* Disable horizontal scroll */
-  top: 0px
+  top: 0px;
   left: -60vw;
   width: 60vw;
   height: 100vh;
