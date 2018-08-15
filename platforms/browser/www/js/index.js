@@ -923,11 +923,13 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("floating-hamburger").classList.add('inactive')
     } else if (num == 1) {
       document.getElementById("news-view").classList.add('inactive')
       document.getElementById("search-view").classList.remove('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("floating-hamburger").classList.add('inactive')
     } else if (num == 2) {
       document.getElementById("news-view").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -935,6 +937,7 @@ function toggleHamburgerMenu() {
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("hamburger-menu").classList.remove('hamburger-out')
       document.getElementById("hamburger-menu").classList.add('inactive')
+      document.getElementById("floating-hamburger").classList.add('inactive')
       renderFbos()
     } else if (num == 3) {
       document.getElementById("news-view").classList.add('inactive')
@@ -943,6 +946,7 @@ function toggleHamburgerMenu() {
       document.getElementById("pipeline-view").classList.remove('inactive')
       document.getElementById("hamburger-menu").classList.remove('hamburger-out')
       document.getElementById("hamburger-menu").classList.add('inactive')
+      document.getElementById("floating-hamburger").classList.add('inactive')
     }
     activeTab = num
     var a = document.getElementsByClassName('iconbar-icon')
@@ -1210,6 +1214,7 @@ function toggleHamburgerMenu() {
     document.getElementById("search-view").classList.add('inactive');
     document.getElementById("pipeline-view").classList.add('inactive');
     document.getElementById("fbo-detail-view").classList.remove('inactive');
+    document.getElementById("floating-hamburger").classList.remove('inactive')
   }
 
   function getTime() {
@@ -1619,8 +1624,8 @@ function getTheData() {
                     // document.getElementById("iconbar-4").classList.add('inactive');
                     // document.getElementById("iconbar-5").classList.add('inactive');
                   }
-                  // switchTab(3)
-                  // goToFbo(5, 0);
+                  switchTab(2)
+                  goToFbo(5, 0);
                   // expandData(2)
                 }
               }
