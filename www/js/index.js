@@ -1611,19 +1611,31 @@ function getTheData() {
                   if (!huntingPartyData.users) {
                     huntingPartyData.users = []
                   }
+                  var doTheUpdateAnyway = false
                   for (i = 0; i < huntingPartyData.users.length; i++) {
                     if (huntingPartyData.users[i].userId == currentUser._id) {
                       userInList = true
+                      if (!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) {
+                        doTheUpdateAnyway = true
+                        huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                      }
+                      if (!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) {
+                        doTheUpdateAnyway = true
+                        huntingPartyData.users[i].deviceId = device.uuid
+                      }
                     }
                   }
-                  if (!userInList) {
+                  if (!userInList || doTheUpdateAnyway) {
                     console.log('not in the list')
-                    huntingPartyData.users.push({
-                      userId: currentUser._id,
-                      name: currentUser.firstName + ' ' + currentUser.lastName,
-                      email: currentUser.username,
-                      deviceId: device.uuid
-                    })
+                    if (!userInList) {
+                      huntingPartyData.users.push({
+                        userId: currentUser._id,
+                        name: currentUser.firstName + ' ' + currentUser.lastName,
+                        email: currentUser.username,
+                        deviceId: device.uuid,
+                        regId = localStorage.getItem('registrationId')
+                      })
+                    }
                     var xhttpHPD = new XMLHttpRequest();
                     xhttpHPD.onreadystatechange = function() {
                       if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
