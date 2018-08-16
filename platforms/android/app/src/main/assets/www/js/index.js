@@ -1611,11 +1611,11 @@ function getTheData() {
                   for (i = 0; i < huntingPartyData.users.length; i++) {
                     if (huntingPartyData.users[i].userId == currentUser._id) {
                       userInList = true
-                      if (!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) {
+                      if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
                         doTheUpdateAnyway = true
                         huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
                       }
-                      if (!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) {
+                      if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
                         doTheUpdateAnyway = true
                         huntingPartyData.users[i].deviceId = device.uuid
                       }
@@ -1772,7 +1772,7 @@ var app = {
         localStorage.setItem('registrationId', data.registrationId);
         // Post registrationId to your app server as the value has changed
       }
-      console.log('reg id: ' + localStorage.getItem('registrationId'))
+      document.getElementById("reg-id").value = data.registrationId
     });
 
     app.push.on('error', function(e) {
