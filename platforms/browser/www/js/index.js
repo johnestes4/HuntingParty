@@ -13,7 +13,7 @@ var emailNotFound = false
 var passwordWrong = false
 var loggedIn = false
 var currentUser = null
-var localStorage = window.localStorage;
+var localStorage = window.localStorage
 var profileDropdownOpen = false
 var voteDropdownOpen = -1
 var hamburgerMenuOpen = false
@@ -810,9 +810,11 @@ function saveSearchTerms() {
         }
       };
       var url = "https://efassembly.com:4432/huntingpartydata/add";
+      var hpdToPush = huntingPartyData
+      delete hpdToPush['_id']
       xhttp.open("POST", url, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
+      xhttp.send(JSON.stringify(hpdToPush));
 
     } else {
       var id = huntingPartyData._id
@@ -824,9 +826,11 @@ function saveSearchTerms() {
         }
       };
       var url = "https://efassembly.com:4432/huntingpartydata/" + id;
+      var hpdToPush = huntingPartyData
+      delete hpdToPush['_id']
       xhttp.open("PUT", url, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
+      xhttp.send(JSON.stringify(hpdToPush));
     }
   }
 }
@@ -1562,6 +1566,8 @@ function toggleHamburgerMenu() {
 });
 
 function getTheData() {
+  document.getElementById("error-popup").classList.remove('inactive');
+
   var id = localStorage.getItem('uid')
   var xhttp = new XMLHttpRequest();
   // xhttp.setRequestHeader("Content-type", "application/json");
@@ -1600,73 +1606,68 @@ function getTheData() {
               xhttp4.onreadystatechange = function() {
                 if (xhttp4.readyState == 4 && xhttp4.status == 200) {
                   huntingPartyData = JSON.parse(xhttp4.responseText);
-                  window.plugins.uniqueDeviceID.get(success, fail);
-                  function fail() {
-                    console.log('IT COULDNT GET THE DEVICE ID')
-                    document.getElementById("loading-details").innerHTML = 'IT COULDNT GET THE DEVICE ID'
+                  deviceId = device.uuid
+                  var userInList = false
+                  if (!huntingPartyData.users) {
+                    huntingPartyData.users = []
                   }
-                  function success(uuid) {
-                    deviceId = uuid
-                    var userInList = false
-                    if (!huntingPartyData.users) {
-                      huntingPartyData.users = []
+                  for (i = 0; i < huntingPartyData.users.length; i++) {
+                    if (huntingPartyData.users[i].userId == currentUser._id) {
+                      userInList = true
                     }
-                    for (i = 0; i < huntingPartyData.users.length; i++) {
-                      if (huntingPartyData.users[i].userId == currentUser._id) {
-                        userInList = true
+                  }
+                  if (!userInList) {
+                    console.log('not in the list')
+                    huntingPartyData.users.push({
+                      userId: currentUser._id,
+                      name: currentUser.firstName + ' ' + currentUser.lastName,
+                      email: currentUser.username,
+                      deviceId: device.uuid
+                    })
+                    var xhttpHPD = new XMLHttpRequest();
+                    xhttpHPD.onreadystatechange = function() {
+                      if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                        oldData = huntingPartyData
+                        huntingPartyData = JSON.parse(xhttpHPD.responseText);
                       }
                     }
-                    if (!userInList) {
-                      console.log('not in the list')
-                      huntingPartyData.users.push({
-                        userId: currentUser._id,
-                        name: currentUser.firstName + ' ' + currentUser.lastName,
-                        email: currentUser.username,
-                        deviceId: deviceId
-                      })
-                      var xhttpHPD = new XMLHttpRequest();
-                      xhttpHPD.onreadystatechange = function() {
-                        if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                          console.log('added you to huntingpartydata')
-                          huntingPartyData = JSON.parse(xhttpHPD.responseText);
-                        }
-                      }
-                      xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
-                      var hpdToSend = huntingPartyData
-                      delete hpdToSend['_id']
-                      xhttpHPD.send(JSON.stringify(hpdToSend));
-                    }
-                    if (company.fboProxies.length > 0) {
-                      fbos = company.fboProxies
-                      setActiveFbo(fboIndex)
-                      renderSavedSearches()
-                      renderSearch()
-                      renderFbos()
-                      var promiseFinished = true
-                      document.getElementById("loading").classList.add('inactive');
-                      document.getElementById("main-view").classList.remove('inactive');
-                      document.getElementById("news-view").classList.remove('inactive');
-                      document.getElementById("fbo-view").classList.add('inactive');
-                      document.getElementById("search-view").classList.add('inactive');
-                      document.getElementById("login-view").classList.add('inactive');
-                    } else {
-                      document.getElementById("loading").classList.add('inactive');
-                      document.getElementById("main-view").classList.remove('inactive');
-                      document.getElementById("news-view").classList.remove('inactive');
-                      document.getElementById("fbo-view").classList.add('inactive');
-                      document.getElementById("search-view").classList.add('inactive');
-                      document.getElementById("login-view").classList.add('inactive');
-                      document.getElementById("fbo-popups").classList.remove('inactive');
-                      document.getElementById("error-popup").classList.remove('inactive');
-                      document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
-                      // document.getElementById("iconbar-3").classList.add('inactive');
-                      // document.getElementById("iconbar-4").classList.add('inactive');
-                      // document.getElementById("iconbar-5").classList.add('inactive');
-                    }
-                    switchTab(2)
-                    goToFbo(5, 0);
-                    // expandData(2)
+                    var hpdToPush = huntingPartyData
+                    delete hpdToPush['_id']
+                    xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                    xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                    xhttpHPD.send(JSON.stringify(hpdToPush));
                   }
+                  if (company.fboProxies.length > 0) {
+                    fbos = company.fboProxies
+                    setActiveFbo(fboIndex)
+                    renderSavedSearches()
+                    renderSearch()
+                    renderFbos()
+                    var promiseFinished = true
+                    document.getElementById("loading").classList.add('inactive');
+                    document.getElementById("main-view").classList.remove('inactive');
+                    document.getElementById("news-view").classList.remove('inactive');
+                    document.getElementById("fbo-view").classList.add('inactive');
+                    document.getElementById("search-view").classList.add('inactive');
+                    document.getElementById("login-view").classList.add('inactive');
+                  } else {
+                    document.getElementById("loading").classList.add('inactive');
+                    document.getElementById("main-view").classList.remove('inactive');
+                    document.getElementById("news-view").classList.remove('inactive');
+                    document.getElementById("fbo-view").classList.add('inactive');
+                    document.getElementById("search-view").classList.add('inactive');
+                    document.getElementById("login-view").classList.add('inactive');
+                    document.getElementById("fbo-popups").classList.remove('inactive');
+                    document.getElementById("error-popup").classList.remove('inactive');
+                    document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
+                    // document.getElementById("iconbar-3").classList.add('inactive');
+                    // document.getElementById("iconbar-4").classList.add('inactive');
+                    // document.getElementById("iconbar-5").classList.add('inactive');
+                  }
+                  // switchTab(2)
+                  // goToFbo(5, 0);
+
+                  // expandData(2)
                 }
               }
               xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
