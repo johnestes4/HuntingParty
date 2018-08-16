@@ -44,31 +44,22 @@
   color: black!important;
 }
 
-#login-view .button-alt{
-  background-color: rgba(255,198,0,1);
-  transition: .1s;
-  /* background-color: black; */
-}
 
-#login-view button:hover{
-  background-color: rgb(30, 48, 90);
-  /* color: black; */
-}
-#login-view .button-alt:hover{
-  background-color: orange;
-}
 
 #login-view .login-field{
   border: 0;
-  border-bottom: 1px solid rgba(63,85,136,1);
+  border-bottom: 2px solid rgba(63,85,136,1);
 }
 
 #login-view :focus{
   outline: none;
-  border-bottom: 1px solid rgba(255,198,0,1);
+  border-bottom: 2px solid rgba(255,198,0,1);
   -webkit-transition: 0.2s;
   -o-transition: 0.2s;
   transition: 0.2s;
+
+  /* animation-name: login-border;
+  animation-duration: 4s; */
 }
 
 #login-view h1 {
@@ -94,6 +85,20 @@
   font-size: 5vh;
   line-height: 7vh;
   margin-top: 5%;
+}
+
+#login-view .button-alt{
+  background-color: rgba(255,198,0,1);
+  transition: .1s;
+  /* background-color: black; */
+}
+
+#login-view button:hover{
+  background-color: rgb(30, 48, 90);
+  /* color: black; */
+}
+#login-view .button-alt:hover{
+  background-color: orange;
 }
 
 .instructions {
