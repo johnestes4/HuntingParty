@@ -1772,7 +1772,11 @@ var app = {
         localStorage.setItem('registrationId', data.registrationId);
         // Post registrationId to your app server as the value has changed
       }
-      document.getElementById("reg-id").value = data.registrationId
+      if (data.registrationId) {
+        document.getElementById("reg-id").value = data.registrationId
+      } else {
+        document.getElementById("reg-id").value = 'no id but it did call this function'
+      }
     });
 
     app.push.on('error', function(e) {
