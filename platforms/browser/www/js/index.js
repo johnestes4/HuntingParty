@@ -1633,7 +1633,7 @@ function getTheData() {
                         name: currentUser.firstName + ' ' + currentUser.lastName,
                         email: currentUser.username,
                         deviceId: device.uuid,
-                        regId = localStorage.getItem('registrationId')
+                        regId: localStorage.getItem('registrationId')
                       })
                     }
                     var xhttpHPD = new XMLHttpRequest();
