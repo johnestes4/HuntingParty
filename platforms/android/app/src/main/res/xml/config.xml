@@ -81,7 +81,7 @@
     <resource-file src="google-services.json" target="./google-services.json" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="android-minSdkVersion" value="16" />
+    <preference name="android-minSdkVersion" value="19" />
     <preference name="phonegap-version" value="cli-7.1.0" />
     <preference name="pgb-builder-version" value="2" />
 </widget>

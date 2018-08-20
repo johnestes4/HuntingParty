@@ -1344,7 +1344,8 @@ function toggleHamburgerMenu() {
     document.getElementById("yes-refer-button").classList.remove('inactive');
     document.getElementById("no-refer-button").classList.remove('inactive');
     renderFbos()
-    switchTab(tab)
+    goToFbo(fboIndex,tab)
+    // switchTab(tab)
   }
 
   function openPopups(yes) {
@@ -1439,6 +1440,7 @@ function toggleHamburgerMenu() {
             document.getElementById("vote-circle-" + index).classList.add('inactive')
           }
         }
+        fboIndex++;
         closePopups(2)
       }
     };
