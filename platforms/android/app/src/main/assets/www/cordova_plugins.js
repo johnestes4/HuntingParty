@@ -336,7 +336,8 @@ module.exports.metadata =
   "cordova-plugin-network-information": "1.3.4",
   "cordova-plugin-uniquedeviceid": "1.3.2",
   "cordova-plugin-vibration": "2.1.6",
-  "cordova-plugin-whitelist": "1.3.3"
+  "cordova-plugin-whitelist": "1.3.3",
+  "cordova-android-support-gradle-release": "1.4.4"
 };
 // BOTTOM OF METADATA
 });
