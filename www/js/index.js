@@ -330,6 +330,9 @@ var emptySearchTerms = {
   ],
   keyword: '',
 }
+var yesRefer = []
+var naics = []
+var tosRead = 0
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -480,16 +483,16 @@ function searchFilter(which) {
       }
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
       } else if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
       } else {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
       }
       html = html + '</div>'
     }
@@ -559,15 +562,31 @@ function renderSearch() {
   }
   document.getElementById("search-box-time").innerHTML = html
   html = ''
+  var naicsIndex = 0
   for (i = 0; i < searchTerms.naics.length; i++) {
     html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
+    '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'+
+    '<div id="naics-subcategory-box-'+i+'"></div>'
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
       '</div>'
     }
+    // if (searchTerms.naics[i].subcategories) {
+    //   html = html + '<div id="naics-sub-'+i+'" class="checkbox-naics-sub inactive">'
+    //   for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+    //     var naicsObj = searchTerms.naics[i].subcategories[i2]
+    //     html = html + '<div class="" style="width: 100%; float: left;">'+
+    //     '<input id="'+naicsIndex+'" class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+'</span>'
+    //
+    //     for (i = 0; i < searchTerms.naics.length; i++) {
+    //     }
+    //
+    //     html = html + '</div>'
+    //   }
+    // }
     html = html + '</div>'
+    naicsIndex++
   }
   document.getElementById("search-box-naics").innerHTML = html
   html = ''
@@ -618,6 +637,13 @@ function renderSearch() {
     html = html + '</div>'
   }
   document.getElementById("search-box-setaside").innerHTML = html
+}
+
+function calculateNaicsSearch(naicsItem, divId, elem) {
+  if (naicsItem.subcategories) {
+    document.getElementById(divId).innerHTML = '<div class="naics-subcategory-box">THIS HAS ' + naicsItem.subcategories.length + ' SUBCATEGORIES</div>'
+  }
+  calculateSearch(elem)
 }
 
 function calculateSearch(elem) {
@@ -1204,6 +1230,15 @@ function toggleHamburgerMenu() {
     }
   }
 
+  function addYesRefer() {
+    yesRefer.push(document.getElementById("yes-refer-input").value)
+    var html = ''
+    for (i = 0; i < yesRefer.length; i++) {
+      html = html + '<p>'+yesRefer[i]+'</p>'
+    }
+    document.getElementById("yes-popup-refer-list").innerHTML = html
+  }
+
   function goToFbo(num, tab) {
     fboIndex = num
     setActiveFbo(num, tab)
@@ -1333,7 +1368,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function closePopups(tab) {
+  function closePopups(moveOn) {
     document.getElementById("fbo-popups").classList.add('inactive');
     var a = document.getElementsByClassName('vote-popup')
     for (i = 0; i < a.length; i++) {
@@ -1344,7 +1379,9 @@ function toggleHamburgerMenu() {
     document.getElementById("yes-refer-button").classList.remove('inactive');
     document.getElementById("no-refer-button").classList.remove('inactive');
     renderFbos()
-    goToFbo(fboIndex,tab)
+    if (moveOn) {
+      goToFbo(fboIndex,tab)
+    }
     // switchTab(tab)
   }
 
@@ -1441,7 +1478,7 @@ function toggleHamburgerMenu() {
           }
         }
         fboIndex++;
-        closePopups(2)
+        closePopups(true)
       }
     };
     var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
@@ -1592,7 +1629,6 @@ function getTheData() {
           // if (xobj.readyState == 4 && xobj.status == "200") {
           // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
           // agencyLogos = JSON.parse(xobj.responseText);
-
           var xhttp3 = new XMLHttpRequest();
           // xhttp3.setRequestHeader("Content-type", "application/json");
           xhttp3.onreadystatechange = function() {
@@ -1604,77 +1640,71 @@ function getTheData() {
               xhttp4.onreadystatechange = function() {
                 if (xhttp4.readyState == 4 && xhttp4.status == 200) {
                   huntingPartyData = JSON.parse(xhttp4.responseText);
-                  deviceId = device.uuid
-                  var userInList = false
-                  if (!huntingPartyData.users) {
-                    huntingPartyData.users = []
-                  }
-                  var doTheUpdateAnyway = false
-                  for (i = 0; i < huntingPartyData.users.length; i++) {
-                    if (huntingPartyData.users[i].userId == currentUser._id) {
-                      userInList = true
-                      if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                        doTheUpdateAnyway = true
-                        huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                  var xhttp5 = new XMLHttpRequest();
+                  xhttp5.overrideMimeType("application/json");
+                  xhttp5.onreadystatechange = function() {
+                    if (xhttp5.readyState == 4 && xhttp5.status == 200) {
+                      naics = JSON.parse(xhttp5.responseText);
+                      searchTerms.naics = naics
+                      emptySearchTerms.naics = naics
+                      deviceId = device.uuid
+                      var userInList = false
+                      if (!huntingPartyData.users) {
+                        huntingPartyData.users = []
                       }
-                      if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
-                        doTheUpdateAnyway = true
-                        huntingPartyData.users[i].deviceId = device.uuid
+                      var doTheUpdateAnyway = false
+                      for (i = 0; i < huntingPartyData.users.length; i++) {
+                        if (huntingPartyData.users[i].userId == currentUser._id) {
+                          userInList = true
+                          if (huntingPartyData.users[i].tosRead) {
+                            tosRead = huntingPartyData.users[i].tosRead
+                          }
+                          if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                            doTheUpdateAnyway = true
+                            huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                          }
+                          if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                            doTheUpdateAnyway = true
+                            huntingPartyData.users[i].deviceId = device.uuid
+                          }
+                        }
                       }
-                    }
-                  }
-                  if (!userInList || doTheUpdateAnyway) {
-                    console.log('not in the list')
-                    if (!userInList) {
-                      huntingPartyData.users.push({
-                        userId: currentUser._id,
-                        name: currentUser.firstName + ' ' + currentUser.lastName,
-                        email: currentUser.username,
-                        deviceId: device.uuid,
-                        regId: localStorage.getItem('registrationId')
-                      })
-                    }
-                    var xhttpHPD = new XMLHttpRequest();
-                    xhttpHPD.onreadystatechange = function() {
-                      if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                        huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                      if (!userInList || doTheUpdateAnyway) {
+                        console.log('not in the list')
+                        if (!userInList) {
+                          huntingPartyData.users.push({
+                            userId: currentUser._id,
+                            name: currentUser.firstName + ' ' + currentUser.lastName,
+                            email: currentUser.username,
+                            deviceId: device.uuid,
+                            regId: localStorage.getItem('registrationId'),
+                            tosRead: 0
+                          })
+                          tosRead = 0
+                        }
+                        var xhttpHPD = new XMLHttpRequest();
+                        xhttpHPD.onreadystatechange = function() {
+                          if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                            huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                          }
+                        }
+                        xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                        xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                        xhttpHPD.send(JSON.stringify(huntingPartyData));
                       }
-                    }
-                    xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
-                    xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                    xhttpHPD.send(JSON.stringify(huntingPartyData));
-                  }
-                  if (company.fboProxies.length > 0) {
-                    fbos = company.fboProxies
-                    setActiveFbo(fboIndex)
-                    renderSavedSearches()
-                    renderSearch()
-                    renderFbos()
-                    var promiseFinished = true
-                    document.getElementById("loading").classList.add('inactive');
-                    document.getElementById("main-view").classList.remove('inactive');
-                    document.getElementById("news-view").classList.remove('inactive');
-                    document.getElementById("fbo-view").classList.add('inactive');
-                    document.getElementById("search-view").classList.add('inactive');
-                    document.getElementById("login-view").classList.add('inactive');
-                  } else {
-                    document.getElementById("loading").classList.add('inactive');
-                    document.getElementById("main-view").classList.remove('inactive');
-                    document.getElementById("news-view").classList.remove('inactive');
-                    document.getElementById("fbo-view").classList.add('inactive');
-                    document.getElementById("search-view").classList.add('inactive');
-                    document.getElementById("login-view").classList.add('inactive');
-                    document.getElementById("fbo-popups").classList.remove('inactive');
-                    document.getElementById("error-popup").classList.remove('inactive');
-                    document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
-                    // document.getElementById("iconbar-3").classList.add('inactive');
-                    // document.getElementById("iconbar-4").classList.add('inactive');
-                    // document.getElementById("iconbar-5").classList.add('inactive');
-                  }
-                  // switchTab(2)
-                  // goToFbo(5, 0);
+                      if (tosRead < 1) {
+                        console.log('fuck')
+                        document.getElementById("loading").classList.add('inactive');
+                        document.getElementById("tos-popup").classList.remove('inactive');
+                        // document.getElementById("login-view").classList.remove('inactive');
+                      } else {
+                        startMainApp()
+                      }
 
-                  // expandData(2)
+                    }
+                  }
+                  xhttp5.open("GET", "../json/naics.json", true);
+                  xhttp5.send();
                 }
               }
               xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
@@ -1699,6 +1729,40 @@ function getTheData() {
   };
   xhttp.open("GET", "https://efassembly.com:4432/profiles/" + id, true);
   xhttp.send();
+}
+
+function startMainApp() {
+  if (company.fboProxies.length > 0) {
+    fbos = company.fboProxies
+    setActiveFbo(fboIndex)
+    renderSavedSearches()
+    renderSearch()
+    renderFbos()
+    var promiseFinished = true
+    document.getElementById("loading").classList.add('inactive');
+    document.getElementById("main-view").classList.remove('inactive');
+    document.getElementById("news-view").classList.remove('inactive');
+    document.getElementById("fbo-view").classList.add('inactive');
+    document.getElementById("search-view").classList.add('inactive');
+    document.getElementById("login-view").classList.add('inactive');
+  } else {
+    document.getElementById("loading").classList.add('inactive');
+    document.getElementById("main-view").classList.remove('inactive');
+    document.getElementById("news-view").classList.remove('inactive');
+    document.getElementById("fbo-view").classList.add('inactive');
+    document.getElementById("search-view").classList.add('inactive');
+    document.getElementById("login-view").classList.add('inactive');
+    document.getElementById("fbo-popups").classList.remove('inactive');
+    document.getElementById("error-popup").classList.remove('inactive');
+    document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
+    // document.getElementById("iconbar-3").classList.add('inactive');
+    // document.getElementById("iconbar-4").classList.add('inactive');
+    // document.getElementById("iconbar-5").classList.add('inactive');
+  }
+  // switchTab(2)
+  // goToFbo(5, 0);
+
+  // expandData(2)
 }
 
 

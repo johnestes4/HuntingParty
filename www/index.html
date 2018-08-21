@@ -45,6 +45,32 @@ under the License.
 </head>
 
 <body>
+  <div id="tos-popup" class="inactive">
+    <p>Please read the TOS. Here it is.</p>
+    <p>TOS</p>
+    <div class="tos-box">
+      Welcome to Hunting Party!
+      <br><br>
+      Out community is based on trust and we take our terms of service very seriously:
+      <br><br>
+      VIOLATIONS OF TERMS:
+      <br><br>
+      Violations will result in you being removed from our platform AND
+      <br><br>
+      The PERSON WHO INVITED YOU being removed from our platform.
+      <br><br>
+      TERMS OF SERVICE
+      <br><br>
+      1) Don't use this platform to advertise or market your professional services (if you want to market yourself here email our help desk)
+      <br><br>
+      2) Don't add yourself to an RFP's interested vendors list if you are really interested in providing professional services
+      <br><br>
+      3) No abusive, vulgar or threatening commenting or emailing
+      <br><br>
+      That's it so don't get [NAME OF PERSON WHO INVITED THEM] in trouble
+    </div>
+    <button type="button" name="button">Accept</button>
+  </div>
   <div id="loading">
     <div class="" style="width: 100%; text-align: center; color: black;">
       <p style="line-height: 60vh; font-size: 8vh;">Loading...</p>
@@ -53,14 +79,20 @@ under the License.
     </div>
   </div>
   <div id="login-view" class="inactive">
-    <h1>HUNTING PARTY</h1>
-    <div class="instructions">
-      Log in with your EF Assembly account credentials.
+
+    <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
+      <h1>HUNTING PARTY</h1>
     </div>
-    <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
-    <input class="login-field" type="password" id="password" name="" value="" placeholder="Password">
-    <div class="" style="width: 100%; position: relative;">
-      <button class="center-absolute" type="button" name="button" onclick=login()>LOG IN</button>
+    <div class="instructions">
+      Please sign in...
+    </div>
+    <p class="login-info">Username (Email Address)</p>
+    <input class="login-field" type="text" id="email" name="" value="" placeholder="">
+    <p class="login-info">Password</p>
+    <input class="login-field" type="password" id="password" name="" value="" placeholder="">
+    <div class="" style="width: 100%; position: relative; margin-top: 2vh;">
+      <button class="center-absolute" type="button" name="button" onclick=login()>LOGIN</button>
+      <button class="center-absolute" type="button" name="button" onclick=login()>JOIN</button>
     </div>
   </div>
   <div id="main-view" class="inactive">
@@ -348,28 +380,25 @@ under the License.
       <div id="error-popup" class="vote-popup inactive">
         <h3>ERROR</h3>
         <p id="error-text">Shit's broke</p>
-         <button type="button" name="button" style="width: 40vw;" onclick="closePopups(0)">Okay</button>
+         <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
       </div>
       <div class="vote-popup yes-popup inactive">
         <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-          <button class="popup-close" type="button" name="button" onclick="closePopups(2)">X</button>
+          <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
           <!-- <p>You voted YES on this opportunity!</p>
           <p>Write a quick comment to let your team know why you approve.</p> -->
-          <p>SENT TO:</p>
+          <h3>SENT TO:</h3>
           <div id="yes-popup-users-list" class="">
 
           </div>
           <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
-          <p>Anyone else you want to send it to?</p>
-          <div class="col-12">
-            <button id="yes-refer-button" type="button" name="button" style="line-height: 26px; width: 30vw; margin-bottom: 1vh; color: white;" onclick="turnOnRefer(0)">Refer</button>
-          </div>
-          <div id="yes-refer" class="inactive">
+          <p>Anyone else you want to send it to? Add their emails here:</p>
+          <div id="yes-refer" class="">
             <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-              <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-              <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
+              <input id="yes-refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+              <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
             </div>
-            <div class="" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
+            <div id="yes-popup-refer-list" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
 
             </div>
           </div>
