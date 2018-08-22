@@ -333,6 +333,7 @@ var emptySearchTerms = {
 var yesRefer = []
 var naics = []
 var tosRead = 0
+var tutorialsOpen = false
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -483,7 +484,7 @@ function searchFilter(which) {
       }
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
@@ -564,27 +565,18 @@ function renderSearch() {
   html = ''
   var naicsIndex = 0
   for (i = 0; i < searchTerms.naics.length; i++) {
-    html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'+
-    '<div id="naics-subcategory-box-'+i+'"></div>'
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
+      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;"> '+searchTerms.naics[i].name+'</div>'+
+      '<div id="naics-subcategory-box-'+i+'"></div>'+
+      '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
       '</div>'
+    } else {
+      html = html + '<div class="" style="width: 100%; float: left;">'+
+      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</div>'+
+      '<div id="naics-subcategory-box-'+i+'"></div>'
     }
-    // if (searchTerms.naics[i].subcategories) {
-    //   html = html + '<div id="naics-sub-'+i+'" class="checkbox-naics-sub inactive">'
-    //   for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-    //     var naicsObj = searchTerms.naics[i].subcategories[i2]
-    //     html = html + '<div class="" style="width: 100%; float: left;">'+
-    //     '<input id="'+naicsIndex+'" class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+'</span>'
-    //
-    //     for (i = 0; i < searchTerms.naics.length; i++) {
-    //     }
-    //
-    //     html = html + '</div>'
-    //   }
-    // }
     html = html + '</div>'
     naicsIndex++
   }
@@ -640,10 +632,37 @@ function renderSearch() {
 }
 
 function calculateNaicsSearch(naicsItem, divId, elem) {
-  if (naicsItem.subcategories) {
-    document.getElementById(divId).innerHTML = '<div class="naics-subcategory-box">THIS HAS ' + naicsItem.subcategories.length + ' SUBCATEGORIES</div>'
+  var elemClasses = [].slice.apply(elem.classList);
+  if (!elem.classList.contains('naics-open')) {
+    if (naicsItem.subcategories) {
+      var html = '<div class="naics-subcategory-box">'
+      for (i = 0; i < naicsItem.subcategories.length; i++) {
+        html = html + '<div class="" style="width: 100%; float: left;">'+
+        '<input class="checkbox-place" type="checkbox" name="" value="'+naicsItem.subcategories[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'</span></div>'
+      }
+      html = html + '</div>'
+      elem.classList.add('naics-open');
+      document.getElementById(divId).innerHTML = html
+    }
+  } else {
+    document.getElementById(divId).innerHTML = ''
+    elem.classList.remove('naics-open');
   }
-  calculateSearch(elem)
+}
+
+function openTutorials() {
+  var a = document.getElementsByClassName('tutorial-view')
+  if (!tutorialsOpen) {
+    for (i = 0; i < a.length; i++) {
+      a[i].classList.remove('inactive')
+    }
+    tutorialsOpen = true
+  } else {
+    for (i = 0; i < a.length; i++) {
+      a[i].classList.add('inactive')
+    }
+    tutorialsOpen = false
+  }
 }
 
 function calculateSearch(elem) {
@@ -947,6 +966,8 @@ function toggleHamburgerMenu() {
   function switchTab(num) {
     document.getElementById("fbo-list-view").classList.remove('inactive');
     document.getElementById("fbo-detail-view").classList.add('inactive');
+    tutorialsOpen = true
+    openTutorials()
     if (num == 0) {
       document.getElementById("news-view").classList.remove('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -1640,71 +1661,59 @@ function getTheData() {
               xhttp4.onreadystatechange = function() {
                 if (xhttp4.readyState == 4 && xhttp4.status == 200) {
                   huntingPartyData = JSON.parse(xhttp4.responseText);
-                  var xhttp5 = new XMLHttpRequest();
-                  xhttp5.overrideMimeType("application/json");
-                  xhttp5.onreadystatechange = function() {
-                    if (xhttp5.readyState == 4 && xhttp5.status == 200) {
-                      naics = JSON.parse(xhttp5.responseText);
-                      searchTerms.naics = naics
-                      emptySearchTerms.naics = naics
-                      deviceId = device.uuid
-                      var userInList = false
-                      if (!huntingPartyData.users) {
-                        huntingPartyData.users = []
+                  deviceId = device.uuid
+                  var userInList = false
+                  if (!huntingPartyData.users) {
+                    huntingPartyData.users = []
+                  }
+                  var doTheUpdateAnyway = false
+                  for (i = 0; i < huntingPartyData.users.length; i++) {
+                    if (huntingPartyData.users[i].userId == currentUser._id) {
+                      userInList = true
+                      if (huntingPartyData.users[i].tosRead) {
+                        tosRead = huntingPartyData.users[i].tosRead
                       }
-                      var doTheUpdateAnyway = false
-                      for (i = 0; i < huntingPartyData.users.length; i++) {
-                        if (huntingPartyData.users[i].userId == currentUser._id) {
-                          userInList = true
-                          if (huntingPartyData.users[i].tosRead) {
-                            tosRead = huntingPartyData.users[i].tosRead
-                          }
-                          if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                            doTheUpdateAnyway = true
-                            huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
-                          }
-                          if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
-                            doTheUpdateAnyway = true
-                            huntingPartyData.users[i].deviceId = device.uuid
-                          }
-                        }
+                      if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                        doTheUpdateAnyway = true
+                        huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
                       }
-                      if (!userInList || doTheUpdateAnyway) {
-                        console.log('not in the list')
-                        if (!userInList) {
-                          huntingPartyData.users.push({
-                            userId: currentUser._id,
-                            name: currentUser.firstName + ' ' + currentUser.lastName,
-                            email: currentUser.username,
-                            deviceId: device.uuid,
-                            regId: localStorage.getItem('registrationId'),
-                            tosRead: 0
-                          })
-                          tosRead = 0
-                        }
-                        var xhttpHPD = new XMLHttpRequest();
-                        xhttpHPD.onreadystatechange = function() {
-                          if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                            huntingPartyData = JSON.parse(xhttpHPD.responseText);
-                          }
-                        }
-                        xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
-                        xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                        xhttpHPD.send(JSON.stringify(huntingPartyData));
+                      if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                        doTheUpdateAnyway = true
+                        huntingPartyData.users[i].deviceId = device.uuid
                       }
-                      if (tosRead < 1) {
-                        console.log('fuck')
-                        document.getElementById("loading").classList.add('inactive');
-                        document.getElementById("tos-popup").classList.remove('inactive');
-                        // document.getElementById("login-view").classList.remove('inactive');
-                      } else {
-                        startMainApp()
-                      }
-
                     }
                   }
-                  xhttp5.open("GET", "../json/naics.json", true);
-                  xhttp5.send();
+                  if (!userInList || doTheUpdateAnyway) {
+                    console.log('not in the list')
+                    if (!userInList) {
+                      huntingPartyData.users.push({
+                        userId: currentUser._id,
+                        name: currentUser.firstName + ' ' + currentUser.lastName,
+                        email: currentUser.username,
+                        deviceId: device.uuid,
+                        regId: localStorage.getItem('registrationId'),
+                        tosRead: 0
+                      })
+                      tosRead = 0
+                    }
+                    var xhttpHPD = new XMLHttpRequest();
+                    xhttpHPD.onreadystatechange = function() {
+                      if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                        huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                      }
+                    }
+                    xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                    xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                    xhttpHPD.send(JSON.stringify(huntingPartyData));
+                  }
+                  if (tosRead < 1) {
+                    console.log('fuck')
+                    document.getElementById("loading").classList.add('inactive');
+                    document.getElementById("tos-popup").classList.remove('inactive');
+                    // document.getElementById("login-view").classList.remove('inactive');
+                  } else {
+                    startMainApp()
+                  }
                 }
               }
               xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
@@ -1731,6 +1740,25 @@ function getTheData() {
   xhttp.send();
 }
 
+function acceptTOS() {
+  for (i = 0; i < huntingPartyData.users.length; i++) {
+    if (huntingPartyData.users[i].userId == currentUser._id) {
+      huntingPartyData.users[i].tosRead = 1
+    }
+  }
+  tosRead = 1
+  var xhttpHPD = new XMLHttpRequest();
+  xhttpHPD.onreadystatechange = function() {
+    if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+      huntingPartyData = JSON.parse(xhttpHPD.responseText);
+      startMainApp()
+    }
+  }
+  xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+  xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttpHPD.send(JSON.stringify(huntingPartyData));
+}
+
 function startMainApp() {
   if (company.fboProxies.length > 0) {
     fbos = company.fboProxies
@@ -1739,6 +1767,7 @@ function startMainApp() {
     renderSearch()
     renderFbos()
     var promiseFinished = true
+    document.getElementById("tos-popup").classList.add('inactive');
     document.getElementById("loading").classList.add('inactive');
     document.getElementById("main-view").classList.remove('inactive');
     document.getElementById("news-view").classList.remove('inactive');
@@ -1747,6 +1776,7 @@ function startMainApp() {
     document.getElementById("login-view").classList.add('inactive');
   } else {
     document.getElementById("loading").classList.add('inactive');
+    document.getElementById("tos-popup").classList.add('inactive');
     document.getElementById("main-view").classList.remove('inactive');
     document.getElementById("news-view").classList.remove('inactive');
     document.getElementById("fbo-view").classList.add('inactive');
@@ -1759,7 +1789,7 @@ function startMainApp() {
     // document.getElementById("iconbar-4").classList.add('inactive');
     // document.getElementById("iconbar-5").classList.add('inactive');
   }
-  // switchTab(2)
+  switchTab(2)
   // goToFbo(5, 0);
 
   // expandData(2)
