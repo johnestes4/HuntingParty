@@ -2,7 +2,7 @@ var activeTab = 0
 var dataExpanded = 0
 var company = null
 var huntingPartyData = null
-var deviceId
+var device
 var fbos = []
 var incomingFbos = []
 var pipelineFbos = []
@@ -490,10 +490,10 @@ function searchFilter(which) {
         '</div>'
       } else if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
       } else {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
+        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
       }
       html = html + '</div>'
     }
@@ -553,7 +553,7 @@ function renderSearch() {
   var html = ''
   for (i = 0; i < searchTerms.dueDate.length; i++) {
     html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.dueDate[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.dueDate[i].name+'</span>'
+    '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.dueDate[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.dueDate[i].name+'</span>'
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
@@ -567,14 +567,14 @@ function renderSearch() {
   for (i = 0; i < searchTerms.naics.length; i++) {
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;"> '+searchTerms.naics[i].name+'</div>'+
+      '<input class="checkbox-naics" type="checkbox" name="" value="0" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;"> '+searchTerms.naics[i].name+'</div>'+
       '<div id="naics-subcategory-box-'+i+'"></div>'+
       '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
       '</div>'
     } else {
       html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</div>'+
+      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</div>'+
       '<div id="naics-subcategory-box-'+i+'"></div>'
     }
     html = html + '</div>'
@@ -584,7 +584,7 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.psc.length; i++) {
     html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+    '<input class="checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
@@ -596,7 +596,7 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.agency.length; i++) {
     html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+    '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
@@ -608,7 +608,7 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.place.length; i++) {
     html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.place[i].name+'</span>'
+    '<input class="checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.place[i].name+'</span>'
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
@@ -620,7 +620,7 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.setAside.length; i++) {
     html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].value+'" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.setAside[i].name+'</span>'
+    '<input class="checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.setAside[i].name+'</span>'
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
@@ -638,7 +638,7 @@ function calculateNaicsSearch(naicsItem, divId, elem) {
       var html = '<div class="naics-subcategory-box">'
       for (i = 0; i < naicsItem.subcategories.length; i++) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-place" type="checkbox" name="" value="'+naicsItem.subcategories[i].value+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'</span></div>'
+        '<input class="checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'</span></div>'
       }
       html = html + '</div>'
       elem.classList.add('naics-open');
@@ -666,165 +666,201 @@ function openTutorials() {
 }
 
 function calculateSearch(elem) {
-  var a = document.getElementsByClassName('checkbox-duedate')
-  var firstClicked = false
   var anyFalse = false
-  for (i = 0; i < a.length; i++) {
-    firstClicked = (elem == a[0])
-    if (elem == a[i]) {
-      console.log('you just clicked on ' + searchTerms.dueDate[i].name + ' and turned it to ' + a[i].checked)
-    }
-    if (!firstClicked || i == 0) {
-      searchTerms.dueDate[i].value = a[i].checked
-    } else if (firstClicked) {
-      searchTerms.dueDate[i].value = a[0].checked
-      a[i].checked = a[0].checked
+  console.log(searchTerms.naics)
+  if (elem.classList.contains('checkbox-duedate')) {
+    if (elem.value == searchTerms.dueDate[0].name) {
+      for (i = 0; i < searchTerms.dueDate.length; i++) {
+        searchTerms.dueDate[i].value = elem.checked
+      }
+      var a = document.getElementsByClassName('checkbox-duedate')
+      for (i2 = 0; i2 < a.length; i2++) {
+        a[i2].checked = elem.checked
+      }
     } else {
-      searchTerms.dueDate[i].value = a[i].checked
-    }
-    if (a[i].checked == false) {
-      a[0].checked = false
-      if (i > 0) {
-        anyFalse = true
+      for (i = 0; i < searchTerms.dueDate.length; i++) {
+        if (searchTerms.dueDate[i].name == elem.value) {
+          searchTerms.dueDate[i].value = elem.checked
+          if (!elem.checked) {
+            searchTerms.dueDate[0].value = false
+            var a = document.getElementsByClassName('checkbox-duedate')
+            a[0].checked = false
+          }
+          break;
+        }
       }
     }
-    if (i == (a.length-1) && !anyFalse && a.length > 1) {
-      a[0].checked = true
-    }
-  }
-  a = document.getElementsByClassName('checkbox-naics')
-  firstClicked = false
-  anyFalse = false
-  for (i = 0; i < a.length; i++) {
-    firstClicked = (elem == a[0])
-    if (elem == a[i]) {
-      console.log('you just clicked on ' + searchTerms.naics[i].name + ' and turned it to ' + a[i].checked)
-    }
-    if (!firstClicked || i == 0) {
-      searchTerms.naics[i].value = a[i].checked
-    } else if (firstClicked) {
-      searchTerms.naics[i].value = a[0].checked
-      a[i].checked = a[0].checked
+  } else if (elem.classList.contains('checkbox-naics')) {
+    if (elem.value == searchTerms.naics[0].code) {
+      for (i = 0; i < searchTerms.naics.length; i++) {
+        searchTerms.naics[i].value = elem.checked
+      }
+      var a = document.getElementsByClassName('checkbox-naics')
+      for (i2 = 0; i2 < a.length; i2++) {
+        a[i2].checked = elem.checked
+      }
     } else {
-      searchTerms.naics[i].value = a[i].checked
-    }
-    if (a[i].checked == false) {
-      a[0].checked = false
-      if (i > 0) {
-        anyFalse = true
+      for (i = 0; i < searchTerms.naics.length; i++) {
+        if (searchTerms.naics[i].code == elem.value) {
+          searchTerms.naics[i].value = elem.checked
+          if (!elem.checked) {
+            searchTerms.naics[0].value = false
+            var a = document.getElementsByClassName('checkbox-naics')
+            a[0].checked = false
+          }
+          break;
+        } else if (elem.value.slice(0,searchTerms.naics[i].code.length) == searchTerms.naics[i].code) {
+          if (searchTerms.naics[i].subcategories) {
+            // LEVEL 1 OF SUBCATEGORIES
+            for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+              if (searchTerms.naics[i].subcategories[i2].code == elem.value) {
+                searchTerms.naics[i].subcategories[i2].value = elem.checked
+                if (!elem.checked) {
+                  searchTerms.naics[0].value = false
+                  var a = document.getElementsByClassName('checkbox-naics')
+                  a[0].checked = false
+                }
+                break;
+              } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].code.length) == searchTerms.naics[i].subcategories[i2].code) {
+                if (searchTerms.naics[i].subcategories[i2].subcategories) {
+                  // LEVEL 2 OF SUBCATEGORIES
+                  for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+                    if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code == elem.value) {
+                      searchTerms.naics[i].subcategories[i2].subcategories[i3].value = elem.checked
+                      if (!elem.checked) {
+                        searchTerms.naics[0].value = false
+                        var a = document.getElementsByClassName('checkbox-naics')
+                        a[0].checked = false
+                      }
+                      break;
+                    } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].code) {
+                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
+                        // LEVEL 3 OF SUBCATEGORIES
+                        for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                          if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code == elem.value) {
+                            searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].value = elem.checked
+                            if (!elem.checked) {
+                              searchTerms.naics[0].value = false
+                              var a = document.getElementsByClassName('checkbox-naics')
+                              a[0].checked = false
+                            }
+                            break;
+                          } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code) {
+                            if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
+                              // LEVEL 4 OF SUBCATEGORIES
+                              for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == elem.value) {
+                                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = elem.checked
+                                  if (!elem.checked) {
+                                    searchTerms.naics[0].value = false
+                                    var a = document.getElementsByClassName('checkbox-naics')
+                                    a[0].checked = false
+                                  }
+                                  break;
+                                }
+                              }
+                              //
+                            }
+                          }
+                        }
+                        //
+                      }
+                    }
+                  }
+                  //
+                }
+              }
+            }
+            //
+          }
+        }
       }
     }
-    if (i == (a.length-1) && !anyFalse && a.length > 1) {
-      a[0].checked = true
-    }
-  }
-  a = document.getElementsByClassName('checkbox-psc')
-  allChecked = false
-  anyFalse = false
-  for (i = 0; i < a.length; i++) {
-    firstClicked = (elem == a[0])
-    if (elem == a[i]) {
-      console.log('you just clicked on ' + searchTerms.psc[i].name + ' and turned it to ' + a[i].checked)
-    }
-    if (!firstClicked || i == 0) {
-      searchTerms.psc[i].value = a[i].checked
-    } else if (firstClicked) {
-      searchTerms.psc[i].value = a[0].checked
-      a[i].checked = a[0].checked
+  } else if (elem.classList.contains('checkbox-psc')) {
+    if (elem.value == searchTerms.psc[0].name) {
+      for (i = 0; i < searchTerms.psc.length; i++) {
+        searchTerms.psc[i].value = elem.checked
+      }
+      var a = document.getElementsByClassName('checkbox-psc')
+      for (i2 = 0; i2 < a.length; i2++) {
+        a[i2].checked = elem.checked
+      }
     } else {
-      searchTerms.psc[i].value = a[i].checked
-    }
-    if (a[i].checked == false) {
-      a[0].checked = false
-      if (i > 0) {
-        anyFalse = true
+      for (i = 0; i < searchTerms.psc.length; i++) {
+        if (searchTerms.psc[i].name == elem.value) {
+          searchTerms.psc[i].value = elem.checked
+          if (!elem.checked) {
+            searchTerms.psc[0].value = false
+            var a = document.getElementsByClassName('checkbox-psc')
+            a[0].checked = false
+          }
+        }
       }
     }
-    if (i == (a.length-1) && !anyFalse && a.length > 1) {
-      a[0].checked = true
-    }
-  }
-  a = document.getElementsByClassName('checkbox-agency')
-  allChecked = false
-  anyFalse = false
-  for (i = 0; i < a.length; i++) {
-    firstClicked = (elem == a[0])
-    if (elem == a[i]) {
-      console.log('you just clicked on ' + searchTerms.agency[i].name + ' and turned it to ' + a[i].checked)
-    }
-    if (!firstClicked || i == 0) {
-      searchTerms.agency[i].value = a[i].checked
-    } else if (firstClicked) {
-      searchTerms.agency[i].value = a[0].checked
-      a[i].checked = a[0].checked
+  } else if (elem.classList.contains('checkbox-agency')) {
+    if (elem.value == searchTerms.agency[0].name) {
+      for (i = 0; i < searchTerms.agency.length; i++) {
+        searchTerms.agency[i].value = elem.checked
+      }
+      var a = document.getElementsByClassName('checkbox-agency')
+      for (i2 = 0; i2 < a.length; i2++) {
+        a[i2].checked = elem.checked
+      }
     } else {
-      searchTerms.agency[i].value = a[i].checked
-    }
-    if (a[i].checked == false) {
-      a[0].checked = false
-      if (i > 0) {
-        anyFalse = true
+      for (i = 0; i < searchTerms.place.length; i++) {
+        if (searchTerms.agency[i].name == elem.value) {
+          searchTerms.agency[i].value = elem.checked
+          if (!elem.checked) {
+            searchTerms.agency[0].value = false
+            var a = document.getElementsByClassName('checkbox-agency')
+            a[0].checked = false
+          }
+        }
       }
     }
-    if (i == (a.length-1) && !anyFalse && a.length > 1) {
-      a[0].checked = true
-    }
-  }
-  a = document.getElementsByClassName('checkbox-place')
-  allChecked = false
-  anyFalse = false
-  for (i = 0; i < a.length; i++) {
-    firstClicked = (elem == a[0])
-    if (elem == a[i]) {
-      console.log('you just clicked on ' + searchTerms.place[i].name + ' and turned it to ' + a[i].checked)
-    }
-    if (!firstClicked || i == 0) {
-      searchTerms.place[i].value = a[i].checked
-    } else if (firstClicked) {
-      searchTerms.place[i].value = a[0].checked
-      a[i].checked = a[0].checked
+  } else if (elem.classList.contains('checkbox-place')) {
+    if (elem.value == searchTerms.place[0].name) {
+      for (i = 0; i < searchTerms.place.length; i++) {
+        searchTerms.place[i].value = elem.checked
+      }
+      var a = document.getElementsByClassName('checkbox-place')
+      for (i2 = 0; i2 < a.length; i2++) {
+        a[i2].checked = elem.checked
+      }
     } else {
-      searchTerms.place[i].value = a[i].checked
-    }
-    if (a[i].checked == false) {
-      a[0].checked = false
-      if (i > 0) {
-        anyFalse = true
+      for (i = 0; i < searchTerms.place.length; i++) {
+        if (searchTerms.place[i].name == elem.value) {
+          searchTerms.place[i].value = elem.checked
+          if (!elem.checked) {
+            searchTerms.place[0].value = false
+            var a = document.getElementsByClassName('checkbox-place')
+            a[0].checked = false
+          }
+        }
       }
     }
-    if (i == (a.length-1) && !anyFalse && a.length > 1) {
-      a[0].checked = true
-    }
-  }
-  a = document.getElementsByClassName('checkbox-setaside')
-  allChecked = false
-  anyFalse = false
-  for (i = 0; i < a.length; i++) {
-    firstClicked = (elem == a[0])
-    if (elem == a[i]) {
-      console.log('you just clicked on ' + searchTerms.setAside[i].name + ' and turned it to ' + a[i].checked)
-    }
-    if (!firstClicked || i == 0) {
-      searchTerms.setAside[i].value = a[i].checked
-    } else if (firstClicked) {
-      searchTerms.setAside[i].value = a[0].checked
-      a[i].checked = a[0].checked
+  } else if (elem.classList.contains('checkbox-setaside')) {
+    if (elem.value == searchTerms.setaside[0].name) {
+      for (i = 0; i < searchTerms.setaside.length; i++) {
+        searchTerms.setaside[i].value = elem.checked
+      }
+      var a = document.getElementsByClassName('checkbox-setaside')
+      for (i2 = 0; i2 < a.length; i2++) {
+        a[i2].checked = elem.checked
+      }
     } else {
-      searchTerms.setAside[i].value = a[i].checked
-    }
-    if (a[i].checked == false) {
-      a[0].checked = false
-      if (i > 0) {
-        anyFalse = true
+      for (i = 0; i < searchTerms.setaside.length; i++) {
+        if (searchTerms.setaside[i].name == elem.value) {
+          searchTerms.setaside[i].value = elem.checked
+          if (!elem.checked) {
+            searchTerms.setaside[0].value = false
+            var a = document.getElementsByClassName('checkbox-setaside')
+            a[0].checked = false
+          }
+        }
       }
     }
-    if (i == (a.length-1) && !anyFalse && a.length > 1) {
-      a[0].checked = true
-    }
   }
-
-
-  console.log(searchTerms)
 }
 
 function saveSearchTerms() {
@@ -1652,6 +1688,7 @@ function getTheData() {
           // agencyLogos = JSON.parse(xobj.responseText);
           var xhttp3 = new XMLHttpRequest();
           // xhttp3.setRequestHeader("Content-type", "application/json");
+          console.log(window.device)
           xhttp3.onreadystatechange = function() {
             if (xhttp3.readyState == 4 && xhttp3.status == 200) {
               searchTerms = JSON.parse(xhttp3.responseText);
@@ -1661,7 +1698,6 @@ function getTheData() {
               xhttp4.onreadystatechange = function() {
                 if (xhttp4.readyState == 4 && xhttp4.status == 200) {
                   huntingPartyData = JSON.parse(xhttp4.responseText);
-                  deviceId = device.uuid
                   var userInList = false
                   if (!huntingPartyData.users) {
                     huntingPartyData.users = []
@@ -1677,34 +1713,38 @@ function getTheData() {
                         doTheUpdateAnyway = true
                         huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
                       }
-                      if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
-                        doTheUpdateAnyway = true
-                        huntingPartyData.users[i].deviceId = device.uuid
+                      if (device !== undefined) {
+                        if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                          doTheUpdateAnyway = true
+                          huntingPartyData.users[i].deviceId = device.uuid
+                        }
                       }
                     }
                   }
-                  if (!userInList || doTheUpdateAnyway) {
-                    console.log('not in the list')
-                    if (!userInList) {
-                      huntingPartyData.users.push({
-                        userId: currentUser._id,
-                        name: currentUser.firstName + ' ' + currentUser.lastName,
-                        email: currentUser.username,
-                        deviceId: device.uuid,
-                        regId: localStorage.getItem('registrationId'),
-                        tosRead: 0
-                      })
-                      tosRead = 0
-                    }
-                    var xhttpHPD = new XMLHttpRequest();
-                    xhttpHPD.onreadystatechange = function() {
-                      if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                        huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                  if (device !== undefined) {
+                    if (!userInList || doTheUpdateAnyway) {
+                      console.log('not in the list')
+                      if (!userInList) {
+                        huntingPartyData.users.push({
+                          userId: currentUser._id,
+                          name: currentUser.firstName + ' ' + currentUser.lastName,
+                          email: currentUser.username,
+                          deviceId: device.uuid,
+                          regId: localStorage.getItem('registrationId'),
+                          tosRead: 0
+                        })
+                        tosRead = 0
                       }
+                      var xhttpHPD = new XMLHttpRequest();
+                      xhttpHPD.onreadystatechange = function() {
+                        if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                          huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                        }
+                      }
+                      xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                      xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                      xhttpHPD.send(JSON.stringify(huntingPartyData));
                     }
-                    xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
-                    xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                    xhttpHPD.send(JSON.stringify(huntingPartyData));
                   }
                   if (tosRead < 1) {
                     console.log('fuck')
@@ -1789,7 +1829,7 @@ function startMainApp() {
     // document.getElementById("iconbar-4").classList.add('inactive');
     // document.getElementById("iconbar-5").classList.add('inactive');
   }
-  switchTab(2)
+  // switchTab(2)
   // goToFbo(5, 0);
 
   // expandData(2)
