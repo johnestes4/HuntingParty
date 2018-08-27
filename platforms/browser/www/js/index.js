@@ -488,12 +488,26 @@ function searchFilter(which) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
-      } else if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
-      } else {
-        html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span>'
+      } else if (isNaN(string)) {
+        if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
+          html = html + '<div class="" style="width: 100%; float: left;">'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<div id="naics-subcategory-box-'+i+'"></div>'
+        } else {
+          html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<div id="naics-subcategory-box-'+i+'"></div>'
+        }
+      } else if (!isNaN(string)) {
+        if (searchTerms.naics[i].code.toString().includes(string) || searchTerms.naics[i].value == true) {
+          html = html + '<div class="" style="width: 100%; float: left;">'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<div id="naics-subcategory-box-'+i+'"></div>'
+        } else {
+          html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<div id="naics-subcategory-box-'+i+'"></div>'
+        }
       }
       html = html + '</div>'
     }
@@ -508,44 +522,109 @@ function searchFilter(which) {
 
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span></div>'
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
       } else if (searchTerms.psc[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span></div>'
       } else {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span></div>'
       }
       html = html + '</div>'
     }
     document.getElementById("search-box-psc").innerHTML = html
   }
   if (which == 2) {
+    console.log('sss')
     for (i = 0; i < searchTerms.agency.length; i++) {
       var checkedHtml = ''
-      if (searchTerms.agency[i].value) {
+      if (searchTerms.agency[i].value == true) {
+        console.log(searchTerms.agency[i].name + ' is checked')
         checkedHtml = ' checked'
       }
 
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span></div>'
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'
       } else if (searchTerms.agency[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.agency[i].value == true) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</span></div>'
+        var inactiveHtml = ''
+        if (document.getElementById("agency-subcategory-box-"+i+"").classList.contains('inactive')) {
+          inactiveHtml = ' inactive'
+        }
+        html = html + '<div id="agency-subcategory-box-'+i+'" class="subcategory-box '+inactiveHtml+'">'
+        for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
+          var subCheckedHTML = ''
+          if (searchTerms.agency[i].subagencies[subagencyIndex].value) {
+            subCheckedHTML = ' checked'
+          }
+          if (searchTerms.agency[i].subagencies[subagencyIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.agency[i].subagencies[subagencyIndex].value == true) {
+            var inactiveHtml2 = ''
+            if (document.getElementById('subagency-subcategory-box-'+i+'-'+subagencyIndex+'')) {
+              if (document.getElementById('subagency-subcategory-box-'+i+'-'+subagencyIndex+'').classList.contains('inactive')) {
+                inactiveHtml2 = ' inactive'
+              }
+            } else {
+              inactiveHtml2 = ' inactive'
+            }
+            var checked = ''
+            if (searchTerms.agency[i].subagencies[subagencyIndex]) {
+              checked = ' checked'
+            }
+            html = html + '<div class="" style="width: 100%; float: left;">'+
+            '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+            '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box '+inactiveHtml2+'"></div>'
+          } else {
+            html = html + '<div class="inactive" style="width: 100%; float: left;">'+
+            '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+            '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box '+inactiveHtml2+'"></div>'
+          }
+        }
+        html = html + '</div>'
       } else {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'
+        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span></div>'+
+        '<div id="agency-subcategory-box-'+i+'"></div>'
       }
-      html = html + '</div>'
     }
     document.getElementById("search-box-agency").innerHTML = html
+    //
+    // if (searchTerms.agency[agencyIndex].name == a[i].value) {
+    //   if (!searchTerms.agency[agencyIndex].name.toLowerCase().includes(string.toLowerCase()) || !searchTerms.agency[agencyIndex].value) {
+    //     a[i].classList.add('inactive')
+    //   } else {
+    //     a[i].classList.remove('inactive')
+    //   }
+    // } else if (searchTerms.agency[agencyIndex].subagencies) {
+    //   for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[agencyIndex].subagencies.length; subagencyIndex++) {
+    //     if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].name == a[i].value) {
+    //       if (!searchTerms.agency[agencyIndex].subagencies[subagencyIndex].name.toLowerCase().includes(string.toLowerCase()) || !searchTerms.agency[agencyIndex].subagencies[subagencyIndex].value) {
+    //         a[i].classList.add('inactive')
+    //       } else {
+    //         a[i].classList.remove('inactive')
+    //       }
+    //       break;
+    //     } else if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices) {
+    //       for (officeIndex = 0; officeIndex < searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices.length; officeIndex++) {
+    //         if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].office[officeIndex].name == a[i].value) {
+    //           if (!searchTerms.agency[agencyIndex].subagencies[subagencyIndex].office[officeIndex].name.toLowerCase().includes(string.toLowerCase()) || !searchTerms.agency[agencyIndex].subagencies[subagencyIndex].office[officeIndex].value) {
+    //             a[i].classList.add('inactive')
+    //           } else {
+    //             a[i].classList.remove('inactive')
+    //           }
+    //           break;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
 
@@ -597,17 +676,31 @@ function renderSearch() {
   for (i = 0; i < searchTerms.agency.length; i++) {
     if (i == 0) {
       html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span>'+
+      '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span></div>'+
       '<div id="agency-subcategory-box-'+i+'"></div>'+
       '<div class="" style="width: 100%; float: left;">'+
       '<p style="margin-bottom: 2px;">----------</p>'+
       '</div>'
     } else {
       html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;" onclick="calculateAgencySearch(searchTerms.agency['+i+'], \'agency-subcategory-box-'+i+'\', this)"> '+searchTerms.agency[i].name+'</span>'+
-      '<div id="agency-subcategory-box-'+i+'"></div>'
+      '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</span></div>'+
+      '<div id="agency-subcategory-box-'+i+'" class="subcategory-box inactive">'
+      if (searchTerms.agency[i].subagencies) {
+        for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
+          html = html + '<div class="" style="width: 100%; float: left;">'+
+          '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+', '+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+          '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box inactive">'
+          if (searchTerms.agency[i].subagencies[subagencyIndex].offices) {
+            for (officeIndex = 0; officeIndex < searchTerms.agency[i].subagencies[subagencyIndex].offices.length; officeIndex++) {
+              html = html + '<div class="" style="width: 100%; float: left;">'+
+              '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'</span></div>'
+            }
+          }
+          html = html + '</div>'
+        }
+      }
+      html = html + '</div>'
     }
-    html = html + '</div>'
   }
   document.getElementById("search-box-agency").innerHTML = html
   html = ''
@@ -654,21 +747,19 @@ function calculateNaicsSearch(naicsItem, divId, elem) {
   }
 }
 
-function calculateAgencySearch(agencyItem, divId, elem) {
-  if (!elem.classList.contains('agency-open')) {
-    if (agencyItem.subagencies) {
-      var html = '<div class="agency-subcategory-box subcategory-box">'
-      for (i = 0; i < agencyItem.subagencies.length; i++) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-agency" type="checkbox" name="" value="'+agencyItem.subagencies[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+agencyItem.subagencies[i].name+'</span></div>'
-      }
-      html = html + '</div>'
-      elem.classList.add('agency-open');
-      document.getElementById(divId).innerHTML = html
-    }
+function calculateAgencySearch(agencyIndex) {
+  if (!document.getElementById('agency-subcategory-box-'+agencyIndex+'').classList.contains('inactive')) {
+    document.getElementById('agency-subcategory-box-'+agencyIndex+'').classList.add('inactive')
   } else {
-    document.getElementById(divId).innerHTML = ''
-    elem.classList.remove('agency-open');
+    document.getElementById('agency-subcategory-box-'+agencyIndex+'').classList.remove('inactive')
+  }
+}
+
+function calculateOfficeSearch(agencyIndex, subagencyIndex) {
+  if (!document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.contains('inactive')) {
+    document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.add('inactive')
+  } else {
+    document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.remove('inactive')
   }
 }
 
@@ -689,7 +780,6 @@ function openTutorials() {
 
 function calculateSearch(elem) {
   var anyFalse = false
-  console.log(searchTerms.naics)
   if (elem.classList.contains('checkbox-duedate')) {
     if (elem.value == searchTerms.dueDate[0].name) {
       for (i = 0; i < searchTerms.dueDate.length; i++) {
@@ -820,6 +910,7 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-agency')) {
+    console.log(elem.value + ' - ' + elem.checked)
     if (elem.value == searchTerms.agency[0].name) {
       for (i = 0; i < searchTerms.agency.length; i++) {
         searchTerms.agency[i].value = elem.checked
@@ -829,13 +920,31 @@ function calculateSearch(elem) {
         a[i2].checked = elem.checked
       }
     } else {
-      for (i = 0; i < searchTerms.place.length; i++) {
-        if (searchTerms.agency[i].name == elem.value) {
-          searchTerms.agency[i].value = elem.checked
+      for (agencyIndex = 0; agencyIndex < searchTerms.agency.length; agencyIndex++) {
+        if (searchTerms.agency[agencyIndex].name == elem.value) {
+          console.log('found a match')
+          searchTerms.agency[agencyIndex].value = elem.checked
+          console.log('now its ' + elem.checked + ' ' + searchTerms.agency[agencyIndex].value)
           if (!elem.checked) {
             searchTerms.agency[0].value = false
             var a = document.getElementsByClassName('checkbox-agency')
             a[0].checked = false
+          }
+        } else if (searchTerms.agency[agencyIndex].subagencies) {
+          for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[agencyIndex].subagencies.length; subagencyIndex++) {
+            if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].name == elem.value) {
+              console.log('found a match')
+              searchTerms.agency[agencyIndex].subagencies[subagencyIndex].value = elem.checked
+              console.log('now its ' + elem.checked + ' ' + searchTerms.agency[agencyIndex].subagencies[subagencyIndex].value)
+            } else if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices) {
+              for (officeIndex = 0; officeIndex < searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices.length; officeIndex++) {
+                if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices[officeIndex].name == elem.value) {
+                  console.log('found a match')
+                  searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices[officeIndex].value = elem.checked
+                  console.log('now its ' + elem.checked + ' ' + searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices[officeIndex].value)
+                }
+              }
+            }
           }
         }
       }
@@ -1375,6 +1484,10 @@ function toggleHamburgerMenu() {
     proxy.fbo.office+
     '</p><p><span style="font-weight: bold">Location: </span>'+
     proxy.fbo.location+
+    '</p><p><span style="font-weight: bold">Setaside: </span>'+
+    proxy.fbo.setaside+
+    '</p><p><span style="font-weight: bold">Due Date: </span>'+
+    proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+
     '</p><p><span style="font-weight: bold">Contact: </span>'+
     proxy.fbo.contact+
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
@@ -1416,6 +1529,7 @@ function toggleHamburgerMenu() {
       document.getElementById("big-no-button").classList.remove('inactive');
     }
     fboIndex = index
+    renderChart()
     updateComments(proxy)
     checkVote(proxy, index)
   }
@@ -1880,6 +1994,69 @@ function handleExternalURLs() {
   }
 }
 
+function renderChart() {
+  var ctx = document.getElementById("myChart").getContext('2d');
+  if (fbos[fboIndex]) {
+    if (fbos[fboIndex].fbo) {
+      var currentFbo = fbos[fboIndex].fbo
+      var query = {naics_code: parseInt(currentFbo.naics), modification_number: '0'}
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          var prices = []
+          var queryResults = JSON.parse(xhttp.responseText);
+          for (i = 0; i < 5 && i < queryResults.length; i++) {
+            var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
+            prices.push(bigPrice)
+          }
+          console.log('heres the prices')
+          console.log(prices)
+          Chart.defaults.global.defaultFontColor = 'white';
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+              datasets: [{
+                label: 'Prices',
+                data: prices,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero:true
+                  }
+                }]
+              }
+            }
+          });
+        }
+      }
+      xhttp.open("POST", "https://efassembly.com:4432/fpds/query/", true);
+      xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.send(JSON.stringify(query));
+    }
+  }
+}
+
 var app = {
   // Application Constructor
   initialize: function() {
@@ -1896,6 +2073,7 @@ var app = {
     // function success(uuid) {
     //   console.log('ID IS THIS: ' + uuid);
     // };
+    renderChart()
   },
   // Bind Event Listeners
   //
@@ -1999,42 +2177,4 @@ $(function() {
     $("#profile-dropdown").removeClass('dropdown-in')
     profileDropdownOpen = false
   }
-});
-
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
 });
