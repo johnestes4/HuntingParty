@@ -18,6 +18,7 @@ var profileDropdownOpen = false
 var voteDropdownOpen = -1
 var hamburgerMenuOpen = false
 var hamburgerOpening = false
+var adCounter = 0
 var agencyLogos = [
   {
     "agency": "Department of the Air Force",
@@ -545,7 +546,6 @@ function searchFilter(which) {
         console.log(searchTerms.agency[i].name + ' is checked')
         checkedHtml = ' checked'
       }
-
       if (i == 0) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
         '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span></div>'
@@ -1569,8 +1569,6 @@ function toggleHamburgerMenu() {
     }
     document.getElementById("yes-refer").classList.add('inactive');
     document.getElementById("no-refer").classList.add('inactive');
-    document.getElementById("yes-refer-button").classList.remove('inactive');
-    document.getElementById("no-refer-button").classList.remove('inactive');
     renderFbos()
     if (moveOn) {
       goToFbo(fboIndex,tab)
@@ -1670,14 +1668,32 @@ function toggleHamburgerMenu() {
             document.getElementById("vote-circle-" + index).classList.add('inactive')
           }
         }
-        fboIndex++;
-        closePopups(true)
+        if (adCounter >= 3) {
+          showAd()
+        } else {
+          adCounter++
+          closePopups(true)
+        }
       }
     };
     var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
     xhttp.open("PUT", url, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(req));
+  }
+
+  function showAd() {
+    document.getElementById("fbo-popups").classList.remove('inactive');
+    document.getElementById("error-popup").classList.remove('inactive');
+    document.getElementById("error-popup").innerHTML = '<div style="width: 98%; height: 98%; margin-left: 1%; position: relative;"><button class="popup-close" type="button" name="button" onclick="closeAd()">X</button><img class="ad-img" src="./img/ads/Neostek design 2.png" alt=""></img></div>'
+  }
+
+  function closeAd() {
+    document.getElementById("fbo-popups").classList.add('inactive');
+    document.getElementById("error-popup").classList.add('inactive');
+    document.getElementById("error-popup").innerHTML = ''
+    adCounter = 0;
+    closePopups(true)
   }
 
   function updateComments(fbo) {
@@ -1794,8 +1810,6 @@ function toggleHamburgerMenu() {
 });
 
 function getTheData() {
-  document.getElementById("error-popup").classList.remove('inactive');
-
   var id = localStorage.getItem('uid')
   var xhttp = new XMLHttpRequest();
   // xhttp.setRequestHeader("Content-type", "application/json");
@@ -1965,6 +1979,7 @@ function startMainApp() {
     // document.getElementById("iconbar-4").classList.add('inactive');
     // document.getElementById("iconbar-5").classList.add('inactive');
   }
+  // showAd()
   // switchTab(2)
   // goToFbo(5, 0);
 

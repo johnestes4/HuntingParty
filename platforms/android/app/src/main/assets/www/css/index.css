@@ -879,6 +879,18 @@ h1 {
   text-align: center;
 }
 
+.ad-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  min-width: 50%;
+  min-height: 50%;
+  height: 100%;
+}
+
 .popup-close {
   position: absolute;
   top: 5px;
@@ -887,6 +899,7 @@ h1 {
   height: 30px;
   color: white;
   line-height: 22px;
+  z-index: 9;
   text-align: center;
 }
 
