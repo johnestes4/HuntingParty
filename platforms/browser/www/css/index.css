@@ -84,7 +84,7 @@
   padding-left: 10px;
 }
 
-#login-view {
+#login-register {
   /* BLUE: */ background: rgba(63,85,136,1);
   /* background: rgba(78,96,136,1); */
   height: 100vh;
@@ -92,47 +92,95 @@
   position: absolute;
   left: 0px;
   top: 0px;
-
 }
 
-#login-view h1 {
+#login-register .login-field {
+  border: 0;
+  border-bottom: 2px solid rgba(63,85,136,1);
+}
+
+#login-register :focus {
+  outline: none;
+  border-bottom: 2px solid rgba(255,198,0,1);
+  -webkit-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  /* animation-name: login-border;
+  animation-duration: 4s; */
+}
+
+#login-register h1 {
   text-align: center;
 }
 
-#login-view input {
+#login-register input {
   width: 90vw;
   margin-left: 5vw;
   margin-bottom: 2vh;
   height: 45px;
-  font-size: 22px;
+  font-size: 18px;
   line-height: 42px;
   background: rgba(255,255,255,0.5);
+  padding-left: 4px;
+  padding-right: 4px;
   border: none;
   border-bottom: 2px solid rgba(255,198,0,0.5);
 }
-#login-view input:focus {
+
+.invalid-input {
+  background: rgba(255,50,50,0.5)!important;
+  border-bottom: 2px solid rgba(172,0,0,0.5)!important;
+}
+
+.register-field {
+  margin-bottom: 0px!important;
+}
+
+.register-field-alert {
+  width: 90%;
+  margin-left: 5%;
+  height: 2vh;
+  margin-bottom: 1vh;
+  color: rgba(255,75,75,1);
+  font-weight: bold;
+}
+
+#login-register input:focus {
   background: rgba(255,255,255,0.75);
   border: none;
   border-bottom: 2px solid rgba(255,198,0,1);
   transition: all 0.2s;
 }
 
-
-#login-view button {
-  width: 50vw;
-  margin-left: 25vw;
-  height: 40px;
-  font-size: 18px;
-  line-height: 34px;
-  color: white;
-  margin-bottom: 1vh;
+#login-register button {
+  /* Positions */
+  width: 40vw;
+  margin-left: 30vw;
+  height: 8vh;
+  font-size: 5vh;
+  line-height: 7vh;
+  margin-top: 5%;
 }
-
 .login-info {
   color: rgba(255,255,255,0.75);
   font-size: 12px;
   margin-bottom: 0px;
   padding-left: 5vw;
+}
+
+#login-register .button-alt{
+  background-color: rgba(255,198,0,1);
+  transition: .1s;
+  /* background-color: black; */
+}
+
+#login-register button:hover{
+  background-color: rgb(30, 48, 90);
+  /* color: black; */
+}
+#login-register .button-alt:hover{
+  background-color: orange;
 }
 
 .instructions {
@@ -142,6 +190,9 @@
   margin-bottom: 4vh;
   font-size: 16px;
   border-top: 1px solid rgba(255,255,255,0.1);
+}
+h1, .instructions{
+  color: black;
 }
 
 #news-view {
@@ -420,7 +471,13 @@
 }
 
 a {
-  color: rgb(0, 134, 255);
+  color: rgba(255,198,0,1);
+  font-weight: bold;
+}
+a:active {
+  color: rgba(255,198,0,1);
+  filter: brightness(90%);
+  font-weight: bold;
 }
 
 body {
@@ -456,6 +513,11 @@ button {
   font-weight: bold;
   line-height: 5vh;
   height: 6vh;
+
+  /* Styles */
+  border: none;
+  color: white;
+  transition: .1s;
 }
 
 /* Portrait layout (default) */
@@ -633,7 +695,7 @@ h1 {
 #profile-dropdown {
   position: absolute;
   overflow-x: hidden; /* Disable horizontal scroll */
-  top: 0px
+  top: 0px;
   left: -60vw;
   width: 60vw;
   height: 100vh;

@@ -19,6 +19,7 @@ var voteDropdownOpen = -1
 var hamburgerMenuOpen = false
 var hamburgerOpening = false
 var adCounter = 0
+var emailValidated = false
 var agencyLogos = [
   {
     "agency": "Department of the Air Force",
@@ -345,7 +346,7 @@ function login() {
   document.getElementById("fbo-view").classList.add('inactive');
   document.getElementById("fbo-list-view").classList.add('inactive');
   document.getElementById("fbo-detail-view").classList.add('inactive');
-  document.getElementById("login-view").classList.add('inactive');
+  document.getElementById("login-register").classList.add('inactive');
   var xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -408,7 +409,7 @@ function logOut() {
   document.getElementById("fbo-view").classList.add('inactive');
   document.getElementById("fbo-list-view").classList.add('inactive');
   document.getElementById("fbo-detail-view").classList.add('inactive');
-  document.getElementById("login-view").classList.remove('inactive');
+  document.getElementById("login-register").classList.remove('inactive');
 }
 
 function hello() {
@@ -1438,6 +1439,99 @@ function toggleHamburgerMenu() {
     document.getElementById("floating-hamburger").classList.remove('inactive')
   }
 
+  function checkEmail() {
+    var email = document.getElementById("email-register").value
+    if (invalidEmail(email)) {
+      document.getElementById("email-register").classList.add('invalid-input')
+      document.getElementById("register-alert-3").innerHTML = 'Invalid email'
+      emailValidated = false
+    } else {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("email-register").classList.add('invalid-input')
+          document.getElementById("register-alert-3").innerHTML = 'Email already in use'
+          emailValidated = false
+        } else if (xhttp.readyState == 4 && xhttp.status == 500) {
+          // document.getElementById("register-alert-3").innerHTML = 'its good'
+          document.getElementById("email-register").classList.remove('invalid-input')
+          document.getElementById("register-alert-3").innerHTML = ''
+          emailValidated = true
+        }
+      }
+      xhttp.open("get", 'https://efassembly.com:4432/profiles/email/' + email, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send();
+    }
+  }
+
+  function checkPasswords() {
+    var password1 = document.getElementById("password-register").value
+    var password2 = document.getElementById("password2").value
+    if (password1.length < 6) {
+      document.getElementById("password-register").classList.add('invalid-input')
+      document.getElementById("register-alert-4").innerHTML = 'Password must be at least 6 characters'
+    } else {
+      document.getElementById("password-register").classList.remove('invalid-input')
+      document.getElementById("register-alert-4").innerHTML = ''
+    }
+    if (password1.length >= 6 && password1 !== password2) {
+      document.getElementById("password2").classList.add('invalid-input')
+      document.getElementById("register-alert-5").innerHTML = 'Passwords must match'
+    } else if (password1.length >= 6 && password1 == password2) {
+      document.getElementById("password-register").classList.remove('invalid-input')
+      document.getElementById("password2").classList.remove('invalid-input')
+      document.getElementById("register-alert-4").innerHTML = ''
+      document.getElementById("register-alert-5").innerHTML = ''
+    }
+  }
+
+  function invalidEmail(email) {
+    return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
+  }
+
+  function goToRegister() {
+    document.getElementById("register-view").classList.remove('inactive')
+    document.getElementById("login-view").classList.add('inactive')
+  }
+  function goToLogin() {
+    document.getElementById("register-view").classList.add('inactive')
+    document.getElementById("login-view").classList.remove('inactive')
+  }
+
+  function register() {
+    var firstName = document.getElementById("first-name").value
+    var lastName = document.getElementById("last-name").value
+    var email = document.getElementById("email-register").value
+    var password1 = document.getElementById("password-register").value
+    var password2 = document.getElementById("password2").value
+
+    if (password1.length >= 6 && password1 == password2 && emailValidated) {
+      var newUser = {
+        username: email,
+        firstName: firstName,
+        lastName: lastName,
+        password: password1,
+        huntingparty: true
+      }
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("email").value = email
+          document.getElementById("password").value = password1
+          login()
+        }
+      }
+      xhttp.open("POST", 'https://efassembly.com:4432/register/', true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(newUser));
+    } else {
+      checkEmail()
+      checkPasswords()
+    }
+  }
+
+
   function getTime() {
     var i = new Date()
     document.getElementById("test-button").innerHTML = i.getTime()
@@ -1900,7 +1994,7 @@ function getTheData() {
                     console.log('fuck')
                     document.getElementById("loading").classList.add('inactive');
                     document.getElementById("tos-popup").classList.remove('inactive');
-                    // document.getElementById("login-view").classList.remove('inactive');
+                    // document.getElementById("login-register").classList.remove('inactive');
                   } else {
                     startMainApp()
                   }
@@ -1963,7 +2057,7 @@ function startMainApp() {
     document.getElementById("news-view").classList.remove('inactive');
     document.getElementById("fbo-view").classList.add('inactive');
     document.getElementById("search-view").classList.add('inactive');
-    document.getElementById("login-view").classList.add('inactive');
+    document.getElementById("login-register").classList.add('inactive');
   } else {
     document.getElementById("loading").classList.add('inactive');
     document.getElementById("tos-popup").classList.add('inactive');
@@ -1971,7 +2065,7 @@ function startMainApp() {
     document.getElementById("news-view").classList.remove('inactive');
     document.getElementById("fbo-view").classList.add('inactive');
     document.getElementById("search-view").classList.add('inactive');
-    document.getElementById("login-view").classList.add('inactive');
+    document.getElementById("login-register").classList.add('inactive');
     document.getElementById("fbo-popups").classList.remove('inactive');
     document.getElementById("error-popup").classList.remove('inactive');
     document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
@@ -2081,7 +2175,7 @@ var app = {
       document.getElementById("loading").classList.add('inactive');
       document.getElementById("main-view").classList.add('inactive');
       document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("login-view").classList.remove('inactive');
+      document.getElementById("login-register").classList.remove('inactive');
     }
     this.bindEvents();
     // window.plugins.uniqueDeviceID.get(success, fail);
