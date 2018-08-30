@@ -87,13 +87,15 @@
 }
 
 #login-view {
-  /* BLUE: */ background: rgba(63,85,136,1);
+  /* BLUE: */
+  background: rgba(63, 85, 136, 1);
   /* background: rgba(78,96,136,1); */
   height: 100vh;
   width: 100vw;
   position: absolute;
   left: 0px;
   top: 0px;
+}
 /*>>>>>>> 853b86a49b21e032ca3cb7f6af37d3cdec737649*/
 
 
@@ -137,29 +139,29 @@
 
 
 #login-view button {
-<<<<<<< HEAD
-  /* Positions */
-  width: 40vw;
-  margin-left: 30vw;
-  height: 8vh;
-  font-size: 5vh;
-  line-height: 7vh;
-  margin-top: 5%;
-}
+/*<<<<<<< HEAD*/
+  /*!* Positions *!*/
+  /*width: 40vw;*/
+  /*margin-left: 30vw;*/
+  /*height: 8vh;*/
+  /*font-size: 5vh;*/
+  /*line-height: 7vh;*/
+  /*margin-top: 5%;*/
+/*}*/
 
-#login-view .button-alt{
-  background-color: rgba(255,198,0,1);
-  transition: .1s;
-  /* background-color: black; */
-}
+/*#login-view .button-alt{*/
+  /*background-color: rgba(255,198,0,1);*/
+  /*transition: .1s;*/
+  /*!* background-color: black; *!*/
+/*}*/
 
-#login-view button:hover{
-  background-color: rgb(30, 48, 90);
-  /* color: black; */
-}
-#login-view .button-alt:hover{
-  background-color: orange;
-=======
+/*#login-view button:hover{*/
+  /*background-color: rgb(30, 48, 90);*/
+  /*!* color: black; *!*/
+/*}*/
+/*#login-view .button-alt:hover{*/
+  /*background-color: orange;*/
+/*=======*/
   width: 50vw;
   margin-left: 25vw;
   height: 40px;
@@ -174,7 +176,7 @@
   font-size: 12px;
   margin-bottom: 0px;
   padding-left: 5vw;
->>>>>>> 853b86a49b21e032ca3cb7f6af37d3cdec737649
+/*>>>>>>> 853b86a49b21e032ca3cb7f6af37d3cdec737649*/
 }
 
 .instructions {
@@ -807,7 +809,7 @@ h1 {
   /* border-bottom: 1px solid rgba(0,0,0,0.05); */
   height: 9vh;
   z-index: 10;
-  margin: none;
+  margin: 0;
   width: 100%;
 }
 
@@ -848,7 +850,8 @@ h1 {
   text-align: center;
   line-height: 100%;
   font-size: 9vh;
-  opacity: 80%;
+  filter: opacity(80%);
+  /*opacity: 80%;*/
   position: absolute;
   right: 2.5vw;
   bottom: 10vh;
@@ -861,7 +864,7 @@ h1 {
 }
 
 .buttonbar {
-  margin: none;
+  margin: 0;
   color: rgba(20,20,20,1);
   height: 19.5vh;
   width: 100vw;
