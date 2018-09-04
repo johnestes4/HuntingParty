@@ -140,6 +140,7 @@ var agencyLogos = [
 ]
 var searchTerms = []
 var fboVote = []
+var peopleToRefer = []
 var tabIds = [
   {
     id: 0,
@@ -350,11 +351,14 @@ function login() {
   var xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
+      console.log('why doesnt this work')
+
       // Typical action to be performed when the document is ready:
       document.getElementById("loading-details").innerHTML = 'Sending login request...'
       var res = JSON.parse(xhttp.responseText)
       if (res.id) {
         var xhttp2 = new XMLHttpRequest();
+        console.log('why doesnt this work')
         xhttp2.onreadystatechange = function() {
           if (xhttp2.readyState == 4 && xhttp2.status == 200) {
             document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...'
@@ -374,6 +378,14 @@ function login() {
             xhttp3.open("GET", "https://efassembly.com:4432/profiles/" + res.id, true);
             xhttp3.setRequestHeader("Content-type", "application/json");
             xhttp3.send();
+          } else if (xhttp2.readyState == 4 && xhttp2.status == 400) {
+            document.getElementById("loading").classList.add('inactive');
+            document.getElementById("main-view").classList.add('inactive');
+            document.getElementById("fbo-view").classList.add('inactive');
+            document.getElementById("fbo-list-view").classList.add('inactive');
+            document.getElementById("fbo-detail-view").classList.add('inactive');
+            document.getElementById("login-register").classList.remove('inactive');
+            document.getElementById("login-error-text").innerHTML = 'Password/username mismatch'
           }
         };
         var body = {
@@ -1498,6 +1510,12 @@ function toggleHamburgerMenu() {
     document.getElementById("register-view").classList.add('inactive')
     document.getElementById("login-view").classList.remove('inactive')
   }
+  function goToCompanyCreate() {
+    document.getElementById("login-register").classList.remove('inactive')
+    document.getElementById("register-view").classList.add('inactive')
+    document.getElementById("login-view").classList.add('inactive')
+    document.getElementById("company-create-view").classList.remove('inactive')
+  }
 
   function register() {
     var firstName = document.getElementById("first-name").value
@@ -1623,7 +1641,7 @@ function toggleHamburgerMenu() {
       document.getElementById("big-no-button").classList.remove('inactive');
     }
     fboIndex = index
-    renderChart()
+    // renderChart()
     updateComments(proxy)
     checkVote(proxy, index)
   }
@@ -1678,8 +1696,12 @@ function toggleHamburgerMenu() {
         a[i].classList.remove('inactive');
       }
       var usersHtml = ''
-      for (i = 0; i < huntingPartyData.users.length; i++) {
-        usersHtml = usersHtml + '<p class="popup-user">'+huntingPartyData.users[i].name+'</p>'
+      var usersList = huntingPartyData.users
+      for (i = 0; i < usersList.length; i++) {
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')"><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
+        if (i < usersList.length-1) {
+          usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+        }
       }
       document.getElementById("yes-popup-users-list").innerHTML = usersHtml
     } else {
@@ -1687,6 +1709,32 @@ function toggleHamburgerMenu() {
       for (i = 0; i < a.length; i++) {
         a[i].classList.remove('inactive');
       }
+    }
+  }
+
+  function checkReferItem(i) {
+    if (document.getElementById("refer-checkbox-"+i+"").checked) {
+      document.getElementById("refer-checkbox-"+i+"").checked = false
+    } else {
+      document.getElementById("refer-checkbox-"+i+"").checked = true
+    }
+    calculateRefers(i)
+  }
+
+  function calculateRefers(index) {
+    console.log(index)
+    if (document.getElementById("refer-checkbox-"+index).checked == true) {
+      peopleToRefer.push(huntingPartyData.users[index])
+      console.log(peopleToRefer)
+    } else {
+      for (i = 0; i < peopleToRefer.length; i++) {
+        if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
+          peopleToRefer.splice(i,1)
+          break;
+        }
+      }
+      console.log('it should be gone now')
+      console.log(peopleToRefer)
     }
   }
 
@@ -1904,6 +1952,8 @@ function toggleHamburgerMenu() {
 });
 
 function getTheData() {
+  console.log('why doesnt this work!!!!')
+
   var id = localStorage.getItem('uid')
   var xhttp = new XMLHttpRequest();
   // xhttp.setRequestHeader("Content-type", "application/json");
@@ -1991,7 +2041,6 @@ function getTheData() {
                     }
                   }
                   if (tosRead < 1) {
-                    console.log('fuck')
                     document.getElementById("loading").classList.add('inactive');
                     document.getElementById("tos-popup").classList.remove('inactive');
                     // document.getElementById("login-register").classList.remove('inactive');
@@ -2016,7 +2065,8 @@ function getTheData() {
         xhttp2.open("GET", "https://efassembly.com:4432/company/" + companyId, true);
         xhttp2.send();
       } else {
-        document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something in here for this"
+        goToCompanyCreate()
+        // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something in here for this"
       }
     }
   };
@@ -2076,10 +2126,17 @@ function startMainApp() {
   // showAd()
   // switchTab(2)
   // goToFbo(5, 0);
+  // openPopups(true)
 
   // expandData(2)
 }
 
+function handleEnterLogin(e) {
+  var keycode = (e.keyCode ? e.keyCode : e.which);
+  if (keycode == '13') {
+    login()
+  }
+}
 
 function handleExternalURLs() {
   // Handle click events for all external URLs
@@ -2182,7 +2239,7 @@ var app = {
     // function success(uuid) {
     //   console.log('ID IS THIS: ' + uuid);
     // };
-    renderChart()
+    // renderChart()
   },
   // Bind Event Listeners
   //

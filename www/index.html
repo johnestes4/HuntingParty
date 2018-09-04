@@ -91,7 +91,10 @@ under the License.
       <p class="login-info">Username (Email Address)</p>
       <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
       <p class="login-info">Password</p>
-      <input class="login-field" type="password" id="password" name="" value="" placeholder="Password">
+      <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
+      <div id="login-error-text" class="" style="color: red; font-size: 14px; padding-left: 5%; width: 100%;">
+
+      </div>
       <div class="" style="width: 100%; position: relative;">
         <button class="center-absolute" type="button" name="button" onclick="login()">LOGIN</button>
         <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button>
@@ -129,6 +132,14 @@ under the License.
           <a href="#" onclick="goToLogin()">Go Back To Login</a>
         </div>
       </div>
+    </div>
+    <div id="company-create-view" class="inactive">
+      <div class="instructions">
+         <p>You don't have a company</p>
+         <p>(in the future you'll be able to add a company to your account from here. right now it doesnt do anything. try to join a company from the assembly site)</p>
+      </div>
+      <p class="login-info">Company Name</p>
+      <input type="text" name="" value="" placeholder="">
     </div>
   </div>
 
@@ -442,10 +453,12 @@ under the License.
       <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
       <!-- <p>You voted YES on this opportunity!</p>
       <p>Write a quick comment to let your team know why you approve.</p> -->
-      <h3>SENT TO:</h3>
-      <div id="yes-popup-users-list" class="">
+      <h3>YOU VOTED YES</h3>
+      <p>Anyone you want to notify?</p>
+      <div id="yes-popup-users-list" class="refer-box">
 
       </div>
+      <p>Add a comment:</p>
       <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
       <p>Anyone else you want to send it to? Add their emails here:</p>
       <div id="yes-refer" class="">
