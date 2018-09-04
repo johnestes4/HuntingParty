@@ -1880,8 +1880,8 @@ function toggleHamburgerMenu() {
     var comment = document.getElementById("chat-input").value
     if (comment.length > 0) {
       fbos[fboIndex].comments.push({
-        id: "59d696ac0fa6f90a6006d3d3",
-        name: "John",
+        id: currentUser._id,
+        name: currentUser.firstName,
         comment: comment
       })
       var xhttp3 = new XMLHttpRequest();
