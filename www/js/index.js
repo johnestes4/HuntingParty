@@ -1952,7 +1952,6 @@ function toggleHamburgerMenu() {
 });
 
 function getTheData() {
-  console.log('why doesnt this work!!!!')
 
   var id = localStorage.getItem('uid')
   var xhttp = new XMLHttpRequest();
