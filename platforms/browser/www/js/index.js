@@ -1880,8 +1880,8 @@ function toggleHamburgerMenu() {
     var comment = document.getElementById("chat-input").value
     if (comment.length > 0) {
       fbos[fboIndex].comments.push({
-        id: "59d696ac0fa6f90a6006d3d3",
-        name: "John",
+        id: currentUser._id,
+        name: currentUser.firstName,
         comment: comment
       })
       var xhttp3 = new XMLHttpRequest();
@@ -1938,408 +1938,401 @@ function toggleHamburgerMenu() {
       'ABSTRACT',
       'DATA',
       'REFER',
-      'COMMENTS & QUESTIONS'
+      'COMMENTS'
     ]
     document.getElementById("databar-title").innerHTML = titles[num-1]
     toggleHamburgerMenu()
   }
 
-  var commentInput = document.getElementById("chat-input");
-  commentInput.addEventListener("keydown", function (e) {
-    if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
-    sendComment();
-  }
-});
+  function getTheData() {
 
-function getTheData() {
-
-  var id = localStorage.getItem('uid')
-  var xhttp = new XMLHttpRequest();
-  // xhttp.setRequestHeader("Content-type", "application/json");
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-      // Typical action to be performed when the document is ready:
-      currentUser = JSON.parse(xhttp.responseText);
-      document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
-      var avatar = currentUser.avatar
-      if (avatar == '../../assets/img/user.png') {
-        avatar = './img/user.png'
-      }
-      document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
-      var xhttp2 = new XMLHttpRequest();
-      // xhttp.setRequestHeader("Content-type", "application/json");
-      xhttp2.onreadystatechange = function() {
-        if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-          // Typical action to be performed when the document is ready:
-          company = JSON.parse(xhttp2.responseText);
-          // var xobj = new XMLHttpRequest();
-          // xobj.overrideMimeType("application/json");
-          // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file
-          // xobj.onreadystatechange = function () {
-          // if (xobj.readyState == 4 && xobj.status == "200") {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          // agencyLogos = JSON.parse(xobj.responseText);
-          var xhttp3 = new XMLHttpRequest();
-          // xhttp3.setRequestHeader("Content-type", "application/json");
-          console.log(window.device)
-          xhttp3.onreadystatechange = function() {
-            if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-              searchTerms = JSON.parse(xhttp3.responseText);
-              emptySearchTerms = JSON.parse(xhttp3.responseText);
-              var xhttp4 = new XMLHttpRequest();
-              // xhttp4.setRequestHeader("Content-type", "application/json");
-              xhttp4.onreadystatechange = function() {
-                if (xhttp4.readyState == 4 && xhttp4.status == 200) {
-                  huntingPartyData = JSON.parse(xhttp4.responseText);
-                  var userInList = false
-                  if (!huntingPartyData.users) {
-                    huntingPartyData.users = []
-                  }
-                  var doTheUpdateAnyway = false
-                  for (i = 0; i < huntingPartyData.users.length; i++) {
-                    if (huntingPartyData.users[i].userId == currentUser._id) {
-                      userInList = true
-                      if (huntingPartyData.users[i].tosRead) {
-                        tosRead = huntingPartyData.users[i].tosRead
-                      }
-                      if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                        doTheUpdateAnyway = true
-                        huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
-                      }
-                      if (device !== undefined) {
-                        if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+    var id = localStorage.getItem('uid')
+    var xhttp = new XMLHttpRequest();
+    // xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        // Typical action to be performed when the document is ready:
+        currentUser = JSON.parse(xhttp.responseText);
+        document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
+        var avatar = currentUser.avatar
+        if (avatar == '../../assets/img/user.png') {
+          avatar = './img/user.png'
+        }
+        document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
+        var xhttp2 = new XMLHttpRequest();
+        // xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp2.onreadystatechange = function() {
+          if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+            // Typical action to be performed when the document is ready:
+            company = JSON.parse(xhttp2.responseText);
+            // var xobj = new XMLHttpRequest();
+            // xobj.overrideMimeType("application/json");
+            // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file
+            // xobj.onreadystatechange = function () {
+            // if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            // agencyLogos = JSON.parse(xobj.responseText);
+            var xhttp3 = new XMLHttpRequest();
+            // xhttp3.setRequestHeader("Content-type", "application/json");
+            console.log(window.device)
+            xhttp3.onreadystatechange = function() {
+              if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                searchTerms = JSON.parse(xhttp3.responseText);
+                emptySearchTerms = JSON.parse(xhttp3.responseText);
+                var xhttp4 = new XMLHttpRequest();
+                // xhttp4.setRequestHeader("Content-type", "application/json");
+                xhttp4.onreadystatechange = function() {
+                  if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+                    huntingPartyData = JSON.parse(xhttp4.responseText);
+                    var userInList = false
+                    if (!huntingPartyData.users) {
+                      huntingPartyData.users = []
+                    }
+                    var doTheUpdateAnyway = false
+                    for (i = 0; i < huntingPartyData.users.length; i++) {
+                      if (huntingPartyData.users[i].userId == currentUser._id) {
+                        userInList = true
+                        if (huntingPartyData.users[i].tosRead) {
+                          tosRead = huntingPartyData.users[i].tosRead
+                        }
+                        if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
                           doTheUpdateAnyway = true
-                          huntingPartyData.users[i].deviceId = device.uuid
+                          huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                        }
+                        if (device !== undefined) {
+                          if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                            doTheUpdateAnyway = true
+                            huntingPartyData.users[i].deviceId = device.uuid
+                          }
                         }
                       }
                     }
-                  }
-                  if (device !== undefined) {
-                    if (!userInList || doTheUpdateAnyway) {
-                      console.log('not in the list')
-                      if (!userInList) {
-                        huntingPartyData.users.push({
-                          userId: currentUser._id,
-                          name: currentUser.firstName + ' ' + currentUser.lastName,
-                          email: currentUser.username,
-                          deviceId: device.uuid,
-                          regId: localStorage.getItem('registrationId'),
-                          tosRead: 0
-                        })
-                        tosRead = 0
-                      }
-                      var xhttpHPD = new XMLHttpRequest();
-                      xhttpHPD.onreadystatechange = function() {
-                        if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                          huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                    if (device !== undefined) {
+                      if (!userInList || doTheUpdateAnyway) {
+                        console.log('not in the list')
+                        if (!userInList) {
+                          huntingPartyData.users.push({
+                            userId: currentUser._id,
+                            name: currentUser.firstName + ' ' + currentUser.lastName,
+                            email: currentUser.username,
+                            deviceId: device.uuid,
+                            regId: localStorage.getItem('registrationId'),
+                            tosRead: 0
+                          })
+                          tosRead = 0
                         }
+                        var xhttpHPD = new XMLHttpRequest();
+                        xhttpHPD.onreadystatechange = function() {
+                          if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                            huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                          }
+                        }
+                        xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                        xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                        xhttpHPD.send(JSON.stringify(huntingPartyData));
                       }
-                      xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
-                      xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                      xhttpHPD.send(JSON.stringify(huntingPartyData));
                     }
-                  }
-                  if (tosRead < 1) {
-                    document.getElementById("loading").classList.add('inactive');
-                    document.getElementById("tos-popup").classList.remove('inactive');
-                    // document.getElementById("login-register").classList.remove('inactive');
-                  } else {
-                    startMainApp()
+                    if (tosRead < 1) {
+                      document.getElementById("loading").classList.add('inactive');
+                      document.getElementById("tos-popup").classList.remove('inactive');
+                      // document.getElementById("login-register").classList.remove('inactive');
+                    } else {
+                      startMainApp()
+                    }
                   }
                 }
+                xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
+                xhttp4.send();
               }
-              xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
-              xhttp4.send();
             }
+            xhttp3.open("GET", "https://efassembly.com:4432/fbo/getsearchterms/", true);
+            xhttp3.send();
+            //   }
+            // };
+            // xobj.send(null);
           }
-          xhttp3.open("GET", "https://efassembly.com:4432/fbo/getsearchterms/", true);
-          xhttp3.send();
-          //   }
-          // };
-          // xobj.send(null);
+        };
+        if (currentUser.companyUserProxies.length > 0) {
+          var companyId = currentUser.companyUserProxies[0].company._id
+          xhttp2.open("GET", "https://efassembly.com:4432/company/" + companyId, true);
+          xhttp2.send();
+        } else {
+          goToCompanyCreate()
+          // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something in here for this"
         }
-      };
-      if (currentUser.companyUserProxies.length > 0) {
-        var companyId = currentUser.companyUserProxies[0].company._id
-        xhttp2.open("GET", "https://efassembly.com:4432/company/" + companyId, true);
-        xhttp2.send();
+      }
+    };
+    xhttp.open("GET", "https://efassembly.com:4432/profiles/" + id, true);
+    xhttp.send();
+  }
+
+  function acceptTOS() {
+    for (i = 0; i < huntingPartyData.users.length; i++) {
+      if (huntingPartyData.users[i].userId == currentUser._id) {
+        huntingPartyData.users[i].tosRead = 1
+      }
+    }
+    tosRead = 1
+    var xhttpHPD = new XMLHttpRequest();
+    xhttpHPD.onreadystatechange = function() {
+      if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+        huntingPartyData = JSON.parse(xhttpHPD.responseText);
+        startMainApp()
+      }
+    }
+    xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+    xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttpHPD.send(JSON.stringify(huntingPartyData));
+  }
+
+  function startMainApp() {
+    if (company.fboProxies.length > 0) {
+      fbos = company.fboProxies
+      setActiveFbo(fboIndex)
+      renderSavedSearches()
+      renderSearch()
+      renderFbos()
+      var promiseFinished = true
+      document.getElementById("tos-popup").classList.add('inactive');
+      document.getElementById("loading").classList.add('inactive');
+      document.getElementById("main-view").classList.remove('inactive');
+      document.getElementById("news-view").classList.remove('inactive');
+      document.getElementById("fbo-view").classList.add('inactive');
+      document.getElementById("search-view").classList.add('inactive');
+      document.getElementById("login-register").classList.add('inactive');
+    } else {
+      document.getElementById("loading").classList.add('inactive');
+      document.getElementById("tos-popup").classList.add('inactive');
+      document.getElementById("main-view").classList.remove('inactive');
+      document.getElementById("news-view").classList.remove('inactive');
+      document.getElementById("fbo-view").classList.add('inactive');
+      document.getElementById("search-view").classList.add('inactive');
+      document.getElementById("login-register").classList.add('inactive');
+      document.getElementById("fbo-popups").classList.remove('inactive');
+      document.getElementById("error-popup").classList.remove('inactive');
+      document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
+      // document.getElementById("iconbar-3").classList.add('inactive');
+      // document.getElementById("iconbar-4").classList.add('inactive');
+      // document.getElementById("iconbar-5").classList.add('inactive');
+    }
+    // showAd()
+    switchTab(2)
+    goToFbo(5, 0);
+    openPopups(true)
+
+    // expandData(2)
+  }
+
+  function handleEnterLogin(e) {
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    if (keycode == '13') {
+      login()
+    }
+  }
+
+  function handleExternalURLs() {
+    // Handle click events for all external URLs
+    if (device.platform.toUpperCase() === 'ANDROID') {
+      $(document).on('click', 'a[href^="http"]', function (e) {
+        var url = $(this).attr('href');
+        // navigator.app.loadUrl(url, { openExternal: true });
+        window.open(url, '_system');
+        e.preventDefault();
+      });
+    }
+    else if (device.platform.toUpperCase() === 'IOS') {
+      $(document).on('click', 'a[href^="http"]', function (e) {
+        var url = $(this).attr('href');
+        window.open(url, '_system');
+        e.preventDefault();
+      });
+    }
+    else {
+      // Leave standard behaviour
+    }
+  }
+
+  function renderChart() {
+    var ctx = document.getElementById("myChart").getContext('2d');
+    if (fbos[fboIndex]) {
+      if (fbos[fboIndex].fbo) {
+        var currentFbo = fbos[fboIndex].fbo
+        var query = {naics_code: parseInt(currentFbo.naics), modification_number: '0'}
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var prices = []
+            var queryResults = JSON.parse(xhttp.responseText);
+            for (i = 0; i < 5 && i < queryResults.length; i++) {
+              var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
+              prices.push(bigPrice)
+            }
+            console.log('heres the prices')
+            console.log(prices)
+            Chart.defaults.global.defaultFontColor = 'white';
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                  label: 'Prices',
+                  data: prices,
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero:true
+                    }
+                  }]
+                }
+              }
+            });
+          }
+        }
+        xhttp.open("POST", "https://efassembly.com:4432/fpds/query/", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send(JSON.stringify(query));
+      }
+    }
+  }
+
+  var app = {
+    // Application Constructor
+    initialize: function() {
+      if (localStorage.getItem('uid')) {
+        getTheData()
       } else {
-        goToCompanyCreate()
-        // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something in here for this"
+        document.getElementById("loading").classList.add('inactive');
+        document.getElementById("main-view").classList.add('inactive');
+        document.getElementById("fbo-view").classList.add('inactive');
+        document.getElementById("login-register").classList.remove('inactive');
+      }
+      this.bindEvents();
+      // window.plugins.uniqueDeviceID.get(success, fail);
+      // function success(uuid) {
+      //   console.log('ID IS THIS: ' + uuid);
+      // };
+      // renderChart()
+    },
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+      document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicitly call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+      document.getElementById("reg-id").value = 'it did ondeviceready'
+      // app.receivedEvent('deviceready');
+      app.push = PushNotification.init({
+        "android": {
+          "senderID": "416059724231"
+        },
+        "ios": {
+          "sound": true,
+          "vibration": true,
+          "badge": true
+        },
+        "windows": {}
+      });
+
+      app.push.on('registration', function(data) {
+        console.log("registration event: " + data.registrationId);
+        var oldRegId = localStorage.getItem('registrationId');
+        if (oldRegId !== data.registrationId) {
+          // Save new registration ID
+          localStorage.setItem('registrationId', data.registrationId);
+          // Post registrationId to your app server as the value has changed
+        }
+        if (data.registrationId) {
+          document.getElementById("reg-id").value = data.registrationId
+        } else {
+          document.getElementById("reg-id").value = 'no id but it did call this function'
+        }
+      });
+
+      app.push.on('error', function(e) {
+        console.log("push error = " + e.message);
+      });
+
+      app.push.on('notification', function(data) {
+        console.log('notification event');
+        navigator.notification.alert(
+          data.message,         // message
+          null,                 // callback
+          data.title,           // title
+          'Ok'                  // buttonName
+        );
+      });
+
+      if (!window.device) {
+        window.device = { platform: 'Browser' };
+      }
+
+      window.open = cordova.InAppBrowser.open
+      handleExternalURLs();
+    },
+
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+      var parentElement = document.getElementById(id);
+      if (!parentElement) {
+        console.log("BUG: " + id + " isn't working with received event, i don't know why")
+      } else {
+        var listeningElement = parentElement.querySelector('.listening');
+        var receivedElement = parentElement.querySelector('.received');
+
+        listeningElement.setAttribute('style', 'display:none;');
+        receivedElement.setAttribute('style', 'display:block;');
+
+        console.log('Received Event: ' + id);
       }
     }
   };
-  xhttp.open("GET", "https://efassembly.com:4432/profiles/" + id, true);
-  xhttp.send();
-}
 
-function acceptTOS() {
-  for (i = 0; i < huntingPartyData.users.length; i++) {
-    if (huntingPartyData.users[i].userId == currentUser._id) {
-      huntingPartyData.users[i].tosRead = 1
-    }
-  }
-  tosRead = 1
-  var xhttpHPD = new XMLHttpRequest();
-  xhttpHPD.onreadystatechange = function() {
-    if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-      huntingPartyData = JSON.parse(xhttpHPD.responseText);
-      startMainApp()
-    }
-  }
-  xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
-  xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-  xhttpHPD.send(JSON.stringify(huntingPartyData));
-}
-
-function startMainApp() {
-  if (company.fboProxies.length > 0) {
-    fbos = company.fboProxies
-    setActiveFbo(fboIndex)
-    renderSavedSearches()
-    renderSearch()
-    renderFbos()
-    var promiseFinished = true
-    document.getElementById("tos-popup").classList.add('inactive');
-    document.getElementById("loading").classList.add('inactive');
-    document.getElementById("main-view").classList.remove('inactive');
-    document.getElementById("news-view").classList.remove('inactive');
-    document.getElementById("fbo-view").classList.add('inactive');
-    document.getElementById("search-view").classList.add('inactive');
-    document.getElementById("login-register").classList.add('inactive');
-  } else {
-    document.getElementById("loading").classList.add('inactive');
-    document.getElementById("tos-popup").classList.add('inactive');
-    document.getElementById("main-view").classList.remove('inactive');
-    document.getElementById("news-view").classList.remove('inactive');
-    document.getElementById("fbo-view").classList.add('inactive');
-    document.getElementById("search-view").classList.add('inactive');
-    document.getElementById("login-register").classList.add('inactive');
-    document.getElementById("fbo-popups").classList.remove('inactive');
-    document.getElementById("error-popup").classList.remove('inactive');
-    document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
-    // document.getElementById("iconbar-3").classList.add('inactive');
-    // document.getElementById("iconbar-4").classList.add('inactive');
-    // document.getElementById("iconbar-5").classList.add('inactive');
-  }
-  // showAd()
-  // switchTab(2)
-  // goToFbo(5, 0);
-  // openPopups(true)
-
-  // expandData(2)
-}
-
-function handleEnterLogin(e) {
-  var keycode = (e.keyCode ? e.keyCode : e.which);
-  if (keycode == '13') {
-    login()
-  }
-}
-
-function handleExternalURLs() {
-  // Handle click events for all external URLs
-  if (device.platform.toUpperCase() === 'ANDROID') {
-    $(document).on('click', 'a[href^="http"]', function (e) {
-      var url = $(this).attr('href');
-      // navigator.app.loadUrl(url, { openExternal: true });
-      window.open(url, '_system');
-      e.preventDefault();
-    });
-  }
-  else if (device.platform.toUpperCase() === 'IOS') {
-    $(document).on('click', 'a[href^="http"]', function (e) {
-      var url = $(this).attr('href');
-      window.open(url, '_system');
-      e.preventDefault();
-    });
-  }
-  else {
-    // Leave standard behaviour
-  }
-}
-
-function renderChart() {
-  var ctx = document.getElementById("myChart").getContext('2d');
-  if (fbos[fboIndex]) {
-    if (fbos[fboIndex].fbo) {
-      var currentFbo = fbos[fboIndex].fbo
-      var query = {naics_code: parseInt(currentFbo.naics), modification_number: '0'}
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          var prices = []
-          var queryResults = JSON.parse(xhttp.responseText);
-          for (i = 0; i < 5 && i < queryResults.length; i++) {
-            var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
-            prices.push(bigPrice)
-          }
-          console.log('heres the prices')
-          console.log(prices)
-          Chart.defaults.global.defaultFontColor = 'white';
-          var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-              datasets: [{
-                label: 'Prices',
-                data: prices,
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                  'rgba(255,99,132,1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-              }]
-            },
-            options: {
-              scales: {
-                yAxes: [{
-                  ticks: {
-                    beginAtZero:true
-                  }
-                }]
-              }
-            }
-          });
-        }
-      }
-      xhttp.open("POST", "https://efassembly.com:4432/fpds/query/", true);
-      xhttp.setRequestHeader("Content-type", "application/json");
-      xhttp.send(JSON.stringify(query));
-    }
-  }
-}
-
-var app = {
-  // Application Constructor
-  initialize: function() {
-    if (localStorage.getItem('uid')) {
-      getTheData()
-    } else {
-      document.getElementById("loading").classList.add('inactive');
-      document.getElementById("main-view").classList.add('inactive');
-      document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("login-register").classList.remove('inactive');
-    }
-    this.bindEvents();
-    // window.plugins.uniqueDeviceID.get(success, fail);
-    // function success(uuid) {
-    //   console.log('ID IS THIS: ' + uuid);
-    // };
-    // renderChart()
-  },
-  // Bind Event Listeners
-  //
-  // Bind any events that are required on startup. Common events are:
-  // 'load', 'deviceready', 'offline', and 'online'.
-  bindEvents: function() {
-    document.addEventListener('deviceready', this.onDeviceReady, false);
-  },
-  // deviceready Event Handler
-  //
-  // The scope of 'this' is the event. In order to call the 'receivedEvent'
-  // function, we must explicitly call 'app.receivedEvent(...);'
-  onDeviceReady: function() {
-    document.getElementById("reg-id").value = 'it did ondeviceready'
-    // app.receivedEvent('deviceready');
-    app.push = PushNotification.init({
-      "android": {
-        "senderID": "416059724231"
+  $(function() {
+    $("#sidebar-detector").swipe( {
+      swipeRight:function(event, distance, duration, fingerCount, fingerData, currentDirection) {
+        openSidebar()
       },
-      "ios": {
-        "sound": true,
-        "vibration": true,
-        "badge": true
+    });
+    $("#main-view").swipe( {
+      swipeLeft:function(event, distance, duration, fingerCount, fingerData, currentDirection) {
+        closeSidebar()
       },
-      "windows": {}
     });
-
-    app.push.on('registration', function(data) {
-      console.log("registration event: " + data.registrationId);
-      var oldRegId = localStorage.getItem('registrationId');
-      if (oldRegId !== data.registrationId) {
-        // Save new registration ID
-        localStorage.setItem('registrationId', data.registrationId);
-        // Post registrationId to your app server as the value has changed
-      }
-      if (data.registrationId) {
-        document.getElementById("reg-id").value = data.registrationId
-      } else {
-        document.getElementById("reg-id").value = 'no id but it did call this function'
-      }
-    });
-
-    app.push.on('error', function(e) {
-      console.log("push error = " + e.message);
-    });
-
-    app.push.on('notification', function(data) {
-      console.log('notification event');
-      navigator.notification.alert(
-        data.message,         // message
-        null,                 // callback
-        data.title,           // title
-        'Ok'                  // buttonName
-      );
-    });
-
-    if (!window.device) {
-      window.device = { platform: 'Browser' };
+    function openSidebar() {
+      $("#profile-dropdown").removeClass('inactive')
+      $("#profile-dropdown").removeClass('dropdown-out')
+      $("#profile-dropdown").addClass('dropdown-in')
+      profileDropdownOpen = true
     }
-
-    window.open = cordova.InAppBrowser.open
-    handleExternalURLs();
-  },
-
-  // Update DOM on a Received Event
-  receivedEvent: function(id) {
-    var parentElement = document.getElementById(id);
-    if (!parentElement) {
-      console.log("BUG: " + id + " isn't working with received event, i don't know why")
-    } else {
-      var listeningElement = parentElement.querySelector('.listening');
-      var receivedElement = parentElement.querySelector('.received');
-
-      listeningElement.setAttribute('style', 'display:none;');
-      receivedElement.setAttribute('style', 'display:block;');
-
-      console.log('Received Event: ' + id);
+    function closeSidebar(){
+      $("#profile-dropdown").addClass('dropdown-out');
+      $("#profile-dropdown").removeClass('dropdown-in')
+      profileDropdownOpen = false
     }
-  }
-};
-
-$(function() {
-  $("#sidebar-detector").swipe( {
-    swipeRight:function(event, distance, duration, fingerCount, fingerData, currentDirection) {
-      openSidebar()
-    },
   });
-  $("#main-view").swipe( {
-    swipeLeft:function(event, distance, duration, fingerCount, fingerData, currentDirection) {
-      closeSidebar()
-    },
-  });
-  function openSidebar() {
-    $("#profile-dropdown").removeClass('inactive')
-    $("#profile-dropdown").removeClass('dropdown-out')
-    $("#profile-dropdown").addClass('dropdown-in')
-    profileDropdownOpen = true
-  }
-  function closeSidebar(){
-    $("#profile-dropdown").addClass('dropdown-out');
-    $("#profile-dropdown").removeClass('dropdown-in')
-    profileDropdownOpen = false
-  }
-});

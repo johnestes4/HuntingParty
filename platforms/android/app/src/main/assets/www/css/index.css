@@ -643,7 +643,8 @@ h1 {
   left: 0px;
   top: 0px;
   height: 91vh;
-  width: 5vw;
+  max-width: 2vw;
+  min-width: 10px;
   /* background: red; */
   z-index: 999999;
 }
