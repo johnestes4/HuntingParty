@@ -1,2 +1,4 @@
 notifications/
 node_modules/
+.idea
+.vscode
