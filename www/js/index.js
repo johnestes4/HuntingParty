@@ -1641,7 +1641,7 @@ function toggleHamburgerMenu() {
       document.getElementById("big-no-button").classList.remove('inactive');
     }
     fboIndex = index
-    // renderChart()
+    renderChart()
     updateComments(proxy)
     checkVote(proxy, index)
   }
@@ -1682,8 +1682,9 @@ function toggleHamburgerMenu() {
     document.getElementById("yes-refer").classList.add('inactive');
     document.getElementById("no-refer").classList.add('inactive');
     renderFbos()
+    peopleToRefer = []
     if (moveOn) {
-      goToFbo(fboIndex,tab)
+      goToFbo(fboIndex,0)
     }
     // switchTab(tab)
   }
@@ -1739,21 +1740,26 @@ function toggleHamburgerMenu() {
   }
 
   function sendReferNotifications() {
+    console.log('doing the notification guy')
     var deviceIds = []
     for (i = 0; i < peopleToRefer.length; i++) {
-      if (peopleToRefer[i].deviceId) {
-        deviceIds.push(peopleToRefer[i].deviceId)
+      if (peopleToRefer[i].regId) {
+        deviceIds.push(peopleToRefer[i].regId)
       }
     }
     var notification = {
       title: currentUser.firstName + ' Has A Referral For You',
       body: 'Open your Hunting Party to see it',
+      platform: 'android',
       deviceIds: deviceIds
     }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         console.log('it sent i think')
+        peopleToRefer = []
+      } else {
+        console.log('status: ' + xhttp.status)
       }
     }
     xhttp.open("POST", "https://efassembly.com:4432/huntingpartydata/notification/", true);
@@ -1762,7 +1768,7 @@ function toggleHamburgerMenu() {
   }
 
   function vote(index, yes) {
-    console.log('voting')
+    console.log('length of the thing is ' + peopleToRefer.length)
     var fbo = fbos[index]
     var vote = {
       id: currentUser._id,
@@ -1832,6 +1838,9 @@ function toggleHamburgerMenu() {
             document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
             document.getElementById("vote-circle-" + index).classList.add('inactive')
           }
+        }
+        if (peopleToRefer.length > 0) {
+          sendReferNotifications()
         }
         if (adCounter >= 3) {
           showAd()
@@ -2139,9 +2148,9 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    switchTab(2)
-    goToFbo(5, 0);
-    openPopups(true)
+    // switchTab(2)
+    // goToFbo(5, 0);
+    // openPopups(true)
 
     // expandData(2)
   }
@@ -2254,7 +2263,7 @@ function toggleHamburgerMenu() {
       // function success(uuid) {
       //   console.log('ID IS THIS: ' + uuid);
       // };
-      // renderChart()
+      renderChart()
     },
     // Bind Event Listeners
     //
