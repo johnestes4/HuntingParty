@@ -1813,6 +1813,7 @@ function toggleHamburgerMenu() {
     }
     console.log(vote)
     var fbo = fbos[index]
+    var fboSubject = fbo.fbo.subject
     var req = {};
     req['voteYes'] = fbo.voteYes;
     req['voteNo'] = fbo.voteNo;
@@ -1842,6 +1843,18 @@ function toggleHamburgerMenu() {
         if (peopleToRefer.length > 0) {
           sendReferNotifications()
         }
+        var newsString = ''
+        console.log(fbo)
+        if (yes) {
+          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted YES on ' + fboSubject
+        } else {
+          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted NO on ' + fboSubject
+        }
+        var newsItem = {
+          type: 'vote',
+          body: newsString
+        }
+        generateNewsItem(newsItem)
         if (adCounter >= 3) {
           showAd()
         } else {
@@ -2117,6 +2130,41 @@ function toggleHamburgerMenu() {
     xhttpHPD.send(JSON.stringify(huntingPartyData));
   }
 
+  function generateNewsItem(newsItem) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var res = JSON.parse(xhttp.responseText)
+        huntingPartyData.news = res.news;
+        renderNews()
+      }
+    }
+    xhttp.open("PUT", "https://efassembly.com:4432/huntingpartydata/news/" + huntingPartyData._id, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(newsItem));
+  }
+
+  function renderNews() {
+    if (huntingPartyData) {
+      var newsHtml = ''
+      for (i = huntingPartyData.news.length-1; i >=0; i--) {
+        var img = 'profile'
+        if (huntingPartyData.news[i].type) {
+          if (huntingPartyData.news[i].type == 'vote') {
+            img = 'contact'
+          }
+        }
+        newsHtml = newsHtml + '<div class="news-item">'+
+          '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
+            '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
+          '</div>'+
+          '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
+        '</div>'
+      }
+      document.getElementById("news-items").innerHTML = newsHtml
+    }
+  }
+
   function startMainApp() {
     if (company.fboProxies.length > 0) {
       fbos = company.fboProxies
@@ -2124,6 +2172,7 @@ function toggleHamburgerMenu() {
       renderSavedSearches()
       renderSearch()
       renderFbos()
+      renderNews()
       var promiseFinished = true
       document.getElementById("tos-popup").classList.add('inactive');
       document.getElementById("loading").classList.add('inactive');
