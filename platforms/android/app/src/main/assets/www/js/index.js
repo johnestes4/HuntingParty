@@ -1673,6 +1673,10 @@ function toggleHamburgerMenu() {
     }
   }
 
+  function openRefer() {
+    document.getElementById("refer-popup").classList.remove('inactive');
+  }
+
   function closePopups(moveOn) {
     document.getElementById("fbo-popups").classList.add('inactive');
     var a = document.getElementsByClassName('vote-popup')
