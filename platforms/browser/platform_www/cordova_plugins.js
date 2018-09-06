@@ -254,14 +254,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-firebase/www/firebase-browser.js",
-        "id": "cordova-plugin-firebase.FirebasePlugin",
-        "pluginId": "cordova-plugin-firebase",
-        "clobbers": [
-            "FirebasePlugin"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
         "id": "cordova-plugin-globalization.GlobalizationError",
         "pluginId": "cordova-plugin-globalization",
@@ -303,6 +295,38 @@ module.exports = [
         "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
         "pluginId": "cordova-plugin-inappbrowser",
         "runs": true
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/push.js",
+        "id": "phonegap-plugin-push.PushNotification",
+        "pluginId": "phonegap-plugin-push",
+        "clobbers": [
+            "PushNotification"
+        ]
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/browser/push.js",
+        "id": "phonegap-plugin-push.BrowserPush",
+        "pluginId": "phonegap-plugin-push",
+        "clobbers": [
+            "PushNotification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-uniquedeviceid/www/uniqueid.js",
+        "id": "cordova-plugin-uniquedeviceid.UniqueDeviceID",
+        "pluginId": "cordova-plugin-uniquedeviceid",
+        "merges": [
+            "window.plugins.uniqueDeviceID"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-firebase/www/firebase-browser.js",
+        "id": "cordova-plugin-firebase.FirebasePlugin",
+        "pluginId": "cordova-plugin-firebase",
+        "clobbers": [
+            "FirebasePlugin"
+        ]
     },
     {
         "file": "plugins/cordova-plugin-media-capture/www/CaptureAudioOptions.js",
@@ -376,19 +400,22 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-android-firebase-gradle-release": "1.0.2",
-    "cordova-android-play-services-gradle-release": "1.4.3",
-    "cordova-android-support-gradle-release": "1.4.4",
     "cordova-plugin-battery-status": "1.2.5",
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-camera": "2.4.1",
     "cordova-plugin-device": "1.1.7",
     "cordova-plugin-dialogs": "1.3.4",
     "cordova-plugin-file": "6.0.1",
-    "cordova-plugin-firebase": "1.0.5",
     "cordova-plugin-geolocation": "2.4.3",
     "cordova-plugin-globalization": "1.0.9",
     "cordova-plugin-inappbrowser": "1.7.2",
+    "phonegap-plugin-push": "2.2.3",
+    "cordova-plugin-uniquedeviceid": "1.3.2",
+    "cordova-plugin-whitelist": "1.3.3",
+    "cordova-plugin-firebase": "1.0.5",
+    "cordova-android-play-services-gradle-release": "1.4.3",
+    "cordova-android-firebase-gradle-release": "1.0.2",
+    "cordova-android-support-gradle-release": "1.4.4",
     "cordova-plugin-media-capture": "1.4.3"
 }
 // BOTTOM OF METADATA

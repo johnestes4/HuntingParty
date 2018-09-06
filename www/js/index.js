@@ -1641,7 +1641,7 @@ function toggleHamburgerMenu() {
       document.getElementById("big-no-button").classList.remove('inactive');
     }
     fboIndex = index
-    // renderChart()
+    renderChart()
     updateComments(proxy)
     checkVote(proxy, index)
   }
@@ -1673,6 +1673,10 @@ function toggleHamburgerMenu() {
     }
   }
 
+  function openRefer() {
+    document.getElementById("refer-popup").classList.remove('inactive');
+  }
+
   function closePopups(moveOn) {
     document.getElementById("fbo-popups").classList.add('inactive');
     var a = document.getElementsByClassName('vote-popup')
@@ -1682,8 +1686,9 @@ function toggleHamburgerMenu() {
     document.getElementById("yes-refer").classList.add('inactive');
     document.getElementById("no-refer").classList.add('inactive');
     renderFbos()
+    peopleToRefer = []
     if (moveOn) {
-      goToFbo(fboIndex,tab)
+      goToFbo(fboIndex,0)
     }
     // switchTab(tab)
   }
@@ -1739,21 +1744,26 @@ function toggleHamburgerMenu() {
   }
 
   function sendReferNotifications() {
+    console.log('doing the notification guy')
     var deviceIds = []
     for (i = 0; i < peopleToRefer.length; i++) {
-      if (peopleToRefer[i].deviceId) {
-        deviceIds.push(peopleToRefer[i].deviceId)
+      if (peopleToRefer[i].regId) {
+        deviceIds.push(peopleToRefer[i].regId)
       }
     }
     var notification = {
       title: currentUser.firstName + ' Has A Referral For You',
       body: 'Open your Hunting Party to see it',
+      platform: 'android',
       deviceIds: deviceIds
     }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         console.log('it sent i think')
+        peopleToRefer = []
+      } else {
+        console.log('status: ' + xhttp.status)
       }
     }
     xhttp.open("POST", "https://efassembly.com:4432/huntingpartydata/notification/", true);
@@ -1762,7 +1772,7 @@ function toggleHamburgerMenu() {
   }
 
   function vote(index, yes) {
-    console.log('voting')
+    console.log('length of the thing is ' + peopleToRefer.length)
     var fbo = fbos[index]
     var vote = {
       id: currentUser._id,
@@ -1807,6 +1817,7 @@ function toggleHamburgerMenu() {
     }
     console.log(vote)
     var fbo = fbos[index]
+    var fboSubject = fbo.fbo.subject
     var req = {};
     req['voteYes'] = fbo.voteYes;
     req['voteNo'] = fbo.voteNo;
@@ -1833,6 +1844,21 @@ function toggleHamburgerMenu() {
             document.getElementById("vote-circle-" + index).classList.add('inactive')
           }
         }
+        if (peopleToRefer.length > 0) {
+          sendReferNotifications()
+        }
+        var newsString = ''
+        console.log(fbo)
+        if (yes) {
+          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted YES on ' + fboSubject
+        } else {
+          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted NO on ' + fboSubject
+        }
+        var newsItem = {
+          type: 'vote',
+          body: newsString
+        }
+        generateNewsItem(newsItem)
         if (adCounter >= 3) {
           showAd()
         } else {
@@ -2108,6 +2134,41 @@ function toggleHamburgerMenu() {
     xhttpHPD.send(JSON.stringify(huntingPartyData));
   }
 
+  function generateNewsItem(newsItem) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var res = JSON.parse(xhttp.responseText)
+        huntingPartyData.news = res.news;
+        renderNews()
+      }
+    }
+    xhttp.open("PUT", "https://efassembly.com:4432/huntingpartydata/news/" + huntingPartyData._id, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(newsItem));
+  }
+
+  function renderNews() {
+    if (huntingPartyData) {
+      var newsHtml = ''
+      for (i = huntingPartyData.news.length-1; i >=0; i--) {
+        var img = 'profile'
+        if (huntingPartyData.news[i].type) {
+          if (huntingPartyData.news[i].type == 'vote') {
+            img = 'contact'
+          }
+        }
+        newsHtml = newsHtml + '<div class="news-item">'+
+          '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
+            '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
+          '</div>'+
+          '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
+        '</div>'
+      }
+      document.getElementById("news-items").innerHTML = newsHtml
+    }
+  }
+
   function startMainApp() {
     if (company.fboProxies.length > 0) {
       fbos = company.fboProxies
@@ -2115,6 +2176,7 @@ function toggleHamburgerMenu() {
       renderSavedSearches()
       renderSearch()
       renderFbos()
+      renderNews()
       var promiseFinished = true
       document.getElementById("tos-popup").classList.add('inactive');
       document.getElementById("loading").classList.add('inactive');
@@ -2139,9 +2201,9 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    switchTab(2)
-    goToFbo(5, 0);
-    openPopups(true)
+    // switchTab(2)
+    // goToFbo(5, 0);
+    // openPopups(true)
 
     // expandData(2)
   }
@@ -2254,7 +2316,7 @@ function toggleHamburgerMenu() {
       // function success(uuid) {
       //   console.log('ID IS THIS: ' + uuid);
       // };
-      // renderChart()
+      renderChart()
     },
     // Bind Event Listeners
     //

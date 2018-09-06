@@ -236,29 +236,31 @@ under the License.
   <div class="" style="width: 100%; text-align: center; float: left; margin-bottom: 2vh;">
     NEWS
   </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/profile.png" alt="">
+  <div id="news-items" class="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/profile.png" alt="">
+      </div>
+      <p class="news-text">Person joined your company</p>
     </div>
-    <p class="news-text">Person joined your company</p>
-  </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/profile.png" alt="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/profile.png" alt="">
+      </div>
+      <p class="news-text">Person2 left a comment on an RFP</p>
     </div>
-    <p class="news-text">Person2 left a comment on an RFP</p>
-  </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/profile.png" alt="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/profile.png" alt="">
+      </div>
+      <p class="news-text">Person3 left a comment on an RFP</p>
     </div>
-    <p class="news-text">Person3 left a comment on an RFP</p>
-  </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/contact.png" alt="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/contact.png" alt="">
+      </div>
+      <p class="news-text">Person4: here is some comment text</p>
     </div>
-    <p class="news-text">Person4: here is some comment text</p>
   </div>
 </div>
 </div>
@@ -442,11 +444,17 @@ under the License.
 
 </div>
 </div>
-<div id="fbo-popups" class="inactive">
+<div id="fbo-popups" class="">
   <div id="error-popup" class="vote-popup inactive">
     <h3>ERROR</h3>
     <p id="error-text">Shit's broke</p>
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
+  </div>
+  <div id="refer-popup" class="vote-popup ">
+    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
+      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+      its good
+    </div>
   </div>
   <div class="vote-popup yes-popup inactive">
     <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
