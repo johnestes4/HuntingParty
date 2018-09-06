@@ -1738,6 +1738,29 @@ function toggleHamburgerMenu() {
     }
   }
 
+  function sendReferNotifications() {
+    var deviceIds = []
+    for (i = 0; i < peopleToRefer.length; i++) {
+      if (peopleToRefer[i].deviceId) {
+        deviceIds.push(peopleToRefer[i].deviceId)
+      }
+    }
+    var notification = {
+      title: currentUser.firstName + ' Has A Referral For You',
+      body: 'Open your Hunting Party to see it',
+      deviceIds: deviceIds
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        console.log('it sent i think')
+      }
+    }
+    xhttp.open("POST", "https://efassembly.com:4432/huntingpartydata/notification/", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(notification));
+  }
+
   function vote(index, yes) {
     console.log('voting')
     var fbo = fbos[index]
