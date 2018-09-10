@@ -1374,7 +1374,7 @@ function toggleHamburgerMenu() {
         comments+
         '</div>'+
         '<div class="fbo-item-buttons">'+
-        '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(false)">'+
+        '<div id="no-button-' + i + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(1)">'+
         '<div class="second-border">'+
         '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
         '</div>'+
@@ -1382,7 +1382,7 @@ function toggleHamburgerMenu() {
         '<div class="fbo-item-time-button">'+
         dueDate+
         '</div>'+
-        '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(true)">'+
+        '<div id="yes-button-' + i + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(0)">'+
         '<div class="second-border">'+
         '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
         '</div>'+
@@ -1607,9 +1607,9 @@ function toggleHamburgerMenu() {
     document.getElementById("abstract-text").innerHTML = proxy.fbo.desc;
     document.getElementById("data-text").innerHTML = dataText;
     if (proxy.fbo.respDate) {
-      "<p>Due</p><p>"+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
+      "<p>Due "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
     } else {
-      document.getElementById("time-button").innerHTML = "<p>No</p><p>Due Date</p>"
+      document.getElementById("time-button").innerHTML = "<p>No Due Date</p>"
     }
     var dueDate = ''
     if (proxy.fbo.respDate) {
@@ -1620,17 +1620,17 @@ function toggleHamburgerMenu() {
       var timeDiff = Math.abs(date2.getTime() - date1.getTime());
       var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
       if (timeToDue >= 365) {
-        dueDate = "<p>Due:</p><p>"+Math.round(timeToDue / 365).toString()+" Years </p>"
+        dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
       } else if (timeToDue >= 60) {
-        dueDate = "<p>Due:</p><p>"+Math.round(timeToDue / 30).toString()+" Months</p>"
+        dueDate = "<p>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
       } else if (timeToDue >= 14) {
-        dueDate = "<p>Due:</p><p>"+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+        dueDate = "<p>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
       } else {
-        dueDate = "<p>Due:</p><p>"+timeToDue+" Days</p>"
+        dueDate = "<p>Due: "+timeToDue+" Days</p>"
       }
       // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
     } else {
-      dueDate = "<p'>No</p><p>Due Date</p>"
+      dueDate = "<p'>No Due Date</p>"
     }
     document.getElementById("time-button").innerHTML = dueDate
     if (tab == 1) {
@@ -1674,6 +1674,7 @@ function toggleHamburgerMenu() {
   }
 
   function openRefer() {
+    document.getElementById("fbo-popups").classList.remove('inactive');
     document.getElementById("refer-popup").classList.remove('inactive');
   }
 
@@ -1693,9 +1694,9 @@ function toggleHamburgerMenu() {
     // switchTab(tab)
   }
 
-  function openPopups(yes) {
+  function openPopups(which) {
     document.getElementById("fbo-popups").classList.remove('inactive');
-    if (yes) {
+    if (which == 0) {
       var a = document.getElementsByClassName('yes-popup')
       for (i = 0; i < a.length; i++) {
         a[i].classList.remove('inactive');
@@ -1709,11 +1710,24 @@ function toggleHamburgerMenu() {
         }
       }
       document.getElementById("yes-popup-users-list").innerHTML = usersHtml
-    } else {
+      document.getElementById("refer-users-list").innerHTML = ''
+    } else if (which == 1) {
       var a = document.getElementsByClassName('no-popup')
       for (i = 0; i < a.length; i++) {
         a[i].classList.remove('inactive');
       }
+    } else if (which == 2) {
+      document.getElementById("refer-popup").classList.remove('inactive');
+      var usersHtml = ''
+      var usersList = huntingPartyData.users
+      for (i = 0; i < usersList.length; i++) {
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')"><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
+        if (i < usersList.length-1) {
+          usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+        }
+      }
+      document.getElementById("refer-users-list").innerHTML = usersHtml
+      document.getElementById("yes-popup-users-list").innerHTML = ''
     }
   }
 
@@ -1994,8 +2008,11 @@ function toggleHamburgerMenu() {
   }
 
   function getTheData() {
-
-    var id = localStorage.getItem('uid')
+    if (localStorage.getItem('uid')) {
+      var id = localStorage.getItem('uid')
+    } else if (currentUser) {
+      var id = currentUser._id
+    }
     var xhttp = new XMLHttpRequest();
     // xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.onreadystatechange = function() {
@@ -2159,10 +2176,10 @@ function toggleHamburgerMenu() {
           }
         }
         newsHtml = newsHtml + '<div class="news-item">'+
-          '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
-            '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
-          '</div>'+
-          '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
+        '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
+        '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
+        '</div>'+
+        '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
         '</div>'
       }
       document.getElementById("news-items").innerHTML = newsHtml
@@ -2172,7 +2189,7 @@ function toggleHamburgerMenu() {
   function startMainApp() {
     if (company.fboProxies.length > 0) {
       fbos = company.fboProxies
-      setActiveFbo(fboIndex)
+      // setActiveFbo(fboIndex)
       renderSavedSearches()
       renderSearch()
       renderFbos()
@@ -2203,7 +2220,7 @@ function toggleHamburgerMenu() {
     // showAd()
     // switchTab(2)
     // goToFbo(5, 0);
-    // openPopups(true)
+    // openPopups(2)
 
     // expandData(2)
   }
@@ -2238,27 +2255,76 @@ function toggleHamburgerMenu() {
   }
 
   function renderChart() {
-    var ctx = document.getElementById("myChart").getContext('2d');
+    var chart1 = document.getElementById("chart1").getContext('2d');
+    var chart2 = document.getElementById("chart2").getContext('2d');
+    var chart3 = document.getElementById("chart3").getContext('2d');
     if (fbos[fboIndex]) {
       if (fbos[fboIndex].fbo) {
         var currentFbo = fbos[fboIndex].fbo
-        var query = {naics_code: parseInt(currentFbo.naics), modification_number: '0'}
+        console.log(currentFbo)
+        var nameFilters = [
+          {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
+          {fbo: 'Department of the Army', agency: false, fpds: 'DEPT OF THE ARMY'},
+          {fbo: 'Department of the Navy', agency: false, fpds: 'DEPT OF THE NAVY'},
+          {fbo: 'Department of the Air Force', agency: false, fpds: 'DEPT OF THE AIR FORCE'},
+          {fbo: 'Department of the Interior', agency: true, fpds: 'DEPARTMENT OF THE INTERIOR (DOI)'},
+          {fbo: 'Department of Agriculture', agency: true, fpds: 'DEPARTMENT OF AGRICULTURE (USDA)'},
+          {fbo: 'Defense Logistics Agency', agency: false, fpds: 'DEFENSE LOGISTICS AGENCY'},
+          {fbo: 'Department of Veterans Affairs', agency: true, fpds: 'DEPARTMENT OF VETERANS AFFAIRS (VA)'},
+          {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'}
+        ]
+        var query = ''
+        for (i = 0; i < nameFilters.length; i++) {
+          if (currentFbo.agency.toLowerCase() == nameFilters[i].fbo.toLowerCase()) {
+            if (nameFilters[i].agency) {
+              query = {naics_code: parseInt(currentFbo.naics), agency_name: nameFilters[i].fpds, modification_number: '0'}
+            } else {
+              query = {naics_code: parseInt(currentFbo.naics), subagency_name: nameFilters[i].fpds, modification_number: '0'}
+            }
+            break
+          }
+        }
+        if (query.length < 1) {
+          query = {naics_code: parseInt(currentFbo.naics), agency_name: currentFbo.agency.toUpperCase(), modification_number: '0'}
+        }
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
-            var prices = []
             var queryResults = JSON.parse(xhttp.responseText);
-            for (i = 0; i < 5 && i < queryResults.length; i++) {
-              var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
-              prices.push(bigPrice)
+            if (queryResults.length < 1) {
+              console.log('no results found')
+            } else {
+              console.log('we got '+queryResults.length+' results')
+              console.log(queryResults)
             }
-            console.log('heres the prices')
-            console.log(prices)
+            var prices = [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+            for (i = 0; i < queryResults.length; i++) {
+              var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
+              if (bigPrice > 0 && bigPrice < 100000) {
+                prices[0]++
+              } else if (bigPrice >= 100000 && bigPrice < 250000) {
+                prices[1]++
+              } else if (bigPrice >= 250000 && bigPrice < 1000000) {
+                prices[2]++
+              } else if (bigPrice >= 1000000 && bigPrice < 5000000) {
+                prices[3]++
+              } else if (bigPrice >= 5000000) {
+                prices[4]++
+              }
+            }
+            // console.log('heres the prices')
+            // console.log(prices)
             Chart.defaults.global.defaultFontColor = 'white';
-            var myChart = new Chart(ctx, {
+            var myChart1 = new Chart(chart1, {
               type: 'bar',
               data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
                 datasets: [{
                   label: 'Prices',
                   data: prices,
@@ -2267,25 +2333,142 @@ function toggleHamburgerMenu() {
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(153, 102, 255, 0.2)'
                   ],
                   borderColor: [
                     'rgba(255,99,132,1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(153, 102, 255, 1)'
                   ],
                   borderWidth: 1
                 }]
               },
               options: {
+                legend: {
+                  display: false,
+                },
                 scales: {
                   yAxes: [{
                     ticks: {
                       beginAtZero:true
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: '# Of FPDS'
+                    }
+                  }],
+                  xAxes: [{
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Values'
+                    }
+                  }]
+                }
+              }
+            });
+            var offers = [
+              0,
+              0,
+              0,
+              0
+            ]
+            for (i = 0; i < queryResults.length; i++) {
+              if (queryResults[i].number_of_offers_received == 1) {
+                offers[0]++
+              } else if (queryResults[i].number_of_offers_received >= 2 && queryResults[i].number_of_offers_received <= 3) {
+                offers[1]++
+              } else if (queryResults[i].number_of_offers_received >= 4 && queryResults[i].number_of_offers_received <= 5) {
+                offers[2]++
+              } else if (queryResults[i].number_of_offers_received >= 6) {
+                offers[3]++
+              }
+            }
+            var myChart2 = new Chart(chart2, {
+              type: 'bar',
+              data: {
+                label: 'Prices',
+                labels: ["1", "2-3", "4-5", "6+"],
+                datasets: [{
+                  data: offers,
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                legend: {
+                  display: false,
+                },
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero:true
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: '# Of FPDS'
+                    }
+                  }],
+                  xAxes: [{
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Offers Received'
+                    }
+                  }]
+                }
+              }
+            });
+            var scatterData = []
+            var colors = []
+            for (i = 0; i < queryResults.length; i++) {
+              var awardSize = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
+              scatterData.push({x: awardSize, y: queryResults[i].number_of_offers_received})
+              if (queryResults[i].type_of_set_aside !== 'N/A') {
+                colors.push('rgba(255,50,50,0.4)')
+              } else {
+                colors.push('rgba(50,50,255,0.4)')
+
+              }
+            }
+
+            var myChart3 = new Chart(chart3, {
+              type: 'scatter',
+              data: {
+                datasets: [{
+                  label: 'Scatter Dataset',
+                  data: scatterData,
+                  backgroundColor: colors
+                }]
+              },
+              options: {
+                legend: {
+                  display: false,
+                },
+                scales: {
+                  yAxes: [{
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Offers Received'
+                    }
+                  }],
+                  xAxes: [{
+                    type: 'linear',
+                    position: 'bottom',
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Values'
                     }
                   }]
                 }
@@ -2316,7 +2499,7 @@ function toggleHamburgerMenu() {
       // function success(uuid) {
       //   console.log('ID IS THIS: ' + uuid);
       // };
-      renderChart()
+      // renderChart()
     },
     // Bind Event Listeners
     //

@@ -921,6 +921,11 @@ h1 {
   overflow: hidden;
 }
 
+#time-button {
+  font-size: 2vh;
+  line-height: 3vh;
+  color: white;
+}
 
 .big-circle:active {
   filter: brightness(80%);
