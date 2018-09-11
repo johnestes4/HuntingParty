@@ -463,7 +463,9 @@ function viewSearch() {
   }
   a = document.getElementsByClassName('checkbox-agency')
   for (i = 0; i < a.length; i++) {
-    a[i].checked = searchTerms.agency[i].value
+    if (searchTerms.agency[i]) {
+      a[i].checked = searchTerms.agency[i].value
+    }
   }
   a = document.getElementsByClassName('checkbox-place')
   for (i = 0; i < a.length; i++) {
@@ -1007,6 +1009,11 @@ function calculateSearch(elem) {
   }
 }
 
+function closeSearchPopup() {
+  document.getElementById('search-save-popup').classList.add('inactive')
+  document.getElementById('search-save-popup-bg').classList.add('inactive')
+}
+
 function saveSearchTerms() {
   if (document.getElementById("search-name").value.length > 0) {
     var terms = searchTerms
@@ -1032,6 +1039,9 @@ function saveSearchTerms() {
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
           console.log('CREATED')
+          document.getElementById('search-save-popup').classList.remove('inactive')
+          document.getElementById('search-save-popup-bg').classList.remove('inactive')
+          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
         }
       };
       var url = "https://efassembly.com:4432/huntingpartydata/add";
@@ -1046,6 +1056,9 @@ function saveSearchTerms() {
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
           console.log('UPDATED')
+          document.getElementById('search-save-popup').classList.remove('inactive')
+          document.getElementById('search-save-popup-bg').classList.remove('inactive')
+          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been updated!'
         }
       };
       var url = "https://efassembly.com:4432/huntingpartydata/" + id;
@@ -1606,11 +1619,6 @@ function toggleHamburgerMenu() {
     document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
     document.getElementById("abstract-text").innerHTML = proxy.fbo.desc;
     document.getElementById("data-text").innerHTML = dataText;
-    if (proxy.fbo.respDate) {
-      "<p>Due "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p>";
-    } else {
-      document.getElementById("time-button").innerHTML = "<p>No Due Date</p>"
-    }
     var dueDate = ''
     if (proxy.fbo.respDate) {
       var today = getToday()
@@ -2466,6 +2474,25 @@ function toggleHamburgerMenu() {
                   xAxes: [{
                     type: 'linear',
                     position: 'bottom',
+                    ticks: {
+                      callback: function(value) {
+                        if (value.toString().length == 9) {
+                          return value.toString().substr(0, 3) + 'm'; //truncate
+                        } else if (value.toString().length == 8) {
+                          return value.toString().substr(0, 2) + 'm'; //truncate
+                        } else if (value.toString().length == 7) {
+                          return value.toString().substr(0, 1) + 'm'; //truncate
+                        } else if (value.toString().length == 6) {
+                          return value.toString().substr(0, 3) + 'k'; //truncate
+                        } else if (value.toString().length == 5) {
+                          return value.toString().substr(0, 2) + 'k'; //truncate
+                        } else if (value.toString().length == 4) {
+                          return value.toString().substr(0, 1) + 'k'; //truncate
+                        } else {
+                          return value
+                        }
+                      },
+                    },
                     scaleLabel: {
                       display: true,
                       labelString: 'Values'

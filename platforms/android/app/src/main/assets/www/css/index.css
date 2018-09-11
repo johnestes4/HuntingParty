@@ -927,6 +927,29 @@ h1 {
   color: white;
 }
 
+#search-save-popup {
+  position: fixed;
+  width: 60vw;
+  left: 20vw;
+  height: 20vh;
+  padding-top: 5vh;
+  text-align: center;
+  top: 35vh;
+  z-index: 19;
+  background: rgba(78,96,136,1);
+  border: 1px solid rgba(0,0,0,0.75);
+}
+
+#search-save-popup-bg {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.25);
+  z-index: 18;
+}
+
 .big-circle:active {
   filter: brightness(80%);
 }

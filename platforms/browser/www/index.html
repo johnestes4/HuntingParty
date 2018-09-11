@@ -266,6 +266,13 @@ under the License.
 </div>
 <div id="search-view" class="body-block inactive">
   <div id="search-terms-view" class="">
+    <div id="search-save-popup" class="inactive">
+      <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
+      <button style="width: 30vw; margin-top: 1vh" type="button" name="button" onclick="closeSearchPopup()">OKAY</button>
+    </div>
+    <div id="search-save-popup-bg" class="inactive">
+
+    </div>
     <div class="search-box-details">
       Saved Searches
     </div>
@@ -439,8 +446,7 @@ under the License.
 <div class="search-box-details" style="margin-top: 2vh;">
 </div>
 <input id="search-name" type="text" name="" value="" placeholder="NAME THIS SEARCH" style="margin-bottom: 2vh; width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);">
-<button style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE & SEARCH</button>
-<!-- <button class="col-12" style="" type="button" name="button">Search without saving</button> -->
+<button style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>
 
 </div>
 </div>
@@ -467,7 +473,7 @@ under the License.
 
       </div>
       <div class="col-12">
-        <button type="button" name="button" onclick="vote(fboIndex, true)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
+        <button type="button" name="button" onclick="sendReferNotifications(), closePopups(false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
       </div>
     </div>
   </div>
@@ -496,7 +502,7 @@ under the License.
         </div>
       </div>
       <div class="col-12">
-        <button type="button" name="button" onclick="sendReferNotifications(), closePopups(false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
+        <button type="button" name="button" onclick="vote(fboIndex, true)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
       </div>
     </div>
   </div>
@@ -689,7 +695,7 @@ under the License.
     </div>
   </div>
   <div class="big-circle-box" style="">
-    <div class="big-circle" style="line-height: 0.5vh; font-size: 2.5vh; padding-top: 4.0vh; height: 9vh; width: 9vh;">
+    <div class="big-circle" style="line-height: 0.5vh; font-size: 2.5vh; padding-top: 4.0vh; height: 9vh; width: 9vh;" onclick='openPopups(2)'>
       Refer
     </div>
     <div class="" id="time-button" style="width: 100%; height: 3vh; margin-top: 9vh;">
