@@ -337,6 +337,8 @@ var yesRefer = []
 var naics = []
 var tosRead = 0
 var tutorialsOpen = false
+var allCompanies
+var companyToJoin
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -1526,8 +1528,87 @@ function toggleHamburgerMenu() {
   function goToCompanyCreate() {
     document.getElementById("login-register").classList.remove('inactive')
     document.getElementById("register-view").classList.add('inactive')
+    document.getElementById("main-view").classList.add('inactive')
     document.getElementById("login-view").classList.add('inactive')
     document.getElementById("company-create-view").classList.remove('inactive')
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        allCompanies = JSON.parse(xhttp.responseText);
+        allCompanies.sort(function(a,b) {
+          var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+          if (nameA < nameB) //sort string ascending
+            return -1
+          if (nameA > nameB)
+            return 1
+          return 0 //default return value (no sorting)
+        })
+        console.log('got em')
+      }
+    }
+    xhttp.open("GET", 'https://efassembly.com:4432/company/light', true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send();
+  }
+
+  function companySearch() {
+    var searchTerm = document.getElementById("company-search").value.toLowerCase()
+    var html = ''
+    for (i = 0; i < allCompanies.length; i++) {
+      if (searchTerm.length > 1 && allCompanies[i].name.toLowerCase().includes(searchTerm)) {
+        html = html + '<div class="company-search-item" onclick="pickCompanyToJoin('+i+')">'+allCompanies[i].name+'</div>'
+      }
+    }
+    document.getElementById("company-search-dropdown").innerHTML = html
+    if (html.length < 1) {
+      document.getElementById("company-search-dropdown").classList.add('inactive')
+    } else {
+      document.getElementById("company-search-dropdown").classList.remove('inactive')
+    }
+  }
+
+  function pickCompanyToJoin(index) {
+    companyToJoin = allCompanies[index]
+    document.getElementById("company-confirm-view").classList.remove('inactive')
+    document.getElementById("company-search-view").classList.add('inactive')
+  }
+
+  function onPhoneChange(event) {
+    // remove all mask characters (keep only numeric)
+    var newVal = document.getElementById("new-company-phone").value.replace(/\D/g, '');
+    // special handling of backspace necessary otherwise
+    // deleting of non-numeric characters is not recognized
+    // this laves room for improvement for example if you delete in the
+    // middle of the string
+    var keynum
+    if(window.event) { // IE
+      keynum = event.keyCode;
+    } else if(event.which){ // Netscape/Firefox/Opera
+      keynum = event.which;
+    }
+    if (keynum == 8) {
+      newVal = newVal.substring(0, newVal.length);
+    }
+
+    // don't show braces for empty value
+    if (newVal.length == 0) {
+    newVal = '';
+    } else if (newVal.length < 3) {
+      newVal = newVal
+    }
+    // don't show braces for empty groups at the end
+    else if (newVal.length == 3) {
+    newVal = newVal.replace(/^(\d{0,3})/, '($1)');
+    } else if (newVal.length <= 6) {
+      newVal = newVal.replace(/^(\d{0,3})(\d{0,3})/, '($1)-$2');
+    }  else {
+      if (newVal.length > 10){
+        newVal = newVal.substring(0,10)
+      }
+      newVal = newVal.replace(/^(\d{0,3})(\d{0,3})(.*)/, '($1)-$2-$3');
+    }
+    // set the new value
+    document.getElementById("new-company-phone").value = newVal
   }
 
   function register() {
@@ -2057,61 +2138,103 @@ function toggleHamburgerMenu() {
                 // xhttp4.setRequestHeader("Content-type", "application/json");
                 xhttp4.onreadystatechange = function() {
                   if (xhttp4.readyState == 4 && xhttp4.status == 200) {
-                    huntingPartyData = JSON.parse(xhttp4.responseText);
-                    var userInList = false
-                    if (!huntingPartyData.users) {
-                      huntingPartyData.users = []
-                    }
-                    var doTheUpdateAnyway = false
-                    for (i = 0; i < huntingPartyData.users.length; i++) {
-                      if (huntingPartyData.users[i].userId == currentUser._id) {
-                        userInList = true
-                        if (huntingPartyData.users[i].tosRead) {
-                          tosRead = huntingPartyData.users[i].tosRead
-                        }
-                        if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                    if (xhttp4.responseText === 'false') {
+                      console.log('did the right one')
+                      huntingPartyData = {
+                        companyId: company._id,
+                        users: [],
+                        searches: []
+                      }
+
+                      huntingPartyData.users.push({
+                        userId: currentUser._id,
+                        name: currentUser.firstName + ' ' + currentUser.lastName,
+                        email: currentUser.username,
+                        deviceId: null,
+                        regId: null,
+                        tosRead: 0
+                      })
+                      if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                        doTheUpdateAnyway = true
+                        huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
+                      }
+                      if (device !== undefined) {
+                        if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
                           doTheUpdateAnyway = true
-                          huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                          huntingPartyData.users[0].deviceId = device.uuid
                         }
-                        if (device !== undefined) {
-                          if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                      }
+                      var xhttpNewHPD = new XMLHttpRequest();
+                      xhttpNewHPD.onload = function() {
+                        if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
+                          huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
+                          console.log('CREATED')
+                          document.getElementById("loading").classList.add('inactive');
+                          document.getElementById("tos-popup").classList.remove('inactive');
+                        }
+                      };
+                      var url = "https://efassembly.com:4432/huntingpartydata/add";
+                      xhttpNewHPD.open("POST", url, true);
+                      xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                      xhttpNewHPD.send(JSON.stringify(huntingPartyData));
+                    } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
+                      huntingPartyData = JSON.parse(xhttp4.responseText);
+                      console.log(huntingPartyData)
+                      var userInList = false
+                      if (!huntingPartyData.users) {
+                        huntingPartyData.users = []
+                      }
+                      var doTheUpdateAnyway = false
+                      for (i = 0; i < huntingPartyData.users.length; i++) {
+                        if (huntingPartyData.users[i].userId == currentUser._id) {
+                          userInList = true
+                          if (huntingPartyData.users[i].tosRead) {
+                            tosRead = huntingPartyData.users[i].tosRead
+                          }
+                          if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
                             doTheUpdateAnyway = true
-                            huntingPartyData.users[i].deviceId = device.uuid
+                            huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                          }
+                          if (device !== undefined) {
+                            if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                              doTheUpdateAnyway = true
+                              huntingPartyData.users[i].deviceId = device.uuid
+                            }
                           }
                         }
                       }
-                    }
-                    if (device !== undefined) {
-                      if (!userInList || doTheUpdateAnyway) {
-                        console.log('not in the list')
-                        if (!userInList) {
-                          huntingPartyData.users.push({
-                            userId: currentUser._id,
-                            name: currentUser.firstName + ' ' + currentUser.lastName,
-                            email: currentUser.username,
-                            deviceId: device.uuid,
-                            regId: localStorage.getItem('registrationId'),
-                            tosRead: 0
-                          })
-                          tosRead = 0
-                        }
-                        var xhttpHPD = new XMLHttpRequest();
-                        xhttpHPD.onreadystatechange = function() {
-                          if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                            huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                      if (device !== undefined) {
+                        if (!userInList || doTheUpdateAnyway) {
+                          console.log('not in the list')
+                          if (!userInList) {
+                            huntingPartyData.users.push({
+                              userId: currentUser._id,
+                              name: currentUser.firstName + ' ' + currentUser.lastName,
+                              email: currentUser.username,
+                              deviceId: device.uuid,
+                              regId: localStorage.getItem('registrationId'),
+                              tosRead: 0
+                            })
+                            tosRead = 0
                           }
+                          var xhttpHPD = new XMLHttpRequest();
+                          xhttpHPD.onreadystatechange = function() {
+                            if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                              huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                            }
+                          }
+                          xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                          xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                          xhttpHPD.send(JSON.stringify(huntingPartyData));
                         }
-                        xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
-                        xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                        xhttpHPD.send(JSON.stringify(huntingPartyData));
                       }
-                    }
-                    if (tosRead < 1) {
-                      document.getElementById("loading").classList.add('inactive');
-                      document.getElementById("tos-popup").classList.remove('inactive');
-                      // document.getElementById("login-register").classList.remove('inactive');
-                    } else {
-                      startMainApp()
+                      if (tosRead < 1) {
+                        document.getElementById("loading").classList.add('inactive');
+                        document.getElementById("tos-popup").classList.remove('inactive');
+                        // document.getElementById("login-register").classList.remove('inactive');
+                      } else {
+                        startMainApp()
+                      }
                     }
                   }
                 }
@@ -2220,7 +2343,7 @@ function toggleHamburgerMenu() {
       document.getElementById("login-register").classList.add('inactive');
       document.getElementById("fbo-popups").classList.remove('inactive');
       document.getElementById("error-popup").classList.remove('inactive');
-      document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br><br><br> (note: none of that is implemented yet, please just use a different account)"
+      document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br>"
       // document.getElementById("iconbar-3").classList.add('inactive');
       // document.getElementById("iconbar-4").classList.add('inactive');
       // document.getElementById("iconbar-5").classList.add('inactive');
@@ -2229,7 +2352,7 @@ function toggleHamburgerMenu() {
     // switchTab(2)
     // goToFbo(5, 0);
     // openPopups(2)
-
+    goToCompanyCreate()
     // expandData(2)
   }
 
