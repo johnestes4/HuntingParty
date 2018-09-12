@@ -1,61 +1,55 @@
 {
-  "prepare_queue": {
-    "installed": [],
-    "uninstalled": []
-  },
-  "config_munge": {
-    "files": {}
-  },
-  "installed_plugins": {
-    "cordova-plugin-battery-status": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
     },
-    "cordova-plugin-camera": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
+    "config_munge": {
+        "files": {}
     },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
+    "installed_plugins": {
+        "cordova-android-firebase-gradle-release": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-android-play-services-gradle-release": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-android-support-gradle-release": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-battery-status": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-firebase": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        }
     },
-    "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-plugin-geolocation": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-plugin-globalization": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "phonegap-plugin-push": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-plugin-uniquedeviceid": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-plugin-firebase": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-android-play-services-gradle-release": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-android-firebase-gradle-release": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-android-support-gradle-release": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.efassembly.huntingparty"
+        }
     }
-  },
-  "dependent_plugins": {
-    "cordova-plugin-compat": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.efassembly.huntingparty"
-    }
-  }
 }

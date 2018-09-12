@@ -80,35 +80,71 @@ under the License.
       <button type="button" name="button" onclick='logOut()'>cancel login (if it breaks)</button>
     </div>
   </div>
-  <div id="login-view" class="inactive">
+  <div id="login-register" class="inactive">
+    <div id="login-view">
+      <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
+        <h1>HUNTING PARTY</h1>
+      </div>
+      <div class="instructions">
+         <p>Please sign in...</p>
+      </div>
+      <p class="login-info">Username (Email Address)</p>
+      <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
+      <p class="login-info">Password</p>
+      <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
+      <div id="login-error-text" class="" style="color: red; font-size: 14px; padding-left: 5%; width: 100%;">
 
-    <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
-      <h1>HUNTING PARTY</h1>
+      </div>
+      <div class="" style="width: 100%; position: relative;">
+        <button class="center-absolute" type="button" name="button" onclick="login()">LOGIN</button>
+        <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button>
+      </div>
     </div>
-    <div class="instructions">
-<!--<<<<<<< HEAD-->
-       <!--<p>Log in with your EF Assembly account credentials.</p>-->
-    <!--</div>-->
-    <!--<input class="login-field" type="text" id="email" name="" value="" placeholder="Email">-->
-    <!--<input class="login-field" type="password" id="password" name="" value="" placeholder="Password">-->
-    <!--<div class="" style="width: 100%; position: relative;">-->
-      <!--<button class="center-absolute" type="button" name="button" onclick=login()>LOGIN</button>-->
-      <!--<button class="center-absolute button-alt" type="button" name="button" onclick=>JOIN</button>-->
-<!--=======-->
-      Please sign in...
+    <div id="register-view" class="inactive">
+      <div class="instructions">
+         <p>Join Hunting Party</p>
+      </div>
+      <!-- <p class="login-info">Username (Email Address)</p> -->
+      <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
+      <div id="register-alert-1" class="register-field-alert">
+
+      </div>
+      <!-- <p class="login-info">Password</p> -->
+      <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last name">
+      <div id="register-alert-2" class="register-field-alert">
+
+      </div>
+      <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Email address">
+      <div id="register-alert-3" class="register-field-alert">
+
+      </div>
+      <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
+      <div id="register-alert-4" class="register-field-alert">
+
+      </div>
+      <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
+      <div id="register-alert-5" class="register-field-alert">
+
+      </div>
+      <div class="" style="width: 100%; position: relative;">
+        <button class="center-absolute" type="button" name="button" onclick=register()>JOIN</button>
+        <div class="" style="width: 100%; text-align: center;">
+          <a href="#" onclick="goToLogin()">Go Back To Login</a>
+        </div>
+      </div>
     </div>
-    <p class="login-info">Username (Email Address)</p>
-    <input class="login-field" type="text" id="email" name="" value="john.estes@4s-llc.com" placeholder="">
-    <p class="login-info">Password</p>
-    <input class="login-field" type="password" id="password" name="" value="password" placeholder="">
-    <div class="" style="width: 100%; position: relative; margin-top: 2vh;">
-      <button class="center-absolute" type="button" name="button" onclick=login()>LOGIN</button>
-      <button class="center-absolute" type="button" name="button" onclick=login()>JOIN</button>
-<!--&gt;>>>>>> 853b86a49b21e032ca3cb7f6af37d3cdec737649-->
+    <div id="company-create-view" class="inactive">
+      <div class="instructions">
+         <p>You don't have a company</p>
+         <p>(in the future you'll be able to add a company to your account from here. right now it doesnt do anything. try to join a company from the assembly site)</p>
+      </div>
+      <p class="login-info">Company Name</p>
+      <input type="text" name="" value="" placeholder="">
     </div>
   </div>
+
   <div id="main-view" class="inactive">
-    <div id="sidebar-detector" class="">
+    <div id="sidebar-detector" class="" style="">
     </div>
     <div class="topbar">
       <div id="profile-circle" class="circle" style="top: 0px; left: 1px;" onclick="openProfileDropdown()">
@@ -200,29 +236,31 @@ under the License.
   <div class="" style="width: 100%; text-align: center; float: left; margin-bottom: 2vh;">
     NEWS
   </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/profile.png" alt="">
+  <div id="news-items" class="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/profile.png" alt="">
+      </div>
+      <p class="news-text">Person joined your company</p>
     </div>
-    <p class="news-text">Person joined your company</p>
-  </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/profile.png" alt="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/profile.png" alt="">
+      </div>
+      <p class="news-text">Person2 left a comment on an RFP</p>
     </div>
-    <p class="news-text">Person2 left a comment on an RFP</p>
-  </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/profile.png" alt="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/profile.png" alt="">
+      </div>
+      <p class="news-text">Person3 left a comment on an RFP</p>
     </div>
-    <p class="news-text">Person3 left a comment on an RFP</p>
-  </div>
-  <div class="news-item">
-    <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-      <img class="iconbar-img" src="./img/contact.png" alt="">
+    <div class="news-item">
+      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+        <img class="iconbar-img" src="./img/contact.png" alt="">
+      </div>
+      <p class="news-text">Person4: here is some comment text</p>
     </div>
-    <p class="news-text">Person4: here is some comment text</p>
   </div>
 </div>
 </div>
@@ -402,7 +440,7 @@ under the License.
 </div>
 <input id="search-name" type="text" name="" value="" placeholder="NAME THIS SEARCH" style="margin-bottom: 2vh; width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);">
 <button style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE & SEARCH</button>
-<button class="col-12" style="" type="button" name="button">Search without saving</button>
+<!-- <button class="col-12" style="" type="button" name="button">Search without saving</button> -->
 
 </div>
 </div>
@@ -412,15 +450,40 @@ under the License.
     <p id="error-text">Shit's broke</p>
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
   </div>
+  <div id="refer-popup" class="vote-popup inactive">
+    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
+      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+      <h3>REFER</h3>
+      <p>Who would you like to send this to?</p>
+
+      <div id="refer-users-list" class="refer-box">
+
+      </div>
+      <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+        <input id="refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+        <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addRefer()">Add</button>
+      </div>
+      <div id="popup-refer-list" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
+
+      </div>
+      <div class="col-12">
+        <button type="button" name="button" onclick="vote(fboIndex, true)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
+      </div>
+    </div>
+  </div>
   <div class="vote-popup yes-popup inactive">
     <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
       <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
       <!-- <p>You voted YES on this opportunity!</p>
       <p>Write a quick comment to let your team know why you approve.</p> -->
-      <h3>SENT TO:</h3>
-      <div id="yes-popup-users-list" class="">
+      <div id="yes-popup-text" class="">
+        <h3>YOU VOTED YES</h3>
+        <p>Anyone you want to notify?</p>
+      </div>
+      <div id="yes-popup-users-list" class="refer-box">
 
       </div>
+      <p>Add a comment:</p>
       <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
       <p>Anyone else you want to send it to? Add their emails here:</p>
       <div id="yes-refer" class="">
@@ -433,13 +496,13 @@ under the License.
         </div>
       </div>
       <div class="col-12">
-        <button type="button" name="button" onclick="vote(fboIndex, true)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
+        <button type="button" name="button" onclick="sendReferNotifications(), closePopups(false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
       </div>
     </div>
   </div>
   <div class="vote-popup no-popup inactive">
     <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-      <button class="popup-close" type="button" name="button" onclick="vote(fboIndex, false)">X</button>
+      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
       <p>Sounds like this one isn't right for you.</p>
       <p>Write a quick comment to explain to your team why you think that way.</p>
       <input type="text" id="no-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
@@ -500,7 +563,7 @@ under the License.
                 <p>Comments</p>
               </div>
               <div class="fbo-item-buttons">
-                <div class="medium-circle fbo-item-no-button" onclick="openPopups(false)">
+                <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
                   <div class="second-border">
                     <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
                   </div>
@@ -508,7 +571,7 @@ under the License.
                 <div class="fbo-item-time-button">
                   T
                 </div>
-                <div class="medium-circle fbo-item-yes-button" onclick="openPopups(true)">
+                <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
                   <div class="second-border">
                     <img class="circle-img-2" src="./img/thumbsup.png" alt="">
                   </div>
@@ -583,7 +646,7 @@ under the License.
       </div>
     </div>
     <div class="databar-inner" onclick='expandData(4)'>
-      COMMENTS AND QUESTIONS
+      COMMENTS
       <div class="info-circle">
         i
       </div>
@@ -619,19 +682,22 @@ under the License.
     <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
   </div>
   <div class="big-circle-box">
-    <div class="big-circle" id="big-no-button" onclick='openPopups(false)'>
+    <div class="big-circle" id="big-no-button" onclick='openPopups(1)'>
       <div class="second-border">
         <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
       </div>
     </div>
   </div>
-  <div class="big-circle-box">
-    <div class="big-circle" id="time-button" style="line-height: 0.5vh; font-size: 2vh; padding-top: 2.5vh;">
-      T
+  <div class="big-circle-box" style="">
+    <div class="big-circle" style="line-height: 0.5vh; font-size: 2.5vh; padding-top: 4.0vh; height: 9vh; width: 9vh;">
+      Refer
+    </div>
+    <div class="" id="time-button" style="width: 100%; height: 3vh; margin-top: 9vh;">
+
     </div>
   </div>
   <div class="big-circle-box">
-    <div class="big-circle" id="big-yes-button" onclick='openPopups(true)' style="font-size: 8vh;">
+    <div class="big-circle" id="big-yes-button" onclick='openPopups(0)' style="font-size: 8vh;">
       <div class="second-border">
         <img class="circle-img-2" src="./img/thumbsup.png" alt="">
       </div>
@@ -660,7 +726,12 @@ Comments
     <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
   <div class="data-box inactive" id="data-box-2">
-    <canvas id="myChart" width="400" height="400"></canvas>
+    <p style="text-align: center; margin: 0px;">Projected Value</p>
+    <canvas id="chart1" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
+    <p style="text-align: center; margin: 0px;">Projected Competition</p>
+    <canvas id="chart2" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
+    <p style="text-align: center; margin: 0px;">Value & Competition</p>
+    <canvas id="chart3" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
     <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
   <div class="data-box inactive" id="data-box-3" style="padding: 1vh;">
@@ -701,10 +772,6 @@ Comments
 <div class="data-box inactive" id="data-box-4">
   <div class="chat-box" id="chat-box">
 
-  </div>
-  <div class="chat-window">
-    <input class="" id="chat-input" type="text" placeholder="Comment" style="height: 100%; width: 75%; float: left; margin: 0px;">
-    <button style="height: 100%; width: 25%; float: left; margin: 0px;" onclick='sendComment()'>SEND</button>
   </div>
 </div>
 </div>
