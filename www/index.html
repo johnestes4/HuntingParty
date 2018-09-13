@@ -134,8 +134,24 @@ under the License.
       </div>
     </div>
     <div id="company-create-view" class="inactive">
-      <div id="company-confirm-view" class="">
-
+      <div id="company-confirm-view" class="inactive">
+        <div id="company-confirm-img-wrapper">
+          <img class="company-confirm-img" src="./img/profile.png" alt="">
+        </div>
+        <div id="company-confirm-desc" class="">
+          <h4>Company #1</h4>
+          <p>123 Place St, 12345</p>
+          <p>email@mail.zone</p>
+          <h5>Do you want to request to join?</h5>
+          <p>If you choose JOIN, we'll send a join request to Company #1. If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>
+        </div>
+        <button type="button" name="button" onclick="sendCompanyRequest()">Join</button>
+        <button type="button" name="button" onclick="leaveCompanyConfirm()">Back</button>
+      </div>
+      <div id="company-confirm-confirm-view" class="inactive">
+        <p>Your join request has been sent.</p>
+        <p>If the company accepts, you'll gain full access to their Hunting Party.</p>
+        <p>We'll notify you when they respond.</p>
       </div>
       <div id="company-search-view" class="">
         <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
@@ -150,8 +166,6 @@ under the License.
 
           </div>
         </div>
-
-
         <div class="instructions">
           <p>If not, you can be the one to start it! Fill in below:</p>
         </div>

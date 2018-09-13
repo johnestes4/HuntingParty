@@ -156,6 +156,42 @@
   filter: brightness(90%);
 }
 
+#company-confirm-view {
+
+}
+
+#company-confirm-img-wrapper {
+  width: 60vw;
+  height: 60vw;
+  margin-left: 20vw;
+  margin-top: 5vh;
+  border: 1px solid rgba(0,0,0,0.75);
+  position: relative;
+  overflow: hidden;
+  background: rgba(205,205,205,1);
+}
+
+.company-confirm-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  min-width: 7vh;
+  min-height: 7vh;
+  height: 100%;
+}
+
+#company-confirm-desc {
+  text-align: center;
+  margin-top: 2vh;
+}
+
+#company-confirm-desc p {
+  margin-bottom: 8px;
+}
+
 .invalid-input {
   background: rgba(255,50,50,0.5)!important;
   border-bottom: 2px solid rgba(172,0,0,0.5)!important;

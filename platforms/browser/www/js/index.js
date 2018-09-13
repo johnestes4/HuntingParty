@@ -1569,8 +1569,60 @@ function toggleHamburgerMenu() {
 
   function pickCompanyToJoin(index) {
     companyToJoin = allCompanies[index]
-    document.getElementById("company-confirm-view").classList.remove('inactive')
-    document.getElementById("company-search-view").classList.add('inactive')
+    console.log(companyToJoin)
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        companyToJoin = JSON.parse(xhttp.responseText);
+        document.getElementById("company-confirm-view").classList.remove('inactive')
+        document.getElementById("company-search-view").classList.add('inactive')
+        document.getElementById("company-confirm-img-wrapper").innerHTML = '<img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt="">'
+        document.getElementById("company-confirm-desc").innerHTML = '<h4>'+companyToJoin.name+'</h4>'+
+        '<p>'+companyToJoin.address+'</p>'+
+        '<p>'+companyToJoin.email+'</p>'+
+        '<h5>Do you want to request to join?</h5>'+
+        "<p>If you choose JOIN, we'll send a join request to "+companyToJoin.name+". If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>"
+      }
+    }
+    xhttp.open("GET", 'https://efassembly.com:4432/company/' + companyToJoin.id, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send();
+  }
+
+  function sendCompanyRequest() {
+    var platform = ''
+    if (device.platform.toLowerCase() === 'android') {
+      platform = 'android'
+    } else if (device.platform.toLowerCase() === 'ios') {
+      platform = 'ios'
+    }
+    if (localStorage.getItem('registrationId') && platform.length > 0) {
+      var request = {
+        userId: currentUser._id,
+        companyId: companyToJoin._id,
+        platform: platform,
+        registrationId: localStorage.getItem('registrationId')
+      }
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('did it i think')
+          document.getElementById("company-confirm-view").classList.add('inactive')
+          document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
+        }
+      }
+      xhttp.open("GET", 'https://efassembly.com:4432/message/huntingpartyrequest/', true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(newUser));
+    }
+  }
+
+  function leaveCompanyConfirm() {
+    document.getElementById("company-search").value = ''
+    companySearch()
+    document.getElementById("company-confirm-view").classList.add('inactive')
+    document.getElementById("company-search-view").classList.remove('inactive')
+    companyToJoin = null
   }
 
   function onPhoneChange(event) {
