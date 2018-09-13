@@ -1476,14 +1476,16 @@ function toggleHamburgerMenu() {
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-          document.getElementById("email-register").classList.add('invalid-input')
-          document.getElementById("register-alert-3").innerHTML = 'Email already in use'
-          emailValidated = false
-        } else if (xhttp.readyState == 4 && xhttp.status == 500) {
-          // document.getElementById("register-alert-3").innerHTML = 'its good'
-          document.getElementById("email-register").classList.remove('invalid-input')
-          document.getElementById("register-alert-3").innerHTML = ''
-          emailValidated = true
+          var res = JSON.parse(xhttp.responseText);
+          if (res.found) {
+            document.getElementById("email-register").classList.add('invalid-input')
+            document.getElementById("register-alert-3").innerHTML = 'Email already in use'
+            emailValidated = false
+          } else {
+            document.getElementById("email-register").classList.remove('invalid-input')
+            document.getElementById("register-alert-3").innerHTML = ''
+            emailValidated = true
+          }
         }
       }
       xhttp.open("get", 'https://efassembly.com:4432/profiles/email/' + email, true);
@@ -1569,11 +1571,11 @@ function toggleHamburgerMenu() {
 
   function pickCompanyToJoin(index) {
     companyToJoin = allCompanies[index]
-    console.log(companyToJoin)
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         companyToJoin = JSON.parse(xhttp.responseText);
+        console.log(companyToJoin)
         document.getElementById("company-confirm-view").classList.remove('inactive')
         document.getElementById("company-search-view").classList.add('inactive')
         document.getElementById("company-confirm-img-wrapper").innerHTML = '<img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt="">'
@@ -1591,30 +1593,35 @@ function toggleHamburgerMenu() {
 
   function sendCompanyRequest() {
     var platform = ''
-    if (device.platform.toLowerCase() === 'android') {
-      platform = 'android'
-    } else if (device.platform.toLowerCase() === 'ios') {
-      platform = 'ios'
-    }
-    if (localStorage.getItem('registrationId') && platform.length > 0) {
-      var request = {
-        userId: currentUser._id,
-        companyId: companyToJoin._id,
-        platform: platform,
-        registrationId: localStorage.getItem('registrationId')
+    if (device) {
+      if (device.platform.toLowerCase() === 'android') {
+        platform = 'android'
+      } else if (device.platform.toLowerCase() === 'ios') {
+        platform = 'ios'
       }
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('did it i think')
-          document.getElementById("company-confirm-view").classList.add('inactive')
-          document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
-        }
-      }
-      xhttp.open("GET", 'https://efassembly.com:4432/message/huntingpartyrequest/', true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(newUser));
     }
+    var regId = ''
+    if (localStorage.getItem('registrationId')) {
+      regId = localStorage.getItem('registrationId')
+    }
+    var request = {
+      userId: currentUser._id,
+      companyId: companyToJoin._id,
+      platform: platform,
+      registrationId: regId
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        console.log(JSON.parse(xhttp.responseText))
+        console.log('did it i think')
+        document.getElementById("company-confirm-view").classList.add('inactive')
+        document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
+      }
+    }
+    xhttp.open("POST", 'https://efassembly.com:4432/messages/huntingpartyrequest/', true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(request));
   }
 
   function leaveCompanyConfirm() {
@@ -2255,16 +2262,24 @@ function toggleHamburgerMenu() {
                           }
                         }
                       }
-                      if (device !== undefined) {
+                      if (device !== undefined || !userInList) {
                         if (!userInList || doTheUpdateAnyway) {
                           console.log('not in the list')
                           if (!userInList) {
+                            var deviceId = ''
+                            var regId = ''
+                            if (device) {
+                              deviceId = device.uuid
+                            }
+                            if (localStorage.getItem('registrationId')) {
+                              regId = localStorage.getItem('registrationId')
+                            }
                             huntingPartyData.users.push({
                               userId: currentUser._id,
                               name: currentUser.firstName + ' ' + currentUser.lastName,
                               email: currentUser.username,
-                              deviceId: device.uuid,
-                              regId: localStorage.getItem('registrationId'),
+                              deviceId: deviceId,
+                              regId: regId,
                               tosRead: 0
                             })
                             tosRead = 0
@@ -2318,6 +2333,7 @@ function toggleHamburgerMenu() {
   function acceptTOS() {
     for (i = 0; i < huntingPartyData.users.length; i++) {
       if (huntingPartyData.users[i].userId == currentUser._id) {
+        console.log('setting tos read')
         huntingPartyData.users[i].tosRead = 1
       }
     }
@@ -2404,7 +2420,7 @@ function toggleHamburgerMenu() {
     // switchTab(2)
     // goToFbo(5, 0);
     // openPopups(2)
-    goToCompanyCreate()
+    // goToCompanyCreate()
     // expandData(2)
   }
 
