@@ -2331,6 +2331,7 @@ function toggleHamburgerMenu() {
           if (xhttp2.readyState == 4 && xhttp2.status == 200) {
             // Typical action to be performed when the document is ready:
             company = JSON.parse(xhttp2.responseText);
+            document.getElementById("company-info").innerHTML = '<div class="company-info-img-wrapper"><img class="company-info-img" src="'+company.avatar+'"></div><p class="company-info-text">'+company.name+'</p>'
             // var xobj = new XMLHttpRequest();
             // xobj.overrideMimeType("application/json");
             // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file

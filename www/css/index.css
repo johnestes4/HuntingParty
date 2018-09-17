@@ -707,6 +707,30 @@ h1 {
   min-height: 80%;
   height: 80%;
 }
+.company-info-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  min-width: 80%;
+  min-height: 80%;
+  height: 80%;
+}
+
+.company-info-img-wrapper {
+  overflow: hidden;
+  width: 50vw;
+  height: 50vw;
+  margin-left: 25vw;
+  position: relative;
+}
+
+.company-info-text {
+  text-align: center;
+  font-size: 18px;
+}
 
 #sidebar-detector {
   /* pointer-events: none; */
