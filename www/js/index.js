@@ -422,6 +422,7 @@ var tosRead = 0
 var tutorialsOpen = false
 var allCompanies
 var companyToJoin
+var yourSearches = []
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -528,7 +529,7 @@ function openProfileDropdown() {
 
 function viewSearch() {
   if (document.getElementById("saved-searches").value > -1) {
-    searchTerms = huntingPartyData.searches[document.getElementById("saved-searches").value]
+    searchTerms = yourSearches[document.getElementById("saved-searches").value]
     // activeSavedSearch = document.getElementById("saved-searches").value
   } else {
     searchTerms = emptySearchTerms
@@ -547,9 +548,10 @@ function viewSearch() {
     a[i].checked = searchTerms.psc[i].value
   }
   a = document.getElementsByClassName('checkbox-agency')
+  console.log(searchTerms.agency)
   for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.agency[i].value
     if (searchTerms.agency[i]) {
-      a[i].checked = searchTerms.agency[i].value
     }
   }
   a = document.getElementsByClassName('checkbox-place')
@@ -567,9 +569,19 @@ function renderSavedSearches() {
   var html = '<option value="-1">---Create New Search---</option>'
   // '<option disabled selected value> -- select an option -- </option>'
   console.log(huntingPartyData.searches)
-  for (i = 0; i < huntingPartyData.searches.length; i++) {
-    html = html + '<option value="'+i+'">'+huntingPartyData.searches[i].name+'</option>'
+  for (i = 0; i < huntingPartyData.users.length; i++) {
+    if (huntingPartyData.users[i].userId == currentUser._id) {
+      if (huntingPartyData.users[i].searches) {
+        for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+          yourSearches.push(huntingPartyData.users[i].searches[i2])
+        }
+      }
+    }
   }
+  for (i = 0; i < yourSearches.length; i++) {
+    html = html + '<option value="'+i+'">'+yourSearches[i].name+'</option>'
+  }
+
   document.getElementById("saved-searches").innerHTML = html
 }
 
@@ -601,12 +613,12 @@ function searchFilter(which) {
         }
       } else if (!isNaN(string)) {
         if (searchTerms.naics[i].code.toString().includes(string) || searchTerms.naics[i].value == true) {
-          html = html + '<div class="" style="width: 100%; float: left;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          html = html + '<div class="" style="width: 100%; float: left; position: relative;">'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         }
       }
@@ -679,11 +691,11 @@ function searchFilter(which) {
               checked = ' checked'
             }
             html = html + '<div class="" style="width: 100%; float: left;">'+
-            '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+            '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
             '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box '+inactiveHtml2+'"></div>'
           } else {
             html = html + '<div class="inactive" style="width: 100%; float: left;">'+
-            '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+            '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
             '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box '+inactiveHtml2+'"></div>'
           }
         }
@@ -789,12 +801,12 @@ function renderSearch() {
       if (searchTerms.agency[i].subagencies) {
         for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
           html = html + '<div class="" style="width: 100%; float: left;">'+
-          '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+', '+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+          '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+', '+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
           '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box inactive">'
           if (searchTerms.agency[i].subagencies[subagencyIndex].offices) {
             for (officeIndex = 0; officeIndex < searchTerms.agency[i].subagencies[subagencyIndex].offices.length; officeIndex++) {
               html = html + '<div class="" style="width: 100%; float: left;">'+
-              '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'</span></div>'
+              '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'</span></div>'
             }
           }
           html = html + '</div>'
@@ -837,7 +849,7 @@ function calculateNaicsSearch(naicsItem, index, elem) {
       var html = '<div class="naics-subcategory-box subcategory-box">'
       for (i = 0; i < naicsItem.subcategories.length; i++) {
         html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'</span></div>'
+        '<input class="checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'
       }
       html = html + '</div>'
       elem.classList.add('naics-open');
@@ -1013,7 +1025,7 @@ function calculateSearch(elem) {
         }
       }
     }
-  } else if (elem.classList.contains('checkbox-agency')) {
+  } else if (elem.classList.contains('checkbox-agency') || elem.classList.contains('checkbox-subagency')) {
     console.log(elem.value + ' - ' + elem.checked)
     if (elem.value == searchTerms.agency[0].name) {
       for (i = 0; i < searchTerms.agency.length; i++) {
@@ -1114,14 +1126,19 @@ function saveSearchTerms() {
         searches: []
       }
       creatingNew = true
-    } else if (!huntingPartyData.users) {
-      huntingPartyData.users = []
     }
     terms.name = document.getElementById("search-name").value
     if (document.getElementById("saved-searches").value > -1) {
-      huntingPartyData.searches[document.getElementById("saved-searches").value] = terms
+      yourSearches[document.getElementById("saved-searches").value] = terms
     } else {
-      huntingPartyData.searches.push(terms)
+      for (i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].userId == currentUser._id) {
+          if (!huntingPartyData.users[i].searches) {
+            huntingPartyData.users[i].searches = []
+          }
+          huntingPartyData.users[i].searches.push(terms)
+        }
+      }
     }
     if (creatingNew) {
       var xhttp = new XMLHttpRequest();
@@ -2230,6 +2247,10 @@ function toggleHamburgerMenu() {
           var newString = '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
           chatString = chatString + newString
         }
+        if ((newFbo.voteYes.length + newFbo.voteNo.length) < 1) {
+          var newString = '<p class="comment">No comments yet</p>'
+          chatString = chatString + newString
+        }
 
         document.getElementById("chat-box").innerHTML = chatString;
         console.log('comments updated')
@@ -2331,7 +2352,7 @@ function toggleHamburgerMenu() {
           if (xhttp2.readyState == 4 && xhttp2.status == 200) {
             // Typical action to be performed when the document is ready:
             company = JSON.parse(xhttp2.responseText);
-            document.getElementById("company-info").innerHTML = '<div class="company-info-img-wrapper"><img class="company-info-img" src="'+company.avatar+'"></div><p class="company-info-text">'+company.name+'</p>'
+            document.getElementById("company-info").innerHTML = '<div class="company-info-img-wrapper"><div class="second-border" style="border: none;"><img class="company-info-img" src="'+company.avatar+'"></div></div><div style="height: 25vh;"></div><p class="company-info-text">'+company.name+'</p>'
             // var xobj = new XMLHttpRequest();
             // xobj.overrideMimeType("application/json");
             // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file
