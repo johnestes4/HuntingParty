@@ -177,6 +177,7 @@ under the License.
         <input id="new-company-city" type="text" name="" value="" placeholder="City">
         <input id="new-company-state" type="text" name="" value="" placeholder="State">
         <input id="new-company-zip" type="number" name="" value="" placeholder="Zip">
+        <button type="button" name="button" onclick="createCompany()">Create</button>
       </div>
     </div>
   </div>
@@ -239,7 +240,7 @@ under the License.
   </div>
 </div>
 <input id="reg-id" style="width: 100%;" class="inactive"></input>
-<div id="todo-block">
+<div id="todo-block" class="inactive">
   <div class="news-tab" style="width: 55%; margin-left: 15%; margin-right: 5%; line-height: 12vh;">
     TO DO
   </div>
@@ -681,20 +682,11 @@ under the License.
       </div>
     </div>
     <div class="databar-inner" onclick='expandData(3)'>
-      REFER
-      <div class="info-circle">
-        i
-      </div>
-      <div class="arrow" id="arrow-3">
-        ▼ <!-- ▲ -->
-      </div>
-    </div>
-    <div class="databar-inner" onclick='expandData(4)'>
       COMMENTS
       <div class="info-circle">
         i
       </div>
-      <div class="arrow" id="arrow-4">
+      <div class="arrow" id="arrow-3">
         ▼ <!-- ▲ -->
       </div>
     </div>
@@ -778,42 +770,7 @@ Comments
     <canvas id="chart3" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
     <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
-  <div class="data-box inactive" id="data-box-3" style="padding: 1vh;">
-    <div class="search-box" style="padding-bottom: 1vh;">
-      <div class="col-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
-        <p>SET-ASIDE</p>
-      </div>
-      <div class="col-12 search-sub-box">
-        <div class="" style="width: 100%; float: left;">
-          <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 20px;"> Dummy Text</span>
-        </div>
-      </div>
-    </div>
-    <div class="" style="height: 5vh; width: 100%; margin-bottom: 2vh;">
-      <input type="text" name="" value="" placeholder="Other email" style="float: left; width: 80%; height: 5vh; margin: 0px;">
-      <button type="button" name="button" style="float: left; width: 20%; height: 5vh; margin: 0px;">ADD</button>
-    </div>
-    <div class="search-box col-12" style="padding-bottom: 1vh;">
-      <div class="col-8" style="height: 20px; float: left; padding: 0px 15px 0px 15px; font-weight: bold;">
-        <p>INVITE</p>
-      </div>
-      <div class="col-4" style="height: 20px; float: left; padding: 0px 15px 0px 15px; font-weight: bold;">
-        <p>Invitations</p>
-      </div>
-      <div class="col-8" style="float: left;">
-        Mr. User
-      </div>
-      <div class="col-4" style="float: left;">
-        1
-      </div>
-      <div class="col-12 search-sub-box">
-        <!-- <div class="" style="width: 100%; float: left;">
-        <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 20px;"> Dummy Text</span>
-      </div> -->
-    </div>
-  </div>
-</div>
-<div class="data-box inactive" id="data-box-4">
+<div class="data-box inactive" id="data-box-3">
   <div class="chat-box" id="chat-box">
 
   </div>

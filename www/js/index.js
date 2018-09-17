@@ -1,3 +1,6 @@
+var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'http://18.218.170.246:4432'
+
 var activeTab = 0
 var dataExpanded = 0
 var company = null
@@ -335,6 +338,86 @@ var emptySearchTerms = {
 }
 var yesRefer = []
 var naics = []
+var psc = [
+  "10 Weapons",
+  "11 Nuclear ordnance",
+  "12 Fire control equipment",
+  "13 Ammunition & explosives",
+  "14 Guided missiles",
+  "15 Aircraft & airframe structural components",
+  "16 Aircraft components & accessories",
+  "17 Aircraft launching, landing & ground handling equipment",
+  "18 Space vehicles",
+  "19 Ships, small craft, pontoons & floating docks",
+  "20 Ship and marine equipment",
+  "22 Railway equipment",
+  "23 Ground effects vehicles, motor vehicles, trailers & cycles",
+  "24 Tractors",
+  "25 Vehicular equipment components",
+  "26 Tires and tubes",
+  "28 Engines, turbines & components",
+  "29 Engine accessories",
+  "30 Mechanical power transmission equipment",
+  "31 Bearings",
+  "32 Woodworking machinery and equipment",
+  "34 Metalworking machinery",
+  "35 Service and trade equipment",
+  "36 Special industry machinery",
+  "37 Agricultural machinery & equipment",
+  "38 Construction, mining, excavating & highway maintenance equipment",
+  "39 Materials handling equipment",
+  "40 Rope, cable, chain & fittings",
+  "41 Refrigeration, air-conditioning & air circulating equipment",
+  "42 Fire fighting, rescue & safety equipment",
+  "43 Pumps & compressors",
+  "44 Furnace, steam plant & drying equipment; & nuclear reactors",
+  "45 Plumbing, heating, & sanitation equipment",
+  "46 Water purification & sewage treatment equipment",
+  "47 Pipe, tubing, hose & fittings",
+  "48 Valves",
+  "49 Maintenance & repair shop equipment",
+  "51 Hand tools",
+  "52 Measuring tools",
+  "53 Hardware & abrasives",
+  "54 Prefabricated structures and scaffolding",
+  "55 Lumber, millwork, plywood & veneer",
+  "56 Construction & building materials",
+  "58 Communication, detection, & coherent radiation equipment",
+  "59 Electrical and electronic equipment components",
+  "60 Fiber optics materials, components, assemblies & accessories",
+  "61 Electric wire & power & distribution equipment",
+  "62 Lighting fixtures & lamps",
+  "63 Alarm, signal & security detection equipment",
+  "65 Medical, dental & veterinary equipment & supplies",
+  "66 Instruments & laboratory equipment",
+  "67 Photographic equipment",
+  "68 Chemicals & chemical products",
+  "69 Training aids & devices",
+  "70 General purpose information technology equipment",
+  "71 Furniture",
+  "72 Household & commercial furnishings & appliances",
+  "73 Food preparation and serving equipment",
+  "74 Office machines, text processing systems & visible record equipment",
+  "75 Office supplies and devices",
+  "76 Books, maps & other publications",
+  "77 Musical instruments, phonographs & home-type radios",
+  "78 Recreational & athletic equipment",
+  "79 Cleaning equipment and supplies",
+  "80 Brushes, paints, sealers & adhesives",
+  "81 Containers, packaging, & packing supplies",
+  "83 Textiles, leather, furs, apparel & shoe findings, tents & flags",
+  "84 Clothing, individual equipment & insignia",
+  "85 Toiletries",
+  "87 Agricultural supplies",
+  "88 Live animals",
+  "89 Subsistence",
+  "91 Fuels, lubricants, oils & waxes",
+  "93 Nonmetallic fabricated materials",
+  "94 Nonmetallic crude materials",
+  "95 Metal bars, sheets & shapes",
+  "96 Ores, minerals & their primary products",
+  "99 Miscellaneous"
+]
 var tosRead = 0
 var tutorialsOpen = false
 var allCompanies
@@ -377,7 +460,7 @@ function login() {
                 // console.log(currentUser)
               }
             };
-            xhttp3.open("GET", "https://efassembly.com:4432/profiles/" + res.id, true);
+            xhttp3.open("GET", apiUrl+"/profiles/" + res.id, true);
             xhttp3.setRequestHeader("Content-type", "application/json");
             xhttp3.send();
           } else if (xhttp2.readyState == 4 && xhttp2.status == 400) {
@@ -394,7 +477,7 @@ function login() {
           email: username,
           password: password
         }
-        xhttp2.open("POST", "https://efassembly.com:4432/auth/login/" + res.id, true);
+        xhttp2.open("POST", apiUrl+"/auth/login/" + res.id, true);
         xhttp2.setRequestHeader("Content-type", "application/json");
         xhttp2.send(JSON.stringify(body));
       } else {
@@ -407,7 +490,7 @@ function login() {
     }
   };
   console.log(username)
-  xhttp.open("GET", "https://efassembly.com:4432/profiles/email/" + username, true);
+  xhttp.open("GET", apiUrl+"/profiles/email/" + username, true);
   xhttp.setRequestHeader("Content-type", "application/json");
   xhttp.send();
 }
@@ -509,17 +592,17 @@ function searchFilter(which) {
       } else if (isNaN(string)) {
         if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
           html = html + '<div class="" style="width: 100%; float: left;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         }
       } else if (!isNaN(string)) {
         if (searchTerms.naics[i].code.toString().includes(string) || searchTerms.naics[i].value == true) {
           html = html + '<div class="" style="width: 100%; float: left;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
+          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
@@ -670,7 +753,8 @@ function renderSearch() {
       '</div>'
     } else {
       html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], \'naics-subcategory-box-'+i+'\', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'</div>'+
+      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; position: relative; width: calc(100% - 15px); float: left;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+
+      searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div>'+
       '<div id="naics-subcategory-box-'+i+'"></div>'
     }
     html = html + '</div>'
@@ -746,7 +830,8 @@ function renderSearch() {
   document.getElementById("search-box-setaside").innerHTML = html
 }
 
-function calculateNaicsSearch(naicsItem, divId, elem) {
+function calculateNaicsSearch(naicsItem, index, elem) {
+  var divId = 'naics-subcategory-box-'+index
   if (!elem.classList.contains('naics-open')) {
     if (naicsItem.subcategories) {
       var html = '<div class="naics-subcategory-box subcategory-box">'
@@ -756,10 +841,12 @@ function calculateNaicsSearch(naicsItem, divId, elem) {
       }
       html = html + '</div>'
       elem.classList.add('naics-open');
+      document.getElementById('naics-arrow-'+index).innerHTML = '▲'
       document.getElementById(divId).innerHTML = html
     }
   } else {
     document.getElementById(divId).innerHTML = ''
+    document.getElementById('naics-arrow-'+index).innerHTML = '▼'
     elem.classList.remove('naics-open');
   }
 }
@@ -1046,7 +1133,7 @@ function saveSearchTerms() {
           document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
         }
       };
-      var url = "https://efassembly.com:4432/huntingpartydata/add";
+      var url = apiUrl+"/huntingpartydata/add";
       xhttp.open("POST", url, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(huntingPartyData));
@@ -1063,7 +1150,7 @@ function saveSearchTerms() {
           document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been updated!'
         }
       };
-      var url = "https://efassembly.com:4432/huntingpartydata/" + id;
+      var url = apiUrl+"/huntingpartydata/" + id;
       xhttp.open("PUT", url, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(huntingPartyData));
@@ -1488,7 +1575,7 @@ function toggleHamburgerMenu() {
           }
         }
       }
-      xhttp.open("get", 'https://efassembly.com:4432/profiles/email/' + email, true);
+      xhttp.open("get", apiUrl+'/profiles/email/' + email, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send();
     }
@@ -1548,7 +1635,7 @@ function toggleHamburgerMenu() {
         console.log('got em')
       }
     }
-    xhttp.open("GET", 'https://efassembly.com:4432/company/light', true);
+    xhttp.open("GET", apiUrl+'/company/light', true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send();
   }
@@ -1586,7 +1673,7 @@ function toggleHamburgerMenu() {
         "<p>If you choose JOIN, we'll send a join request to "+companyToJoin.name+". If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>"
       }
     }
-    xhttp.open("GET", 'https://efassembly.com:4432/company/' + companyToJoin.id, true);
+    xhttp.open("GET", apiUrl+'/company/' + companyToJoin.id, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send();
   }
@@ -1619,7 +1706,7 @@ function toggleHamburgerMenu() {
         document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
       }
     }
-    xhttp.open("POST", 'https://efassembly.com:4432/messages/huntingpartyrequest/', true);
+    xhttp.open("POST", apiUrl+'/messages/huntingpartyrequest/', true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(request));
   }
@@ -1693,13 +1780,79 @@ function toggleHamburgerMenu() {
           login()
         }
       }
-      xhttp.open("POST", 'https://efassembly.com:4432/register/', true);
+      xhttp.open("POST", apiUrl+'/register/', true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(newUser));
     } else {
       checkEmail()
       checkPasswords()
     }
+  }
+
+  function createCompany() {
+    if (
+      document.getElementById("new-company-name").value.length > 0 &&
+      document.getElementById("new-company-email").value.length > 0 &&
+      document.getElementById("new-company-phone").value.length == 14 &&
+      document.getElementById("new-company-address").value.length > 0 &&
+      document.getElementById("new-company-city").value.length > 0 &&
+      document.getElementById("new-company-state").value.length > 0 &&
+      document.getElementById("new-company-zip").value.length > 0
+    ) {
+      var newCompany = {
+        name: document.getElementById("new-company-name").value,
+        email: document.getElementById("new-company-email").value,
+        avatar: '',
+        contactNumber: document.getElementById("new-company-phone").value,
+        address: document.getElementById("new-company-address").value,
+        city: document.getElementById("new-company-city").value,
+        state: document.getElementById("new-company-state").value,
+        zip:  document.getElementById("new-company-zip").value
+      }
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          var company2 = JSON.parse(xhttp.responseText);
+          var xhttp2 = new XMLHttpRequest();
+          xhttp2.onload = function() {
+            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+              var role = JSON.parse(xhttp2.responseText);
+              var currentDate = (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
+              var request = {
+                "userProfile": currentUser._id,
+                "company": company2._id,
+                "startDate": currentDate,
+                "endDate": currentDate,
+                "stillAffiliated": true,
+                "role": role._id
+              }
+              var xhttp3 = new XMLHttpRequest();
+              xhttp3.onload = function() {
+                if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                  getTheData()
+                }
+              }
+              xhttp3.open("POST", apiUrl+'/companyuserproxy/add/', true);
+              xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
+              xhttp3.setRequestHeader('Authorization','application/json; charset=utf-8');
+              xhttp3.setRequestHeader('id',currentUser._id);
+              xhttp3.send(JSON.stringify(request));
+            }
+          }
+          xhttp2.open("GET", apiUrl+'/role/title/', true);
+          xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+          xhttp2.send("admin");
+        }
+      }
+      xhttp.open("POST", apiUrl+'/company/add/', true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(newCompany));
+    } else {
+      console.log(document.getElementById("new-company-phone").value.length)
+      console.log('nah')
+    }
+
   }
 
 
@@ -1723,7 +1876,7 @@ function toggleHamburgerMenu() {
         document.getElementById("lower-" + (i+1).toString()).classList.add('inactive')
       }
     }
-    for (i = 1; i <=4; i++) {
+    for (i = 1; i <=3; i++) {
       if (!tabIds[num].allowed.includes(i)) {
         document.getElementById("data-box-" + i.toString()).classList.add('data-box-inactive');
         document.getElementById("arrow-" + i.toString()).innerHTML = "▼";
@@ -1928,7 +2081,7 @@ function toggleHamburgerMenu() {
         console.log('status: ' + xhttp.status)
       }
     }
-    xhttp.open("POST", "https://efassembly.com:4432/huntingpartydata/notification/", true);
+    xhttp.open("POST", apiUrl+"/huntingpartydata/notification/", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(notification));
   }
@@ -2029,7 +2182,7 @@ function toggleHamburgerMenu() {
         }
       }
     };
-    var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
+    var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
     xhttp.open("PUT", url, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(req));
@@ -2082,7 +2235,7 @@ function toggleHamburgerMenu() {
         console.log('comments updated')
       }
     };
-    xhttp2.open("GET", "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id, true);
+    xhttp2.open("GET", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
     xhttp2.setRequestHeader("Content-type", "application/json");
     xhttp2.send();
   }
@@ -2114,7 +2267,7 @@ function toggleHamburgerMenu() {
         }
       };
 
-      var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbos[fboIndex]._id;
+      var url = apiUrl+"/fbocompanyproxy/" + fbos[fboIndex]._id;
 
       xhttp3.open("PUT", url, true);
       xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
@@ -2148,7 +2301,6 @@ function toggleHamburgerMenu() {
     var titles = [
       'ABSTRACT',
       'DATA',
-      'REFER',
       'COMMENTS'
     ]
     document.getElementById("databar-title").innerHTML = titles[num-1]
@@ -2232,7 +2384,7 @@ function toggleHamburgerMenu() {
                           document.getElementById("tos-popup").classList.remove('inactive');
                         }
                       };
-                      var url = "https://efassembly.com:4432/huntingpartydata/add";
+                      var url = apiUrl+"/huntingpartydata/add";
                       xhttpNewHPD.open("POST", url, true);
                       xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
                       xhttpNewHPD.send(JSON.stringify(huntingPartyData));
@@ -2290,7 +2442,7 @@ function toggleHamburgerMenu() {
                               huntingPartyData = JSON.parse(xhttpHPD.responseText);
                             }
                           }
-                          xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                          xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
                           xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
                           xhttpHPD.send(JSON.stringify(huntingPartyData));
                         }
@@ -2305,11 +2457,11 @@ function toggleHamburgerMenu() {
                     }
                   }
                 }
-                xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
+                xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
                 xhttp4.send();
               }
             }
-            xhttp3.open("GET", "https://efassembly.com:4432/fbo/getsearchterms/", true);
+            xhttp3.open("GET", apiUrl+"/fbo/getsearchterms/", true);
             xhttp3.send();
             //   }
             // };
@@ -2318,7 +2470,7 @@ function toggleHamburgerMenu() {
         };
         if (currentUser.companyUserProxies.length > 0) {
           var companyId = currentUser.companyUserProxies[0].company._id
-          xhttp2.open("GET", "https://efassembly.com:4432/company/" + companyId, true);
+          xhttp2.open("GET", apiUrl+"/company/" + companyId, true);
           xhttp2.send();
         } else {
           goToCompanyCreate()
@@ -2326,7 +2478,7 @@ function toggleHamburgerMenu() {
         }
       }
     };
-    xhttp.open("GET", "https://efassembly.com:4432/profiles/" + id, true);
+    xhttp.open("GET", apiUrl+"/profiles/" + id, true);
     xhttp.send();
   }
 
@@ -2345,7 +2497,7 @@ function toggleHamburgerMenu() {
         startMainApp()
       }
     }
-    xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+    xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
     xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttpHPD.send(JSON.stringify(huntingPartyData));
   }
@@ -2359,7 +2511,7 @@ function toggleHamburgerMenu() {
         renderNews()
       }
     }
-    xhttp.open("PUT", "https://efassembly.com:4432/huntingpartydata/news/" + huntingPartyData._id, true);
+    xhttp.open("PUT", apiUrl+"/huntingpartydata/news/" + huntingPartyData._id, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(newsItem));
   }
@@ -2694,7 +2846,7 @@ function toggleHamburgerMenu() {
             });
           }
         }
-        xhttp.open("POST", "https://efassembly.com:4432/fpds/query/", true);
+        xhttp.open("POST", apiUrl+"/fpds/query/", true);
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify(query));
       }

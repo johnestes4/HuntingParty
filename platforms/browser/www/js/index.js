@@ -1,3 +1,6 @@
+var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'http://18.218.170.246:4432'
+
 var activeTab = 0
 var dataExpanded = 0
 var company = null
@@ -377,7 +380,7 @@ function login() {
                 // console.log(currentUser)
               }
             };
-            xhttp3.open("GET", "https://efassembly.com:4432/profiles/" + res.id, true);
+            xhttp3.open("GET", apiUrl+"/profiles/" + res.id, true);
             xhttp3.setRequestHeader("Content-type", "application/json");
             xhttp3.send();
           } else if (xhttp2.readyState == 4 && xhttp2.status == 400) {
@@ -394,7 +397,7 @@ function login() {
           email: username,
           password: password
         }
-        xhttp2.open("POST", "https://efassembly.com:4432/auth/login/" + res.id, true);
+        xhttp2.open("POST", apiUrl+"/auth/login/" + res.id, true);
         xhttp2.setRequestHeader("Content-type", "application/json");
         xhttp2.send(JSON.stringify(body));
       } else {
@@ -407,7 +410,7 @@ function login() {
     }
   };
   console.log(username)
-  xhttp.open("GET", "https://efassembly.com:4432/profiles/email/" + username, true);
+  xhttp.open("GET", apiUrl+"/profiles/email/" + username, true);
   xhttp.setRequestHeader("Content-type", "application/json");
   xhttp.send();
 }
@@ -1046,7 +1049,7 @@ function saveSearchTerms() {
           document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
         }
       };
-      var url = "https://efassembly.com:4432/huntingpartydata/add";
+      var url = apiUrl+"/huntingpartydata/add";
       xhttp.open("POST", url, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(huntingPartyData));
@@ -1063,7 +1066,7 @@ function saveSearchTerms() {
           document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been updated!'
         }
       };
-      var url = "https://efassembly.com:4432/huntingpartydata/" + id;
+      var url = apiUrl+"/huntingpartydata/" + id;
       xhttp.open("PUT", url, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(huntingPartyData));
@@ -1488,7 +1491,7 @@ function toggleHamburgerMenu() {
           }
         }
       }
-      xhttp.open("get", 'https://efassembly.com:4432/profiles/email/' + email, true);
+      xhttp.open("get", apiUrl+'/profiles/email/' + email, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send();
     }
@@ -1548,7 +1551,7 @@ function toggleHamburgerMenu() {
         console.log('got em')
       }
     }
-    xhttp.open("GET", 'https://efassembly.com:4432/company/light', true);
+    xhttp.open("GET", apiUrl+'/company/light', true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send();
   }
@@ -1586,7 +1589,7 @@ function toggleHamburgerMenu() {
         "<p>If you choose JOIN, we'll send a join request to "+companyToJoin.name+". If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>"
       }
     }
-    xhttp.open("GET", 'https://efassembly.com:4432/company/' + companyToJoin.id, true);
+    xhttp.open("GET", apiUrl+'/company/' + companyToJoin.id, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send();
   }
@@ -1619,7 +1622,7 @@ function toggleHamburgerMenu() {
         document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
       }
     }
-    xhttp.open("POST", 'https://efassembly.com:4432/messages/huntingpartyrequest/', true);
+    xhttp.open("POST", apiUrl+'/messages/huntingpartyrequest/', true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(request));
   }
@@ -1693,7 +1696,7 @@ function toggleHamburgerMenu() {
           login()
         }
       }
-      xhttp.open("POST", 'https://efassembly.com:4432/register/', true);
+      xhttp.open("POST", apiUrl+'/register/', true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(newUser));
     } else {
@@ -1723,7 +1726,7 @@ function toggleHamburgerMenu() {
         document.getElementById("lower-" + (i+1).toString()).classList.add('inactive')
       }
     }
-    for (i = 1; i <=4; i++) {
+    for (i = 1; i <=3; i++) {
       if (!tabIds[num].allowed.includes(i)) {
         document.getElementById("data-box-" + i.toString()).classList.add('data-box-inactive');
         document.getElementById("arrow-" + i.toString()).innerHTML = "▼";
@@ -1928,7 +1931,7 @@ function toggleHamburgerMenu() {
         console.log('status: ' + xhttp.status)
       }
     }
-    xhttp.open("POST", "https://efassembly.com:4432/huntingpartydata/notification/", true);
+    xhttp.open("POST", apiUrl+"/huntingpartydata/notification/", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(notification));
   }
@@ -2029,7 +2032,7 @@ function toggleHamburgerMenu() {
         }
       }
     };
-    var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id;
+    var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
     xhttp.open("PUT", url, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(req));
@@ -2082,7 +2085,7 @@ function toggleHamburgerMenu() {
         console.log('comments updated')
       }
     };
-    xhttp2.open("GET", "https://efassembly.com:4432/fbocompanyproxy/" + fbo._id, true);
+    xhttp2.open("GET", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
     xhttp2.setRequestHeader("Content-type", "application/json");
     xhttp2.send();
   }
@@ -2114,7 +2117,7 @@ function toggleHamburgerMenu() {
         }
       };
 
-      var url = "https://efassembly.com:4432/fbocompanyproxy/" + fbos[fboIndex]._id;
+      var url = apiUrl+"/fbocompanyproxy/" + fbos[fboIndex]._id;
 
       xhttp3.open("PUT", url, true);
       xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
@@ -2148,7 +2151,6 @@ function toggleHamburgerMenu() {
     var titles = [
       'ABSTRACT',
       'DATA',
-      'REFER',
       'COMMENTS'
     ]
     document.getElementById("databar-title").innerHTML = titles[num-1]
@@ -2232,7 +2234,7 @@ function toggleHamburgerMenu() {
                           document.getElementById("tos-popup").classList.remove('inactive');
                         }
                       };
-                      var url = "https://efassembly.com:4432/huntingpartydata/add";
+                      var url = apiUrl+"/huntingpartydata/add";
                       xhttpNewHPD.open("POST", url, true);
                       xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
                       xhttpNewHPD.send(JSON.stringify(huntingPartyData));
@@ -2290,7 +2292,7 @@ function toggleHamburgerMenu() {
                               huntingPartyData = JSON.parse(xhttpHPD.responseText);
                             }
                           }
-                          xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+                          xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
                           xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
                           xhttpHPD.send(JSON.stringify(huntingPartyData));
                         }
@@ -2305,11 +2307,11 @@ function toggleHamburgerMenu() {
                     }
                   }
                 }
-                xhttp4.open("GET", "https://efassembly.com:4432/huntingpartydata/company/" + company._id, true);
+                xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
                 xhttp4.send();
               }
             }
-            xhttp3.open("GET", "https://efassembly.com:4432/fbo/getsearchterms/", true);
+            xhttp3.open("GET", apiUrl+"/fbo/getsearchterms/", true);
             xhttp3.send();
             //   }
             // };
@@ -2318,7 +2320,7 @@ function toggleHamburgerMenu() {
         };
         if (currentUser.companyUserProxies.length > 0) {
           var companyId = currentUser.companyUserProxies[0].company._id
-          xhttp2.open("GET", "https://efassembly.com:4432/company/" + companyId, true);
+          xhttp2.open("GET", apiUrl+"/company/" + companyId, true);
           xhttp2.send();
         } else {
           goToCompanyCreate()
@@ -2326,7 +2328,7 @@ function toggleHamburgerMenu() {
         }
       }
     };
-    xhttp.open("GET", "https://efassembly.com:4432/profiles/" + id, true);
+    xhttp.open("GET", apiUrl+"/profiles/" + id, true);
     xhttp.send();
   }
 
@@ -2345,7 +2347,7 @@ function toggleHamburgerMenu() {
         startMainApp()
       }
     }
-    xhttpHPD.open("PUT", "https://efassembly.com:4432/huntingpartydata/" + huntingPartyData._id, true);
+    xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
     xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttpHPD.send(JSON.stringify(huntingPartyData));
   }
@@ -2359,7 +2361,7 @@ function toggleHamburgerMenu() {
         renderNews()
       }
     }
-    xhttp.open("PUT", "https://efassembly.com:4432/huntingpartydata/news/" + huntingPartyData._id, true);
+    xhttp.open("PUT", apiUrl+"/huntingpartydata/news/" + huntingPartyData._id, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(newsItem));
   }
@@ -2694,7 +2696,7 @@ function toggleHamburgerMenu() {
             });
           }
         }
-        xhttp.open("POST", "https://efassembly.com:4432/fpds/query/", true);
+        xhttp.open("POST", apiUrl+"/fpds/query/", true);
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify(query));
       }
