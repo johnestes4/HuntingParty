@@ -917,6 +917,15 @@ h1 {
   height: 100%;
 }
 
+.highlighted {
+  background: yellow;
+  color: black;
+}
+
+.grayed {
+  color: rgba(255,255,255,0.25);
+}
+
 .iconbar {
   position: relative;
   background: rgba(78,96,136,1);
