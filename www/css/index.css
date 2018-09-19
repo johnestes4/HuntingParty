@@ -260,16 +260,6 @@ h1, .instructions{
   color: black;
 }
 
-#news-view {
-
-}
-
-#news-items {
-  height: 40vh;
-  width: 100%;
-  overflow-y: auto;
-}
-
 .body-block {
   border-top: 1px solid rgba(255,255,255,0.1);
   /* border-bottom: 1px solid rgba(0,0,0,0.75); */
@@ -279,27 +269,12 @@ h1, .instructions{
   width: 100%;
 }
 
-.news-tab {
-  float: left;
-  text-align: center;
-  height: 12vh;
-  border-bottom: .5vh solid rgba(255,198,0,1);
-}
-
-#news-block {
-  float: left;
-  position: relative;
-  margin-top: 2vh;
-  width: 100%;
-  height: auto;
-}
 #todo-block {
   float: left;
   position: relative;
   width: 100%;
   height: auto;
 }
-
 
 .todo-item {
   background: rgba(136, 78, 78, 1);
@@ -337,12 +312,67 @@ h1, .instructions{
   padding-right: 5%;
   text-align: center;
 }
-#news-block {
+
+#news-view {
+
 }
+
+#news-items {
+  height: 40vh;
+  width: 100%;
+  overflow-y: auto;
+  
+  border-top: 2px solid rgba(255, 255, 255, .1);
+  border-bottom: 2px solid rgba(255, 255, 255, .1);
+}
+
+.news-tab {
+  float: left;
+  text-align: center;
+  height: 12vh;
+  border-bottom: .5vh solid rgb(255,198,0);
+}
+
+#news-block {
+  /* border: 5px solid black; */
+  float: left;
+  position: relative;
+  /* width: 100%; */
+  /* margin-top: 1em; */
+  height: auto;
+}
+
+/* Random Test For Orientation; May be implemented */
+@media screen and (orientation: landscape){
+  .news-header h6{
+    color: rgb(255,198,0);
+  }
+}
+
+.news-header{
+  /* border: 2px solid blue; */
+  width: 100%;
+  text-align: left;
+  float: left;
+  margin-bottom: 1px;
+  /* margin-bottom: 2vh; */
+}
+
+.news-header h6{
+  padding-left: 5%;
+  
+}
+
+.news-header hr {
+  width: 90%;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
 .news-item {
   background: rgba(78,96,136,1);
   border-top: 1px solid rgba(255,255,255,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.75);
+  border-bottom: 1px solid rgb(44, 61, 97);
   float: left;
   width: 100%;
   /* line-height: 20px; */
@@ -357,6 +387,14 @@ h1, .instructions{
   margin: 0px;
 }
 
+/*Defines Color, Weight, and style of Horizontal Lines;
+  Does not define width, margins or padding; Do those separately.*/
+.hr-gold{
+  border: 1px outset rgb(255,198,0);
+}
+.hr-white{
+  border: 1px outset white;
+}
 
 #fbo-view {
 
@@ -709,12 +747,30 @@ h1 {
 }
 
 #company-info {
+  /* background-color: #4B946A;
+  border: 5px solid black; */
   width: 100%;
-  height: 27vh;
+  height: 40%;
   position: relative;
+  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
+.company-info-img-wrapper {
+  /* border: 5px solid red; */
+  overflow: hidden;
+  width: 15vh;
+  height: 15vh;
+  
+  /* transform: translateX(-50%);
+  position: absolute; 
+  left: 50%;
+  top: 0px;*/
+}
 .company-info-img {
+  /* border: 5px solid blue; */
   position: absolute;
   left: 50%;
   top: 50%;
@@ -726,17 +782,8 @@ h1 {
   height: 80%;
 }
 
-.company-info-img-wrapper {
-  overflow: hidden;
-  width: 25vh;
-  height: 25vh;
-  left: 50%;
-  top: 0px;
-  transform: translateX(-50%);
-  position: absolute;
-}
-
 .company-info-text {
+  /* border: 5px solid blue; */
   text-align: center;
   font-size: 18px;
 }
@@ -839,7 +886,7 @@ h1 {
   font-weight: bold;
   color: white;
   border-top: 1px solid rgba(255,255,255,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.75);
+  border-bottom: 1px solid rgb(44, 61, 97);
 }
 
 .profile-dropdown-item:active {
