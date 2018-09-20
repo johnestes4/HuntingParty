@@ -1,5 +1,5 @@
 var apiUrl = 'https://efassembly.com:4432'
-// var apiUrl = 'http://18.218.170.246:4432'
+// var apiUrl = 'http://18.218.170.246:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -1384,6 +1384,7 @@ function toggleHamburgerMenu() {
       return p2num - p1num
     });
     var updateNeeded
+    var toDeleteIds = []
     for (i = 0; i < company.fboProxies.length; i++) {
       proxy = company.fboProxies[i]
       // if (company.fboProxies[i].comments.length == 0) {
@@ -1490,7 +1491,7 @@ function toggleHamburgerMenu() {
       }
       var expired = false
       if (proxy.voteYes.length < 1 && vote !== 1) {
-        if (timeToDue < 0) {
+        if (timeToDue < -14) {
           expired = true
           updateNeeded = true
         }
@@ -1528,6 +1529,10 @@ function toggleHamburgerMenu() {
           '</div>'
         }
       } else if (proxy.voteYes.length > 0 && vote !== 1) {
+        // if (timeToDue < -60) {
+        //   expired = true
+        //   updateNeeded = true
+        // }
         fboPipeline.push(proxy)
         var index = fboPipeline.length - 1
         pipelineHtml = pipelineHtml + '<div class="fbo-item">'+
@@ -1550,22 +1555,25 @@ function toggleHamburgerMenu() {
         '</div>'
       }
       if (expired) {
+        toDeleteIds.push(company.fboProxies[i]._id)
         company.fboProxies.splice(i,1)
         i = i - 1
       }
     }
-    if (updateNeeded) {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          var res = JSON.parse(xhttp.responseText);
-
-        }
-      }
-      xhttp.open("get", apiUrl+'/profiles/email/' + email, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send();
-    }
+    // if (updateNeeded) {
+    //   for (i = 0; i < toDeleteIds.length; i++) {
+    //     var xhttp = new XMLHttpRequest();
+    //     xhttp.onload = function() {
+    //       if (xhttp.readyState == 4 && xhttp.status == 200) {
+    //         // var res = JSON.parse(xhttp.responseText);
+    //         console.log('deleted one')
+    //       }
+    //     }
+    //     xhttp.open("DELETE", apiUrl+'/fbocompanyproxy/' + toDeleteIds[i], true);
+    //     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    //     xhttp.send();
+    //   }
+    // }
     document.getElementById("fbo-items").innerHTML = fboHtml;
     document.getElementById("pipeline-items").innerHTML = pipelineHtml;
     // for (i = 0; i < company.fboProxies.length; i++) {
@@ -2691,6 +2699,10 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive');
       document.getElementById("login-register").classList.add('inactive');
     } else {
+      renderSavedSearches()
+      renderSearch()
+      // renderFbos()
+      renderNews()
       document.getElementById("loading").classList.add('inactive');
       document.getElementById("tos-popup").classList.add('inactive');
       document.getElementById("main-view").classList.remove('inactive');
