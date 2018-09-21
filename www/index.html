@@ -86,7 +86,7 @@ under the License.
         <h1>HUNTING PARTY</h1>
       </div>
       <div class="instructions">
-         <p>Please sign in...</p>
+        <p>Please sign in...</p>
       </div>
       <p class="login-info">Username (Email Address)</p>
       <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
@@ -102,7 +102,7 @@ under the License.
     </div>
     <div id="register-view" class="inactive">
       <div class="instructions">
-         <p>Join Hunting Party</p>
+        <p>Join Hunting Party</p>
       </div>
       <!-- <p class="login-info">Username (Email Address)</p> -->
       <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
@@ -167,56 +167,38 @@ under the License.
           </div>
         </div>
         <!-- <div class="instructions">
-          <p>If not, you can be the one to start it! Fill in below:</p>
-        </div>
-        <p class="login-info"></p>
-        <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
-        <input id="new-company-email" type="text" name="" value="" placeholder="Email">
-        <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
-        <input id="new-company-address" type="text" name="" value="" placeholder="Address">
-        <input id="new-company-city" type="text" name="" value="" placeholder="City">
-        <input id="new-company-state" type="text" name="" value="" placeholder="State">
-        <input id="new-company-zip" type="number" name="" value="" placeholder="Zip">
-        <button type="button" name="button" onclick="createCompany()">Create</button> -->
+        <p>If not, you can be the one to start it! Fill in below:</p>
       </div>
+      <p class="login-info"></p>
+      <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
+      <input id="new-company-email" type="text" name="" value="" placeholder="Email">
+      <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
+      <input id="new-company-address" type="text" name="" value="" placeholder="Address">
+      <input id="new-company-city" type="text" name="" value="" placeholder="City">
+      <input id="new-company-state" type="text" name="" value="" placeholder="State">
+      <input id="new-company-zip" type="number" name="" value="" placeholder="Zip">
+      <button type="button" name="button" onclick="createCompany()">Create</button> -->
     </div>
   </div>
+</div>
 
-  <div id="main-view" class="inactive">
-    <div id="sidebar-detector" class="" style="">
-    </div>
-    <div class="topbar">
-      <div id="profile-circle" class="circle" style="top: 0px; left: 1px;" onclick="openProfileDropdown()">
-        <div id="profile-circle-inside" class="circle-inside" style="">
-          <img class="circle-img" src="./img/profile.png" alt="">
-        </div>
+<div id="main-view" class="inactive">
+  <div id="sidebar-detector" class="" style="">
+  </div>
+  <div class="topbar">
+    <div id="profile-dropdown" class="inactive">
+      <div class="profile-dropdown-item">
+        <p id="user-name"></p>
       </div>
-      <div id="profile-dropdown" class="inactive">
-        <div class="profile-dropdown-item">
-          <p id="user-name"></p>
-        </div>
-        <div class="profile-dropdown-item">
-          <p>Company Profile</p>
-        </div>
-        <div class="profile-dropdown-item">
-          <p>Points</p>
-        </div>
-        <div class="profile-dropdown-item" onclick="logOut()">
-          <p>Log Out</p>
-        </div>
+      <div class="profile-dropdown-item">
+        <p>Company Profile</p>
       </div>
-      <!-- <div id="profile-sidebar" class="">
-      test
-    </div> -->
-    <div class="bar bar-left">
-      Pipeline Health
-    </div>
-    <div class="circle" style="top: 0px; right: 1px; padding-top: 2vh; font-size: 2.5vh; line-height: 0.1vh;">
-      <p>12,</p>
-      <p>750</p>
-    </div>
-    <div class="bar bar-right">
-      For Another Invite
+      <div class="profile-dropdown-item">
+        <p>Points</p>
+      </div>
+      <div class="profile-dropdown-item" onclick="logOut()">
+        <p>Log Out</p>
+      </div>
     </div>
   </div>
   <div id="news-view" class="body-block">
@@ -602,26 +584,24 @@ under the License.
         </div>
         <div id="fbo-items">
           <div class="fbo-item">
-            <div class="second-border">
-              <div class="fbo-item-title">
-                <p>TITLE XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX  XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX</p>
-              </div>
-              <div class="fbo-item-comments">
-                <p>Comments</p>
-              </div>
-              <div class="fbo-item-buttons">
-                <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
-                  <div class="second-border">
-                    <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
-                  </div>
+            <div class="fbo-item-title">
+              <p>TITLE XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX  XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX</p>
+            </div>
+            <div class="fbo-item-comments">
+              <p>Comments</p>
+            </div>
+            <div class="fbo-item-buttons">
+              <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
+                <div class="second-border">
+                  <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
                 </div>
-                <div class="fbo-item-time-button">
-                  T
-                </div>
-                <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
-                  <div class="second-border">
-                    <img class="circle-img-2" src="./img/thumbsup.png" alt="">
-                  </div>
+              </div>
+              <div class="fbo-item-time-button">
+                T
+              </div>
+              <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
+                <div class="second-border">
+                  <img class="circle-img-2" src="./img/thumbsup.png" alt="">
                 </div>
               </div>
             </div>
@@ -772,11 +752,11 @@ Comments
     <canvas id="chart3" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
     <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
-<div class="data-box inactive" id="data-box-3">
-  <div class="chat-box" id="chat-box">
+  <div class="data-box inactive" id="data-box-3">
+    <div class="chat-box" id="chat-box">
 
+    </div>
   </div>
-</div>
 </div>
 <!-- <div class="lower inactive" id="lower-2">
 </div>
@@ -792,21 +772,21 @@ Comments
 </div>
 </div>
 <div class="iconbar">
-  <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
-    <img class="iconbar-img" src="./img/news.png" alt="">
-  </div>
-  <div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
-    <img class="iconbar-img" src="./img/search.png" alt="">
-  </div>
-  <div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
-    <img class="iconbar-img" src="./img/contact.png" alt="">
-  </div>
-  <div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
-    <img class="iconbar-img" src="./img/settings.png" alt="">
-  </div>
-  <div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
-    <img class="iconbar-img" src="./img/info.png" alt="">
-  </div>
+<div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
+<img class="iconbar-img" src="./img/news.png" alt="">
+</div>
+<div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
+<img class="iconbar-img" src="./img/search.png" alt="">
+</div>
+<div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
+<img class="iconbar-img" src="./img/contact.png" alt="">
+</div>
+<div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
+<img class="iconbar-img" src="./img/settings.png" alt="">
+</div>
+<div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
+<img class="iconbar-img" src="./img/info.png" alt="">
+</div>
 </div>
 </div>
 

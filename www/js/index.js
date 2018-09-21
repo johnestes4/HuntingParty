@@ -1537,34 +1537,48 @@ function toggleHamburgerMenu() {
         if (!expired) {
           fbosIn.push(proxy)
           var index = fbosIn.length - 1
-          fboHtml = fboHtml + '<div class="fbo-item">'+
-          '<div class="second-border">'+
-          ''+voteHtml+
-          ''+originHtml+
-          '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
+          fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
+          '<div class="fbo-item-avatar">'+
+          '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
+          '</div>'+
+          '<div class="fbo-item-body">'+
+          '<div class="fbo-item-title">'+
           '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-          '<div class="fbo-item-title-bg"></div>'+
-          '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
           '</div>'+
-          '<div class="fbo-item-comments">'+
-          comments+
+          '<div class="fbo-item-desc">'+
+          '<p class="">'+proxy.fbo.desc+'</p>'+
           '</div>'+
-          '<div class="fbo-item-buttons">'+
-          '<div id="no-button-' + index + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(1)">'+
-          '<div class="second-border">'+
-          '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
+          '<div class="fbo-item-icons">'+
+          '<p class="">------------</p>'+
           '</div>'+
           '</div>'+
-          '<div class="fbo-item-time-button">'+
-          dueDate+
-          '</div>'+
-          '<div id="yes-button-' + index + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(0)">'+
-          '<div class="second-border">'+
-          '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
-          '</div>'+
-          '</div>'+
-          '</div>'+
-          '</div>'+
+          // '<div class="bottom-border">'+
+          // '</div>'+
+          // ''+voteHtml+
+          // ''+originHtml+
+          // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
+          // '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+          // '<div class="fbo-item-title-bg"></div>'+
+          // '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
+          // '</div>'+
+          // '<div class="fbo-item-comments">'+
+          // comments+
+          // '</div>'+
+          // '<div class="fbo-item-buttons">'+
+          // '<div id="no-button-' + index + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(1)">'+
+          // '<div class="second-border">'+
+          // '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
+          // '</div>'+
+          // '</div>'+
+          // '<div class="fbo-item-time-button">'+
+          // dueDate+
+          // '</div>'+
+          // '<div id="yes-button-' + index + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(0)">'+
+          // '<div class="second-border">'+
+          // '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
+          // '</div>'+
+          // '</div>'+
+          // '</div>'+
           '</div>'
         }
       } else if (proxy.voteYes.length > 0 && vote !== 1) {
@@ -2514,7 +2528,7 @@ function toggleHamburgerMenu() {
         if (avatar == '../../assets/img/user.png') {
           avatar = './img/user.png'
         }
-        document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
+        // document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
         var xhttp2 = new XMLHttpRequest();
         // xhttp.setRequestHeader("Content-type", "application/json");
         xhttp2.onreadystatechange = function() {
