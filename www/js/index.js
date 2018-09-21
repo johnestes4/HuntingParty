@@ -525,7 +525,7 @@ function hello() {
 
 function openProfileDropdown() {
   // document.getElementById("profile-sidebar").classList.add('slide-to-right');
-  // document.getElementById("profile-dropdown").classList.remove('inactive')
+  // document.getElementById("sidebar").classList.remove('inactive')
   // profileDropdownOpen = true
 }
 
@@ -1236,7 +1236,7 @@ function toggleHamburgerMenu() {
   }
 
   document.addEventListener("click", (evt) => {
-    const profileDropdown = document.getElementById("profile-dropdown");
+    const profileDropdown = document.getElementById("sidebar");
     const profileCircle = document.getElementById("profile-circle");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
     const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
@@ -1252,8 +1252,8 @@ function toggleHamburgerMenu() {
       } else {
         if (targetElement == profileCircle) {
           profileDropdown.classList.remove('inactive')
-          profileDropdown.classList.remove('dropdown-out');
-          profileDropdown.classList.add('dropdown-in')
+          profileDropdown.classList.remove('sidebar-out');
+          profileDropdown.classList.add('sidebar-in')
           profileDropdownOpen = true
           profileInside = true;
         }
@@ -1263,8 +1263,8 @@ function toggleHamburgerMenu() {
     } while (targetElement);
     // This is a click outside.
     if (!profileInside) {
-      profileDropdown.classList.add('dropdown-out');
-      profileDropdown.classList.remove('dropdown-in')
+      profileDropdown.classList.add('sidebar-out');
+      profileDropdown.classList.remove('sidebar-in')
       profileDropdownOpen = false
     }
 
@@ -1669,37 +1669,83 @@ function toggleHamburgerMenu() {
   var fboHighlightClose
   var activeFboDesc
 
-  function fboDescClick(index, text, elem) {
-    console.log(index + ' ' + text)
-    var elemString = elem.toString()
-    if (!fboClickOpen) {
-      fboHighlightOpen = index
-      fboClickOpen = true
-    } else {
-      if (index < fboHighlightOpen) {
-        fboHighlightClose = fboHighlightOpen
-        fboHighlightOpen = index
+  var highlightOn = false
+  var grayOn = false
+
+  function turnOnHighlight(gray) {
+    if (!gray) {
+      if (!highlightOn) {
+        highlightOn = true
+        grayOn = false
+        document.getElementById("highlight-button-1").classList.add('highlight-button-active')
+        document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
       } else {
-        fboHighlightClose = index
+        highlightOn = false
+        grayOn = false
+        document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
+        document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
       }
-      var fbo
-      if (activeTab == 2) {
-        fbo = fbosIn[fboIndex]
-      } else if (activeTab == 3) {
-        fbo = fboPipeline[fboIndex]
+    } else {
+      if (!grayOn) {
+        highlightOn = false
+        grayOn = true
+        document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
+        document.getElementById("highlight-button-2").classList.add('highlight-button-active')
+        fboClickOpen = false
+        fboHighlightOpen = null
+        fboHighlightClose = null
+      } else {
+        highlightOn = false
+        grayOn = false
+        document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
+        document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
+        fboClickOpen = false
+        fboHighlightOpen = null
+        fboHighlightClose = null
       }
-      console.log(fbo)
-      fbo.fboDesc[fboHighlightOpen] = '<span class="grayed">' + fbo.fboDesc[fboHighlightOpen]
-      fbo.fboDesc[fboHighlightClose] = fbo.fboDesc[fboHighlightClose] + '</span>'
-      var fboDescHTML = ''
-      for (i = 0; i < fbo.fboDesc.length; i++) {
-        fboDescHTML = fboDescHTML + activeFboDesc[i]
-      }
-      document.getElementById("abstract-text").innerHTML = fboDescHTML;
-      fboClickOpen = false
     }
-    // elem.classList.add('bold')
-    console.log(fbosIn[fboIndex].fboDesc[index])
+  }
+
+  function fboDescClick(index, text, elem) {
+    if (grayOn || highlightOn) {
+      var elemString = elem.toString()
+      if (!fboClickOpen) {
+        fboHighlightOpen = index
+        fboClickOpen = true
+      } else {
+        if (index < fboHighlightOpen) {
+          fboHighlightClose = fboHighlightOpen
+          fboHighlightOpen = index
+        } else {
+          fboHighlightClose = index
+        }
+        var fbo
+        if (activeTab == 2) {
+          fbo = fbosIn[fboIndex]
+        } else if (activeTab == 3) {
+          fbo = fboPipeline[fboIndex]
+        }
+        console.log(fbo)
+        if (highlightOn) {
+          fbo.fboDesc[fboHighlightOpen] = '<span class="highlighted">' + fbo.fboDesc[fboHighlightOpen]
+        } else if (grayOn) {
+          fbo.fboDesc[fboHighlightOpen] = '<span class="grayed">' + fbo.fboDesc[fboHighlightOpen]
+        }
+        fbo.fboDesc[fboHighlightClose] = fbo.fboDesc[fboHighlightClose] + '</span>'
+        var fboDescHTML = ''
+        for (i = 0; i < fbo.fboDesc.length; i++) {
+          fboDescHTML = fboDescHTML + activeFboDesc[i]
+        }
+        document.getElementById("abstract-text").innerHTML = fboDescHTML;
+        highlightOn = false
+        grayOn = false
+        fboClickOpen = false
+        fboHighlightOpen = null
+        fboHighlightClose = null
+      }
+      // elem.classList.add('bold')
+      console.log(fbosIn[fboIndex].fboDesc[index])
+    }
   }
 
   function showVotes(index) {
@@ -2081,6 +2127,7 @@ function toggleHamburgerMenu() {
     } else if (tab == 1) {
       proxy = fboPipeline[index]
     }
+    activeFboDesc = proxy.fboDesc
     console.log(proxy)
     var dataText = '<p><span style="font-weight: bold">Solicitation Number: </span>'+
     proxy.fbo.solnbr +
@@ -2103,7 +2150,6 @@ function toggleHamburgerMenu() {
     //   var fboDesc = parseThroughFboDesc(proxy.fboDesc)
     //   proxy.fboDesc = fboDesc
     // }
-    console.log(proxy.fboDesc)
     var fboDescHTML = ''
     for (i = 0; i < proxy.fboDesc.length; i++) {
       fboDescHTML = fboDescHTML + proxy.fboDesc[i]
@@ -2523,7 +2569,7 @@ function toggleHamburgerMenu() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         // Typical action to be performed when the document is ready:
         currentUser = JSON.parse(xhttp.responseText);
-        document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
+        // document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
         var avatar = currentUser.avatar
         if (avatar == '../../assets/img/user.png') {
           avatar = './img/user.png'
@@ -2778,7 +2824,7 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    // switchTab(2)
+    switchTab(2)
     // goToFbo(5, 0);
     // openPopups(2)
     // goToCompanyCreate()
@@ -3172,14 +3218,14 @@ function toggleHamburgerMenu() {
       },
     });
     function openSidebar() {
-      $("#profile-dropdown").removeClass('inactive')
-      $("#profile-dropdown").removeClass('dropdown-out')
-      $("#profile-dropdown").addClass('dropdown-in')
+      $("#sidebar").removeClass('inactive')
+      $("#sidebar").removeClass('sidebar-out')
+      $("#sidebar").addClass('sidebar-in')
       profileDropdownOpen = true
     }
     function closeSidebar(){
-      $("#profile-dropdown").addClass('dropdown-out');
-      $("#profile-dropdown").removeClass('dropdown-in')
+      $("#sidebar").addClass('sidebar-out');
+      $("#sidebar").removeClass('sidebar-in')
       profileDropdownOpen = false
     }
   });

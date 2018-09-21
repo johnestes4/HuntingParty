@@ -186,19 +186,56 @@ under the License.
   <div id="sidebar-detector" class="" style="">
   </div>
   <div class="topbar">
-    <div id="profile-dropdown" class="inactive">
-      <div class="profile-dropdown-item">
-        <p id="user-name"></p>
+    <div class="topbar-side">
+      <img class="topbar-side-img" src="./img/hamburger.png" alt="">
+    </div>
+    <div class="topbar-center">
+      <p id="topbar-center-text">Activity</p>
+    </div>
+    <div class="topbar-side">
+
+    </div>
+    <div id="sidebar" class="inactive">
+      <div class="sidebar-item">
+        <div id="profile-circle" class="circle" style="">
+          <div id="profile-circle-inside" class="circle-inside" style="">
+            <img class="circle-img" src="./img/profile.png" alt="">
+          </div>
+        </div>
       </div>
-      <div class="profile-dropdown-item">
-        <p>Company Profile</p>
+      <div class="sidebar-item" onclick="switchTab(0)">
+        <!-- <img class="iconbar-img" src="./img/news.png" alt=""> -->
+        <p>News</p>
       </div>
-      <div class="profile-dropdown-item">
-        <p>Points</p>
+      <div class="sidebar-item" onclick="switchTab(2)">
+        <p>Opportunities</p>
       </div>
-      <div class="profile-dropdown-item" onclick="logOut()">
+      <div class="sidebar-item" onclick="switchTab(3)">
+        <p>Pipeline</p>
+      </div>
+      <div class="sidebar-item" onclick="switchTab(1)">
+        <p>Search</p>
+      </div>
+      <div class="sidebar-item" onclick="logOut()">
         <p>Log Out</p>
       </div>
+
+      <!--
+      <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
+      </div>
+      <div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
+      <img class="iconbar-img" src="./img/search.png" alt="">
+      </div>
+      <div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
+      <img class="iconbar-img" src="./img/contact.png" alt="">
+      </div>
+      <div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
+      <img class="iconbar-img" src="./img/settings.png" alt="">
+      </div>
+      <div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
+      <img class="iconbar-img" src="./img/info.png" alt="">
+      </div> -->
+
     </div>
   </div>
   <div id="news-view" class="body-block">
@@ -742,6 +779,10 @@ Comments
   </div>
   <div class="data-box" id="data-box-1">
     <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <div class="" style="width: 96%; position: absolute; height: 30px; bottom: 2%; left: 2%;">
+      <button id="highlight-button-1" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
+      <button id="highlight-button-2" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
+    </div>
   </div>
   <div class="data-box inactive" id="data-box-2">
     <p style="text-align: center; margin: 0px;">Projected Value</p>
@@ -771,7 +812,7 @@ Comments
   <img class="iconbar-img" src="./img/hamburger.png" alt="">
 </div>
 </div>
-<div class="iconbar">
+<!-- <div class="iconbar">
 <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
 <img class="iconbar-img" src="./img/news.png" alt="">
 </div>
@@ -787,7 +828,7 @@ Comments
 <div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
 <img class="iconbar-img" src="./img/info.png" alt="">
 </div>
-</div>
+</div> -->
 </div>
 
 
