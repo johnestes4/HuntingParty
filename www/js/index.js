@@ -529,12 +529,16 @@ function openProfileDropdown() {
   // profileDropdownOpen = true
 }
 
+var activeSearchIndex
 function viewSearch() {
   if (document.getElementById("saved-searches").value > -1) {
     searchTerms = yourSearches[document.getElementById("saved-searches").value]
-    // activeSavedSearch = document.getElementById("saved-searches").value
+    activeSearchIndex = document.getElementById("saved-searches").value
+    document.getElementById("delete-search-button").classList.remove('inactive')
   } else {
     searchTerms = emptySearchTerms
+    activeSearchIndex = document.getElementById("saved-searches").value
+    document.getElementById("delete-search-button").classList.add('inactive')
   }
   renderSearch()
   var a = document.getElementsByClassName('checkbox-duedate')
@@ -571,15 +575,16 @@ function renderSavedSearches() {
   var html = '<option value="-1">---Create New Search---</option>'
   // '<option disabled selected value> -- select an option -- </option>'
   console.log(huntingPartyData.searches)
-  for (i = 0; i < huntingPartyData.users.length; i++) {
-    if (huntingPartyData.users[i].userId == currentUser._id) {
-      if (huntingPartyData.users[i].searches) {
-        for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
-          yourSearches.push(huntingPartyData.users[i].searches[i2])
-        }
-      }
-    }
-  }
+  yourSearches = huntingPartyData.searches
+  // for (i = 0; i < huntingPartyData.users.length; i++) {
+  //   if (huntingPartyData.users[i].userId == currentUser._id) {
+  //     if (huntingPartyData.users[i].searches) {
+  //       for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+  //         yourSearches.push(huntingPartyData.users[i].searches[i2])
+  //       }
+  //     }
+  //   }
+  // }
   for (i = 0; i < yourSearches.length; i++) {
     html = html + '<option value="'+i+'">'+yourSearches[i].name+'</option>'
   }
@@ -587,6 +592,39 @@ function renderSavedSearches() {
   document.getElementById("saved-searches").innerHTML = html
 }
 
+function deleteSearchTerms() {
+  if (document.getElementById("saved-searches").value > -1 && activeSearchIndex) {
+    var searchSucceeded = false
+    for (i = 0; i < huntingPartyData.users.length; i++) {
+      if (huntingPartyData.users[i].userId == currentUser._id) {
+        if (huntingPartyData.users[i].searches) {
+          huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
+          searchSucceeded = true
+          theindex = i
+          break
+        }
+      }
+    }
+    if (searchSucceeded) {
+      var id = huntingPartyData._id
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('search is gone!')
+          yourSearches = []
+          renderSavedSearches()
+          viewSearch()
+        }
+      };
+      var url = apiUrl+"/huntingpartydata/" + id;
+      xhttp.open("PUT", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(huntingPartyData));
+    } else {
+      console.log('it failed somehow')
+    }
+  }
+}
 
 function searchFilter(which) {
   var string = document.getElementById("search-filter-" + which).value
@@ -1177,6 +1215,8 @@ function saveSearchTerms() {
   }
 }
 
+
+
 function toggleHamburgerMenu() {
   if (hamburgerMenuOpen) {
     document.getElementById("hamburger-menu").classList.add('hamburger-out');
@@ -1330,12 +1370,6 @@ function toggleHamburgerMenu() {
     var pipelineHtml = ''
     fboVote = []
     // console.log(company.fboProxies[0])
-    for (i = 0; i < company.fboProxies.length; i++) {
-      if (company.fboProxies[i].date) {
-        console.log(company.fboProxies[i])
-        break
-      }
-    }
     company.fboProxies.sort(function(proxy1, proxy2){
       var p1num = 0
       for (i = 0; i < proxy1.voteYes.length; i++) {
@@ -1383,8 +1417,10 @@ function toggleHamburgerMenu() {
       }
       return p2num - p1num
     });
+    console.log('length is ' + company.fboProxies.length)
     var updateNeeded
     var toDeleteIds = []
+    var logCount = 0
     for (i = 0; i < company.fboProxies.length; i++) {
       proxy = company.fboProxies[i]
       // if (company.fboProxies[i].comments.length == 0) {
@@ -1402,7 +1438,11 @@ function toggleHamburgerMenu() {
         var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
         var date2 = new Date(today);
         var date1 = new Date(due);
-        var timeDiff = (date2.getTime() - date1.getTime());
+        var expired = false
+        if (date1 < date2) {
+          expired = true
+        }
+        var timeDiff = (date1.getTime() - date2.getTime());
         var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
         if (timeToDue >= 365) {
           dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 365).toString()+" Years</p>"
@@ -1489,12 +1529,11 @@ function toggleHamburgerMenu() {
       if (proxy.originSearch) {
         originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
       }
-      var expired = false
       if (proxy.voteYes.length < 1 && vote !== 1) {
-        if (timeToDue < -14) {
-          expired = true
-          updateNeeded = true
-        }
+        // if (timeToDue < -14) {
+        //   expired = true
+        //   updateNeeded = true
+        // }
         if (!expired) {
           fbosIn.push(proxy)
           var index = fbosIn.length - 1
@@ -1554,11 +1593,11 @@ function toggleHamburgerMenu() {
         '</div>'+
         '</div>'
       }
-      if (expired) {
-        toDeleteIds.push(company.fboProxies[i]._id)
-        company.fboProxies.splice(i,1)
-        i = i - 1
-      }
+      // if (expired) {
+      //   toDeleteIds.push(company.fboProxies[i]._id)
+      //   company.fboProxies.splice(i,1)
+      //   i = i - 1
+      // }
     }
     // if (updateNeeded) {
     //   for (i = 0; i < toDeleteIds.length; i++) {
@@ -1671,6 +1710,8 @@ function toggleHamburgerMenu() {
   }
 
   function goToFbo(num, tab) {
+    console.log('why')
+    console.log(num)
     fboIndex = num
     setActiveFbo(num, tab)
     document.getElementById("news-view").classList.add('inactive');
@@ -2026,6 +2067,7 @@ function toggleHamburgerMenu() {
     } else if (tab == 1) {
       proxy = fboPipeline[index]
     }
+    console.log(proxy)
     var dataText = '<p><span style="font-weight: bold">Solicitation Number: </span>'+
     proxy.fbo.solnbr +
     '</p><p><span style="font-weight: bold">Agency: </span>'+
@@ -2042,11 +2084,15 @@ function toggleHamburgerMenu() {
     proxy.fbo.contact+
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
     document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
-    var fboDesc = parseThroughFboDesc(proxy.fboDesc)
-    proxy.fboDesc = fboDesc
+    // if (typeof proxy.fboDesc === 'string') {
+    //   console.log('parsing')
+    //   var fboDesc = parseThroughFboDesc(proxy.fboDesc)
+    //   proxy.fboDesc = fboDesc
+    // }
+    console.log(proxy.fboDesc)
     var fboDescHTML = ''
-    for (i = 0; i < fboDesc.length; i++) {
-      fboDescHTML = fboDescHTML + fboDesc[i]
+    for (i = 0; i < proxy.fboDesc.length; i++) {
+      fboDescHTML = fboDescHTML + proxy.fboDesc[i]
     }
     document.getElementById("abstract-text").innerHTML = fboDescHTML;
 
