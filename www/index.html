@@ -82,54 +82,58 @@ under the License.
   </div>
   <div id="login-register" class="inactive">
     <div id="login-view">
-      <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
+      <div class="login-header">
         <h1>HUNTING PARTY</h1>
       </div>
-      <div class="instructions">
+      <!-- <div class="instructions">
         <p>Please sign in...</p>
+      </div> -->
+      <div class="login-register-content">
+        <p class="login-info">Email Address</p>
+        <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
+        <p class="login-info">Password</p>
+        <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
+        <div id="login-error-text"></div>
       </div>
-      <p class="login-info">Username (Email Address)</p>
-      <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
-      <p class="login-info">Password</p>
-      <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
-      <div id="login-error-text" class="" style="color: red; font-size: 14px; padding-left: 5%; width: 100%;">
+        
 
-      </div>
       <div class="" style="width: 100%; position: relative;">
-        <button class="center-absolute" type="button" name="button" onclick="login()">LOGIN</button>
-        <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button>
+        <button class="center-absolute button-alt" type="button" name="button" onclick="login()">LOGIN</button>
+        <div class="login-redirect">
+          <p>New to Hunting Party? <a href="#" onclick="goToRegister()">Sign Up Here</a></p>
+        </div>
+        <!-- <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button> -->
       </div>
     </div>
     <div id="register-view" class="inactive">
-      <div class="instructions">
+      <!-- <div class="instructions">
         <p>Join Hunting Party</p>
-      </div>
+      </div> -->
       <!-- <p class="login-info">Username (Email Address)</p> -->
-      <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
-      <div id="register-alert-1" class="register-field-alert">
-
+      <div class="login-header">
+        <h1>HUNTING PARTY</h1>
       </div>
-      <!-- <p class="login-info">Password</p> -->
-      <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last name">
-      <div id="register-alert-2" class="register-field-alert">
-
+      <div class="login-register-content">
+        <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
+        <div id="register-alert-1" class="register-field-alert"></div>
+        <!-- <p class="login-info">Password</p> -->
+        <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last name">
+        <div id="register-alert-2" class="register-field-alert"></div>
+  
+        <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Email address">
+        <div id="register-alert-3" class="register-field-alert"></div>
+  
+        <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
+        <div id="register-alert-4" class="register-field-alert"></div>
+        
+        <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
+        <div id="register-alert-5" class="register-field-alert"></div>
       </div>
-      <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Email address">
-      <div id="register-alert-3" class="register-field-alert">
 
-      </div>
-      <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
-      <div id="register-alert-4" class="register-field-alert">
-
-      </div>
-      <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
-      <div id="register-alert-5" class="register-field-alert">
-
-      </div>
-      <div class="" style="width: 100%; position: relative;">
-        <button class="center-absolute" type="button" name="button" onclick=register()>JOIN</button>
-        <div class="" style="width: 100%; text-align: center;">
-          <a href="#" onclick="goToLogin()">Go Back To Login</a>
+      <div class="">
+        <button class="center-absolute button-alt" type="button" name="button" onclick=register()>JOIN</button>
+        <div class="login-redirect">
+          <p>Already have an Account? <a href="#" onclick="goToLogin()">Go Back To Login</a></p>
         </div>
       </div>
     </div>
