@@ -38,6 +38,12 @@
   font-weight: 400;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Lato Semibold', sans-serif;
+  src: url('./Lato-Semibold.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+}
 
 body {
   -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
@@ -62,6 +68,9 @@ body {
   margin:0px;
   padding:0px;
   width:100%;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Lato Semibold', sans-serif!important;
 }
 
 #mypanel {
@@ -285,12 +294,13 @@ h1, .instructions{
 }
 
 #news-view {
-
+  background: rgba(60,85,136,1);
 }
 
 #news-items {
-  height: 40vh;
+  height: 100%;
   width: 100%;
+  background: rgba(96,97,97,1);
   overflow-y: auto;
 }
 
@@ -298,7 +308,7 @@ h1, .instructions{
   /* border-top: 1px solid rgba(255,255,255,0.1); */
   /* border-bottom: 1px solid rgba(0,0,0,0.75); */
   background: rgba(255,255,255,1);
-  height: 91vh;
+  height: 93vh;
   overflow-y: auto;
   width: 100%;
 }
@@ -315,7 +325,7 @@ h1, .instructions{
   position: relative;
   margin-top: 2vh;
   width: 100%;
-  height: auto;
+  height: 60vh;
 }
 #todo-block {
   float: left;
@@ -364,10 +374,11 @@ h1, .instructions{
 #news-block {
 }
 .news-item {
-  background: rgba(0,175,217,1);
+  background: rgba(96,97,97,1);
   border-top: 1px solid rgba(255,255,255,0.1);
   border-bottom: 1px solid rgba(0,0,0,0.75);
   float: left;
+  color: white;
   width: 100%;
   /* line-height: 20px; */
   height: auto;
@@ -725,7 +736,34 @@ h1 {
   font-size: 18px;
   color: white;
   line-height: 7vh;
-  font-weight: bold;
+  font-family: 'Lato Semibold', sans-serif;
+}
+
+.second-topbar {
+  background: rgba(0,175,217,1);
+  height: 7vh;
+  position: relative;
+  width: 100%;
+}
+
+.second-topbar-half {
+  float: left;
+  height: 100%;
+  width: 50%;gf
+  color: white;
+  line-height: 7vh;
+  font-family: 'Lato Semibold', sans-serif;
+}
+
+.second-topbar-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(255,255,255,1);
+  bottom: 0px;
+  left: 45px;
 }
 
 .circle {
@@ -758,8 +796,8 @@ h1 {
   transform: translate(-50%, -50%);
   display: block;
   object-fit: cover;
-  min-width: 7vh;
-  min-height: 7vh;
+  min-width: 9vh;
+  min-height: 9vh;
   height: 100%;
 }
 .circle-img-2 {
@@ -832,17 +870,17 @@ h1 {
 }
 @keyframes hamburger-in {
   0%   {bottom: -105px}
-  100% {bottom: 9vh}
+  100% {bottom: 0px}
 }
 @keyframes hamburger-out {
-  0%   {bottom: 9vh}
+  0%   {bottom: 0px}
   100% {bottom: -105px}
 }
 
 .hamburger-in {
   animation-name: hamburger-in;
   animation-duration: 0.5s;
-  bottom: 9vh!important;
+  bottom: 0px!important;
 }
 .hamburger-out {
   animation-name: hamburger-out;
@@ -854,8 +892,8 @@ h1 {
   position: absolute;
   overflow-x: hidden; /* Disable horizontal scroll */
   top: 0px;
-  left: -30vw;
-  width: 30vw;
+  left: -33vw;
+  width: 33vw;
   height: 100vh;
   background: rgba(0,175,217,1);
   border: 1px solid rgba(0,0,0,0.1);
@@ -864,7 +902,7 @@ h1 {
 }
 
 @keyframes sidebar-in {
-  0%   {left: -30vw}
+  0%   {left: -33vw}
   100% {left: 0px}
 }
 .sidebar-in {
@@ -874,40 +912,56 @@ h1 {
 }
 @keyframes sidebar-out {
   0%   {left: 0px}
-  100% {left: -30vw; box-shadow: none!important;}
+  100% {left: -33vw; box-shadow: none!important;}
 }
 .sidebar-out {
   animation-name: sidebar-out;
   animation-duration: 0.5s;
-  left: -30vw!important;
+  left: -33vw!important;
   box-shadow: none!important;
 }
 
 .sidebar-item {
   height: calc(100% / 6);
   width: 100%;
-  font-size: 14px;
+  font-size: 16px;
   background: rgba(0,175,217,1);
   position: relative;
-  line-height: 50px;
+  padding-top: 5%;
   text-align: center;
   font-weight: bold;
   color: white;
   border-top: 1px solid rgba(255,255,255,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.75);
+  border-bottom: 1px solid rgba(255,255,255,0.5);
 }
 
 .sidebar-item:active {
   filter: brightness(95%);
 }
 
+.sidebar-img-wrapper {
+  position: relative;
+  height: 50%;
+  margin-bottom: 5%;
+  width: 100%;
+}
+
+.sidebar-img {
+  height: 90%;
+  width: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 #profile-circle {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 20vw;
-  height: 20vw;
   transform: translate(-50%, -50%);
+  width: calc((100vh / 6) * 0.6);
+  height: calc((100vh / 6) * 0.6);
   border: 3px solid white;
 }
 
@@ -1248,12 +1302,11 @@ h1 {
 }
 
 .data-box {
-  height: calc(63.5vh - 36px);
+  height: calc(73.5vh - 35px);
   background: rgba(255,255,255,1);
   position: relative;
   padding: 1vh 1vw 1vh 1vw;
   overflow-y: auto;
-  border-bottom: 1px solid rgba(0,0,0,0.75);
   float: left;
   width: 100%;
 }

@@ -187,16 +187,16 @@ under the License.
   </div>
   <div class="topbar">
     <div class="topbar-side">
-      <img class="topbar-side-img" src="./img/hamburger.png" alt="">
+      <img id="topbar-hamburger" class="topbar-side-img" src="./img/hamburger.png" alt="">
     </div>
     <div class="topbar-center">
-      <p id="topbar-center-text">Activity</p>
+      <p id="topbar-center-text">News</p>
     </div>
     <div class="topbar-side">
 
     </div>
     <div id="sidebar" class="inactive">
-      <div class="sidebar-item">
+      <div class="sidebar-item" style="background: rgba(0,0,0,0.2);">
         <div id="profile-circle" class="circle" style="">
           <div id="profile-circle-inside" class="circle-inside" style="">
             <img class="circle-img" src="./img/profile.png" alt="">
@@ -204,128 +204,139 @@ under the License.
         </div>
       </div>
       <div class="sidebar-item" onclick="switchTab(0)">
-        <!-- <img class="iconbar-img" src="./img/news.png" alt=""> -->
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img" src="./img/news.png" alt="">
+        </div>
         <p>News</p>
       </div>
       <div class="sidebar-item" onclick="switchTab(2)">
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img" src="./img/contact.png" alt="">
+        </div>
         <p>Opportunities</p>
       </div>
       <div class="sidebar-item" onclick="switchTab(3)">
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img" src="./img/settings.png" alt="">
+        </div>
         <p>Pipeline</p>
       </div>
       <div class="sidebar-item" onclick="switchTab(1)">
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img" src="./img/search.png" alt="">
+        </div>
         <p>Search</p>
       </div>
-      <div class="sidebar-item" onclick="logOut()">
+      <div class="sidebar-item" onclick="logOut()" style="line-height: 100%;">
         <p>Log Out</p>
       </div>
 
       <!--
       <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
-      </div>
-      <div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
-      <img class="iconbar-img" src="./img/search.png" alt="">
-      </div>
-      <div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
-      <img class="iconbar-img" src="./img/contact.png" alt="">
-      </div>
-      <div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
-      <img class="iconbar-img" src="./img/settings.png" alt="">
-      </div>
-      <div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
-      <img class="iconbar-img" src="./img/info.png" alt="">
-      </div> -->
-
     </div>
+    <div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
+    <img class="iconbar-img" src="./img/search.png" alt="">
   </div>
-  <div id="news-view" class="body-block">
-    <div class="tutorial-view inactive">
-      <div class="tutorial-box" style="left: 10vw; top: 12vh;">
-        <div class="relative-box" style="width: 60vw; height: 40vh;">
-          <p>PIPELINE HEALTH IS OUR ESTIMATE OF YOUR CHANCES OF HITTING YOUR GROWTH GOALS BASED ON:</p>
-          <p>1) THE NUMBER OF OPPORTUNITIES YOU'VE IDENTIFIED</p>
-          <p>2) THE AVERAGE COMPETITION FOR THE KIND OF WORK YOU ARE PURSUING</p>
-          <p>3) THE RFP TARGET YOU SET</p>
-          <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(50% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
-            <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
-            </div>
+  <div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
+  <img class="iconbar-img" src="./img/contact.png" alt="">
+</div>
+<div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
+<img class="iconbar-img" src="./img/settings.png" alt="">
+</div>
+<div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
+<img class="iconbar-img" src="./img/info.png" alt="">
+</div> -->
+
+</div>
+</div>
+<div id="news-view" class="body-block">
+  <div class="tutorial-view inactive">
+    <div class="tutorial-box" style="left: 10vw; top: 12vh;">
+      <div class="relative-box" style="width: 60vw; height: 40vh;">
+        <p>PIPELINE HEALTH IS OUR ESTIMATE OF YOUR CHANCES OF HITTING YOUR GROWTH GOALS BASED ON:</p>
+        <p>1) THE NUMBER OF OPPORTUNITIES YOU'VE IDENTIFIED</p>
+        <p>2) THE AVERAGE COMPETITION FOR THE KIND OF WORK YOU ARE PURSUING</p>
+        <p>3) THE RFP TARGET YOU SET</p>
+        <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(50% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
+          <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
           </div>
-          <!-- <div class="" style="position: absolute; bottom: calc(100% - 0px); left: 48%; height: 40px; width: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-bottom: none;">
-        </div> -->
-        <!-- <div class="" style="position: absolute; left: calc(100% - 0px); top: 10px; width: 40px; height: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-left: none;">
+        </div>
+      </div>
+    </div>
+  </div>
+  <input id="reg-id" style="width: 100%;" class="inactive"></input>
+  <div id="todo-block" class="inactive">
+    <div class="news-tab" style="width: 55%; margin-left: 15%; margin-right: 5%; line-height: 12vh;">
+      TO DO
+    </div>
+    <div class="news-tab" style="width: 20%; margin-right: 5%; line-height: calc(8vh / 3); padding-top: 2vh; padding-bottom: 2vh;">
+      Average Completion Time
+    </div>
+    <div class="" style="float: left; width: 100%; height: 2vh;">
+    </div>
+    <div class="todo-item">
+      <div class="todo-img" style="">
+        <img class="iconbar-img" src="./img/profile2.png" alt="">
+      </div>
+      <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
+      <p class="todo-text todo-right">10/RFP</p>
+    </div>
+    <div class="todo-item">
+      <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+        <img class="iconbar-img" src="./img/profile2.png" alt="">
+      </div>
+      <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
+      <p class="todo-text todo-right">10/RFP</p>
+    </div>
+    <div class="todo-item">
+      <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+        <img class="iconbar-img" src="./img/profile2.png" alt="">
+      </div>
+      <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
+      <p class="todo-text todo-right">5/RFP</p>
+    </div>
+  </div>
+  <div id="company-info" style="color: white;">
 
-      </div> -->
+  </div>
+  <div id="news-block">
+    <div class="" style="width: 100%; text-align: center; float: left; height: 4vh; line-height: 4vh; font-size: 14px; color: white;">
+      NEWS
     </div>
-  </div>
-</div>
-<input id="reg-id" style="width: 100%;" class="inactive"></input>
-<div id="todo-block" class="inactive">
-  <div class="news-tab" style="width: 55%; margin-left: 15%; margin-right: 5%; line-height: 12vh;">
-    TO DO
-  </div>
-  <div class="news-tab" style="width: 20%; margin-right: 5%; line-height: calc(8vh / 3); padding-top: 2vh; padding-bottom: 2vh;">
-    Average Completion Time
-  </div>
-  <div class="" style="float: left; width: 100%; height: 2vh;">
-  </div>
-  <div class="todo-item">
-    <div class="todo-img" style="">
-      <img class="iconbar-img" src="./img/profile2.png" alt="">
-    </div>
-    <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
-    <p class="todo-text todo-right">10/RFP</p>
-  </div>
-  <div class="todo-item">
-    <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-      <img class="iconbar-img" src="./img/profile2.png" alt="">
-    </div>
-    <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
-    <p class="todo-text todo-right">10/RFP</p>
-  </div>
-  <div class="todo-item">
-    <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-      <img class="iconbar-img" src="./img/profile2.png" alt="">
-    </div>
-    <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
-    <p class="todo-text todo-right">5/RFP</p>
-  </div>
-</div>
-<div id="company-info">
-
-</div>
-<div id="news-block">
-  <div class="" style="width: 100%; text-align: center; float: left; margin-bottom: 2vh;">
-    NEWS
-  </div>
-  <div id="news-items" class="">
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/profile.png" alt="">
+    <div id="news-items" class="">
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/profile.png" alt="">
+        </div>
+        <p class="news-text">Person joined your company</p>
       </div>
-      <p class="news-text">Person joined your company</p>
-    </div>
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/profile.png" alt="">
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/profile.png" alt="">
+        </div>
+        <p class="news-text">Person2 left a comment on an RFP</p>
       </div>
-      <p class="news-text">Person2 left a comment on an RFP</p>
-    </div>
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/profile.png" alt="">
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/profile.png" alt="">
+        </div>
+        <p class="news-text">Person3 left a comment on an RFP</p>
       </div>
-      <p class="news-text">Person3 left a comment on an RFP</p>
-    </div>
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/contact.png" alt="">
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/contact.png" alt="">
+        </div>
+        <p class="news-text">Person4: here is some comment text</p>
       </div>
-      <p class="news-text">Person4: here is some comment text</p>
     </div>
   </div>
-</div>
 </div>
 <div id="search-view" class="body-block inactive">
+  <div id="saved-search-view" class="">
+    <div class="search-item">
+      Test
+    </div>
+  </div>
   <div id="search-terms-view" class="">
     <div id="search-save-popup" class="inactive">
       <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
@@ -594,7 +605,18 @@ under the License.
   </div>
 </div>
 <div id="fbo-view" class="body-block inactive">
-  <div id="fbo-list-view" class="body-block" style="">
+  <div class="second-topbar">
+    <div class="second-topbar-half" style="padding-left: 40px;">
+      LEFT
+      <div class="second-topbar-arrow">
+
+      </div>
+    </div>
+    <div class="second-topbar-half" style="padding-right: 40px; text-align: right;">
+      RIGHT
+    </div>
+  </div>
+  <div id="fbo-list-view" class="body-block" style="height: 86vh;">
     <div class="" style="height: 100%; width: 100%; overflow-y: auto;">
       <div class="" style="position: relative; height: auto; width: 100%;">
         <div class="tutorial-view inactive" style="height: 100%;">
@@ -647,7 +669,6 @@ under the License.
       </div>
     </div>
   </div>
-
 </div>
 <div id="pipeline-view" class="body-block inactive">
   <!-- <button type="button" id="test-button" name="button" onclick="getTime()">click me </button> -->
@@ -724,82 +745,66 @@ under the License.
           <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
           </div>
         </div>
-        <!-- <div class="" style="position: absolute; bottom: calc(100% - 0px); left: 48%; height: 40px; width: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-bottom: none;">
-      </div> -->
-      <!-- <div class="" style="position: absolute; left: calc(100% - 0px); top: 10px; width: 40px; height: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-left: none;">
-
-    </div> -->
-  </div>
-</div>
-</div>
-<div class="buttonbar">
-  <div style="float: left; width: 100%; height: 7vh;">
-    <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-  </div>
-  <div class="big-circle-box">
-    <div class="big-circle" id="big-no-button" onclick='openPopups(1)'>
-      <div class="second-border">
-        <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
       </div>
     </div>
   </div>
-  <div class="big-circle-box" style="">
-    <div class="big-circle" style="line-height: 0.5vh; font-size: 2.5vh; padding-top: 4.0vh; height: 9vh; width: 9vh;" onclick='openPopups(2)'>
-      Refer
+  <div class="buttonbar">
+    <div style="float: left; width: 100%; height: 7vh;">
+      <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
     </div>
-    <div class="" id="time-button" style="width: 100%; height: 3vh; margin-top: 9vh;">
+    <div class="big-circle-box">
+      <div class="big-circle" id="big-no-button" onclick='openPopups(1)'>
+        <div class="second-border">
+          <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="big-circle-box" style="">
+      <div class="big-circle" style="line-height: 0.5vh; font-size: 2.5vh; padding-top: 4.0vh; height: 9vh; width: 9vh;" onclick='openPopups(2)'>
+        Refer
+      </div>
+      <div class="" id="time-button" style="width: 100%; height: 3vh; margin-top: 9vh;">
 
+      </div>
     </div>
-  </div>
-  <div class="big-circle-box">
-    <div class="big-circle" id="big-yes-button" onclick='openPopups(0)' style="font-size: 8vh;">
-      <div class="second-border">
-        <img class="circle-img-2" src="./img/thumbsup.png" alt="">
+    <div class="big-circle-box">
+      <div class="big-circle" id="big-yes-button" onclick='openPopups(0)' style="font-size: 8vh;">
+        <div class="second-border">
+          <img class="circle-img-2" src="./img/thumbsup.png" alt="">
+        </div>
       </div>
     </div>
   </div>
-  <!-- <div class="" style="width: 100%; height: calc(4vh+12px)">
-  <div class="buttonbar-tab buttonbar-tab-active" onclick='switchFboTab(this, 0)'>
-  Abstract/data
-</div>
-<div class="buttonbar-tab" onclick='switchFboTab(this, 1)'>
-Refer
-</div>
-<div class="buttonbar-tab" onclick='switchFboTab(this, 2)'>
-Comments
-</div>
-</div> -->
-</div>
-<div class="lower" id="lower-1">
-  <div id="databar-active" class="databar-inner">
-    <p id="databar-title">ABSTRACT</p>
-    <div class="info-circle">
-      i
+  <div class="lower" id="lower-1">
+    <div id="databar-active" class="databar-inner">
+      <p id="databar-title">ABSTRACT</p>
+      <div class="info-circle">
+        i
+      </div>
     </div>
-  </div>
-  <div class="data-box" id="data-box-1">
-    <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <div class="" style="width: 96%; position: absolute; height: 30px; bottom: 2%; left: 2%;">
-      <button id="highlight-button-1" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
-      <button id="highlight-button-2" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
+    <div class="data-box" id="data-box-1">
+      <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <div class="" style="width: 96%; position: absolute; height: 30px; bottom: 2%; left: 2%;">
+        <button id="highlight-button-1" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
+        <button id="highlight-button-2" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
+      </div>
     </div>
-  </div>
-  <div class="data-box inactive" id="data-box-2">
-    <p style="text-align: center; margin: 0px;">Projected Value</p>
-    <canvas id="chart1" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
-    <p style="text-align: center; margin: 0px;">Projected Competition</p>
-    <canvas id="chart2" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
-    <p style="text-align: center; margin: 0px;">Value & Competition</p>
-    <canvas id="chart3" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
-    <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-  <div class="data-box inactive" id="data-box-3">
-    <div class="chat-box" id="chat-box">
+    <div class="data-box inactive" id="data-box-2">
+      <p style="text-align: center; margin: 0px;">Projected Value</p>
+      <canvas id="chart1" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
+      <p style="text-align: center; margin: 0px;">Projected Competition</p>
+      <canvas id="chart2" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
+      <p style="text-align: center; margin: 0px;">Value & Competition</p>
+      <canvas id="chart3" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
+      <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+    <div class="data-box inactive" id="data-box-3">
+      <div class="chat-box" id="chat-box">
 
+      </div>
     </div>
   </div>
-</div>
-<!-- <div class="lower inactive" id="lower-2">
+  <!-- <div class="lower inactive" id="lower-2">
 </div>
 <div class="lower inactive" id="lower-3">
 </div> -->

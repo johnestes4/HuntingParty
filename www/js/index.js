@@ -1237,7 +1237,7 @@ function toggleHamburgerMenu() {
 
   document.addEventListener("click", (evt) => {
     const profileDropdown = document.getElementById("sidebar");
-    const profileCircle = document.getElementById("profile-circle");
+    const topbarHamburger = document.getElementById("topbar-hamburger");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
     const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
     const hamburgerMenu = document.getElementById("hamburger-menu");
@@ -1250,7 +1250,7 @@ function toggleHamburgerMenu() {
           profileInside = true;
         }
       } else {
-        if (targetElement == profileCircle) {
+        if (targetElement == topbarHamburger) {
           profileDropdown.classList.remove('inactive')
           profileDropdown.classList.remove('sidebar-out');
           profileDropdown.classList.add('sidebar-in')
@@ -1315,12 +1315,14 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("floating-hamburger").classList.add('inactive')
+      document.getElementById("topbar-center-text").innerHTML = "News"
     } else if (num == 1) {
       document.getElementById("news-view").classList.add('inactive')
       document.getElementById("search-view").classList.remove('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("floating-hamburger").classList.add('inactive')
+      document.getElementById("topbar-center-text").innerHTML = "Search"
     } else if (num == 2) {
       document.getElementById("news-view").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -1329,6 +1331,7 @@ function toggleHamburgerMenu() {
       document.getElementById("hamburger-menu").classList.remove('hamburger-out')
       document.getElementById("hamburger-menu").classList.add('inactive')
       document.getElementById("floating-hamburger").classList.add('inactive')
+      document.getElementById("topbar-center-text").innerHTML = "Opportunities"
       renderFbos()
     } else if (num == 3) {
       document.getElementById("news-view").classList.add('inactive')
@@ -1338,6 +1341,7 @@ function toggleHamburgerMenu() {
       document.getElementById("hamburger-menu").classList.remove('hamburger-out')
       document.getElementById("hamburger-menu").classList.add('inactive')
       document.getElementById("floating-hamburger").classList.add('inactive')
+      document.getElementById("topbar-center-text").innerHTML = "Pipeline"
     }
     activeTab = num
     var a = document.getElementsByClassName('iconbar-icon')
@@ -1348,6 +1352,7 @@ function toggleHamburgerMenu() {
         a[i].classList.remove('iconbar-icon-active');
       }
     }
+    closeSidebar()
   }
 
   function getToday() {
@@ -2574,7 +2579,7 @@ function toggleHamburgerMenu() {
         if (avatar == '../../assets/img/user.png') {
           avatar = './img/user.png'
         }
-        // document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
+        document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
         var xhttp2 = new XMLHttpRequest();
         // xhttp.setRequestHeader("Content-type", "application/json");
         xhttp2.onreadystatechange = function() {
@@ -2824,7 +2829,7 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    switchTab(2)
+    // switchTab(2)
     // goToFbo(5, 0);
     // openPopups(2)
     // goToCompanyCreate()
@@ -2900,8 +2905,10 @@ function toggleHamburgerMenu() {
             if (queryResults.length < 1) {
               console.log('no results found')
             } else {
-              console.log('we got '+queryResults.length+' results')
               console.log(queryResults)
+              if (queryResults > 1000) {
+                queryResults = queryResults.slice(0,1000)
+              }
             }
             var prices = [
               0,
@@ -3205,6 +3212,18 @@ function toggleHamburgerMenu() {
       }
     }
   };
+  function openSidebar() {
+    document.getElementById("sidebar").classList.remove('inactive')
+    document.getElementById("sidebar").classList.remove('sidebar-out')
+    document.getElementById("sidebar").classList.add('sidebar-in')
+    profileDropdownOpen = true
+  }
+  function closeSidebar(){
+    document.getElementById("sidebar").classList.add('sidebar-out');
+    document.getElementById("sidebar").classList.remove('sidebar-in')
+    profileDropdownOpen = false
+  }
+
 
   $(function() {
     $("#sidebar-detector").swipe( {
