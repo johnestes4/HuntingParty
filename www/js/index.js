@@ -1310,21 +1310,21 @@ function toggleHamburgerMenu() {
     tutorialsOpen = true
     openTutorials()
     if (num == 0) {
-      document.getElementById("news-view").classList.remove('inactive')
+      document.getElementById("news-block").classList.remove('inactive')
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("floating-hamburger").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "News"
     } else if (num == 1) {
-      document.getElementById("news-view").classList.add('inactive')
+      document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.remove('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("floating-hamburger").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Search"
     } else if (num == 2) {
-      document.getElementById("news-view").classList.add('inactive')
+      document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.remove('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
@@ -1334,7 +1334,7 @@ function toggleHamburgerMenu() {
       document.getElementById("topbar-center-text").innerHTML = "Opportunities"
       renderFbos()
     } else if (num == 3) {
-      document.getElementById("news-view").classList.add('inactive')
+      document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.remove('inactive')
@@ -1779,12 +1779,12 @@ function toggleHamburgerMenu() {
     console.log(num)
     fboIndex = num
     setActiveFbo(num, tab)
-    document.getElementById("news-view").classList.add('inactive');
+    document.getElementById("news-block").classList.add('inactive');
     document.getElementById("fbo-view").classList.add('inactive');
     document.getElementById("search-view").classList.add('inactive');
     document.getElementById("pipeline-view").classList.add('inactive');
     document.getElementById("fbo-detail-view").classList.remove('inactive');
-    document.getElementById("floating-hamburger").classList.remove('inactive')
+    document.getElementById("floating-hamburger").classList.remove('inactive');
   }
 
   function checkEmail() {
@@ -2805,7 +2805,7 @@ function toggleHamburgerMenu() {
       document.getElementById("tos-popup").classList.add('inactive');
       document.getElementById("loading").classList.add('inactive');
       document.getElementById("main-view").classList.remove('inactive');
-      document.getElementById("news-view").classList.remove('inactive');
+      document.getElementById("news-block").classList.remove('inactive');
       document.getElementById("fbo-view").classList.add('inactive');
       document.getElementById("search-view").classList.add('inactive');
       document.getElementById("login-register").classList.add('inactive');
@@ -2817,7 +2817,7 @@ function toggleHamburgerMenu() {
       document.getElementById("loading").classList.add('inactive');
       document.getElementById("tos-popup").classList.add('inactive');
       document.getElementById("main-view").classList.remove('inactive');
-      document.getElementById("news-view").classList.remove('inactive');
+      document.getElementById("news-block").classList.remove('inactive');
       document.getElementById("fbo-view").classList.add('inactive');
       document.getElementById("search-view").classList.add('inactive');
       document.getElementById("login-register").classList.add('inactive');

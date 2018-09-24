@@ -82,104 +82,108 @@ under the License.
   </div>
   <div id="login-register" class="inactive">
     <div id="login-view">
-      <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
+      <div class="login-header">
         <h1>HUNTING PARTY</h1>
       </div>
-      <div class="instructions">
-        <p>Please sign in...</p>
-      </div>
-      <p class="login-info">Username (Email Address)</p>
+      <!-- <div class="instructions">
+      <p>Please sign in...</p>
+    </div> -->
+    <div class="login-register-content">
+      <p class="login-info">Email Address</p>
       <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
       <p class="login-info">Password</p>
       <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
-      <div id="login-error-text" class="" style="color: red; font-size: 14px; padding-left: 5%; width: 100%;">
-
-      </div>
-      <div class="" style="width: 100%; position: relative;">
-        <button class="center-absolute" type="button" name="button" onclick="login()">LOGIN</button>
-        <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button>
-      </div>
+      <div id="login-error-text"></div>
     </div>
-    <div id="register-view" class="inactive">
-      <div class="instructions">
-        <p>Join Hunting Party</p>
-      </div>
-      <!-- <p class="login-info">Username (Email Address)</p> -->
-      <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
-      <div id="register-alert-1" class="register-field-alert">
 
-      </div>
-      <!-- <p class="login-info">Password</p> -->
-      <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last name">
-      <div id="register-alert-2" class="register-field-alert">
 
+    <div class="" style="width: 100%; position: relative;">
+      <button class="center-absolute button-alt" type="button" name="button" onclick="login()">LOGIN</button>
+      <div class="login-redirect">
+        <p>New to Hunting Party? <a href="#" onclick="goToRegister()">Sign Up Here</a></p>
       </div>
-      <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Email address">
-      <div id="register-alert-3" class="register-field-alert">
-
-      </div>
-      <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
-      <div id="register-alert-4" class="register-field-alert">
-
-      </div>
-      <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
-      <div id="register-alert-5" class="register-field-alert">
-
-      </div>
-      <div class="" style="width: 100%; position: relative;">
-        <button class="center-absolute" type="button" name="button" onclick=register()>JOIN</button>
-        <div class="" style="width: 100%; text-align: center;">
-          <a href="#" onclick="goToLogin()">Go Back To Login</a>
-        </div>
-      </div>
-    </div>
-    <div id="company-create-view" class="inactive">
-      <div id="company-confirm-view" class="inactive">
-        <div id="company-confirm-img-wrapper">
-          <img class="company-confirm-img" src="./img/profile.png" alt="">
-        </div>
-        <div id="company-confirm-desc" class="">
-          <h4>Company #1</h4>
-          <p>123 Place St, 12345</p>
-          <p>email@mail.zone</p>
-          <h5>Do you want to request to join?</h5>
-          <p>If you choose JOIN, we'll send a join request to Company #1. If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>
-        </div>
-        <button type="button" name="button" onclick="sendCompanyRequest()">Join</button>
-        <button type="button" name="button" onclick="leaveCompanyConfirm()">Back</button>
-      </div>
-      <div id="company-confirm-confirm-view" class="inactive">
-        <p>Your join request has been sent.</p>
-        <p>If the company accepts, you'll gain full access to their Hunting Party.</p>
-        <p>We'll notify you when they respond.</p>
-      </div>
-      <div id="company-search-view" class="">
-        <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
-          <h1>Become part of a company</h1>
-        </div>
-        <div class="instructions">
-          <p>See if your company is already in our system:</p>
-        </div>
-        <div class="" style="position: relative; width: 100vw; height: 45px; margin-bottom: 2vh;">
-          <input id="company-search" type="text" name="" value="" onkeyup="companySearch()" placeholder="Find a Company">
-          <div id="company-search-dropdown" class="inactive">
-
-          </div>
-        </div>
-        <!-- <div class="instructions">
-        <p>If not, you can be the one to start it! Fill in below:</p>
-      </div>
-      <p class="login-info"></p>
-      <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
-      <input id="new-company-email" type="text" name="" value="" placeholder="Email">
-      <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
-      <input id="new-company-address" type="text" name="" value="" placeholder="Address">
-      <input id="new-company-city" type="text" name="" value="" placeholder="City">
-      <input id="new-company-state" type="text" name="" value="" placeholder="State">
-      <input id="new-company-zip" type="number" name="" value="" placeholder="Zip">
-      <button type="button" name="button" onclick="createCompany()">Create</button> -->
+      <!-- <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button> -->
     </div>
   </div>
+  <div id="register-view" class="inactive">
+    <!-- <div class="instructions">
+    <p>Join Hunting Party</p>
+  </div> -->
+  <!-- <p class="login-info">Username (Email Address)</p> -->
+  <div class="login-header">
+    <h1>HUNTING PARTY</h1>
+  </div>
+  <div class="login-register-content">
+    <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
+    <div id="register-alert-1" class="register-field-alert"></div>
+    <!-- <p class="login-info">Password</p> -->
+    <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last name">
+    <div id="register-alert-2" class="register-field-alert"></div>
+
+    <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Email address">
+    <div id="register-alert-3" class="register-field-alert"></div>
+
+    <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
+    <div id="register-alert-4" class="register-field-alert"></div>
+
+    <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
+    <div id="register-alert-5" class="register-field-alert"></div>
+  </div>
+
+  <div class="">
+    <button class="center-absolute button-alt" type="button" name="button" onclick=register()>JOIN</button>
+    <div class="login-redirect">
+      <p>Already have an Account? <a href="#" onclick="goToLogin()">Go Back To Login</a></p>
+    </div>
+  </div>
+</div>
+<div id="company-create-view" class="inactive">
+  <div id="company-confirm-view" class="inactive">
+    <div id="company-confirm-img-wrapper">
+      <img class="company-confirm-img" src="./img/profile.png" alt="">
+    </div>
+    <div id="company-confirm-desc" class="">
+      <h4>Company #1</h4>
+      <p>123 Place St, 12345</p>
+      <p>email@mail.zone</p>
+      <h5>Do you want to request to join?</h5>
+      <p>If you choose JOIN, we'll send a join request to Company #1. If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>
+    </div>
+    <button type="button" name="button" onclick="sendCompanyRequest()">Join</button>
+    <button type="button" name="button" onclick="leaveCompanyConfirm()">Back</button>
+  </div>
+  <div id="company-confirm-confirm-view" class="inactive">
+    <p>Your join request has been sent.</p>
+    <p>If the company accepts, you'll gain full access to their Hunting Party.</p>
+    <p>We'll notify you when they respond.</p>
+  </div>
+  <div id="company-search-view" class="">
+    <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
+      <h1>Become part of a company</h1>
+    </div>
+    <div class="instructions">
+      <p>See if your company is already in our system:</p>
+    </div>
+    <div class="" style="position: relative; width: 100vw; height: 45px; margin-bottom: 2vh;">
+      <input id="company-search" type="text" name="" value="" onkeyup="companySearch()" placeholder="Find a Company">
+      <div id="company-search-dropdown" class="inactive">
+
+      </div>
+    </div>
+    <!-- <div class="instructions">
+    <p>If not, you can be the one to start it! Fill in below:</p>
+  </div>
+  <p class="login-info"></p>
+  <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
+  <input id="new-company-email" type="text" name="" value="" placeholder="Email">
+  <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
+  <input id="new-company-address" type="text" name="" value="" placeholder="Address">
+  <input id="new-company-city" type="text" name="" value="" placeholder="City">
+  <input id="new-company-state" type="text" name="" value="" placeholder="State">
+  <input id="new-company-zip" type="number" name="" value="" placeholder="Zip">
+  <button type="button" name="button" onclick="createCompany()">Create</button> -->
+</div>
+</div>
 </div>
 
 <div id="main-view" class="inactive">
@@ -248,22 +252,7 @@ under the License.
 </div> -->
 
 </div>
-</div>
-<div id="news-view" class="body-block">
-  <div class="tutorial-view inactive">
-    <div class="tutorial-box" style="left: 10vw; top: 12vh;">
-      <div class="relative-box" style="width: 60vw; height: 40vh;">
-        <p>PIPELINE HEALTH IS OUR ESTIMATE OF YOUR CHANCES OF HITTING YOUR GROWTH GOALS BASED ON:</p>
-        <p>1) THE NUMBER OF OPPORTUNITIES YOU'VE IDENTIFIED</p>
-        <p>2) THE AVERAGE COMPETITION FOR THE KIND OF WORK YOU ARE PURSUING</p>
-        <p>3) THE RFP TARGET YOU SET</p>
-        <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(50% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
-          <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="news-block">
   <input id="reg-id" style="width: 100%;" class="inactive"></input>
   <div id="todo-block" class="inactive">
     <div class="news-tab" style="width: 55%; margin-left: 15%; margin-right: 5%; line-height: 12vh;">
@@ -299,9 +288,10 @@ under the License.
   <div id="company-info" style="color: white;">
 
   </div>
-  <div id="news-block">
-    <div class="" style="width: 100%; text-align: center; float: left; height: 4vh; line-height: 4vh; font-size: 14px; color: white;">
-      NEWS
+  <div id="news-block" style="height: 51.5vh">
+    <div class="news-header">
+      <h6>NEWS</h6>
+      <hr class="hr-gold">
     </div>
     <div id="news-items" class="">
       <div class="news-item">
@@ -804,18 +794,9 @@ under the License.
       </div>
     </div>
   </div>
-  <!-- <div class="lower inactive" id="lower-2">
-</div>
-<div class="lower inactive" id="lower-3">
-</div> -->
-<!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
-<!-- <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
-<button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
-<button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
-</div> -->
-<div id="floating-hamburger" class="iconbar-floating" onclick="toggleHamburgerMenu()">
-  <img class="iconbar-img" src="./img/hamburger.png" alt="">
-</div>
+  <div id="floating-hamburger" class="iconbar-floating" onclick="toggleHamburgerMenu()">
+    <img class="iconbar-img" src="./img/hamburger.png" alt="">
+  </div>
 </div>
 <!-- <div class="iconbar">
 <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
