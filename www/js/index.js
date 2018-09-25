@@ -1593,23 +1593,40 @@ function toggleHamburgerMenu() {
         // }
         fboPipeline.push(proxy)
         var index = fboPipeline.length - 1
-        pipelineHtml = pipelineHtml + '<div class="fbo-item">'+
-        '<div class="second-border">'+
-        ''+voteHtml+
-        '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
+        pipelineHtml = pipelineHtml +
+        '<div class="fbo-item" onclick="goToFbo(' + index + ', 1)">'+
+        '<div class="fbo-item-avatar">'+
+        '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
+        '</div>'+
+        '<div class="fbo-item-body">'+
+        '<div class="fbo-item-title">'+
         '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-        '<div class="fbo-item-title-bg"></div>'+
-        '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
         '</div>'+
-        '<div class="fbo-item-comments">'+
-        comments+
+        '<div class="fbo-item-desc">'+
+        '<p class="">'+proxy.fbo.desc+'</p>'+
         '</div>'+
-        '<div class="fbo-item-buttons">'+
-        '<div class="fbo-item-time-button">'+
-        dueDate+
+        '<div class="fbo-item-icons">'+
+        '<p class="">------------</p>'+
         '</div>'+
         '</div>'+
-        '</div>'+
+        // '<div class="fbo-item">'+
+        // '<div class="second-border">'+
+        // ''+voteHtml+
+        // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
+        // '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+        // '<div class="fbo-item-title-bg"></div>'+
+        // '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
+        // '</div>'+
+        // '<div class="fbo-item-comments">'+
+        // comments+
+        // '</div>'+
+        // '<div class="fbo-item-buttons">'+
+        // '<div class="fbo-item-time-button">'+
+        // dueDate+
+        // '</div>'+
+        // '</div>'+
+        // '</div>'+
+        // '</div>'
         '</div>'
       }
       // if (expired) {
