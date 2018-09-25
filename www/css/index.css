@@ -73,6 +73,27 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Lato Semibold', sans-serif!important;
 }
 
+#search-input-keyword{
+  padding: 0px 15px; 
+  font-size: 14px; 
+  border: 1px solid rgba(20,20,20,1);
+}
+
+#save-search-button{
+  width: 90%; 
+  margin-top: .5em;
+  margin-left: 5%; 
+  margin-bottom: 2vh;
+}
+#delete-search-button{
+  background: rgba(255,198,0,1);
+  width: 90%; 
+  margin-left: 5%;
+  margin-bottom: 2vh;
+}
+
+
+
 #mypanel {
   color: black!important;
 }
@@ -1483,13 +1504,15 @@ h1 {
 }
 #search-terms-view .card-header{
   padding: 0 !important;
+  background-color: white;
 }
 
 #search-terms-view .card{
   margin-left: 0 !important;
   margin-right: 0 !important;
+  border-radius: 0;
+  border: none;
 }
-
 .search-box {
   /* border: 1px solid rgba(0,0,0,0.75); */
   width: 100%;
@@ -1534,9 +1557,9 @@ h1 {
   font-size: 14px;
 }
 
-#search-terms-view {
+/* #search-terms-view {
   padding: 1vh 2vw 1vh 2vw;
-}
+} */
 
 @keyframes fade {
   from { opacity: 1.0; }
