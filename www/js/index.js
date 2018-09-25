@@ -1476,7 +1476,7 @@ function toggleHamburgerMenu() {
         if (vote.comment) {
           voteString = ' - "'+vote.comment+'"'
         }
-        comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+        comments = comments + '<p class="comment yes-comment"><img class="comment-icon icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
         voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
       }
       for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
@@ -1485,7 +1485,7 @@ function toggleHamburgerMenu() {
         if (vote.comment) {
           voteString = ' - "'+vote.comment+'"'
         }
-        comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+        comments = comments + '<p class="comment no-comment"><img class="comment-icon icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
         voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
       }
       if (comments.length < 1) {
@@ -1552,7 +1552,7 @@ function toggleHamburgerMenu() {
           '<div class="fbo-item-buttons">'+
           '<div id="no-button-' + index + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(1)">'+
           '<div class="second-border">'+
-          '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
+          '<img class="circle-img-2 icon" src="./img/thumbsdown.png" alt="">'+
           '</div>'+
           '</div>'+
           '<div class="fbo-item-time-button">'+
@@ -1560,7 +1560,7 @@ function toggleHamburgerMenu() {
           '</div>'+
           '<div id="yes-button-' + index + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(0)">'+
           '<div class="second-border">'+
-          '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
+          '<img class="circle-img-2 icon" src="./img/thumbsup.png" alt="">'+
           '</div>'+
           '</div>'+
           '</div>'+
@@ -2403,7 +2403,7 @@ function toggleHamburgerMenu() {
           if (vote.comment) {
             voteString = ' - "'+vote.comment+'"'
           }
-          var newString = '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+          var newString = '<p class="comment yes-comment"><img class="comment-icon icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
 
           chatString = chatString + newString
         }
@@ -2413,7 +2413,7 @@ function toggleHamburgerMenu() {
           if (vote.comment) {
             voteString = ' - "'+vote.comment+'"'
           }
-          var newString = '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+          var newString = '<p class="comment no-comment"><img class="comment-icon icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
           chatString = chatString + newString
         }
         if ((newFbo.voteYes.length + newFbo.voteNo.length) < 1) {
