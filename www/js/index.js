@@ -1,5 +1,5 @@
-var apiUrl = 'https://efassembly.com:4432'
-// var apiUrl = 'http://18.218.170.246:4200'
+// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'http://18.218.170.246:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -530,16 +530,17 @@ function openProfileDropdown() {
 }
 
 var activeSearchIndex
-function viewSearch() {
-  if (document.getElementById("saved-searches").value > -1) {
-    searchTerms = yourSearches[document.getElementById("saved-searches").value]
-    activeSearchIndex = document.getElementById("saved-searches").value
+function viewSearch(index) {
+  if (index > -1) {
+    searchTerms = yourSearches[index]
+    activeSearchIndex = index
     document.getElementById("delete-search-button").classList.remove('inactive')
   } else {
     searchTerms = emptySearchTerms
-    activeSearchIndex = document.getElementById("saved-searches").value
+    activeSearchIndex = -1
     document.getElementById("delete-search-button").classList.add('inactive')
   }
+
   renderSearch()
   var a = document.getElementsByClassName('checkbox-duedate')
   for (i = 0; i < a.length; i++) {
@@ -572,7 +573,7 @@ function viewSearch() {
 }
 
 function renderSavedSearches() {
-  var html = '<option value="-1">---Create New Search---</option>'
+  var html = ''
   // '<option disabled selected value> -- select an option -- </option>'
   console.log(huntingPartyData.searches)
   yourSearches = huntingPartyData.searches
@@ -586,10 +587,25 @@ function renderSavedSearches() {
   //   }
   // }
   for (i = 0; i < yourSearches.length; i++) {
-    html = html + '<option value="'+i+'">'+yourSearches[i].name+'</option>'
+    html = html + '<div class="search-item" onclick="viewSearch('+i+')">'+
+      '<div class="search-item-text">'+
+        yourSearches[i].name+
+      '</div>'+
+      '<div class="search-item-right">'+
+        '>'+
+      '</div>'+
+    '</div>'
   }
+  html = html + '<div class="search-item" onclick="viewSearch('+i+')">'+
+    '<div class="search-item-text">'+
+      'Create New Search'+
+    '</div>'+
+    '<div class="search-item-right">'+
+      '>'+
+    '</div>'+
+  '</div>'
 
-  document.getElementById("saved-searches").innerHTML = html
+  document.getElementById("saved-search-view").innerHTML = html
 }
 
 function deleteSearchTerms() {
@@ -1240,7 +1256,6 @@ function toggleHamburgerMenu() {
     const topbarHamburger = document.getElementById("topbar-hamburger");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
     const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
-    const hamburgerMenu = document.getElementById("hamburger-menu");
     let targetElement = evt.target; // clicked element
     var profileInside = false
     do {
@@ -1289,19 +1304,6 @@ function toggleHamburgerMenu() {
       // }
       voteDropdownOpen = -1
     }
-    if (hamburgerMenuOpen && !hamburgerOpening) {
-      targetElement = evt.target
-      do {
-        if (targetElement == hamburgerMenu) {
-          // This is a click inside. Do nothing, just return.
-          return;
-          // Go up the DOM
-        }
-        targetElement = targetElement.parentNode;
-      } while (targetElement);
-      // This is a click outside.
-      toggleHamburgerMenu()
-    }
   });
 
   function switchTab(num) {
@@ -1314,23 +1316,18 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("floating-hamburger").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "News"
     } else if (num == 1) {
       document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.remove('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("floating-hamburger").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Search"
     } else if (num == 2) {
       document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.remove('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("hamburger-menu").classList.remove('hamburger-out')
-      document.getElementById("hamburger-menu").classList.add('inactive')
-      document.getElementById("floating-hamburger").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Opportunities"
       renderFbos()
     } else if (num == 3) {
@@ -1338,9 +1335,6 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.remove('inactive')
-      document.getElementById("hamburger-menu").classList.remove('hamburger-out')
-      document.getElementById("hamburger-menu").classList.add('inactive')
-      document.getElementById("floating-hamburger").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
     }
     activeTab = num
@@ -1801,7 +1795,6 @@ function toggleHamburgerMenu() {
     document.getElementById("search-view").classList.add('inactive');
     document.getElementById("pipeline-view").classList.add('inactive');
     document.getElementById("fbo-detail-view").classList.remove('inactive');
-    document.getElementById("floating-hamburger").classList.remove('inactive');
   }
 
   function checkEmail() {
@@ -2167,11 +2160,6 @@ function toggleHamburgerMenu() {
     proxy.fbo.contact+
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
     document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
-    // if (typeof proxy.fboDesc === 'string') {
-    //   console.log('parsing')
-    //   var fboDesc = parseThroughFboDesc(proxy.fboDesc)
-    //   proxy.fboDesc = fboDesc
-    // }
     var fboDescHTML = ''
     for (i = 0; i < proxy.fboDesc.length; i++) {
       fboDescHTML = fboDescHTML + proxy.fboDesc[i]
@@ -2200,18 +2188,29 @@ function toggleHamburgerMenu() {
     } else {
       dueDate = "<p'>No Due Date</p>"
     }
-    document.getElementById("time-button").innerHTML = dueDate
-    if (tab == 1) {
-      document.getElementById("big-yes-button").classList.add('inactive');
-      document.getElementById("big-no-button").classList.add('inactive');
-    } else if (tab == 0) {
-      document.getElementById("big-yes-button").classList.remove('inactive');
-      document.getElementById("big-no-button").classList.remove('inactive');
-    }
+    document.getElementById("fbo-detail-left-details-date").innerHTML = due
     fboIndex = index
     renderChart()
     updateComments(proxy)
     checkVote(proxy, index)
+  }
+
+  function switchFboDetailTab(which) {
+    if (which == 0) {
+      document.getElementById("fbo-detail-topbar-arrow-left").classList.remove('inactive');
+      document.getElementById("fbo-detail-info").classList.remove('inactive');
+      document.getElementById("fbo-detail-topbar-arrow-right").classList.add('inactive');
+      document.getElementById("fbo-detail-data").classList.add('inactive');
+      document.getElementById("fbo-detail-topbar-left").classList.add('topbar-half-active');
+      document.getElementById("fbo-detail-topbar-right").classList.remove('topbar-half-active');
+    } else if (which == 1) {
+      document.getElementById("fbo-detail-topbar-arrow-left").classList.add('inactive');
+      document.getElementById("fbo-detail-info").classList.add('inactive');
+      document.getElementById("fbo-detail-topbar-arrow-right").classList.remove('inactive');
+      document.getElementById("fbo-detail-data").classList.remove('inactive');
+      document.getElementById("fbo-detail-topbar-left").classList.remove('topbar-half-active');
+      document.getElementById("fbo-detail-topbar-right").classList.add('topbar-half-active');
+    }
   }
 
   function checkVote(proxy, index) {
@@ -2230,14 +2229,8 @@ function toggleHamburgerMenu() {
       }
     }
     if (fboVote[index] == 1) {
-      document.getElementById("big-yes-button").classList.remove('voted-button');
-      document.getElementById("big-no-button").classList.add('voted-button');
     } else if (fboVote[index] == 2) {
-      document.getElementById("big-yes-button").classList.add('voted-button');
-      document.getElementById("big-no-button").classList.remove('voted-button');
     } else {
-      document.getElementById("big-yes-button").classList.remove('voted-button');
-      document.getElementById("big-no-button").classList.remove('voted-button');
     }
   }
 
@@ -2485,7 +2478,27 @@ function toggleHamburgerMenu() {
           if (vote.comment) {
             voteString = ' - "'+vote.comment+'"'
           }
-          var newString = '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+          var avatar = './img/user.png'
+          if (vote.avatar) {
+            avatar = vote.avatar
+          }
+          var newString = '<div class="comment yes-comment">'+
+          '<div class="comment-left">'+
+            '<div class="comment-avatar">'+
+              '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
+            '</div>'+
+            '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
+          '</div>'+
+          '<div class="comment-right">'+
+            '<div class="comment-title" style="margin: none!important">'+
+              '<p class="comment-name">'+vote.name+'</p>'+
+              '<p class="comment-time">99 mins</p>'+
+            '</div>'+
+            '<div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">'+
+              '<div class="comment-text" style="padding: none!important">'+voteString+'</div>'+
+            '</div>'+
+          '</div>'+
+          '</div>'
 
           chatString = chatString + newString
         }
@@ -2495,15 +2508,38 @@ function toggleHamburgerMenu() {
           if (vote.comment) {
             voteString = ' - "'+vote.comment+'"'
           }
-          var newString = '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+          var newString = '<div class="comment no-comment">'+
+          '<div class="comment-left">'+
+            '<div class="comment-avatar">'+
+              '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
+            '</div>'+
+            '<img class="comment-avatar-vote" src="./img/thumbsdown.png" alt="">'+
+          '</div>'+
+          '<div class="comment-right">'+
+            '<div class="comment-title" style="margin: none!important">'+
+              '<p class="comment-name">'+vote.name+'</p>'+
+              '<p class="comment-time">99 mins</p>'+
+            '</div>'+
+            '<div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">'+
+              '<div class="comment-text" style="padding: none!important">'+voteString+'</div>'+
+            '</div>'+
+          '</div>'+
+          '</div>'
           chatString = chatString + newString
         }
         if ((newFbo.voteYes.length + newFbo.voteNo.length) < 1) {
-          var newString = '<p class="comment">No comments yet</p>'
+          var newString = '<div class="comment">'+
+          '<div class="comment-left">'+
+          '</div>'+
+          '<div class="comment-right">'+
+            '<div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">'+
+              '<div class="comment-text" style="padding: none!important">No Comments Yet</div>'+
+            '</div>'+
+          '</div>'+
+          '</div>'
           chatString = chatString + newString
         }
-
-        document.getElementById("chat-box").innerHTML = chatString;
+        document.getElementById("fbo-details-comments").innerHTML = chatString;
         console.log('comments updated')
       }
     };
@@ -2846,7 +2882,7 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    // switchTab(2)
+    switchTab(1)
     // goToFbo(5, 0);
     // openPopups(2)
     // goToCompanyCreate()
@@ -2922,10 +2958,10 @@ function toggleHamburgerMenu() {
             if (queryResults.length < 1) {
               console.log('no results found')
             } else {
-              console.log(queryResults)
-              if (queryResults > 1000) {
+              if (queryResults.length > 1000) {
                 queryResults = queryResults.slice(0,1000)
               }
+              console.log(queryResults)
             }
             var prices = [
               0,
@@ -2950,7 +2986,7 @@ function toggleHamburgerMenu() {
             }
             // console.log('heres the prices')
             // console.log(prices)
-            Chart.defaults.global.defaultFontColor = 'white';
+            Chart.defaults.global.defaultFontColor = 'rgba(96,97,97,1)';
             var myChart1 = new Chart(chart1, {
               type: 'bar',
               data: {

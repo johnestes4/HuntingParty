@@ -45,6 +45,10 @@
   font-style: normal;
 }
 
+.icon {
+  filter: brightness(0) invert(1);
+}
+
 body {
   -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
   -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
@@ -703,6 +707,248 @@ h1, .instructions{
   right: 1vw;
 }
 
+.fbo-detail-left {
+  height: 55vh;
+  width: 140px;
+  float: left;
+  padding-left: 4px;
+  padding-right: 4px;
+  overflow-y: auto;
+}
+.fbo-detail-right {
+  height: 55vh;
+  width: calc(100% - 140px);
+  float: left;
+}
+.fbo-detail-img {
+  width: 132px;
+  height: 132px;
+  float: left;
+  margin-bottom: 4px;
+  position: relative;
+}
+#fbo-detail-img {
+  display: block;
+  margin: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  max-width: 132px;
+  max-width: 132px;
+}
+
+#fbo-title {
+  padding: 1vh 1vw 1vh 1vw;
+  font-size: 16px;
+  line-height: 16px;
+  font-family: 'Lato Semibold', sans-serif;
+  height: calc(2vh + 50px);
+}
+
+#abstract-text {
+  padding: 1vh 1vw 1vh 1vw;
+  height: calc(53vh - 58px);
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.fbo-detail-left-details {
+  height: 22px;
+  width: 100%;
+  margin-bottom: 3px;
+}
+.fbo-detail-left-details img {
+  height: 22px;
+  width: 22px;
+  float: left;
+}
+.fbo-detail-left-details p {
+  padding-left: 5px;
+  float: left;
+  width: calc(100% - 22px);
+  font-size: 11px;
+  line-height: 22px;
+}
+.fbo-detail-left button {
+  width: calc(100% - 20px);
+  height: 20px;
+  line-height: 16px;
+  font-size: 12px;
+  font-weight: normal;
+  margin-bottom: 5px;
+  background: rgba(0,175,217,1);
+}
+
+
+#fbo-detail-top {
+  height: 55vh;
+  width: 100%;
+  float: left;
+  overflow-y: auto;
+}
+
+.fbo-detail-bottom {
+  height: 31vh;
+  width: 100%;
+  float: left;
+  border-top: 1px solid rgba(0,0,0,0.35);
+}
+
+#fbo-details-comments {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+#fbo-details-comment-submit {
+  height: 40px;
+  background: rgba(255,255,255,1);
+
+}
+
+.fbo-details-input {
+  height: 36px;
+  width: calc(100% - 140px);
+  margin-left: 4px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  float: left;
+  border-radius: 8px;
+}
+
+.fbo-details-input-button {
+  width: 36px;
+  margin: 2px 15px 2px 15px;
+  height: 36px;
+  float: left;
+}
+
+.comment {
+  background: rgba(205,239,248,1);
+  min-height: 95px;
+  overflow: auto;
+  width: 100%;
+  position: relative;
+  height: auto;
+  border-bottom: rgba(0,0,0,0.75);
+  text-align: left;
+  margin-bottom: 0px;
+  padding: 12px 6px 12px 6px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.375);
+}
+.comment p {
+  margin: none;
+  margin: 0px!important;
+  padding: 0px!important;
+}
+
+.comment-left {
+  width: 80px;
+  float: left;
+  display: block;
+  position: relative;
+}
+
+.comment-right {
+  width: calc(100% - 80px);
+  padding-left: 4px;
+  float: left;
+  display: block;
+  position: relative;
+}
+.comment-avatar {
+  width: 50px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+  background: white;
+  border-radius: 90%;
+}
+
+.comment-avatar-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  min-width: 50px;
+  min-height: 50px;
+  height: 100%;
+}
+.comment-avatar-vote {
+  position: absolute;
+  left: 50%;
+  top: 55px;
+  transform: translateX(-50%);
+  width: 15px;
+  height: 15px;
+}
+.comment-title {
+  width: 100%;
+  height: 30px;
+  margin: 0px;
+}
+.comment-name {
+  width: 50%;
+  float: left;
+  font-size: 18px;
+  line-height: 26px;
+  height: 30px;
+}
+.comment-time {
+  width: 50%;
+  height: 30px;
+  float: left;
+  font-size: 14px;
+  line-height: 26px;
+  text-align: right;
+  color: rgba(0,0,0,0.5);
+}
+.comment-text {
+  width: 100%;
+  font-size: 16px;
+  height: auto;
+  display: block;
+  position: relative;
+  line-height: 18px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.yes-comment {
+  background: rgba(205, 249, 208, 1);
+}
+.no-comment {
+  background: rgba(249, 205, 205, 1);
+}
+
+.search-item {
+  padding: 2vh 5vw 2vh 5vw;
+  font-size: 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  overflow: auto;
+}
+
+.search-item-text {
+  width: calc(100% - 80px);
+  float: left;
+}
+.search-item-right {
+  width: 80px;
+  padding-top: 2px;
+  float: left;
+  text-align: right;
+  color: rgba(0,0,0,0.5);
+  font-size: 18px;
+}
+
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
@@ -719,15 +965,15 @@ a:active {
 
 button {
   /* background: rgba(255,198,0,1); */
-  background: rgba(0,175,217,1);
+  background: rgba(255,198,0,1);
   /* background: rgba(60,85,136,1); */
   font-size: 2vh;
   font-weight: bold;
   line-height: 5vh;
   height: 6vh;
-
+  border-radius: 8px;
   /* Styles */
-  border: none;
+  border: 1px solid rgba(255,255,255,0.25);
   color: white;
   transition: .1s;
 }
@@ -822,6 +1068,10 @@ h1 {
   line-height: 7vh;
   font-family: 'Lato Semibold', sans-serif;
 }
+.topbar-half-active {
+  color: white!important;
+  font-weight: bold;
+}
 
 .second-topbar {
   background: rgba(0,175,217,1);
@@ -833,8 +1083,9 @@ h1 {
 .second-topbar-half {
   float: left;
   height: 100%;
-  width: 50%;gf
-  color: white;
+  width: 50%;
+  font-size: 18px;
+  color: rgba(255,255,255,0.5);
   line-height: 7vh;
   font-family: 'Lato Semibold', sans-serif;
 }
@@ -847,7 +1098,6 @@ h1 {
   border-right: 8px solid transparent;
   border-bottom: 8px solid rgba(255,255,255,1);
   bottom: 0px;
-  left: 45px;
 }
 
 .circle {
@@ -1062,13 +1312,6 @@ h1 {
 .sidebar h1 {
   font-size: 3vh;
   line-height: 7vh;
-}
-
-#fbo-title {
-  padding: 0px 1vw 0px 1vw;
-  font-size: 16px;
-  margin-top: 4px;
-  line-height: 16px;
 }
 
 .bar {
@@ -1411,7 +1654,6 @@ h1 {
 }
 
 .highlight-button {
-  height: 100%;
   width: 48%;
   margin-left: 1%;
   margin-right: 1%;
@@ -1453,21 +1695,6 @@ h1 {
 .chat-window {
   width: 100%;
   height: 6vh;
-}
-
-.comment {
-  text-align: left;
-  margin-bottom: 0px;
-  padding: 4px 4px 4px 4px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(0,0,0,0.375);
-}
-
-.yes-comment {
-  background: rgba(78, 136, 81, 1);
-}
-.no-comment {
-  background: rgba(136, 78, 78, 1);
 }
 
 .voted-button {

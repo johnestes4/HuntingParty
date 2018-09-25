@@ -209,25 +209,25 @@ under the License.
       </div>
       <div class="sidebar-item" onclick="switchTab(0)">
         <div class="sidebar-img-wrapper">
-          <img class="sidebar-img" src="./img/news.png" alt="">
+          <img class="sidebar-img icon" src="./img/news.png" alt="">
         </div>
         <p>News</p>
       </div>
       <div class="sidebar-item" onclick="switchTab(2)">
         <div class="sidebar-img-wrapper">
-          <img class="sidebar-img" src="./img/rfp.png" alt="">
+          <img class="sidebar-img icon" src="./img/rfp.png" alt="">
         </div>
         <p>Opportunities</p>
       </div>
       <div class="sidebar-item" onclick="switchTab(3)">
         <div class="sidebar-img-wrapper">
-          <img class="sidebar-img" src="./img/news.png" alt="">
+          <img class="sidebar-img icon" src="./img/news.png" alt="">
         </div>
         <p>Pipeline</p>
       </div>
       <div class="sidebar-item" onclick="switchTab(1)">
         <div class="sidebar-img-wrapper">
-          <img class="sidebar-img" src="./img/search.png" alt="">
+          <img class="sidebar-img icon" src="./img/search.png" alt="">
         </div>
         <p>Search</p>
       </div>
@@ -324,10 +324,18 @@ under the License.
 <div id="search-view" class="body-block inactive">
   <div id="saved-search-view" class="">
     <div class="search-item">
-      Test
+      <div class="search-item-text">
+        Test
+      </div>
+      <div class="search-item-right">
+        >
+      </div>
+    </div>
+    <div class="search-item">
+      Test2
     </div>
   </div>
-  <div id="search-terms-view" class="">
+  <div id="search-terms-view" class="inactive">
     <div id="search-save-popup" class="inactive">
       <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
       <button style="width: 30vw; margin-top: 1vh" type="button" name="button" onclick="closeSearchPopup()">OKAY</button>
@@ -642,15 +650,15 @@ under the License.
             <div class="fbo-item-buttons">
               <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
                 <div class="second-border">
-                  <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
+                  <img class="circle-img-2 icon" src="./img/thumbsdown.png" alt="">
                 </div>
               </div>
               <div class="fbo-item-time-button">
-                <img class="circle-img-2" src="./img/share.png" alt="">
+                <img class="circle-img-2 icon" src="./img/share.png" alt="">
               </div>
               <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
                 <div class="second-border">
-                  <img class="circle-img-2" src="./img/thumbsup.png" alt="">
+                  <img class="circle-img-2 icon" src="./img/thumbsup.png" alt="">
                 </div>
               </div>
             </div>
@@ -692,32 +700,15 @@ under the License.
   </div>
 </div>
 <div id="fbo-detail-view" class="body-block inactive">
-  <div id="hamburger-menu" class="inactive">
-    <div class="databar-inner" onclick='expandData(1)'>
-      ABSTRACT
-      <div class="info-circle">
-        i
-      </div>
-      <div class="arrow" id="arrow-1">
-        ▼ <!-- ▲ -->
+  <div class="second-topbar">
+    <div id="fbo-detail-topbar-left" class="second-topbar-half topbar-half-active" onclick="switchFboDetailTab(0)" style="padding-left: 40px;">
+      Info
+      <div id="fbo-detail-topbar-arrow-left" class="second-topbar-arrow" style="left: 50px;">
       </div>
     </div>
-    <div class="databar-inner" onclick='expandData(2)'>
-      DATA
-      <div class="info-circle">
-        i
-      </div>
-      <div class="arrow" id="arrow-2">
-        ▼ <!-- ▲ -->
-      </div>
-    </div>
-    <div class="databar-inner" onclick='expandData(3)'>
-      COMMENTS
-      <div class="info-circle">
-        i
-      </div>
-      <div class="arrow" id="arrow-3">
-        ▼ <!-- ▲ -->
+    <div id="fbo-detail-topbar-right" class="second-topbar-half" onclick="switchFboDetailTab(1)" style="padding-right: 40px; text-align: right;">
+      Data
+      <div id="fbo-detail-topbar-arrow-right" class="second-topbar-arrow inactive" style="right: 50px;">
       </div>
     </div>
   </div>
@@ -738,50 +729,45 @@ under the License.
       </div>
     </div>
   </div>
-  <div class="buttonbar">
-    <div style="float: left; width: 100%; height: 7vh;">
-      <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-    </div>
-    <div class="big-circle-box">
-      <div class="big-circle" id="big-no-button" onclick='openPopups(1)'>
-        <div class="second-border">
-          <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
+  <div id="fbo-detail-top" class="">
+    <div id="fbo-detail-info" class="">
+      <div class="fbo-detail-left">
+        <div class="fbo-detail-img">
+          <img id="fbo-detail-img" src="./img/agencies/dhs.png" alt="">
+        </div>
+        <div class="fbo-detail-left-details">
+          <img src="./img/calendar.png" alt="">
+          <p id="fbo-detail-left-details-date">11/11/2111</p>
+        </div>
+        <div class="fbo-detail-left-details">
+          <img src="./img/comment.png" alt="">
+          <p id="fbo-detail-left-details-comments">99 Comments</p>
+        </div>
+        <div class="fbo-detail-left-details">
+          <img src="./img/thumbsup.png" alt="">
+          <p id="fbo-detail-left-details-likes">99 Likes</p>
+        </div>
+        <div class="fbo-detail-left-details">
+          <img src="./img/thumbsdown.png" alt="">
+          <p id="fbo-detail-left-details-dislikes">99 Dislikes</p>
+        </div>
+        <div class="fbo-detail-left-details">
+          <img src="./img/share.png" alt="">
+          <p id="fbo-detail-left-details-shares">99 Shares</p>
+        </div>
+        <button id="" class="" type="button" name="button">Refer</button>
+        <button id="highlight-button-1" class="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
+        <button id="highlight-button-2" class="" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
+      </div>
+      <div class="fbo-detail-right">
+        <h2 id="fbo-title">
+        </h2>
+        <div id="abstract-text" class="">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
         </div>
       </div>
     </div>
-    <div class="big-circle-box" style="">
-      <div class="big-circle" style="height: 9vh; width: 9vh;" onclick='openPopups(2)'>
-        <div class="second-border">
-          <img class="circle-img-2" src="./img/share.png" alt="">
-        </div>
-      </div>
-      <div class="" id="time-button" style="width: 100%; height: 3vh; margin-top: 9vh;">
-
-      </div>
-    </div>
-    <div class="big-circle-box">
-      <div class="big-circle" id="big-yes-button" onclick='openPopups(0)' style="font-size: 8vh;">
-        <div class="second-border">
-          <img class="circle-img-2" src="./img/thumbsup.png" alt="">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="lower" id="lower-1">
-    <div id="databar-active" class="databar-inner">
-      <p id="databar-title">ABSTRACT</p>
-      <div class="info-circle">
-        i
-      </div>
-    </div>
-    <div class="data-box" id="data-box-1">
-      <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <div class="" style="width: 96%; position: absolute; height: 30px; bottom: 2%; left: 2%;">
-        <button id="highlight-button-1" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
-        <button id="highlight-button-2" class="highlight-button" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
-      </div>
-    </div>
-    <div class="data-box inactive" id="data-box-2">
+    <div id="fbo-detail-data" class="inactive" style="position: relative; height: 85vh; width: 100%; float: left; overflow: auto;">
       <p style="text-align: center; margin: 0px;">Projected Value</p>
       <canvas id="chart1" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
       <p style="text-align: center; margin: 0px;">Projected Competition</p>
@@ -790,14 +776,32 @@ under the License.
       <canvas id="chart3" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
       <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
     </div>
-    <div class="data-box inactive" id="data-box-3">
-      <div class="chat-box" id="chat-box">
-
+  </div>
+  <div class="fbo-detail-bottom" style="background: rgba(205,239,248,1);">
+    <div id="fbo-details-comments" class="">
+      <div class="comment">
+        <div class="comment-left">
+          <div class="comment-avatar">
+            <img class="comment-avatar-img" src="./img/user.png" alt="">
+          </div>
+          <img class="comment-avatar-vote" src="./img/thumbsdown.png" alt="">
+        </div>
+        <div class="comment-right">
+          <div class="comment-title" style="margin: none!important">
+            <p class="comment-name">Person's Name</p>
+            <p class="comment-time">99 mins</p>
+          </div>
+          <div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">
+            <div class="comment-text" style="padding: none!important">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div id="floating-hamburger" class="iconbar-floating" onclick="toggleHamburgerMenu()">
-    <img class="iconbar-img" src="./img/hamburger.png" alt="">
+    <div id="fbo-details-comment-submit" class="">
+      <input class="fbo-details-input" placeholder="Enter your comments ..." type="text" name="" value="">
+      <img class="fbo-details-input-button" src="./img/thumbsup.png" alt="">
+      <img class="fbo-details-input-button" src="./img/thumbsdown.png" alt="">
+    </div>
   </div>
 </div>
 <!-- <div class="iconbar">
