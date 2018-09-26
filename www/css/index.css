@@ -34,14 +34,14 @@
 
 @font-face {
   font-family: 'Lato', sans-serif;
-  src: url('./Lato-Regular.ttf') format('ttf');
-  font-weight: 400;
+  src: url('Lato-Regular.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'Lato Semibold', sans-serif;
-  src: url('./Lato-Semibold.ttf') format('ttf');
-  font-weight: 400;
+  src: url('Lato-Semibold.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
 }
 
@@ -809,7 +809,7 @@ h1, .instructions{
 
 }
 
-.fbo-details-input {
+#fbo-details-input {
   height: 36px;
   width: calc(100% - 140px);
   margin-left: 4px;
@@ -1520,17 +1520,38 @@ h1 {
 
 .vote-popup {
   position: absolute;
-  left: 5%;
-  top: 10%;
-  height: 90%;
-  width: 90%;
-  background: rgba(0,175,217,1);
-  z-index: 10;
-  border-top: 1px solid rgba(0,0,0,0.75);
-  border-left: 1px solid rgba(0,0,0,0.75);
-  border-right: 1px solid rgba(0,0,0,0.75);
+  left: 5vw;
+  top: 15vh;
+  height: 70vh;
+  width: 90vw;
+  padding: 4vh 6vw 5vh 6vw;
+  background: rgba(33,100,126,1);
+  color: white;
+  z-index: 15;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.25);
   box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
-  text-align: center;
+}
+.vote-popup::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -15vh;
+  left: -5vw;
+  z-index: -1;
+  background: rgba(0,0,0,0.15);
+  height: 100vh;
+  width: 100vw;
+}
+.vote-popup button {
+  width: 100%;
+  background: rgba(255,255,255,0.25);
+}
+.vote-popup p {
+  font-size: 14px;
+}
+.vote-popup h3 {
+  font-family: 'Lato Semibold', sans-serif!important;
 }
 
 .ad-img {
@@ -1549,10 +1570,14 @@ h1 {
   position: absolute;
   top: 5px;
   right: 5px;
-  width: 30px;
+  width: 30px!important;
   height: 30px;
   color: white;
   line-height: 22px;
+  background: black!important;
+  margin: none!important;
+  border: none;
+  border-radius: 90%;
   z-index: 9;
   text-align: center;
 }
@@ -1561,6 +1586,8 @@ h1 {
   width: 100%;
   background: rgba(155,155,155,0.75);
   border: 1px solid rgba(0,0,0,0.75);
+  maxheight: 20vh;
+  overflow-y: auto;
   color: black;
   text-align: left;
   margin-bottom: 1vh;

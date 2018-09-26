@@ -221,7 +221,7 @@ under the License.
       </div>
       <div class="sidebar-item" onclick="switchTab(3)">
         <div class="sidebar-img-wrapper">
-          <img class="sidebar-img icon" src="./img/news.png" alt="">
+          <img class="sidebar-img icon" src="./img/pipeline.png" alt="">
         </div>
         <p>Pipeline</p>
       </div>
@@ -528,77 +528,68 @@ under the License.
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
   </div>
   <div id="refer-popup" class="vote-popup inactive">
-    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-      <h3>REFER</h3>
-      <p>Who would you like to send this to?</p>
+    <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+    <h3>REFER</h3>
+    <p>Who would you like to send this to?</p>
 
-      <div id="refer-users-list" class="refer-box">
+    <div id="refer-users-list" class="refer-box">
 
-      </div>
-      <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-        <input id="refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-        <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addRefer()">Add</button>
-      </div>
-      <div id="popup-refer-list" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
+    </div>
+    <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+      <input id="refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+      <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addRefer()">Add</button>
+    </div>
+    <div id="popup-refer-list" style="width: 100%; height: 10vh; border: 1px solid rgba(0,0,0,0.75);">
 
-      </div>
-      <div class="col-12">
-        <button type="button" name="button" onclick="sendReferNotifications(), closePopups(false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
-      </div>
+    </div>
+    <div style="width: 78vw; float: left; padding-top: 1vh; position: absolute; bottom: 3vh; left: 6vw;">
+      <button type="button" name="button" onclick="sendReferNotifications(), closePopups(false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
     </div>
   </div>
   <div class="vote-popup yes-popup inactive">
-    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-      <!-- <p>You voted YES on this opportunity!</p>
-      <p>Write a quick comment to let your team know why you approve.</p> -->
-      <div id="yes-popup-text" class="">
-        <h3>YOU VOTED YES</h3>
-        <p>Anyone you want to notify?</p>
+    <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+    <!-- <p>You voted YES on this opportunity!</p>
+    <p>Write a quick comment to let your team know why you approve.</p> -->
+    <div id="yes-popup-text" class="">
+      <h3>Great Opportunity!</h3>
+      <p>Anyone you want to notify?</p>
+    </div>
+    <div id="yes-popup-users-list" class="refer-box">
+
+    </div>
+    <!-- <p>Add a comment:</p>
+    <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;"> -->
+    <p>Anyone else you want to send it to? Add their emails here:</p>
+    <div id="yes-refer" class="">
+      <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+        <input id="yes-refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+        <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
       </div>
-      <div id="yes-popup-users-list" class="refer-box">
+      <div id="yes-popup-refer-list" style="width: 100%; height: 10vh; border: 1px solid rgba(0,0,0,0.75);">
 
       </div>
-      <p>Add a comment:</p>
-      <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
-      <p>Anyone else you want to send it to? Add their emails here:</p>
-      <div id="yes-refer" class="">
-        <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-          <input id="yes-refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-          <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
-        </div>
-        <div id="yes-popup-refer-list" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
-
-        </div>
-      </div>
-      <div class="col-12">
-        <button type="button" name="button" onclick="vote(fboIndex, true)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
-      </div>
+    </div>
+    <div style="width: 78vw; float: left; padding-top: 1vh; position: absolute; bottom: 3vh; left: 6vw;">
+      <button type="button" name="button" onclick="vote(fboIndex, true)" style="height: 10vh; font-size: 18px;">Send</button>
     </div>
   </div>
   <div class="vote-popup no-popup inactive">
-    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-      <p>Sounds like this one isn't right for you.</p>
-      <p>Write a quick comment to explain to your team why you think that way.</p>
-      <input type="text" id="no-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
-      <p>Know anyone it would be a better fit for? Send it their way.</p>
-      <div class="col-12">
-        <button id="no-refer-button" type="button" name="button" style="line-height: 26px; width: 30vw; margin-bottom: 1vh; color: white;" onclick="turnOnRefer(1)">Refer</button>
+    <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+    <p>Sounds like this one isn't right for you.</p>
+    <!-- <p>Write a quick comment to explain to your team why you think that way.</p>
+    <input type="text" id="no-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;"> -->
+    <p>Know anyone it would be a better fit for? Send it their way.</p>
+    <div id="no-refer" class="">
+      <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
+        <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
+        <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
       </div>
-      <div id="no-refer" class="inactive">
-        <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-          <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-          <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
-        </div>
-        <div class="" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
+      <div class="" style="width: 100%; height: 10vh; border: 1px solid rgba(0,0,0,0.75);">
 
-        </div>
       </div>
-      <div class="col-12">
-        <button type="button" name="button" onclick="vote(fboIndex, false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
-      </div>
+    </div>
+    <div style="width: 78vw; float: left; padding-top: 1vh; position: absolute; bottom: 3vh; left: 6vw;">
+      <button type="button" name="button" onclick="vote(fboIndex, false)" style="height: 10vh; font-size: 18px;">Done</button>
     </div>
   </div>
 </div>
@@ -798,9 +789,9 @@ under the License.
       </div>
     </div>
     <div id="fbo-details-comment-submit" class="">
-      <input class="fbo-details-input" placeholder="Enter your comments ..." type="text" name="" value="">
-      <img class="fbo-details-input-button" src="./img/thumbsup.png" alt="">
-      <img class="fbo-details-input-button" src="./img/thumbsdown.png" alt="">
+      <input id="fbo-details-input" placeholder="Enter your comments ..." type="text" name="" value="">
+      <img class="fbo-details-input-button" src="./img/thumbsup.png" alt="" onclick="openPopups(0)">
+      <img class="fbo-details-input-button" src="./img/thumbsdown.png" alt="" onclick="openPopups(1)">
     </div>
   </div>
 </div>

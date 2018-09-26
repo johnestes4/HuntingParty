@@ -1,5 +1,6 @@
 // var apiUrl = 'https://efassembly.com:4432'
 var apiUrl = 'http://18.218.170.246:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -2144,6 +2145,7 @@ function toggleHamburgerMenu() {
     }
     activeFboDesc = proxy.fboDesc
     console.log(proxy)
+    document.getElementById("fbo-details-input").value = ''
     var dataText = '<p><span style="font-weight: bold">Solicitation Number: </span>'+
     proxy.fbo.solnbr +
     '</p><p><span style="font-weight: bold">Agency: </span>'+
@@ -2350,9 +2352,15 @@ function toggleHamburgerMenu() {
   function vote(index, yes) {
     console.log('length of the thing is ' + peopleToRefer.length)
     var fbo = fbos[index]
+    if (activeTab == 2) {
+      fbo = fbosIn[index]
+    } else if (activeTab == 3) {
+      fbo = fboPipeline[index]
+    }
     var vote = {
       id: currentUser._id,
       name: currentUser.firstName + ' ' + currentUser.lastName,
+      avatar: currentUser.avatar,
       position: '',
       comment: '',
       date: ''
@@ -2378,7 +2386,7 @@ function toggleHamburgerMenu() {
       }
       voteChanged = true
       fboVote[index] = 2
-      vote.comment = document.getElementById("yes-popup-comment").value
+      vote.comment = document.getElementById("fbo-details-input").value
       fbo.voteYes.push(vote)
     } else if (fboVote[index] !== 1 && !yes) {
       for (var i = 0; i < fbo.voteYes.length; i++) {
@@ -2388,11 +2396,10 @@ function toggleHamburgerMenu() {
       }
       voteChanged = true
       fboVote[index] = 1
-      vote.comment = document.getElementById("no-popup-comment").value
+      vote.comment = document.getElementById("fbo-details-input").value
       fbo.voteNo.push(vote)
     }
     console.log(vote)
-    var fbo = fbos[index]
     var fboSubject = fbo.fbo.subject
     var req = {};
     req['voteYes'] = fbo.voteYes;
@@ -2434,12 +2441,14 @@ function toggleHamburgerMenu() {
           type: 'vote',
           body: newsString
         }
+        document.getElementById("fbo-details-input").value = ''
         generateNewsItem(newsItem)
         if (adCounter >= 3) {
           showAd()
         } else {
           adCounter++
           closePopups(true)
+          switchTab(activeTab)
         }
       }
     };
@@ -2475,8 +2484,9 @@ function toggleHamburgerMenu() {
         for (i = 0; i < newFbo.voteYes.length; i++) {
           var vote = newFbo.voteYes[i]
           var voteString = ''
+          console.log(vote)
           if (vote.comment) {
-            voteString = ' - "'+vote.comment+'"'
+            voteString = vote.comment
           }
           var avatar = './img/user.png'
           if (vote.avatar) {
