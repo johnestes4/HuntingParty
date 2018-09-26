@@ -574,6 +574,7 @@ function viewSearch(index) {
   document.getElementById("search-name").value = searchTerms.name
   document.getElementById("saved-search-view").classList.add('inactive')
   document.getElementById("search-terms-view").classList.remove('inactive')
+  document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(1)">'
 }
 
 function openSearchBox(which) {
@@ -661,17 +662,17 @@ function openSearchBox(which) {
 function renderSavedSearches() {
   var html = ''
   // '<option disabled selected value> -- select an option -- </option>'
-  console.log(huntingPartyData.searches)
-  yourSearches = huntingPartyData.searches
-  // for (i = 0; i < huntingPartyData.users.length; i++) {
-  //   if (huntingPartyData.users[i].userId == currentUser._id) {
-  //     if (huntingPartyData.users[i].searches) {
-  //       for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
-  //         yourSearches.push(huntingPartyData.users[i].searches[i2])
-  //       }
-  //     }
-  //   }
-  // }
+  // console.log(huntingPartyData.searches)
+  // yourSearches = huntingPartyData.searches
+  for (i = 0; i < huntingPartyData.users.length; i++) {
+    if (huntingPartyData.users[i].userId == currentUser._id) {
+      if (huntingPartyData.users[i].searches) {
+        for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+          yourSearches.push(huntingPartyData.users[i].searches[i2])
+        }
+      }
+    }
+  }
   for (i = 0; i < yourSearches.length; i++) {
     html = html + '<div class="search-item" onclick="viewSearch('+i+')">'+
       '<div class="search-item-text">'+
@@ -738,29 +739,29 @@ function searchFilter(which) {
         checkedHtml = ' checked'
       }
       if (i == 0) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].name+'</span>'
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<p style="margin-bottom: 2px;">----------</p>'+
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.naics[i].name+'</span>'
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<p style="margin: 0px;">----------</p>'+
         '</div>'
       } else if (isNaN(string)) {
         if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
-          html = html + '<div class="" style="width: 100%; float: left;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
+          html = html + '<div class="search-box-checkbox-item">'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         }
       } else if (!isNaN(string)) {
         if (searchTerms.naics[i].code.toString().includes(string) || searchTerms.naics[i].value == true) {
           html = html + '<div class="" style="width: 100%; float: left; position: relative;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-          '<input class="checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         }
       }
@@ -776,24 +777,23 @@ function searchFilter(which) {
       }
 
       if (i == 0) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span></div>'
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<p style="margin-bottom: 2px;">----------</p>'+
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</span></div>'
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<p style="margin: 0px;">----------</p>'+
         '</div>'
       } else if (searchTerms.psc[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span></div>'
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</span></div>'
       } else {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span></div>'
+        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</span></div>'
       }
       html = html + '</div>'
     }
     document.getElementById("search-box-psc").innerHTML = html
   }
   if (which == 2) {
-    console.log('sss')
     for (i = 0; i < searchTerms.agency.length; i++) {
       var checkedHtml = ''
       if (searchTerms.agency[i].value == true) {
@@ -801,14 +801,14 @@ function searchFilter(which) {
         checkedHtml = ' checked'
       }
       if (i == 0) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span></div>'
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<p style="margin-bottom: 2px;">----------</p>'+
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.agency[i].name+'</span></div>'
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<p style="margin: 0px;">----------</p>'+
         '</div>'
       } else if (searchTerms.agency[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.agency[i].value == true) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</span></div>'
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span class="search-box-checkbox-text" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</span></div>'
         var inactiveHtml = ''
         if (document.getElementById("agency-subcategory-box-"+i+"").classList.contains('inactive')) {
           inactiveHtml = ' inactive'
@@ -832,19 +832,19 @@ function searchFilter(which) {
             if (searchTerms.agency[i].subagencies[subagencyIndex]) {
               checked = ' checked'
             }
-            html = html + '<div class="" style="width: 100%; float: left;">'+
-            '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+            html = html + '<div class="search-box-checkbox-item">'+
+            '<input class="search-box-checkbox checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span class="search-box-checkbox-text" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
             '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box '+inactiveHtml2+'"></div>'
           } else {
             html = html + '<div class="inactive" style="width: 100%; float: left;">'+
-            '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+            '<input class="search-box-checkbox checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+subCheckedHTML+'> <span class="search-box-checkbox-text" onclick="calculateOfficeSearch('+i+','+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
             '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box '+inactiveHtml2+'"></div>'
           }
         }
         html = html + '</div>'
       } else {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span></div>'+
+        '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" style="float: left; height: 20px;" onclick="calculateSearch(this)" '+checkedHtml+'> <span class="search-box-checkbox-text"> '+searchTerms.agency[i].name+'</span></div>'+
         '<div id="agency-subcategory-box-'+i+'"></div>'
       }
     }
@@ -885,11 +885,11 @@ function searchFilter(which) {
 function renderSearch() {
   var html = ''
   for (i = 0; i < searchTerms.dueDate.length; i++) {
-    html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-duedate" type="checkbox" name="" value="'+searchTerms.dueDate[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.dueDate[i].name+'</span>'
+    html = html + '<div class="search-box-checkbox-item">'+
+    '<input class="search-box-checkbox checkbox-duedate" type="checkbox" name="" value="'+searchTerms.dueDate[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text"> '+searchTerms.dueDate[i].name+'</span>'
     if (i == 0) {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<p style="margin-bottom: 2px;">----------</p>'+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<p style="margin: 0px;">----------</p>'+
       '</div>'
     }
     html = html + '</div>'
@@ -899,15 +899,15 @@ function renderSearch() {
   var naicsIndex = 0
   for (i = 0; i < searchTerms.naics.length; i++) {
     if (i == 0) {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-naics" type="checkbox" name="" value="0" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; width: calc(100% - 15px); float: left;"> '+searchTerms.naics[i].name+'</div>'+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="0" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].name+'</div>'+
       '<div id="naics-subcategory-box-'+i+'"></div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-      '<p style="margin-bottom: 2px;">----------</p>'+
+      '<div class="search-box-checkbox-item">'+
+      '<p style="margin: 0px;">----------</p>'+
       '</div>'
     } else {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div style="line-height: 25px; position: relative; width: calc(100% - 15px); float: left;" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+
       searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div>'+
       '<div id="naics-subcategory-box-'+i+'"></div>'
     }
@@ -917,11 +917,11 @@ function renderSearch() {
   document.getElementById("search-box-naics").innerHTML = html
   html = ''
   for (i = 0; i < searchTerms.psc.length; i++) {
-    html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.psc[i].name+'</span>'
+    html = html + '<div class="search-box-checkbox-item">'+
+    '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</span>'
     if (i == 0) {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<p style="margin-bottom: 2px;">----------</p>'+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<p style="margin: 0px;">----------</p>'+
       '</div>'
     }
     html = html + '</div>'
@@ -930,25 +930,25 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.agency.length; i++) {
     if (i == 0) {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].name+'</span></div>'+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text"> '+searchTerms.agency[i].name+'</span></div>'+
       '<div id="agency-subcategory-box-'+i+'"></div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-      '<p style="margin-bottom: 2px;">----------</p>'+
+      '<div class="search-box-checkbox-item">'+
+      '<p style="margin: 0px;">----------</p>'+
       '</div>'
     } else {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<input class="checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</span></div>'+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</span></div>'+
       '<div id="agency-subcategory-box-'+i+'" class="subcategory-box inactive">'
       if (searchTerms.agency[i].subagencies) {
         for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
-          html = html + '<div class="" style="width: 100%; float: left;">'+
-          '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;" onclick="calculateOfficeSearch('+i+', '+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
+          html = html + '<div class="search-box-checkbox-item">'+
+          '<input class="search-box-checkbox checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text" onclick="calculateOfficeSearch('+i+', '+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</span></div>'+
           '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box inactive">'
           if (searchTerms.agency[i].subagencies[subagencyIndex].offices) {
             for (officeIndex = 0; officeIndex < searchTerms.agency[i].subagencies[subagencyIndex].offices.length; officeIndex++) {
-              html = html + '<div class="" style="width: 100%; float: left;">'+
-              '<input class="checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'</span></div>'
+              html = html + '<div class="search-box-checkbox-item">'+
+              '<input class="search-box-checkbox checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text"> '+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'</span></div>'
             }
           }
           html = html + '</div>'
@@ -960,11 +960,11 @@ function renderSearch() {
   document.getElementById("search-box-agency").innerHTML = html
   html = ''
   for (i = 0; i < searchTerms.place.length; i++) {
-    html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+searchTerms.place[i].name+'</span>'
+    html = html + '<div class="search-box-checkbox-item">'+
+    '<input class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text"> '+searchTerms.place[i].name+'</span>'
     if (i == 0) {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<p style="margin-bottom: 2px;">----------</p>'+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<p style="margin: 0px;">----------</p>'+
       '</div>'
     }
     html = html + '</div>'
@@ -972,11 +972,11 @@ function renderSearch() {
   document.getElementById("search-box-location").innerHTML = html
   html = ''
   for (i = 0; i < searchTerms.setAside.length; i++) {
-    html = html + '<div class="" style="width: 100%; float: left;">'+
-    '<input class="checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'" style="float: left; height: 20px;"> <span style="line-height: 25px;"> '+searchTerms.setAside[i].name+'</span>'
+    html = html + '<div class="search-box-checkbox-item">'+
+    '<input class="search-box-checkbox checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'" style="float: left; height: 20px;"> <span class="search-box-checkbox-text"> '+searchTerms.setAside[i].name+'</span>'
     if (i == 0) {
-      html = html + '<div class="" style="width: 100%; float: left;">'+
-      '<p style="margin-bottom: 2px;">----------</p>'+
+      html = html + '<div class="search-box-checkbox-item">'+
+      '<p style="margin: 0px;">----------</p>'+
       '</div>'
     }
     html = html + '</div>'
@@ -990,8 +990,8 @@ function calculateNaicsSearch(naicsItem, index, elem) {
     if (naicsItem.subcategories) {
       var html = '<div class="naics-subcategory-box subcategory-box">'
       for (i = 0; i < naicsItem.subcategories.length; i++) {
-        html = html + '<div class="" style="width: 100%; float: left;">'+
-        '<input class="checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span class="search-box-checkbox-text"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></span></div>'
       }
       html = html + '</div>'
       elem.classList.add('naics-open');
@@ -1409,6 +1409,8 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Search"
+      document.getElementById("saved-search-view").classList.remove('inactive')
+      document.getElementById("search-terms-view").classList.add('inactive')
     } else if (num == 2) {
       document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -1423,6 +1425,7 @@ function toggleHamburgerMenu() {
       document.getElementById("pipeline-view").classList.remove('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
     }
+    document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="">'
     activeTab = num
     var a = document.getElementsByClassName('iconbar-icon')
     for (i = 0; i < a.length; i++) {
@@ -2225,8 +2228,10 @@ function toggleHamburgerMenu() {
     var proxy = fbos[index]
     if (tab == 0) {
       proxy = fbosIn[index]
+      document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
     } else if (tab == 1) {
       proxy = fboPipeline[index]
+      document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(3)">'
     }
     activeFboDesc = proxy.fboDesc
     console.log(proxy)
@@ -2977,7 +2982,7 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    // switchTab(1)
+    switchTab(1)
     // goToFbo(5, 0);
     // openPopups(2)
     // goToCompanyCreate()
