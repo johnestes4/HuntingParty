@@ -668,6 +668,8 @@ function renderSavedSearches() {
   // '<option disabled selected value> -- select an option -- </option>'
   // console.log(huntingPartyData.searches)
   // yourSearches = huntingPartyData.searches
+
+  yourSearches = []
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId == currentUser._id) {
       if (huntingPartyData.users[i].searches) {
@@ -1274,8 +1276,8 @@ function saveSearchTerms() {
       creatingNew = true
     }
     terms.name = document.getElementById("search-name").value
-    if (document.getElementById("saved-searches").value > -1) {
-      yourSearches[document.getElementById("saved-searches").value] = terms
+    if (activeSearchIndex > -1) {
+      yourSearches[activeSearchIndex] = terms
     } else {
       for (i = 0; i < huntingPartyData.users.length; i++) {
         if (huntingPartyData.users[i].userId == currentUser._id) {
@@ -1307,10 +1309,9 @@ function saveSearchTerms() {
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
+          renderSavedSearches()
+          switchTab(1)
           console.log('UPDATED')
-          document.getElementById('search-save-popup').classList.remove('inactive')
-          document.getElementById('search-save-popup-bg').classList.remove('inactive')
-          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been updated!'
         }
       };
       var url = apiUrl+"/huntingpartydata/" + id;
