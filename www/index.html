@@ -344,6 +344,9 @@ under the License.
 
     </div>
     <div id="search-terms-items" class="">
+      <div class="search-item" style="">
+        <input id="search-name" class="search-item-input" type="text" name="" value="" style="margin: 0px;" placeholder="Name Your Search">
+      </div>
       <div class="search-item" onclick="openSearchBox(0)">
         <div class="search-item-text">
           Due Date
@@ -408,14 +411,20 @@ under the License.
       </div>
       <div class="search-item">
         <div class="search-item-half">
-          <input id="search-input-keyword" class="search-item-input" type="text" name="" value="" style="margin-left: -8px;" placeholder="Keyword">
+          <input id="search-input-keyword" class="search-item-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">
         </div>
         <div class="search-item-half">
-          <div class="" style="float: left; width: 50%; height: 25px; position: relative;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px; "> <span style="line-height: 25px;"> Title Only</span>
+          <div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">
+            <div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">
+              Title Only
+            </div>
+            <!-- <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px; "> <span style="line-height: 25px;"> Title Only</span> -->
           </div>
-          <div class="" style="float: left; width: 50%; height: 25px; position: relative;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All Text</span>
+          <div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">
+            <div id="search-box-keyword-right" class="" onclick="switchKeywordSearch(1)">
+              All Text
+            </div>
+            <!-- <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All Text</span> -->
           </div>
         </div>
       </div>
@@ -436,7 +445,7 @@ under the License.
           <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
         </div>
       </div>
-      <div class="search-item" onclick="openSearchBox(4)">
+      <div class="search-item inactive" onclick="openSearchBox(4)">
         <div class="search-item-text">
           Location
         </div>
@@ -518,10 +527,7 @@ under the License.
 </div> -->
 <!-- <input type="text" name="" value="" placeholder="Award ID" style="margin-bottom: 1vh; width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);">
 <input type="text" name="" value="" placeholder="Key personnel" style="width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);"> -->
-<div class="search-box-details" style="margin-top: 2vh;">
-</div>
-<input id="search-name" class="search-item-input" type="text" name="" value="" placeholder="NAME THIS SEARCH" style="margin-bottom: 2vh">
-<button style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>
+<button style="width: 40%; margin-left: 30%; margin-bottom: 2vh; margin-top: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>
 <button id="delete-search-button" class="inactive" style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
 
 </div>

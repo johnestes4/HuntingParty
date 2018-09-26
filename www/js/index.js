@@ -571,7 +571,11 @@ function viewSearch(index) {
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.setAside[i].value
   }
-  document.getElementById("search-name").value = searchTerms.name
+  if (searchTerms.name) {
+    document.getElementById("search-name").value = searchTerms.name
+  } else {
+    document.getElementById("search-name").value = ''
+  }
   document.getElementById("saved-search-view").classList.add('inactive')
   document.getElementById("search-terms-view").classList.remove('inactive')
   document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(1)">'
@@ -2982,7 +2986,7 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    switchTab(1)
+    // switchTab(1)
     // goToFbo(5, 0);
     // openPopups(2)
     // goToCompanyCreate()
@@ -2993,6 +2997,17 @@ function toggleHamburgerMenu() {
     var keycode = (e.keyCode ? e.keyCode : e.which);
     if (keycode == '13') {
       login()
+    }
+  }
+
+  function switchKeywordSearch(which) {
+    if (which == 0) {
+      document.getElementById("search-box-keyword-left").classList.add('search-box-keyword-active');
+      document.getElementById("search-box-keyword-right").classList.remove('search-box-keyword-active');
+    } else if (which == 1) {
+      document.getElementById("search-box-keyword-left").classList.remove('search-box-keyword-active');
+      document.getElementById("search-box-keyword-right").classList.add('search-box-keyword-active');
+
     }
   }
 
