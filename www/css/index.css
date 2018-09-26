@@ -949,6 +949,12 @@ h1, .instructions{
   font-size: 18px;
 }
 
+.search-item-half {
+  width: 50%;
+  float: left;
+}
+
+
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
@@ -1736,14 +1742,9 @@ h1 {
 
 
 .search-box {
-  border: 1px solid rgba(0,0,0,0.75);
   font-size: 14px;
   text-align: left;
-  margin-bottom: 2vh;
-  background: rgba(0,175,217,1);
-}
-
-.search-sub-box {
+  background: rgba(200,200,200,1);
   max-height: 150px;
   overflow-y: auto;
 }

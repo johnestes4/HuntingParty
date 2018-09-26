@@ -1,5 +1,5 @@
-// var apiUrl = 'https://efassembly.com:4432'
-var apiUrl = 'http://18.218.170.246:4200'
+var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'http://18.218.170.246:4200'
 // var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
@@ -538,6 +538,7 @@ function viewSearch(index) {
     document.getElementById("delete-search-button").classList.remove('inactive')
   } else {
     searchTerms = emptySearchTerms
+    console.log(searchTerms)
     activeSearchIndex = -1
     document.getElementById("delete-search-button").classList.add('inactive')
   }
@@ -571,6 +572,90 @@ function viewSearch(index) {
     a[i].checked = searchTerms.setAside[i].value
   }
   document.getElementById("search-name").value = searchTerms.name
+  document.getElementById("saved-search-view").classList.add('inactive')
+  document.getElementById("search-terms-view").classList.remove('inactive')
+}
+
+function openSearchBox(which) {
+  if (which == 0) {
+    if (document.getElementById("search-box-time").classList.contains('inactive')) {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+      document.getElementById("search-box-time").classList.remove('inactive')
+    } else {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+    }
+  } else if (which == 1) {
+    if (document.getElementById("search-box-naics").classList.contains('inactive')) {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+      document.getElementById("search-box-naics").classList.remove('inactive')
+    } else {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+    }
+  } else if (which == 2) {
+    if (document.getElementById("search-box-psc").classList.contains('inactive')) {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+      document.getElementById("search-box-psc").classList.remove('inactive')
+    } else {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+    }
+  } else if (which == 3) {
+    if (document.getElementById("search-box-agency").classList.contains('inactive')) {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+      document.getElementById("search-box-agency").classList.remove('inactive')
+    } else {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+    }
+  } else if (which == 4) {
+    if (document.getElementById("search-box-location").classList.contains('inactive')) {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+      document.getElementById("search-box-location").classList.remove('inactive')
+    } else {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+    }
+  } else if (which == 5) {
+    if (document.getElementById("search-box-setaside").classList.contains('inactive')) {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+      document.getElementById("search-box-setaside").classList.remove('inactive')
+    } else {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+    }
+  }
 }
 
 function renderSavedSearches() {
@@ -597,7 +682,7 @@ function renderSavedSearches() {
       '</div>'+
     '</div>'
   }
-  html = html + '<div class="search-item" onclick="viewSearch('+i+')">'+
+  html = html + '<div class="search-item" onclick="viewSearch(-1)">'+
     '<div class="search-item-text">'+
       'Create New Search'+
     '</div>'+
@@ -2892,7 +2977,7 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    switchTab(1)
+    // switchTab(1)
     // goToFbo(5, 0);
     // openPopups(2)
     // goToCompanyCreate()
