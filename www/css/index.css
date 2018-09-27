@@ -45,8 +45,60 @@
   font-style: normal;
 }
 
+.loading-overlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  width: 100vw;
+}
+
+.loading-circle {
+  border: 16px solid rgba(218, 218, 218, 0); /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-left: 16px solid #3498db; /* Blue */
+  border-right: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  position:absolute;
+  left:50%;
+  top:50%;
+  margin:-60px 0 0 -60px;
+}
+#loading-overlay-text {
+  position: absolute;
+  top: calc(50% + 70px);
+  font-size: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  text-shadow: 2px 2px rgba(0,0,0,0.75);
+  z-index: 2;
+}
+.loading-overlay-bg {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+  background: rgba(0,0,0,0.33);
+  height: 100vh;
+  width: 100vw;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .icon {
   filter: brightness(0) invert(1);
+}
+.icon:active {
+  filter: brightness(0) invert(0.8);
 }
 
 body {
@@ -205,9 +257,22 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 
+#company-create-view {
+  color: white;
+  padding: 9% 5vw 0px 5vw;
+}
+
+#company-create-back {
+  position: absolute;
+  left: 1.5vh;
+  top: 1.5vh;
+  height: 4vh;
+  width: 4vh;
+}
+
 #company-search-dropdown {
   position: absolute;
-  left: 5vw;
+  left: 0px;
   top: 45px;
   width: 90vw;
   min-height: 45px;
@@ -240,9 +305,8 @@ h1, h2, h3, h4, h5, h6 {
 #company-confirm-img-wrapper {
   width: 60vw;
   height: 60vw;
-  margin-left: 20vw;
+  margin-left: 15vw;
   margin-top: 5vh;
-  border: 1px solid rgba(0,0,0,0.75);
   position: relative;
   overflow: hidden;
   background: rgba(205,205,205,1);
@@ -327,10 +391,9 @@ h1, h2, h3, h4, h5, h6 {
 .instructions {
   text-align: center;
   padding-top: 5vh;
-  width: 100vw;
+  width: 100%;
   margin-bottom: 4vh;
   font-size: 16px;
-  border-top: 1px solid rgba(255,255,255,0.1);
 }
 h1, .instructions{
   color: black;
@@ -578,6 +641,26 @@ h1, .instructions{
 .fbo-item-icons {
   width: 100%;
   height: 12%;
+  font-size: 12px;
+  padding-top: 6px;
+  line-height: 20px;
+}
+
+.fbo-item-icon-img {
+  height: 20px;
+  width: 20px;
+  margin-right: 4px;
+  float: left;
+}
+.fbo-item-icon-date {
+  width: calc(100% - 135px);
+  float: left;
+  height: 100%;
+}
+.fbo-item-icon-item {
+  width: 45px;
+  float: left;
+  height: 100%;
 }
 
 .fbo-item-title:active {

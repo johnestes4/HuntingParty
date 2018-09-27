@@ -1525,10 +1525,10 @@ function toggleHamburgerMenu() {
       //   }
       // }
       var dueDate = ''
-
+      var due = 'No Due Date'
       if (proxy.fbo.respDate) {
         var today = getToday()
-        var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+        due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
         var date2 = new Date(today);
         var date1 = new Date(due);
         var expired = false
@@ -1622,6 +1622,9 @@ function toggleHamburgerMenu() {
       if (proxy.originSearch) {
         originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
       }
+      var commentsCount = proxy.voteYes.length + proxy.voteNo.length
+      var votesYesCount = proxy.voteYes.length
+      var votesNoCount = proxy.voteNo.length
       if (proxy.voteYes.length < 1 && vote !== 1) {
         // if (timeToDue < -14) {
         //   expired = true
@@ -1642,7 +1645,10 @@ function toggleHamburgerMenu() {
           '<p class="">'+proxy.fbo.desc+'</p>'+
           '</div>'+
           '<div class="fbo-item-icons">'+
-          '<p class="">------------</p>'+
+          '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
+          '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div>'+
+          '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div>'+
+          '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
           '</div>'+
           '</div>'+
           // '<div class="bottom-border">'+
@@ -1694,7 +1700,10 @@ function toggleHamburgerMenu() {
         '<p class="">'+proxy.fbo.desc+'</p>'+
         '</div>'+
         '<div class="fbo-item-icons">'+
-        '<p class="">------------</p>'+
+        '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
+        '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div>'+
+        '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div>'+
+        '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
         '</div>'+
         '</div>'+
         // '<div class="fbo-item">'+
@@ -1946,17 +1955,25 @@ function toggleHamburgerMenu() {
 
   function goToRegister() {
     document.getElementById("register-view").classList.remove('inactive')
+    document.getElementById("loading").classList.add('inactive')
     document.getElementById("login-view").classList.add('inactive')
   }
   function goToLogin() {
     document.getElementById("register-view").classList.add('inactive')
     document.getElementById("login-view").classList.remove('inactive')
+    document.getElementById("company-create-view").classList.add('inactive')
+    document.getElementById("company-confirm-view").classList.add('inactive')
+    document.getElementById("company-search-view").classList.remove('inactive')
+    if (currentUser) {
+      logOut()
+    }
   }
   function goToCompanyCreate() {
     document.getElementById("login-register").classList.remove('inactive')
     document.getElementById("register-view").classList.add('inactive')
     document.getElementById("main-view").classList.add('inactive')
     document.getElementById("login-view").classList.add('inactive')
+    document.getElementById("loading").classList.add('inactive')
     document.getElementById("company-create-view").classList.remove('inactive')
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
@@ -1995,6 +2012,9 @@ function toggleHamburgerMenu() {
   }
 
   function pickCompanyToJoin(index) {
+    document.getElementById("loading-overlay").classList.remove('inactive')
+    document.getElementById("loading-overlay-text").innerHTML = 'Loading your company...'
+
     companyToJoin = allCompanies[index]
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
@@ -2009,6 +2029,9 @@ function toggleHamburgerMenu() {
         '<p>'+companyToJoin.email+'</p>'+
         '<h5>Do you want to request to join?</h5>'+
         "<p>If you choose JOIN, we'll send a join request to "+companyToJoin.name+". If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>"
+        document.getElementById("loading-overlay").classList.add('inactive')
+        document.getElementById("loading-overlay-text").innerHTML = ''
+
       }
     }
     xhttp.open("GET", apiUrl+'/company/' + companyToJoin.id, true);
@@ -2240,6 +2263,12 @@ function toggleHamburgerMenu() {
     }
     activeFboDesc = proxy.fboDesc
     console.log(proxy)
+    var dueDateHtml = 'No Due Date'
+    if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
+      dueDateHtml = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+    } else {
+      dueDateHtml = 'No Due Date'
+    }
     document.getElementById("fbo-details-input").value = ''
     var dataText = '<p><span style="font-weight: bold">Solicitation Number: </span>'+
     proxy.fbo.solnbr +
@@ -2252,7 +2281,7 @@ function toggleHamburgerMenu() {
     '</p><p><span style="font-weight: bold">Setaside: </span>'+
     proxy.fbo.setaside+
     '</p><p><span style="font-weight: bold">Due Date: </span>'+
-    proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+
+    dueDateHtml+
     '</p><p><span style="font-weight: bold">Contact: </span>'+
     proxy.fbo.contact+
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
@@ -2282,10 +2311,16 @@ function toggleHamburgerMenu() {
         dueDate = "<p>Due: "+timeToDue+" Days</p>"
       }
       // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
+      document.getElementById("fbo-detail-left-details-date").innerHTML = due
     } else {
       dueDate = "<p'>No Due Date</p>"
+      document.getElementById("fbo-detail-left-details-date").innerHTML = 'No Due Date'
     }
-    document.getElementById("fbo-detail-left-details-date").innerHTML = due
+    document.getElementById("fbo-detail-left-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
+    document.getElementById("fbo-detail-left-details-likes").innerHTML = proxy.voteYes.length + ' Likes'
+    document.getElementById("fbo-detail-left-details-dislikes").innerHTML = proxy.voteNo.length + ' Dislikes'
+    document.getElementById("fbo-detail-left-details-shares").innerHTML = '2' + ' Shares'
+
     fboIndex = index
     renderChart()
     updateComments(proxy)
