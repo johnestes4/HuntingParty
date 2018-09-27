@@ -393,12 +393,14 @@ under the License.
         </div>
       </div>
       <div id="search-box-naics" class="search-box inactive">
-        <input id="search-filter-0" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Relevant industry (NAICS)" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+        <input id="search-filter-0" class="search-item-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">
+        <div id="search-box-naics-list" class="">
+          <div class="" style="width: 100%; float: left;">
+            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+          </div>
+          <div class="" style="width: 100%; float: left;">
+            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+          </div>
         </div>
       </div>
       <div class="search-item" onclick="openSearchBox(2)">
@@ -410,12 +412,14 @@ under the License.
         </div>
       </div>
       <div id="search-box-psc" class="search-box inactive">
-        <input id="search-input-1" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Product/service description" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+        <input id="search-filter-1" class="search-item-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">
+        <div id="search-box-psc-list" class="">
+          <div class="" style="width: 100%; float: left;">
+            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+          </div>
+          <div class="" style="width: 100%; float: left;">
+            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+          </div>
         </div>
       </div>
       <div class="search-item">
@@ -446,12 +450,14 @@ under the License.
         </div>
       </div>
       <div id="search-box-agency" class="search-box inactive">
-        <input id="search-filter-2" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="AGENCY/OFFICE" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+        <input id="search-filter-2" class="search-item-input" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="Filter">
+        <div id="search-box-agency-list" class="">
+          <div class="" style="width: 100%; float: left;">
+            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+          </div>
+          <div class="" style="width: 100%; float: left;">
+            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
+          </div>
         </div>
       </div>
       <div class="search-item inactive" onclick="openSearchBox(4)">
@@ -770,7 +776,7 @@ under the License.
         <button id="highlight-button-1" class="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
         <button id="highlight-button-2" class="" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
       </div>
-      <div class="fbo-detail-right">
+      <div id="fbo-detail-right">
         <h2 id="fbo-title">
         </h2>
         <div id="abstract-text" class="">
