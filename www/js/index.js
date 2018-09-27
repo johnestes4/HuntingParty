@@ -455,7 +455,7 @@ function login() {
             var xhttp3 = new XMLHttpRequest();
             xhttp3.onreadystatechange = function() {
               if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-                document.getElementById("loading-details").innerHTML = 'Profile info found, finishing up...'
+                document.getElementById("loading-details").innerHTML = 'Profile info found, getting the rest of the data...'
                 localStorage.setItem('uid', res.id)
                 loggedIn = true
                 currentUser = JSON.parse(xhttp3.responseText)
@@ -2761,6 +2761,7 @@ function toggleHamburgerMenu() {
     } else if (currentUser) {
       var id = currentUser._id
     }
+    document.getElementById("loading-details").innerHTML = 'Getting full user data...'
     var xhttp = new XMLHttpRequest();
     // xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.onreadystatechange = function() {
@@ -2773,6 +2774,7 @@ function toggleHamburgerMenu() {
           avatar = './img/user.png'
         }
         document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
+        document.getElementById("loading-details").innerHTML = 'Getting full company data...'
         var xhttp2 = new XMLHttpRequest();
         // xhttp.setRequestHeader("Content-type", "application/json");
         xhttp2.onreadystatechange = function() {
@@ -2790,15 +2792,18 @@ function toggleHamburgerMenu() {
             var xhttp3 = new XMLHttpRequest();
             // xhttp3.setRequestHeader("Content-type", "application/json");
             console.log(window.device)
+            document.getElementById("loading-details").innerHTML = 'Getting full search terms...'
             xhttp3.onreadystatechange = function() {
               if (xhttp3.readyState == 4 && xhttp3.status == 200) {
                 searchTerms = JSON.parse(xhttp3.responseText);
                 emptySearchTerms = JSON.parse(xhttp3.responseText);
                 var xhttp4 = new XMLHttpRequest();
                 // xhttp4.setRequestHeader("Content-type", "application/json");
+                document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
                 xhttp4.onreadystatechange = function() {
                   if (xhttp4.readyState == 4 && xhttp4.status == 200) {
                     if (xhttp4.responseText === 'false') {
+                      document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
                       console.log('did the right one')
                       huntingPartyData = {
                         companyId: company._id,
@@ -2827,6 +2832,8 @@ function toggleHamburgerMenu() {
                       var xhttpNewHPD = new XMLHttpRequest();
                       xhttpNewHPD.onload = function() {
                         if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
+                          document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
+
                           huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
                           console.log('CREATED')
                           document.getElementById("loading").classList.add('inactive');
@@ -2838,6 +2845,7 @@ function toggleHamburgerMenu() {
                       xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
                       xhttpNewHPD.send(JSON.stringify(huntingPartyData));
                     } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
+                      document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
                       huntingPartyData = JSON.parse(xhttp4.responseText);
                       console.log(huntingPartyData)
                       var userInList = false
@@ -2901,6 +2909,7 @@ function toggleHamburgerMenu() {
                         document.getElementById("tos-popup").classList.remove('inactive');
                         // document.getElementById("login-register").classList.remove('inactive');
                       } else {
+                        document.getElementById("loading-details").innerHTML = 'Done'
                         startMainApp()
                       }
                     }
