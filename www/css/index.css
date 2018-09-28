@@ -847,22 +847,24 @@ h1, .instructions{
 
 #abstract-text {
   padding: 1vh 1vw 1vh 1vw;
-  height: calc(100% - (2vh + 110px));
+  height: calc(100% - (2vh + 100px));
   display: block;
   position: relative;
+  z-index: 10;
   width: 100%;
   overflow-y: auto;
+  overflow-x: visible;
 }
 
 .highlight-button-box {
-  height: 50px;
+  height: 40px;
 }
 
 .highlight-button-box button {
-  width: 50%;
+  width: 48%;
   float: left;
   height: 100%;
-  line-height: 56px;
+  line-height: 36px;
   font-size: 14px;
   font-weight: normal;
   background: rgba(0,175,217,1);
@@ -906,6 +908,21 @@ h1, .instructions{
 .fbo-detail-top-larger {
   height: calc(86vh - 40px)!important;
 }
+
+.fbo-desc-word {
+  position: relative;
+}
+
+.fbo-desc-word-start {
+  text-shadow:
+   -1px -1px 0 rgba(255,198,0,1),
+    1px -1px 0 rgba(255,198,0,1),
+    -1px 1px 0 rgba(255,198,0,1),
+     1px 1px 0 rgba(255,198,0,1);
+}
+
+
+
 
 .fbo-detail-bottom {
 }

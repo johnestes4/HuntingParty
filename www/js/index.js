@@ -1434,8 +1434,8 @@ function toggleHamburgerMenu() {
       document.getElementById("pipeline-view").classList.remove('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
     }
-    document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="">'
     activeTab = num
+    document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="">'
     var a = document.getElementsByClassName('iconbar-icon')
     for (i = 0; i < a.length; i++) {
       if (i == num) {
@@ -1519,6 +1519,8 @@ function toggleHamburgerMenu() {
     var toDeleteIds = []
     var logCount = 0
     var noProxies = 0
+    fbosIn = []
+    fboPipeline = []
     for (i = 0; i < company.fboProxies.length; i++) {
       proxy = company.fboProxies[i]
       // if (company.fboProxies[i].comments.length == 0) {
@@ -1537,17 +1539,17 @@ function toggleHamburgerMenu() {
       else {
         if (proxy.fbo.respDate) {
           var today = getToday()
-          // today = today.slice(0,4)+""+today.slice(5,7)+""+today.slice(8,10)
           today = today.slice(0,2)+"/"+today.slice(3,4)+"/"+today.slice(6,7)
+          today2 = today.slice(0,4)+""+today.slice(5,7)+""+today.slice(8,10)
 
           due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-          // due = "20"+proxy.fbo.respDate.slice(4,6)+""+proxy.fbo.respDate.slice(2,4)+""+proxy.fbo.respDate.slice(0,2)
+          due2 = "20"+proxy.fbo.respDate.slice(4,6)+""+proxy.fbo.respDate.slice(2,4)+""+proxy.fbo.respDate.slice(0,2)
           var date2 = new Date(today);
           var date1 = new Date(due);
           var expired = false
-          // if (date1 < date2) {
-          //   expired = true
-          // }
+          if (due2 < today2) {
+            expired = true
+          }
           var timeDiff = (date1.getTime() - date2.getTime());
           var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
           if (timeToDue >= 365) {
@@ -1845,6 +1847,13 @@ function toggleHamburgerMenu() {
       var elemString = elem.toString()
       if (!fboClickOpen) {
         fboHighlightOpen = index
+        var fbo
+        if (activeTab == 2) {
+          fbo = fbosIn[fboIndex]
+        } else if (activeTab == 3) {
+          fbo = fboPipeline[fboIndex]
+        }
+        elem.classList.add('fbo-desc-word-start')
         fboClickOpen = true
       } else {
         if (index < fboHighlightOpen) {
@@ -1858,6 +1867,8 @@ function toggleHamburgerMenu() {
           fbo = fbosIn[fboIndex]
         } else if (activeTab == 3) {
           fbo = fboPipeline[fboIndex]
+        } else {
+          console.log('tab is messed up - its ' + activeTab)
         }
         console.log(fbo)
         if (highlightOn) {
@@ -2246,7 +2257,6 @@ function toggleHamburgerMenu() {
     for (i = 0; i < b.length; i++) {
       b[i].classList.remove('inactive');
     }
-    var activeTab = num
     for (i = 0; i < 3; i++) {
       if (i !== num) {
         document.getElementById("lower-" + (i+1).toString()).classList.add('inactive')
@@ -2309,6 +2319,14 @@ function toggleHamburgerMenu() {
     document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
     var fboDescHTML = ''
     for (i = 0; i < proxy.fboDesc.length; i++) {
+      if (proxy.fboDesc[i].slice(0,27) == '<span onclick="fboDescClick') {
+        var proxyCopy = proxy.fboDesc[i]
+        proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word" ' + proxyCopy.slice(6)
+        // if (i == 0) {
+        //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
+        // } else {
+        // }
+      }
       fboDescHTML = fboDescHTML + proxy.fboDesc[i]
     }
     document.getElementById("abstract-text").innerHTML = fboDescHTML;
@@ -3016,13 +3034,13 @@ function toggleHamburgerMenu() {
             img = 'contact'
           }
         }
-         
+
         //Might not be the cleanest solution but it works dangit
         var fboI = -1
-        for (f = 0; f < fbos.length; f++){          
+        for (f = 0; f < fbos.length; f++){
           if (huntingPartyData.news[i].body.includes(fbos[f].fbo.subject)){
               // console.log(
-              //   "The Fbo Subject: " + fbos[f].fbo.subject 
+              //   "The Fbo Subject: " + fbos[f].fbo.subject
               //   + " is included in "+ huntingPartyData.news[i].body)
               fboI = f
               // console.log("F: " +f+ ", FboI: " + fboI)
@@ -3081,8 +3099,8 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    switchTab(1)
-    goToFbo(5, 0);
+    // switchTab(2)
+    // goToFbo(6, 0);
     // openPopups(2)
     // goToCompanyCreate()
     // expandData(2)
