@@ -1,5 +1,5 @@
-var apiUrl = 'https://efassembly.com:4432'
-// var apiUrl = 'http://18.218.170.246:4200'
+// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'http://18.218.170.246:4200'
 // var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
@@ -1514,10 +1514,11 @@ function toggleHamburgerMenu() {
       }
       return p2num - p1num
     });
-    console.log('length is ' + company.fboProxies.length)
+    console.log('FBO proxy length is ' + company.fboProxies.length)
     var updateNeeded
     var toDeleteIds = []
     var logCount = 0
+    var noProxies = 0
     for (i = 0; i < company.fboProxies.length; i++) {
       proxy = company.fboProxies[i]
       // if (company.fboProxies[i].comments.length == 0) {
@@ -1530,114 +1531,177 @@ function toggleHamburgerMenu() {
       // }
       var dueDate = ''
       var due = 'No Due Date'
-      if (proxy.fbo.respDate) {
-        var today = getToday()
-        due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-        var date2 = new Date(today);
-        var date1 = new Date(due);
-        var expired = false
-        if (date1 < date2) {
-          expired = true
-        }
-        var timeDiff = (date1.getTime() - date2.getTime());
-        var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        if (timeToDue >= 365) {
-          dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 365).toString()+" Years</p>"
-        } else if (timeToDue >= 60) {
-          dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
-        } else if (timeToDue >= 14) {
-          dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+      if (!proxy.fbo) {
+        noProxies++
+      }
+      else {
+        if (proxy.fbo.respDate) {
+          var today = getToday()
+          // today = today.slice(0,4)+""+today.slice(5,7)+""+today.slice(8,10)
+          today = today.slice(0,2)+"/"+today.slice(3,4)+"/"+today.slice(6,7)
+
+          due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+          // due = "20"+proxy.fbo.respDate.slice(4,6)+""+proxy.fbo.respDate.slice(2,4)+""+proxy.fbo.respDate.slice(0,2)
+          var date2 = new Date(today);
+          var date1 = new Date(due);
+          var expired = false
+          // if (date1 < date2) {
+          //   expired = true
+          // }
+          var timeDiff = (date1.getTime() - date2.getTime());
+          var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          if (timeToDue >= 365) {
+            dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 365).toString()+" Years</p>"
+          } else if (timeToDue >= 60) {
+            dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
+          } else if (timeToDue >= 14) {
+            dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+          } else {
+            dueDate = "<p style='font-weight: bold;'>Due: "+timeToDue+" Days</p>"
+          }
+          // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
         } else {
-          dueDate = "<p style='font-weight: bold;'>Due: "+timeToDue+" Days</p>"
+          dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
         }
-        // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
-      } else {
-        dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
-      }
-      var voteHtml = ''
-      var comments = ''
-      var voteScore = proxy.voteYes.length - proxy.voteNo.length
-      if (voteScore < 0) {
-        voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
-      } else if (voteScore > 0) {
-        voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
-      } else if (voteScore == 0 && ((proxy.voteYes.length + proxy.voteNo.length) > 0)) {
-        voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: black;">+'+voteScore+'</p></div>'
-      } else {
-        voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
-      }
-      voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
-      for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
-        var vote = proxy.voteYes[i2]
-        var voteString = ''
-        if (vote.comment) {
-          voteString = ' - "'+vote.comment+'"'
+        var voteHtml = ''
+        var comments = ''
+        var voteScore = proxy.voteYes.length - proxy.voteNo.length
+        if (voteScore < 0) {
+          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
+        } else if (voteScore > 0) {
+          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
+        } else if (voteScore == 0 && ((proxy.voteYes.length + proxy.voteNo.length) > 0)) {
+          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: black;">+'+voteScore+'</p></div>'
+        } else {
+          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
         }
-        comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
-        voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
-      }
-      for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
-        var vote = proxy.voteNo[i2]
-        var voteString = ''
-        if (vote.comment) {
-          voteString = ' - "'+vote.comment+'"'
+        voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
+        for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+          var vote = proxy.voteYes[i2]
+          var voteString = ''
+          if (vote.comment) {
+            voteString = ' - "'+vote.comment+'"'
+          }
+          comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+          voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
         }
-        comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
-        voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
-      }
-      if (comments.length < 1) {
-        comments = '<p style="color: gray;">Comments</p>'
-      }
-      voteHtml = voteHtml + '</div>'
-      var vote = null
-      for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
-        if (proxy.voteYes[i2].id == currentUser._id) {
-          vote = 2
-          break;
-        }
-      }
-      if (vote !== 2) {
         for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
-          if (proxy.voteNo[i2].id == currentUser._id) {
-            vote = 1
+          var vote = proxy.voteNo[i2]
+          var voteString = ''
+          if (vote.comment) {
+            voteString = ' - "'+vote.comment+'"'
+          }
+          comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+          voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
+        }
+        if (comments.length < 1) {
+          comments = '<p style="color: gray;">Comments</p>'
+        }
+        voteHtml = voteHtml + '</div>'
+        var vote = null
+        for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+          if (proxy.voteYes[i2].id == currentUser._id) {
+            vote = 2
             break;
           }
         }
-      }
-      var yesString = ''
-      var noString = ''
-      if (vote == 1) {
-        noString = ' voted-button'
-        fboVote.push(1)
-      } else if (vote == 2) {
-        yesString = ' voted-button'
-        fboVote.push(2)
-      } else {
-        fboVote.push(0)
-      }
-      var imgString = ''
-      for (i2 = 0; i2 < agencyLogos.length; i2++) {
-        if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
-          imgString = 'img/agencies/'+agencyLogos[i2].img
-          break;
+        if (vote !== 2) {
+          for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
+            if (proxy.voteNo[i2].id == currentUser._id) {
+              vote = 1
+              break;
+            }
+          }
         }
-      }
-      var originHtml = ''
-      if (proxy.originSearch) {
-        originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
-      }
-      var commentsCount = proxy.voteYes.length + proxy.voteNo.length
-      var votesYesCount = proxy.voteYes.length
-      var votesNoCount = proxy.voteNo.length
-      if (proxy.voteYes.length < 1 && vote !== 1) {
-        // if (timeToDue < -14) {
-        //   expired = true
-        //   updateNeeded = true
-        // }
-        if (!expired) {
-          fbosIn.push(proxy)
-          var index = fbosIn.length - 1
-          fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
+        var yesString = ''
+        var noString = ''
+        if (vote == 1) {
+          noString = ' voted-button'
+          fboVote.push(1)
+        } else if (vote == 2) {
+          yesString = ' voted-button'
+          fboVote.push(2)
+        } else {
+          fboVote.push(0)
+        }
+        var imgString = ''
+        for (i2 = 0; i2 < agencyLogos.length; i2++) {
+          if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
+            imgString = 'img/agencies/'+agencyLogos[i2].img
+            break;
+          }
+        }
+        var originHtml = ''
+        if (proxy.originSearch) {
+          originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
+        }
+        var commentsCount = proxy.voteYes.length + proxy.voteNo.length
+        var votesYesCount = proxy.voteYes.length
+        var votesNoCount = proxy.voteNo.length
+        if (proxy.voteYes.length < 1 && vote !== 1) {
+          // if (timeToDue < -14) {
+          //   expired = true
+          //   updateNeeded = true
+          // }
+          if (!expired) {
+            fbosIn.push(proxy)
+            var index = fbosIn.length - 1
+            fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
+            '<div class="fbo-item-avatar">'+
+            '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
+            '</div>'+
+            '<div class="fbo-item-body">'+
+            '<div class="fbo-item-title">'+
+            '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+            '</div>'+
+            '<div class="fbo-item-desc">'+
+            '<p class="">'+proxy.fbo.desc+'</p>'+
+            '</div>'+
+            '<div class="fbo-item-icons">'+
+            '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
+            '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div>'+
+            '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div>'+
+            '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
+            '</div>'+
+            '</div>'+
+            // '<div class="bottom-border">'+
+            // '</div>'+
+            // ''+voteHtml+
+            // ''+originHtml+
+            // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
+            // '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+            // '<div class="fbo-item-title-bg"></div>'+
+            // '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
+            // '</div>'+
+            // '<div class="fbo-item-comments">'+
+            // comments+
+            // '</div>'+
+            // '<div class="fbo-item-buttons">'+
+            // '<div id="no-button-' + index + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(1)">'+
+            // '<div class="second-border">'+
+            // '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
+            // '</div>'+
+            // '</div>'+
+            // '<div class="fbo-item-time-button">'+
+            // dueDate+
+            // '</div>'+
+            // '<div id="yes-button-' + index + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(0)">'+
+            // '<div class="second-border">'+
+            // '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
+            // '</div>'+
+            // '</div>'+
+            // '</div>'+
+            '</div>'
+          }
+        } else if (proxy.voteYes.length > 0 && vote !== 1) {
+          // if (timeToDue < -60) {
+          //   expired = true
+          //   updateNeeded = true
+          // }
+          fboPipeline.push(proxy)
+          var index = fboPipeline.length - 1
+          pipelineHtml = pipelineHtml +
+          '<div class="fbo-item" onclick="goToFbo(' + index + ', 1)">'+
           '<div class="fbo-item-avatar">'+
           '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
           '</div>'+
@@ -1655,11 +1719,10 @@ function toggleHamburgerMenu() {
           '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
           '</div>'+
           '</div>'+
-          // '<div class="bottom-border">'+
-          // '</div>'+
+          // '<div class="fbo-item">'+
+          // '<div class="second-border">'+
           // ''+voteHtml+
-          // ''+originHtml+
-          // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
+          // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
           // '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
           // '<div class="fbo-item-title-bg"></div>'+
           // '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
@@ -1668,74 +1731,22 @@ function toggleHamburgerMenu() {
           // comments+
           // '</div>'+
           // '<div class="fbo-item-buttons">'+
-          // '<div id="no-button-' + index + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(1)">'+
-          // '<div class="second-border">'+
-          // '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
-          // '</div>'+
-          // '</div>'+
           // '<div class="fbo-item-time-button">'+
           // dueDate+
           // '</div>'+
-          // '<div id="yes-button-' + index + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(0)">'+
-          // '<div class="second-border">'+
-          // '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
           // '</div>'+
           // '</div>'+
-          // '</div>'+
+          // '</div>'
           '</div>'
         }
-      } else if (proxy.voteYes.length > 0 && vote !== 1) {
-        // if (timeToDue < -60) {
-        //   expired = true
-        //   updateNeeded = true
+        // if (expired) {
+        //   toDeleteIds.push(company.fboProxies[i]._id)
+        //   company.fboProxies.splice(i,1)
+        //   i = i - 1
         // }
-        fboPipeline.push(proxy)
-        var index = fboPipeline.length - 1
-        pipelineHtml = pipelineHtml +
-        '<div class="fbo-item" onclick="goToFbo(' + index + ', 1)">'+
-        '<div class="fbo-item-avatar">'+
-        '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
-        '</div>'+
-        '<div class="fbo-item-body">'+
-        '<div class="fbo-item-title">'+
-        '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-        '</div>'+
-        '<div class="fbo-item-desc">'+
-        '<p class="">'+proxy.fbo.desc+'</p>'+
-        '</div>'+
-        '<div class="fbo-item-icons">'+
-        '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
-        '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div>'+
-        '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div>'+
-        '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
-        '</div>'+
-        '</div>'+
-        // '<div class="fbo-item">'+
-        // '<div class="second-border">'+
-        // ''+voteHtml+
-        // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
-        // '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-        // '<div class="fbo-item-title-bg"></div>'+
-        // '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
-        // '</div>'+
-        // '<div class="fbo-item-comments">'+
-        // comments+
-        // '</div>'+
-        // '<div class="fbo-item-buttons">'+
-        // '<div class="fbo-item-time-button">'+
-        // dueDate+
-        // '</div>'+
-        // '</div>'+
-        // '</div>'+
-        // '</div>'
-        '</div>'
       }
-      // if (expired) {
-      //   toDeleteIds.push(company.fboProxies[i]._id)
-      //   company.fboProxies.splice(i,1)
-      //   i = i - 1
-      // }
     }
+    console.log(noProxies + ' busted proxies')
     // if (updateNeeded) {
     //   for (i = 0; i < toDeleteIds.length; i++) {
     //     var xhttp = new XMLHttpRequest();
@@ -2947,7 +2958,7 @@ function toggleHamburgerMenu() {
         };
         if (currentUser.companyUserProxies.length > 0) {
           var companyId = currentUser.companyUserProxies[0].company._id
-          xhttp2.open("GET", apiUrl+"/company/" + companyId, true);
+          xhttp2.open("GET", apiUrl+"/company/" + companyId + "/light/", true);
           xhttp2.send();
         } else {
           goToCompanyCreate()
@@ -3050,8 +3061,8 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    // switchTab(1)
-    // goToFbo(5, 0);
+    switchTab(1)
+    goToFbo(5, 0);
     // openPopups(2)
     // goToCompanyCreate()
     // expandData(2)
