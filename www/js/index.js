@@ -1893,7 +1893,7 @@ function toggleHamburgerMenu() {
   }
 
   function goToFbo(num, tab) {
-    console.log('why')
+    console.log('Loading FBO Details')
     console.log(num)
     fboIndex = num
     setActiveFbo(num, tab)
@@ -2998,13 +2998,33 @@ function toggleHamburgerMenu() {
       var newsHtml = ''
       for (i = huntingPartyData.news.length-1; i >=0; i--) {
         var img = 'profile'
+        // console.log(huntingPartyData.news[i])
+        console.log(huntingPartyData.news[i].body)
         if (huntingPartyData.news[i].type) {
           if (huntingPartyData.news[i].type == 'vote') {
             img = 'contact'
           }
         }
-        newsHtml = newsHtml + '<div class="news-item">'+
-        '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
+         
+        //Might not be the cleanest solution but it works dangit
+        var fboI = -1
+        for (f = 0; f < fbos.length; f++){          
+          if (huntingPartyData.news[i].body.includes(fbos[f].fbo.subject)){
+              // console.log(
+              //   "The Fbo Subject: " + fbos[f].fbo.subject 
+              //   + " is included in "+ huntingPartyData.news[i].body)
+              fboI = f
+              // console.log("F: " +f+ ", FboI: " + fboI)
+           }
+        }
+        if (fboI == -1){
+          console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
+          newsHtml = newsHtml + '<div class="news-item">'
+        }
+        else{
+          newsHtml = newsHtml + '<div class="news-item" onclick="goToFbo('+ fboI +', 1)">'
+        }
+        newsHtml += '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
         '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
         '</div>'+
         '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
