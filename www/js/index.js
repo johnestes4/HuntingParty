@@ -1,5 +1,5 @@
-// var apiUrl = 'https://efassembly.com:4432'
-var apiUrl = 'http://18.218.170.246:4200'
+var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'http://18.218.170.246:4200'
 // var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
@@ -994,13 +994,16 @@ function renderSearch() {
 }
 
 function calculateNaicsSearch(naicsItem, index, elem) {
+  var a = document.getElementsByClassName('naics-subcategory-box')
+  var newSubBoxIndex = a.length
   var divId = 'naics-subcategory-box-'+index
   if (!elem.classList.contains('naics-open')) {
     if (naicsItem.subcategories) {
       var html = '<div class="naics-subcategory-box subcategory-box">'
       for (i = 0; i < naicsItem.subcategories.length; i++) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div>'+
+        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSubSearch('+index+', '+i+', -1, -1, -1, \''+index+'-'+i+'\', this)"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+index+'-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div>'+
+        '<div id="naics-subcategory-box-'+index+'-'+i+'"></div>'+
         '</div>'
       }
       html = html + '</div>'
@@ -1011,6 +1014,61 @@ function calculateNaicsSearch(naicsItem, index, elem) {
   } else {
     document.getElementById(divId).innerHTML = ''
     document.getElementById('naics-arrow-'+index).innerHTML = '▼'
+    elem.classList.remove('naics-open');
+  }
+}
+
+function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3, subIndex4, boxId, elem) {
+  var naicsItem = searchTerms.naics[naicsItemIndex]
+  var divIdNum = ''
+  if (subIndex4 > -1) {
+    naicsItem = searchTerms.naics[naicsItemIndex].subcategories[subIndex1].subcategories[subIndex2].subcategories[subIndex3].subcategories[subIndex4]
+  } else if (subIndex3 > -1) {
+    naicsItem = searchTerms.naics[naicsItemIndex].subcategories[subIndex1].subcategories[subIndex2].subcategories[subIndex3]
+  } else if (subIndex2 > -1) {
+    naicsItem = searchTerms.naics[naicsItemIndex].subcategories[subIndex1].subcategories[subIndex2]
+  } else if (subIndex1 > -1) {
+    naicsItem = searchTerms.naics[naicsItemIndex].subcategories[subIndex1]
+  }
+  console.log(divIdNum)
+  if (!elem.classList.contains('naics-open')) {
+    if (naicsItem.subcategories) {
+      var html = '<div class="naics-subcategory-box subcategory-box">'
+      for (i = 0; i < naicsItem.subcategories.length; i++) {
+        var onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', -1, -1, -1, -1, \''+divIdNum+'\', this)'
+        if (subIndex4 > -1) {
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+subIndex3+'-'+subIndex4+'-'+i
+          onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+subIndex2+', '+subIndex3+', '+subIndex4+', \''+divIdNum+'\', this)'
+        } else if (subIndex3 > -1) {
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+subIndex3+'-'+i
+          onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+subIndex2+', '+subIndex3+', '+i+', \''+divIdNum+'\', this)'
+        } else if (subIndex2 > -1) {
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+i
+          onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+subIndex2+', '+i+', -1, \''+divIdNum+'\', this)'
+        } else if (subIndex1 > -1) {
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+i
+          onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+i+', -1, -1, \''+divIdNum+'\', this)'
+        }
+        var arrowHtml = ''
+        var onclickHtml = ''
+        if (naicsItem.subcategories[i].subcategories) {
+          arrowHtml = '<span id="naics-arrow-'+divIdNum+'" style="position: absolute; right: 0px; top: 0px;">▼</span>'
+          onclickHtml = 'onclick="'+onclickString+'"'
+        }
+
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+arrowHtml+'</div>'+
+        '<div id="naics-subcategory-box-'+divIdNum+'"></div>'+
+        '</div>'
+      }
+      html = html + '</div>'
+      elem.classList.add('naics-open');
+      document.getElementById('naics-arrow-'+boxId).innerHTML = '▲'
+      document.getElementById('naics-subcategory-box-'+boxId).innerHTML = html
+    }
+  } else {
+    document.getElementById('naics-subcategory-box-'+boxId).innerHTML = ''
+    document.getElementById('naics-arrow-'+boxId).innerHTML = '▼'
     elem.classList.remove('naics-open');
   }
 }
@@ -1355,18 +1413,14 @@ function toggleHamburgerMenu() {
     var profileInside = false
     do {
       if (profileDropdownOpen) {
-        if (targetElement == profileDropdown) {
+        if (targetElement == profileDropdown || targetElement == topbarHamburger) {
           // This is a click inside. Do nothing, just return.
           profileInside = true;
         }
-      } else {
-        if (targetElement == topbarHamburger) {
-          profileDropdown.classList.remove('inactive')
-          profileDropdown.classList.remove('sidebar-out');
-          profileDropdown.classList.add('sidebar-in')
-          profileDropdownOpen = true
-          profileInside = true;
-        }
+      }
+      if (targetElement == topbarHamburger) {
+        // This is a click inside. Do nothing, just return.
+        profileInside = true;
       }
       // Go up the DOM
       targetElement = targetElement.parentNode;
@@ -1435,7 +1489,7 @@ function toggleHamburgerMenu() {
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
     }
     activeTab = num
-    document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="">'
+    document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="" onclick="openSidebar()">'
     var a = document.getElementsByClassName('iconbar-icon')
     for (i = 0; i < a.length; i++) {
       if (i == num) {
@@ -1872,16 +1926,18 @@ function toggleHamburgerMenu() {
         }
         console.log(fbo)
         if (highlightOn) {
-          fbo.fboDesc[fboHighlightOpen] = '<span class="highlighted">' + fbo.fboDesc[fboHighlightOpen]
+          activeFboDesc[fboHighlightOpen] = '<span class="highlighted">' + activeFboDesc[fboHighlightOpen]
         } else if (grayOn) {
-          fbo.fboDesc[fboHighlightOpen] = '<span class="grayed">' + fbo.fboDesc[fboHighlightOpen]
+          activeFboDesc[fboHighlightOpen] = '<span class="grayed">' + activeFboDesc[fboHighlightOpen]
         }
-        fbo.fboDesc[fboHighlightClose] = fbo.fboDesc[fboHighlightClose] + '</span>'
+        activeFboDesc[fboHighlightClose] = activeFboDesc[fboHighlightClose] + '</span>'
         var fboDescHTML = ''
-        for (i = 0; i < fbo.fboDesc.length; i++) {
+        for (i = 0; i < activeFboDesc.length; i++) {
           fboDescHTML = fboDescHTML + activeFboDesc[i]
         }
         document.getElementById("abstract-text").innerHTML = fboDescHTML;
+        document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
+        document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
         highlightOn = false
         grayOn = false
         fboClickOpen = false
@@ -1889,7 +1945,7 @@ function toggleHamburgerMenu() {
         fboHighlightClose = null
       }
       // elem.classList.add('bold')
-      console.log(fbosIn[fboIndex].fboDesc[index])
+      console.log(elem)
     }
   }
 
@@ -2292,7 +2348,6 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-detail-right").classList.remove('fbo-detail-right-larger')
       document.getElementById("fbo-details-comments").classList.remove('inactive')
     }
-    activeFboDesc = proxy.fboDesc
     console.log(proxy)
     var dueDateHtml = 'No Due Date'
     if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
@@ -2318,19 +2373,73 @@ function toggleHamburgerMenu() {
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
     document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
     var fboDescHTML = ''
-    for (i = 0; i < proxy.fboDesc.length; i++) {
-      if (proxy.fboDesc[i].slice(0,27) == '<span onclick="fboDescClick') {
-        var proxyCopy = proxy.fboDesc[i]
-        proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word" ' + proxyCopy.slice(6)
+    var separators = [' ', '\n'];
+    var outputArray = proxy.fbo.desc.split(new RegExp(separators.join('|'), 'g'));
+    var outputArray2 = []
+    var index2 = 0
+    for (i = 0; i < outputArray.length; i++) {
+      var newOne = outputArray[i]
+      if (outputArray[i].includes('<')) {
+        var htmlClosed = false
+        var htmlStart = 0
+        var extendedLink
+        for (i2 = 0; i2 < outputArray[i].length; i2++) {
+          if (outputArray[i][i2] == '<') {
+            htmlStart = i2
+            htmlClosed = false
+            if (outputArray[i][i2+1] == 'a') {
+              console.log('HERE: ' + outputArray[i][i2] + outputArray[i][i2+1])
+            }
+          } else if (outputArray[i][i2] == '>') {
+            console.log(outputArray[i].slice(htmlStart,i2+1))
+            htmlClosed = true
+          }
+        }
+        if (!htmlClosed) {
+          var newOne = outputArray[i]
+          var startingPoint = i+1
+          var indexToClose = 0
+          var closeFound = false
+          while (!closeFound && (startingPoint+indexToClose) < outputArray.length) {
+            if (outputArray[startingPoint+indexToClose].includes('>')) {
+              // console.log('going - '  + outputArray[i+indexToClose])
+              for (x = startingPoint; x <= startingPoint+indexToClose; x++) {
+                newOne = newOne + ' ' + outputArray[x]
+              }
+              i = startingPoint + indexToClose
+              closeFound = true
+            } else {
+              indexToClose++
+            }
+          }
+        }
+      }
+      if (newOne.slice(0,1) == '<' && newOne.slice(-1) == '>') {
+        outputArray2.push(newOne)
+        index2++
+      } else {
+        newOne = '<span class="fbo-desc-word" onclick="fboDescClick('+index2+',\'\', this)">' + newOne + ' </span>'
+        outputArray2.push(newOne)
+        index2++
+      }
+    }
+    activeFboDesc = outputArray2
+    for (i = 0; i < outputArray2.length; i++) {
+      if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
+        var proxyCopy = outputArray2[i]
         // if (i == 0) {
         //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
         // } else {
         // }
+        outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
       }
-      fboDescHTML = fboDescHTML + proxy.fboDesc[i]
+      fboDescHTML = fboDescHTML + outputArray2[i]
     }
-    document.getElementById("abstract-text").innerHTML = fboDescHTML;
+    console.log(outputArray2[0])
+    console.log(outputArray2[1])
+    console.log(outputArray2[2])
 
+    document.getElementById("abstract-text").innerHTML = fboDescHTML;
     document.getElementById("data-text").innerHTML = dataText;
     var dueDate = ''
     if (proxy.fbo.respDate) {
@@ -3100,7 +3209,7 @@ function toggleHamburgerMenu() {
     }
     // showAd()
     // switchTab(2)
-    // goToFbo(6, 0);
+    // goToFbo(27, 0);
     // openPopups(2)
     // goToCompanyCreate()
     // expandData(2)
@@ -3494,6 +3603,7 @@ function toggleHamburgerMenu() {
     }
   };
   function openSidebar() {
+    console.log('its doing it')
     document.getElementById("sidebar").classList.remove('inactive')
     document.getElementById("sidebar").classList.remove('sidebar-out')
     document.getElementById("sidebar").classList.add('sidebar-in')
