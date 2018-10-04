@@ -356,6 +356,31 @@ under the License.
       <div class="search-item" style="">
         <input id="search-name" class="search-item-input" type="text" name="" value="" style="margin: 0px;" placeholder="Name Your Search">
       </div>
+      <div class="search-item" onclick="openSearchBox(6)">
+        <div class="search-item-text">
+          Type
+        </div>
+        <div class="search-item-right">
+          All >
+        </div>
+      </div>
+      <div id="search-box-type" class="search-box inactive">
+        <div class="" style="width: 100%; float: left;">
+          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
+          <div class="" style="width: 100%; float: left;">
+            <p style="margin-bottom: 2px;">----------</p>
+          </div>
+        </div>
+        <div class="" style="width: 100%; float: left;">
+          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFPs</span>
+        </div>
+        <div class="" style="width: 100%; float: left;">
+          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFIs</span>
+        </div>
+        <div class="" style="width: 100%; float: left;">
+          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Projected opportunities</span>
+        </div>
+      </div>
       <div class="search-item" onclick="openSearchBox(0)">
         <div class="search-item-text">
           Due Date
@@ -460,7 +485,7 @@ under the License.
           </div>
         </div>
       </div>
-      <div class="search-item inactive" onclick="openSearchBox(4)">
+      <div class="search-item" onclick="openSearchBox(4)">
         <div class="search-item-text">
           Location
         </div>

@@ -1,5 +1,5 @@
-var apiUrl = 'https://efassembly.com:4432'
-// var apiUrl = 'http://18.218.170.246:4200'
+// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'http://18.218.170.246:4200'
 // var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
@@ -534,6 +534,9 @@ var activeSearchIndex
 function viewSearch(index) {
   if (index > -1) {
     searchTerms = yourSearches[index]
+    if (searchTerms.place.length < 2) {
+      searchTerms.place = emptySearchTerms.place
+    }
     activeSearchIndex = index
     document.getElementById("delete-search-button").classList.remove('inactive')
   } else {
@@ -660,6 +663,19 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
     }
+  } else if (which == 6) {
+    if (document.getElementById("search-box-type").classList.contains('inactive')) {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+      document.getElementById("search-box-type").classList.remove('inactive')
+    } else {
+      a = document.getElementsByClassName('search-box')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive')
+      }
+    }
   }
 }
 
@@ -753,21 +769,21 @@ function searchFilter(which) {
       } else if (isNaN(string)) {
         if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
           html = html + '<div class="search-box-checkbox-item">'+
-          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div></div>'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div></div>'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div></div>'+
           '<div id="naics-subcategory-box-'+i+'" class="inactive"></div>'
         }
       } else if (!isNaN(string)) {
         if (searchTerms.naics[i].code.toString().includes(string) || searchTerms.naics[i].value == true) {
           html = html + '<div class="" style="width: 100%; float: left; position: relative;">'+
-          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div></div>'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div></div>'+
           '<div id="naics-subcategory-box-'+i+'"></div>'
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div></div>'+
+          '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div></div>'+
           '<div id="naics-subcategory-box-'+i+'" class="inactive"></div>'
         }
       }
@@ -914,7 +930,7 @@ function renderSearch() {
     } else {
       html = html + '<div class="search-box-checkbox-item">'+
       '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+
-      searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div>'+
+      searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
       '<div id="naics-subcategory-box-'+i+'"></div>'
     }
     html = html + '</div>'
@@ -969,8 +985,23 @@ function renderSearch() {
   document.getElementById("search-box-agency-list").innerHTML = html
   html = ''
   for (i = 0; i < searchTerms.place.length; i++) {
+    var arrowHtml = ''
+    var onclickHtml = ''
+    if (searchTerms.place[i].subcategories) {
+      arrowHtml = '<span id="place-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
+      onclickHtml = 'onclick="calculateLocationSearch('+i+')"'
+    }
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.place[i].name+'</span>'
+    '<input class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
+    if (searchTerms.place[i].subcategories) {
+      html = html + '<div id="location-subcategory-box-'+i+'" class="subcategory-box inactive">'
+      for (subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].subcategories.length; subcategoryIndex++) {
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].subcategories[subcategoryIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.place[i].subcategories[subcategoryIndex].name+'</div>'+
+        '</div>'
+      }
+      html = html + '</div>'
+    }
     if (i == 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<p style="margin: 0px;">----------</p>'+
@@ -982,7 +1013,7 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.setAside.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input class="search-box-checkbox checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'"> <div class="search-box-checkbox-text"> '+searchTerms.setAside[i].name+'</span>'
+    '<input class="search-box-checkbox checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'"> <div class="search-box-checkbox-text"> '+searchTerms.setAside[i].name+'</div>'
     if (i == 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<p style="margin: 0px;">----------</p>'+
@@ -1002,7 +1033,7 @@ function calculateNaicsSearch(naicsItem, index, elem) {
       var html = '<div class="naics-subcategory-box subcategory-box">'
       for (i = 0; i < naicsItem.subcategories.length; i++) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSubSearch('+index+', '+i+', -1, -1, -1, \''+index+'-'+i+'\', this)"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+index+'-'+i+'" style="position: absolute; right: 0px; top: 0px;">▼</span></div>'+
+        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSubSearch('+index+', '+i+', -1, -1, -1, \''+index+'-'+i+'\', this)"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+index+'-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
         '<div id="naics-subcategory-box-'+index+'-'+i+'"></div>'+
         '</div>'
       }
@@ -1030,7 +1061,6 @@ function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3
   } else if (subIndex1 > -1) {
     naicsItem = searchTerms.naics[naicsItemIndex].subcategories[subIndex1]
   }
-  console.log(divIdNum)
   if (!elem.classList.contains('naics-open')) {
     if (naicsItem.subcategories) {
       var html = '<div class="naics-subcategory-box subcategory-box">'
@@ -1052,7 +1082,7 @@ function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3
         var arrowHtml = ''
         var onclickHtml = ''
         if (naicsItem.subcategories[i].subcategories) {
-          arrowHtml = '<span id="naics-arrow-'+divIdNum+'" style="position: absolute; right: 0px; top: 0px;">▼</span>'
+          arrowHtml = '<span id="naics-arrow-'+divIdNum+'" class="checkbox-text-arrow">▼</span>'
           onclickHtml = 'onclick="'+onclickString+'"'
         }
 
@@ -1086,6 +1116,16 @@ function calculateOfficeSearch(agencyIndex, subagencyIndex) {
     document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.add('inactive')
   } else {
     document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.remove('inactive')
+  }
+}
+
+function calculateLocationSearch(locationIndex) {
+  if (!document.getElementById('location-subcategory-box-'+locationIndex+'').classList.contains('inactive')) {
+    document.getElementById('location-subcategory-box-'+locationIndex+'').classList.add('inactive')
+    document.getElementById('place-arrow-'+locationIndex).innerHTML = '▼'
+  } else {
+    document.getElementById('location-subcategory-box-'+locationIndex+'').classList.remove('inactive')
+    document.getElementById('place-arrow-'+locationIndex).innerHTML = '▲'
   }
 }
 
@@ -3208,7 +3248,7 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
     // showAd()
-    // switchTab(2)
+    switchTab(1)
     // goToFbo(27, 0);
     // openPopups(2)
     // goToCompanyCreate()

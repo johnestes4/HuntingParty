@@ -1151,10 +1151,17 @@ h1, .instructions{
 }
 
 .search-box-checkbox-text {
-  width: calc(100% - 35px);
+  width: calc(100% - 50px);
   line-height: 20px;
   float: left;
   font-size: 14px;
+}
+
+.checkbox-text-arrow {
+  position: absolute;
+  color: rgba(25,25,25,1);
+  right: 0px;
+  top: 3px;
 }
 
 .search-box-details {
