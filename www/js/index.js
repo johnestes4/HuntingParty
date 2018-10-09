@@ -1603,58 +1603,111 @@ function toggleHamburgerMenu() {
     return today
   }
 
+  function sortRenderProxies(){
+    const BY_EARLIEST_DUE = 0
+    const BY_LATEST_DUE = 1
+    const DEFAULT = 10
+    
+    var renderOption = BY_EARLIEST_DUE
+
+    switch(renderOption){
+      case 0: //By Due date
+        company.fboProxies.sort(function(p1, p2){
+          //[mm,dd,yy]
+          var due1
+          var due2
+          var duenum1 = 0
+          var duenum2 = 0
+          if (p1.fbo.respDate){
+            mm = p1.fbo.respDate.slice(0,2)
+            dd = p1.fbo.respDate.slice(2,4)
+            yy = p1.fbo.respDate.slice(4,6)
+
+            due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+
+            duenum1 = ((-1 + due1[0]) * 30)
+            duenum1 += due1[1]
+            duenum1 += (1000 * due1[2])
+          }
+          else{
+            due1 = "No Date"
+            duenum1 = 99999
+          }
+          if (p2.fbo.respDate){
+            mm = p2.fbo.respDate.slice(0,2)
+            dd = p2.fbo.respDate.slice(2,4)
+            yy = p2.fbo.respDate.slice(4,6)
+
+            due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+            duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+          }
+          else{
+            due2 = "No Date"
+            duenum2 = 99999
+          }
+          return duenum1 - duenum2
+        });
+        break;
+      case 1:
+        
+      default:
+      company.fboProxies.sort(function(proxy1, proxy2){
+        var p1num = 0
+        for (i = 0; i < proxy1.voteYes.length; i++) {
+          var proxy = proxy1.voteYes[i]
+          if(proxy.date) {
+            if (proxy.date * 10 > p1num) {
+              p1num = proxy.date * 10
+            }
+          }
+        }
+        for (i = 0; i < proxy1.voteNo.length; i++) {
+          var proxy = proxy1.voteNo[i]
+          if(proxy.date) {
+            if (proxy.date * 10 > p1num) {
+              p1num = proxy.date * 10
+            }
+          }
+        }
+        var p2num = 0
+        for (i = 0; i < proxy2.voteYes.length; i++) {
+          var proxy = proxy2.voteYes[i]
+          if(proxy.date) {
+            if (proxy.date * 10 > p2num) {
+              p2num = proxy.date * 10
+            }
+          }
+        }
+        for (i = 0; i < proxy2.voteNo.length; i++) {
+          var proxy = proxy2.voteNo[i]
+          if(proxy.date) {
+            if (proxy.date * 10 > p2num) {
+              p2num = proxy.date
+            }
+          }
+        }
+        if (p1num == 0 && ((proxy1.voteYes.length + proxy1.voteNo.length) > 0)) {
+          p1num = proxy1.voteYes.length + proxy1.voteNo.length
+        } else if (p1num == 0 && proxy1.date) {
+          p1num = proxy1.date
+        }
+        if (p2num == 0 && ((proxy2.voteYes.length + proxy2.voteNo.length) > 0)) {
+          p2num = proxy2.voteYes.length + proxy2.voteNo.length
+        } else if (p2num == 0 && proxy2.date){
+          p2num = proxy2.date
+        }
+        return p2num - p1num
+      });
+    }
+
+    
+  }
+
   function renderFbos() {
     var fboHtml = ''
     var pipelineHtml = ''
     fboVote = []
-    // console.log(company.fboProxies[0])
-    company.fboProxies.sort(function(proxy1, proxy2){
-      var p1num = 0
-      for (i = 0; i < proxy1.voteYes.length; i++) {
-        var proxy = proxy1.voteYes[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p1num) {
-            p1num = proxy.date * 10
-          }
-        }
-      }
-      for (i = 0; i < proxy1.voteNo.length; i++) {
-        var proxy = proxy1.voteNo[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p1num) {
-            p1num = proxy.date * 10
-          }
-        }
-      }
-      var p2num = 0
-      for (i = 0; i < proxy2.voteYes.length; i++) {
-        var proxy = proxy2.voteYes[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p2num) {
-            p2num = proxy.date * 10
-          }
-        }
-      }
-      for (i = 0; i < proxy2.voteNo.length; i++) {
-        var proxy = proxy2.voteNo[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p2num) {
-            p2num = proxy.date
-          }
-        }
-      }
-      if (p1num == 0 && ((proxy1.voteYes.length + proxy1.voteNo.length) > 0)) {
-        p1num = proxy1.voteYes.length + proxy1.voteNo.length
-      } else if (p1num == 0 && proxy1.date) {
-        p1num = proxy1.date
-      }
-      if (p2num == 0 && ((proxy2.voteYes.length + proxy2.voteNo.length) > 0)) {
-        p2num = proxy2.voteYes.length + proxy2.voteNo.length
-      } else if (p2num == 0 && proxy2.date){
-        p2num = proxy2.date
-      }
-      return p2num - p1num
-    });
+    
     console.log('FBO proxy length is ' + company.fboProxies.length)
     var updateNeeded
     var toDeleteIds = []
@@ -1662,6 +1715,8 @@ function toggleHamburgerMenu() {
     var noProxies = 0
     fbosIn = []
     fboPipeline = []
+
+    sortRenderProxies()
     for (i = 0; i < company.fboProxies.length; i++) {
       proxy = company.fboProxies[i]
       // if (company.fboProxies[i].comments.length == 0) {
@@ -1679,18 +1734,41 @@ function toggleHamburgerMenu() {
       }
       else {
         if (proxy.fbo.respDate) {
+          var todayarray = [], duearray = []
           var today = getToday()
-          today = today.slice(0,2)+"/"+today.slice(3,4)+"/"+today.slice(6,7)
-          today2 = today.slice(0,4)+""+today.slice(5,7)+""+today.slice(8,10)
-
+          today = today.slice(5,7)+"/"+today.slice(8,10)+"/"+today.slice(2,4)
+          todayarray = [today.slice(0,2), today.slice(3,5), today.slice(6,8)]
+          
           due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-          due2 = "20"+proxy.fbo.respDate.slice(4,6)+""+proxy.fbo.respDate.slice(2,4)+""+proxy.fbo.respDate.slice(0,2)
+          duearray = [due.slice(0,2), due.slice(3,5), due.slice(6,8)]
+  
           var date2 = new Date(today);
           var date1 = new Date(due);
           var expired = false
-          if (due2 < today2) {
+
+          if (duearray[2] < todayarray[2]) {
             expired = true
           }
+          else if (duearray[2] > todayarray[2]){
+            expired = false
+          }
+          else{
+            if(duearray[0] < todayarray[0]){
+              expired = true
+            }
+            else if (duearray[0] > todayarray[0]){
+              expired = false
+            }
+            else{
+              if (duearray[1] < todayarray[1]){
+                expired = true
+              }
+              else{
+                expired = false
+              }
+            }
+          }
+
           var timeDiff = (date1.getTime() - date2.getTime());
           var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
           if (timeToDue >= 365) {
@@ -1706,41 +1784,41 @@ function toggleHamburgerMenu() {
         } else {
           dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
         }
-        var voteHtml = ''
-        var comments = ''
-        var voteScore = proxy.voteYes.length - proxy.voteNo.length
-        if (voteScore < 0) {
-          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
-        } else if (voteScore > 0) {
-          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
-        } else if (voteScore == 0 && ((proxy.voteYes.length + proxy.voteNo.length) > 0)) {
-          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: black;">+'+voteScore+'</p></div>'
-        } else {
-          voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
-        }
-        voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
-        for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
-          var vote = proxy.voteYes[i2]
-          var voteString = ''
-          if (vote.comment) {
-            voteString = ' - "'+vote.comment+'"'
-          }
-          comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
-          voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
-        }
-        for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
-          var vote = proxy.voteNo[i2]
-          var voteString = ''
-          if (vote.comment) {
-            voteString = ' - "'+vote.comment+'"'
-          }
-          comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
-          voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
-        }
-        if (comments.length < 1) {
-          comments = '<p style="color: gray;">Comments</p>'
-        }
-        voteHtml = voteHtml + '</div>'
+        // var voteHtml = ''
+        // var comments = ''
+        // var voteScore = proxy.voteYes.length - proxy.voteNo.length
+        // if (voteScore < 0) {
+        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
+        // } else if (voteScore > 0) {
+        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
+        // } else if (voteScore == 0 && ((proxy.voteYes.length + proxy.voteNo.length) > 0)) {
+        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: black;">+'+voteScore+'</p></div>'
+        // } else {
+        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
+        // }
+        // voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
+        // for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+        //   var vote = proxy.voteYes[i2]
+        //   var voteString = ''
+        //   if (vote.comment) {
+        //     voteString = ' - "'+vote.comment+'"'
+        //   }
+        //   comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+        //   voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
+        // }
+        // for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
+        //   var vote = proxy.voteNo[i2]
+        //   var voteString = ''
+        //   if (vote.comment) {
+        //     voteString = ' - "'+vote.comment+'"'
+        //   }
+        //   comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+        //   voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
+        // }
+        // if (comments.length < 1) {
+        //   comments = '<p style="color: gray;">Comments</p>'
+        // }
+        // voteHtml = voteHtml + '</div>'
         var vote = null
         for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
           if (proxy.voteYes[i2].id == currentUser._id) {
@@ -1788,6 +1866,7 @@ function toggleHamburgerMenu() {
           // }
           if (!expired) {
             fbosIn.push(proxy)
+            // console.log(proxy.fbo.respDate +": " + today)
             var index = fbosIn.length - 1
             fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
             '<div class="fbo-item-avatar">'+
@@ -1889,6 +1968,8 @@ function toggleHamburgerMenu() {
         // }
       }
     }
+    
+      
     console.log(noProxies + ' busted proxies')
     // if (updateNeeded) {
     //   for (i = 0; i < toDeleteIds.length; i++) {
