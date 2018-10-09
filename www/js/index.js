@@ -1605,51 +1605,65 @@ function toggleHamburgerMenu() {
 
   function sortRenderProxies(){
     const BY_EARLIEST_DUE = 0
-    const BY_LATEST_DUE = 1
-    const DEFAULT = 10
+    const BY_LATEST_DUE = 1 //Includes data with no deadline at top
+    const BY_DATE_POSTED = 2 //Most recent date to oldest; Inactive
+    const BY_ALPHA_DEC = 3 //inactive
+    const BY_ALPHA_ASC = 4 //inactive
+    const DEFAULT = 10 //Unknown Criteria; Kept Just in case
     
     var renderOption = BY_EARLIEST_DUE
-
     switch(renderOption){
-      case 0: //By Due date
+      case 0: //By Earliest Due
         company.fboProxies.sort(function(p1, p2){
           //[mm,dd,yy]
-          var due1
-          var due2
+          var due1, due2
           var duenum1 = 0
           var duenum2 = 0
           if (p1.fbo.respDate){
             mm = p1.fbo.respDate.slice(0,2)
             dd = p1.fbo.respDate.slice(2,4)
             yy = p1.fbo.respDate.slice(4,6)
-
             due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-
-            duenum1 = ((-1 + due1[0]) * 30)
-            duenum1 += due1[1]
-            duenum1 += (1000 * due1[2])
+            duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
           }
-          else{
-            due1 = "No Date"
-            duenum1 = 99999
-          }
+          else{due1 = "No Date", duenum1 = 99999}
           if (p2.fbo.respDate){
             mm = p2.fbo.respDate.slice(0,2)
             dd = p2.fbo.respDate.slice(2,4)
             yy = p2.fbo.respDate.slice(4,6)
-
             due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
             duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
           }
-          else{
-            due2 = "No Date"
-            duenum2 = 99999
-          }
+          else{due2 = "No Date", duenum2 = 99999}
           return duenum1 - duenum2
         });
         break;
       case 1:
-        
+        company.fboProxies.sort(function(p1, p2){
+          //[mm,dd,yy]
+          var due1, due2
+          var duenum1 = 0
+          var duenum2 = 0
+          if (p1.fbo.respDate){
+            mm = p1.fbo.respDate.slice(0,2)
+            dd = p1.fbo.respDate.slice(2,4)
+            yy = p1.fbo.respDate.slice(4,6)
+            due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+            duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+          }
+          else{due1 = "No Date", duenum1 = 99999}
+          if (p2.fbo.respDate){
+            mm = p2.fbo.respDate.slice(0,2)
+            dd = p2.fbo.respDate.slice(2,4)
+            yy = p2.fbo.respDate.slice(4,6)
+            due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+            duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+          }
+          else{due2 = "No Date", duenum2 = 99999}
+          return duenum1 - duenum2
+        });
+        company.fboProxies.reverse()
+        break;
       default:
       company.fboProxies.sort(function(proxy1, proxy2){
         var p1num = 0
