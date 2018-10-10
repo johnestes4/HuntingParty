@@ -3843,16 +3843,32 @@ function toggleHamburgerMenu() {
   }
 
   $(document).ready(function(){
-    $('#fbo-scroll-box').bind('scroll',chk_scroll);
+    $('#fbo-scroll-box').bind('scroll',fboScroll);
+    $('#pipeline-view').bind('scroll',pipelineScroll);
   });
   var loadInProgress = false
-  function chk_scroll(e) {
+  function fboScroll(e) {
     // console.log('scrolling')
     var elem = $(e.currentTarget);
     if (elem[0].scrollHeight - elem.scrollTop() <= elem.outerHeight() + 900)
     {
       if (!loadInProgress) {
         if (fbosIn.length < fbosInMax) {
+          loadInProgress = true
+          getMoreProxies()
+        } else {
+          console.log('got all of em')
+        }
+      }
+    }
+  }
+  function pipelineScroll(e) {
+    // console.log('scrolling')
+    var elem = $(e.currentTarget);
+    if (elem[0].scrollHeight - elem.scrollTop() <= elem.outerHeight() + 900)
+    {
+      if (!loadInProgress) {
+        if (fboPipeline.length < fboPipelineMax) {
           loadInProgress = true
           getMoreProxies()
         } else {
@@ -3887,7 +3903,28 @@ function toggleHamburgerMenu() {
     xhttp3b.send(JSON.stringify(proxyRequest));
   }
   function getMorePipelineProxies() {
-
+    console.log('getting more')
+    loadInProgress = true
+    document.getElementById("pipeline-item-load-buffer").classList.remove('inactive');
+    var proxyRequest = {
+      startIndex: fboPipeline.length,
+      which: 1
+    }
+    var xhttp3b = new XMLHttpRequest();
+    xhttp3b.onreadystatechange = function() {
+      if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
+        proxiesRes = JSON.parse(xhttp3b.responseText);
+        for (i = 0; i < proxiesRes.fboPipeline.length; i++) {
+          fboPipeline.push(proxiesRes.fboPipeline[i])
+        }
+        renderFbos()
+        loadInProgress = false
+        document.getElementById("fbo-item-load-buffer").classList.add('inactive');
+      }
+    }
+    xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+    xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp3b.send(JSON.stringify(proxyRequest));
   }
 
 
