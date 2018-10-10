@@ -1,6 +1,6 @@
 // var apiUrl = 'https://efassembly.com:4432'
-var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://18.218.170.246:4200'
+var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -426,6 +426,8 @@ var companyToJoin
 var yourSearches = []
 var fbosIn = []
 var fboPipeline = []
+var fbosInMax = 0
+var fboPipelineMax = 0
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -1608,76 +1610,16 @@ function toggleHamburgerMenu() {
     var pipelineHtml = ''
     fboVote = []
     // console.log(company.fboProxies[0])
-    company.fboProxies.sort(function(proxy1, proxy2){
-      var p1num = 0
-      for (i = 0; i < proxy1.voteYes.length; i++) {
-        var proxy = proxy1.voteYes[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p1num) {
-            p1num = proxy.date * 10
-          }
-        }
-      }
-      for (i = 0; i < proxy1.voteNo.length; i++) {
-        var proxy = proxy1.voteNo[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p1num) {
-            p1num = proxy.date * 10
-          }
-        }
-      }
-      var p2num = 0
-      for (i = 0; i < proxy2.voteYes.length; i++) {
-        var proxy = proxy2.voteYes[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p2num) {
-            p2num = proxy.date * 10
-          }
-        }
-      }
-      for (i = 0; i < proxy2.voteNo.length; i++) {
-        var proxy = proxy2.voteNo[i]
-        if(proxy.date) {
-          if (proxy.date * 10 > p2num) {
-            p2num = proxy.date
-          }
-        }
-      }
-      if (p1num == 0 && ((proxy1.voteYes.length + proxy1.voteNo.length) > 0)) {
-        p1num = proxy1.voteYes.length + proxy1.voteNo.length
-      } else if (p1num == 0 && proxy1.date) {
-        p1num = proxy1.date
-      }
-      if (p2num == 0 && ((proxy2.voteYes.length + proxy2.voteNo.length) > 0)) {
-        p2num = proxy2.voteYes.length + proxy2.voteNo.length
-      } else if (p2num == 0 && proxy2.date){
-        p2num = proxy2.date
-      }
-      return p2num - p1num
-    });
-    console.log('FBO proxy length is ' + company.fboProxies.length)
     var updateNeeded
     var toDeleteIds = []
     var logCount = 0
     var noProxies = 0
-    fbosIn = []
-    fboPipeline = []
-    for (i = 0; i < company.fboProxies.length; i++) {
-      proxy = company.fboProxies[i]
-      // if (company.fboProxies[i].comments.length == 0) {
-      //   comments = '<p style="color: gray;">Comments</p>'
-      // } else {
-      //   for (i2 = 0; i2 < proxy.comments.length; i2++) {
-      //     var comment = proxy.comments[i2];
-      //     comments = comments + '<p class="comment"><span style="font-weight: bold;">' + comment.name + ': </span>' + comment.comment + '</p>'
-      //   }
-      // }
+    function parseProxy(proxy, index) {
       var dueDate = ''
       var due = 'No Due Date'
       if (!proxy.fbo) {
         noProxies++
-      }
-      else {
+      } else {
         if (proxy.fbo.respDate) {
           var today = getToday()
           today = today.slice(0,2)+"/"+today.slice(3,4)+"/"+today.slice(6,7)
@@ -1787,8 +1729,6 @@ function toggleHamburgerMenu() {
           //   updateNeeded = true
           // }
           if (!expired) {
-            fbosIn.push(proxy)
-            var index = fbosIn.length - 1
             fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
             '<div class="fbo-item-avatar">'+
             '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
@@ -1841,8 +1781,6 @@ function toggleHamburgerMenu() {
           //   expired = true
           //   updateNeeded = true
           // }
-          fboPipeline.push(proxy)
-          var index = fboPipeline.length - 1
           pipelineHtml = pipelineHtml +
           '<div class="fbo-item" onclick="goToFbo(' + index + ', 1)">'+
           '<div class="fbo-item-avatar">'+
@@ -1889,6 +1827,12 @@ function toggleHamburgerMenu() {
         // }
       }
     }
+    for (var i = 0; i < fbosIn.length; i++) {
+      parseProxy(fbosIn[i], i)
+    }
+    for (var i = 0; i < fboPipeline.length; i++) {
+      parseProxy(fboPipeline[i], i)
+    }
     console.log(noProxies + ' busted proxies')
     // if (updateNeeded) {
     //   for (i = 0; i < toDeleteIds.length; i++) {
@@ -1913,7 +1857,6 @@ function toggleHamburgerMenu() {
   }
 
   function parseThroughFboDesc(desc) {
-    console.log(desc)
     var separators = [' ', '\n'];
     var outputArray = desc.split(new RegExp(separators.join('|'), 'g'));
     var outputArray2 = []
@@ -1931,7 +1874,7 @@ function toggleHamburgerMenu() {
               startIndex = 0
             }
             htmlCode = htmlCode + ' ' + outputArray[i].slice(startIndex,i2+1)
-            console.log('CLOSED: ' + htmlCode)
+            // console.log('CLOSED: ' + htmlCode)
             outputArray2.push(htmlCode)
             index2++
             htmlCode = ''
@@ -1946,7 +1889,7 @@ function toggleHamburgerMenu() {
                 startIndex = 0
               }
               if (outputArray[i].slice(startIndex,i2).length > 0) {
-                console.log(outputArray[i].slice(startIndex,i2))
+                // console.log(outputArray[i].slice(startIndex,i2))
                 outputArray2.push('<span onclick="fboDescClick('+index2+',\''+outputArray[i].slice(startIndex,i2)+'\', this)">' + outputArray[i].slice(startIndex,i2) + '</span>')
                 index2++
               }
@@ -1975,9 +1918,9 @@ function toggleHamburgerMenu() {
         index2++
       }
     }
-    console.log(outputArray2[0])
-    console.log(outputArray2[1])
-    console.log(outputArray2[2])
+    // console.log(outputArray2[0])
+    // console.log(outputArray2[1])
+    // console.log(outputArray2[2])
 
     return outputArray2
   }
@@ -2052,17 +1995,34 @@ function toggleHamburgerMenu() {
         } else {
           console.log('tab is messed up - its ' + activeTab)
         }
-        console.log(fbo)
         if (highlightOn) {
-          activeFboDesc[fboHighlightOpen] = '<span class="highlighted">' + activeFboDesc[fboHighlightOpen]
+          for (i = fboHighlightOpen; i <= fboHighlightClose; i++) {
+            if (activeFboDesc[i].slice(0,50) == '<span class="fbo-desc-word" onclick="fboDescClick(' || activeFboDesc[i].slice(0,21) == '<span class="grayed">') {
+              if (activeFboDesc[i].slice(0,21) == '<span class="grayed">') {
+                var endPoint = activeFboDesc[i].length - 7
+                activeFboDesc[i] = activeFboDesc[i].slice(21, endPoint)
+              }
+              activeFboDesc[i] = '<span class="highlighted">' + activeFboDesc[i] + '</span>'
+            }
+          }
         } else if (grayOn) {
-          activeFboDesc[fboHighlightOpen] = '<span class="grayed">' + activeFboDesc[fboHighlightOpen]
+          for (i = fboHighlightOpen; i <= fboHighlightClose; i++) {
+            if (activeFboDesc[i].slice(0,50) == '<span class="fbo-desc-word" onclick="fboDescClick(' || activeFboDesc[i].slice(0,26) == '<span class="highlighted">') {
+              if (activeFboDesc[i].slice(0,26) == '<span class="highlighted">') {
+                var endPoint = activeFboDesc[i].length - 7
+                activeFboDesc[i] = activeFboDesc[i].slice(26, endPoint)
+              }
+              activeFboDesc[i] = '<span class="grayed">' + activeFboDesc[i] + '</span>'
+            }
+          }
+          // activeFboDesc[fboHighlightOpen] = '<span class="grayed">' + activeFboDesc[fboHighlightOpen]
         }
-        activeFboDesc[fboHighlightClose] = activeFboDesc[fboHighlightClose] + '</span>'
+        // activeFboDesc[fboHighlightClose] = activeFboDesc[fboHighlightClose] + '</span>'
         var fboDescHTML = ''
         for (i = 0; i < activeFboDesc.length; i++) {
           fboDescHTML = fboDescHTML + activeFboDesc[i]
         }
+        fbo.fboDesc = activeFboDesc
         document.getElementById("abstract-text").innerHTML = fboDescHTML;
         document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
         document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
@@ -2071,6 +2031,17 @@ function toggleHamburgerMenu() {
         fboClickOpen = false
         fboHighlightOpen = null
         fboHighlightClose = null
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log('it voted')
+            fbo = JSON.parse(xhttp.responseText)
+          }
+        };
+        var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
+        xhttp.open("PUT", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(req));
       }
       // elem.classList.add('bold')
       console.log(elem)
@@ -2457,12 +2428,7 @@ function toggleHamburgerMenu() {
   }
 
   function setActiveFbo(index, tab) {
-    if (index < 0) {
-      index = fbos.length-1
-    } else if (index >= fbos.length) {
-      index = 0
-    }
-    var proxy = fbos[index]
+    var proxy
     if (tab == 0) {
       proxy = fbosIn[index]
       document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
@@ -3020,135 +2986,160 @@ function toggleHamburgerMenu() {
               if (xhttp3.readyState == 4 && xhttp3.status == 200) {
                 searchTerms = JSON.parse(xhttp3.responseText);
                 emptySearchTerms = JSON.parse(xhttp3.responseText);
-                var xhttp4 = new XMLHttpRequest();
-                // xhttp4.setRequestHeader("Content-type", "application/json");
-                document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
-                xhttp4.onreadystatechange = function() {
-                  if (xhttp4.readyState == 4 && xhttp4.status == 200) {
-                    if (xhttp4.responseText === 'false') {
-                      document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
-                      console.log('did the right one')
-                      huntingPartyData = {
-                        companyId: company._id,
-                        users: [],
-                        searches: []
-                      }
-
-                      huntingPartyData.users.push({
-                        userId: currentUser._id,
-                        name: currentUser.firstName + ' ' + currentUser.lastName,
-                        email: currentUser.username,
-                        deviceId: null,
-                        regId: null,
-                        tosRead: 0
-                      })
-                      if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                        doTheUpdateAnyway = true
-                        huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
-                      }
-                      if (device !== undefined) {
-                        if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
-                          doTheUpdateAnyway = true
-                          huntingPartyData.users[0].deviceId = device.uuid
-                        }
-                      }
-                      var xhttpNewHPD = new XMLHttpRequest();
-                      xhttpNewHPD.onload = function() {
-                        if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
-                          document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
-
-                          huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
-                          console.log('CREATED')
-                          document.getElementById("loading").classList.add('inactive');
-                          document.getElementById("tos-popup").classList.remove('inactive');
-                        }
-                      };
-                      var url = apiUrl+"/huntingpartydata/add";
-                      xhttpNewHPD.open("POST", url, true);
-                      xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                      xhttpNewHPD.send(JSON.stringify(huntingPartyData));
-                    } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
-                      document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
-                      huntingPartyData = JSON.parse(xhttp4.responseText);
-                      console.log(huntingPartyData)
-                      var userInList = false
-                      if (!huntingPartyData.users) {
-                        huntingPartyData.users = []
-                      }
-                      var doTheUpdateAnyway = false
-                      for (i = 0; i < huntingPartyData.users.length; i++) {
-                        if (huntingPartyData.users[i].userId == currentUser._id) {
-                          userInList = true
-                          if (huntingPartyData.users[i].tosRead) {
-                            tosRead = huntingPartyData.users[i].tosRead
+                var proxyRequest = {
+                  startIndex: 0,
+                  which: 2
+                }
+                document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...'
+                var xhttp3b = new XMLHttpRequest();
+                xhttp3b.onreadystatechange = function() {
+                  if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
+                    console.log('got the thing')
+                    proxiesRes = JSON.parse(xhttp3b.responseText);
+                    console.log(proxiesRes)
+                    fbosIn = proxiesRes.fbosIn
+                    fboPipeline = proxiesRes.fboPipeline
+                    fbosInMax = proxiesRes.fbosInMax
+                    fboPipelineMax = proxiesRes.fboPipelineMax
+                    if (!fbosIn) {
+                      fbosIn = []
+                    } else if (!fboPipeline) {
+                      fboPipeline = []
+                    }
+                    var xhttp4 = new XMLHttpRequest();
+                    // xhttp4.setRequestHeader("Content-type", "application/json");
+                    document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
+                    xhttp4.onreadystatechange = function() {
+                      if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+                        if (xhttp4.responseText === 'false') {
+                          document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
+                          console.log('did the right one')
+                          huntingPartyData = {
+                            companyId: company._id,
+                            users: [],
+                            searches: []
                           }
-                          if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+
+                          huntingPartyData.users.push({
+                            userId: currentUser._id,
+                            name: currentUser.firstName + ' ' + currentUser.lastName,
+                            email: currentUser.username,
+                            deviceId: null,
+                            regId: null,
+                            tosRead: 0
+                          })
+                          if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
                             doTheUpdateAnyway = true
-                            huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                            huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
                           }
                           if (device !== undefined) {
-                            if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                            if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
                               doTheUpdateAnyway = true
-                              huntingPartyData.users[i].deviceId = device.uuid
+                              huntingPartyData.users[0].deviceId = device.uuid
                             }
                           }
-                        }
-                      }
-                      if (device !== undefined || !userInList) {
-                        if (!userInList || doTheUpdateAnyway) {
-                          console.log('not in the list')
-                          if (!userInList) {
-                            var deviceId = ''
-                            var regId = ''
-                            if (device) {
-                              deviceId = device.uuid
+                          var xhttpNewHPD = new XMLHttpRequest();
+                          xhttpNewHPD.onload = function() {
+                            if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
+                              document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
+
+                              huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
+                              console.log('CREATED')
+                              document.getElementById("loading").classList.add('inactive');
+                              document.getElementById("tos-popup").classList.remove('inactive');
                             }
-                            if (localStorage.getItem('registrationId')) {
-                              regId = localStorage.getItem('registrationId')
-                            }
-                            huntingPartyData.users.push({
-                              userId: currentUser._id,
-                              name: currentUser.firstName + ' ' + currentUser.lastName,
-                              email: currentUser.username,
-                              deviceId: deviceId,
-                              regId: regId,
-                              tosRead: 0
-                            })
-                            tosRead = 0
+                          };
+                          var url = apiUrl+"/huntingpartydata/add";
+                          xhttpNewHPD.open("POST", url, true);
+                          xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                          xhttpNewHPD.send(JSON.stringify(huntingPartyData));
+                        } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
+                          document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
+                          huntingPartyData = JSON.parse(xhttp4.responseText);
+                          console.log(huntingPartyData)
+                          var userInList = false
+                          if (!huntingPartyData.users) {
+                            huntingPartyData.users = []
                           }
-                          var xhttpHPD = new XMLHttpRequest();
-                          xhttpHPD.onreadystatechange = function() {
-                            if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                              huntingPartyData = JSON.parse(xhttpHPD.responseText);
-                              if (tosRead < 1) {
-                                document.getElementById("loading").classList.add('inactive');
-                                document.getElementById("tos-popup").classList.remove('inactive');
-                                // document.getElementById("login-register").classList.remove('inactive');
-                              } else {
-                                document.getElementById("loading-details").innerHTML = 'Done'
-                                startMainApp()
+                          var doTheUpdateAnyway = false
+                          for (i = 0; i < huntingPartyData.users.length; i++) {
+                            if (huntingPartyData.users[i].userId == currentUser._id) {
+                              userInList = true
+                              if (huntingPartyData.users[i].tosRead) {
+                                tosRead = huntingPartyData.users[i].tosRead
+                              }
+                              if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                                doTheUpdateAnyway = true
+                                huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                              }
+                              if (device !== undefined) {
+                                if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                                  doTheUpdateAnyway = true
+                                  huntingPartyData.users[i].deviceId = device.uuid
+                                }
                               }
                             }
                           }
-                          xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
-                          xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                          xhttpHPD.send(JSON.stringify(huntingPartyData));
-                        }
-                      } else {
-                        if (tosRead < 1) {
-                          document.getElementById("loading").classList.add('inactive');
-                          document.getElementById("tos-popup").classList.remove('inactive');
-                          // document.getElementById("login-register").classList.remove('inactive');
-                        } else {
-                          document.getElementById("loading-details").innerHTML = 'Done'
-                          startMainApp()
+                          if (device !== undefined || !userInList) {
+                            if (!userInList || doTheUpdateAnyway) {
+                              console.log('not in the list')
+                              if (!userInList) {
+                                var deviceId = ''
+                                var regId = ''
+                                if (device) {
+                                  deviceId = device.uuid
+                                }
+                                if (localStorage.getItem('registrationId')) {
+                                  regId = localStorage.getItem('registrationId')
+                                }
+                                huntingPartyData.users.push({
+                                  userId: currentUser._id,
+                                  name: currentUser.firstName + ' ' + currentUser.lastName,
+                                  email: currentUser.username,
+                                  deviceId: deviceId,
+                                  regId: regId,
+                                  tosRead: 0
+                                })
+                                tosRead = 0
+                              }
+                              var xhttpHPD = new XMLHttpRequest();
+                              xhttpHPD.onreadystatechange = function() {
+                                if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                                  huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                                  if (tosRead < 1) {
+                                    document.getElementById("loading").classList.add('inactive');
+                                    document.getElementById("tos-popup").classList.remove('inactive');
+                                    // document.getElementById("login-register").classList.remove('inactive');
+                                  } else {
+                                    document.getElementById("loading-details").innerHTML = 'Done'
+                                    startMainApp()
+                                  }
+                                }
+                              }
+                              xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
+                              xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                              xhttpHPD.send(JSON.stringify(huntingPartyData));
+                            }
+                          } else {
+                            if (tosRead < 1) {
+                              document.getElementById("loading").classList.add('inactive');
+                              document.getElementById("tos-popup").classList.remove('inactive');
+                              // document.getElementById("login-register").classList.remove('inactive');
+                            } else {
+                              document.getElementById("loading-details").innerHTML = 'Done'
+                              startMainApp()
+                            }
+                          }
                         }
                       }
                     }
+                    xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
+                    xhttp4.send();
                   }
                 }
-                xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
-                xhttp4.send();
+                xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+                xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
+                xhttp3b.send(JSON.stringify(proxyRequest));
               }
             }
             xhttp3.open("GET", apiUrl+"/fbo/getsearchterms/", true);
@@ -3221,8 +3212,8 @@ function toggleHamburgerMenu() {
 
         //Might not be the cleanest solution but it works dangit
         var fboI = -1
-        for (f = 0; f < fbos.length; f++){
-          if (huntingPartyData.news[i].body.includes(fbos[f].fbo.subject)){
+        for (f = 0; f < fboPipeline.length; f++){
+          if (huntingPartyData.news[i].body.includes(fboPipeline[f].fbo.subject)){
             // console.log(
             //   "The Fbo Subject: " + fbos[f].fbo.subject
             //   + " is included in "+ huntingPartyData.news[i].body)
@@ -3248,8 +3239,9 @@ function toggleHamburgerMenu() {
   }
 
   function startMainApp() {
-    if (company.fboProxies.length > 0) {
-      fbos = company.fboProxies
+    console.log(fbosIn)
+    console.log(fboPipeline)
+    if (fbosIn.length + fboPipeline.length > 0) {
       // setActiveFbo(fboIndex)
       renderSavedSearches()
       renderSearch()
@@ -3282,9 +3274,10 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-4").classList.add('inactive');
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
+    console.log(company)
     // showAd()
     switchTab(2)
-    goToFbo(159, 0);
+    // goToFbo(159, 0);
     // openPopups(2)
     // goToCompanyCreate()
     // expandData(2)
@@ -3334,21 +3327,37 @@ function toggleHamburgerMenu() {
     var chart1 = document.getElementById("chart1").getContext('2d');
     var chart2 = document.getElementById("chart2").getContext('2d');
     var chart3 = document.getElementById("chart3").getContext('2d');
-    if (fbos[fboIndex]) {
-      if (fbos[fboIndex].fbo) {
-        var currentFbo = fbos[fboIndex].fbo
-        console.log(currentFbo)
-        var nameFilters = [
-          {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
-          {fbo: 'Department of the Army', agency: false, fpds: 'DEPT OF THE ARMY'},
-          {fbo: 'Department of the Navy', agency: false, fpds: 'DEPT OF THE NAVY'},
-          {fbo: 'Department of the Air Force', agency: false, fpds: 'DEPT OF THE AIR FORCE'},
-          {fbo: 'Department of the Interior', agency: true, fpds: 'DEPARTMENT OF THE INTERIOR (DOI)'},
-          {fbo: 'Department of Agriculture', agency: true, fpds: 'DEPARTMENT OF AGRICULTURE (USDA)'},
-          {fbo: 'Defense Logistics Agency', agency: false, fpds: 'DEFENSE LOGISTICS AGENCY'},
-          {fbo: 'Department of Veterans Affairs', agency: true, fpds: 'DEPARTMENT OF VETERANS AFFAIRS (VA)'},
-          {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'}
-        ]
+    var proxy
+    var noFbo = false
+    if (activeTab == 2) {
+      if (fbosIn[fboIndex]) {
+        proxy = fbosIn[fboIndex]
+      } else {
+        noFbo = true
+      }
+    } else if (activeTab == 3) {
+      proxy = fboPipeline[fboIndex]
+      if (fbosIn[fboIndex]) {
+        proxy = fboPipeline[fboIndex]
+      } else {
+        noFbo = true
+      }
+    }
+    if (!noFbo) {
+      var currentFbo = proxy.fbo
+      console.log(currentFbo)
+      var nameFilters = [
+        {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
+        {fbo: 'Department of the Army', agency: false, fpds: 'DEPT OF THE ARMY'},
+        {fbo: 'Department of the Navy', agency: false, fpds: 'DEPT OF THE NAVY'},
+        {fbo: 'Department of the Air Force', agency: false, fpds: 'DEPT OF THE AIR FORCE'},
+        {fbo: 'Department of the Interior', agency: true, fpds: 'DEPARTMENT OF THE INTERIOR (DOI)'},
+        {fbo: 'Department of Agriculture', agency: true, fpds: 'DEPARTMENT OF AGRICULTURE (USDA)'},
+        {fbo: 'Defense Logistics Agency', agency: false, fpds: 'DEFENSE LOGISTICS AGENCY'},
+        {fbo: 'Department of Veterans Affairs', agency: true, fpds: 'DEPARTMENT OF VETERANS AFFAIRS (VA)'},
+        {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'}
+      ]
+      if (!proxy.chartData) {
         var query = ''
         for (i = 0; i < nameFilters.length; i++) {
           if (currentFbo.agency.toLowerCase() == nameFilters[i].fbo.toLowerCase()) {
@@ -3576,6 +3585,149 @@ function toggleHamburgerMenu() {
         xhttp.open("POST", apiUrl+"/fpds/query/", true);
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify(query));
+      } else {
+        var myChart1 = new Chart(chart1, {
+          type: 'bar',
+          data: {
+            labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
+            datasets: [{
+              label: 'Prices',
+              data: proxy.chartData.prices,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)'
+              ],
+              borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            legend: {
+              display: false,
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero:true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: '# Of FPDS'
+                }
+              }],
+              xAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Values'
+                }
+              }]
+            }
+          }
+        });
+        var myChart2 = new Chart(chart2, {
+          type: 'bar',
+          data: {
+            label: 'Prices',
+            labels: ["1", "2-3", "4-5", "6+"],
+            datasets: [{
+              data: proxy.chartData.offers,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'
+              ],
+              borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            legend: {
+              display: false,
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero:true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: '# Of FPDS'
+                }
+              }],
+              xAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Offers Received'
+                }
+              }]
+            }
+          }
+        });
+        var myChart3 = new Chart(chart3, {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Scatter Dataset',
+              data: proxy.chartData.scatterData,
+              backgroundColor: proxy.chartData.colors
+            }]
+          },
+          options: {
+            legend: {
+              display: false,
+            },
+            scales: {
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Offers Received'
+                }
+              }],
+              xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                ticks: {
+                  callback: function(value) {
+                    if (value.toString().length == 9) {
+                      return value.toString().substr(0, 3) + 'm'; //truncate
+                    } else if (value.toString().length == 8) {
+                      return value.toString().substr(0, 2) + 'm'; //truncate
+                    } else if (value.toString().length == 7) {
+                      return value.toString().substr(0, 1) + 'm'; //truncate
+                    } else if (value.toString().length == 6) {
+                      return value.toString().substr(0, 3) + 'k'; //truncate
+                    } else if (value.toString().length == 5) {
+                      return value.toString().substr(0, 2) + 'k'; //truncate
+                    } else if (value.toString().length == 4) {
+                      return value.toString().substr(0, 1) + 'k'; //truncate
+                    } else {
+                      return value
+                    }
+                  },
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Values'
+                }
+              }]
+            }
+          }
+        });
       }
     }
   }
@@ -3688,6 +3840,54 @@ function toggleHamburgerMenu() {
     document.getElementById("sidebar").classList.add('sidebar-out');
     document.getElementById("sidebar").classList.remove('sidebar-in')
     profileDropdownOpen = false
+  }
+
+  $(document).ready(function(){
+    $('#fbo-scroll-box').bind('scroll',chk_scroll);
+  });
+  var loadInProgress = false
+  function chk_scroll(e) {
+    // console.log('scrolling')
+    var elem = $(e.currentTarget);
+    if (elem[0].scrollHeight - elem.scrollTop() <= elem.outerHeight() + 900)
+    {
+      if (!loadInProgress) {
+        if (fbosIn.length < fbosInMax) {
+          loadInProgress = true
+          getMoreProxies()
+        } else {
+          console.log('got all of em')
+        }
+      }
+    }
+  }
+
+  function getMoreProxies() {
+    console.log('getting more')
+    loadInProgress = true
+    document.getElementById("fbo-item-load-buffer").classList.remove('inactive');
+    var proxyRequest = {
+      startIndex: fbosIn.length,
+      which: 0
+    }
+    var xhttp3b = new XMLHttpRequest();
+    xhttp3b.onreadystatechange = function() {
+      if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
+        proxiesRes = JSON.parse(xhttp3b.responseText);
+        for (i = 0; i < proxiesRes.fbosIn.length; i++) {
+          fbosIn.push(proxiesRes.fbosIn[i])
+        }
+        renderFbos()
+        loadInProgress = false
+        document.getElementById("fbo-item-load-buffer").classList.add('inactive');
+      }
+    }
+    xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+    xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp3b.send(JSON.stringify(proxyRequest));
+  }
+  function getMorePipelineProxies() {
+
   }
 
 
