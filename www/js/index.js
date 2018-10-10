@@ -1607,13 +1607,15 @@ function toggleHamburgerMenu() {
     const BY_EARLIEST_DUE = 0
     const BY_LATEST_DUE = 1 //Includes data with no deadline at top
     const BY_DATE_POSTED = 2 //Most recent date to oldest; Inactive
-    const BY_ALPHA_DEC = 3 //inactive
-    const BY_ALPHA_ASC = 4 //inactive
-    const DEFAULT = 10 //Unknown Criteria; Kept Just in case
+    const BY_ALPHA_ASC = 3 //Alphanumeric Order (1 - Z)
+    const BY_ALPHA_DEC = 4 //Reverse Alphanumeric
+    const BY_AGENCY_ASC = 5 //Sorts by Agency (Second criteria is duedate)
+    const BY_AGENCY_DEC = 6 //Reverse agency (duedate still in order)
+    const DEFAULT = 99 //Unknown Criteria; Kept Just in case
     
     var renderOption = BY_EARLIEST_DUE
     switch(renderOption){
-      case 0: //By Earliest Due
+      case BY_EARLIEST_DUE: //By Earliest Due
         company.fboProxies.sort(function(p1, p2){
           //[mm,dd,yy]
           var due1, due2
@@ -1638,7 +1640,7 @@ function toggleHamburgerMenu() {
           return duenum1 - duenum2
         });
         break;
-      case 1:
+      case BY_LATEST_DUE:
         company.fboProxies.sort(function(p1, p2){
           //[mm,dd,yy]
           var due1, due2
@@ -1663,6 +1665,94 @@ function toggleHamburgerMenu() {
           return duenum1 - duenum2
         });
         company.fboProxies.reverse()
+        break;
+      case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
+        break;
+      case BY_ALPHA_ASC:
+        company.fboProxies.sort(function(p1, p2){
+          
+          var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
+          prox1bool = isNaN(parseInt(prox1.slice(0,2)))
+          prox2bool = isNaN(parseInt(prox2.slice(0,2)))
+          
+          if (!prox1bool && !prox2bool){ // If both are numbers
+            prox1num = parseInt(prox1.slice(0,2))
+            prox2num = parseInt(prox2.slice(0,2))
+
+            if (prox1num > prox2num){
+              return 1
+            }
+            else if (prox2num < prox1num){
+              return -1
+            }
+          }
+          else if (prox1bool && !prox2bool){ //if proxy 2 is number
+            return 1
+          }
+          else if (!prox1bool && prox2bool){ //if prox 1 is number
+            return -1
+          }
+          return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
+        });
+        break;
+      case BY_ALPHA_DEC:
+        company.fboProxies.sort(function(p1, p2){
+          var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
+          prox1bool = isNaN(parseInt(prox1.slice(0,2)))
+          prox2bool = isNaN(parseInt(prox2.slice(0,2)))
+          
+          if (!prox1bool && !prox2bool){ // If both are numbers
+            prox1num = parseInt(prox1.slice(0,2))
+            prox2num = parseInt(prox2.slice(0,2))
+
+            if (prox1num > prox2num){
+              return 1
+            }
+            else if (prox2num < prox1num){
+              return -1
+            }
+          }
+          else if (prox1bool && !prox2bool){ //if proxy 2 is number
+            return 1
+          }
+          else if (!prox1bool && prox2bool){ //if prox 1 is number
+            return -1
+          }
+          return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
+        });
+        company.fboProxies.reverse();
+        break;
+      case BY_AGENCY_ASC:
+        company.fboProxies.sort(function(p1, p2){
+          prox1 = p1.fbo.agency
+          prox2 = p2.fbo.agency
+
+          if (prox1.localeCompare(prox2) = 0){
+            var due1, due2
+            var duenum1 = 0
+            var duenum2 = 0
+            if (p1.fbo.respDate){
+              mm = p1.fbo.respDate.slice(0,2)
+              dd = p1.fbo.respDate.slice(2,4)
+              yy = p1.fbo.respDate.slice(4,6)
+              due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+              duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+            }
+            else{due1 = "No Date", duenum1 = 99999}
+            if (p2.fbo.respDate){
+              mm = p2.fbo.respDate.slice(0,2)
+              dd = p2.fbo.respDate.slice(2,4)
+              yy = p2.fbo.respDate.slice(4,6)
+              due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+              duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+            }
+            else{due2 = "No Date", duenum2 = 99999}
+            return duenum1 - duenum2
+          }
+          else{
+            return prox1.localeCompare(prox2)
+          }
+        });
         break;
       default:
       company.fboProxies.sort(function(proxy1, proxy2){
