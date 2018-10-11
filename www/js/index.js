@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -3276,7 +3276,7 @@ function toggleHamburgerMenu() {
     }
     console.log(company)
     // showAd()
-    switchTab(2)
+    // switchTab(2)
     // goToFbo(159, 0);
     // openPopups(2)
     // goToCompanyCreate()
@@ -3329,15 +3329,20 @@ function toggleHamburgerMenu() {
     var chart3 = document.getElementById("chart3").getContext('2d');
     var proxy
     var noFbo = false
-    if (activeTab == 2) {
+    if (activeTab == 0) {
+      if (fboPipeline[fboIndex]) {
+        proxy = fboPipeline[fboIndex]
+      } else {
+        noFbo = true
+      }
+    } else if (activeTab == 2) {
       if (fbosIn[fboIndex]) {
         proxy = fbosIn[fboIndex]
       } else {
         noFbo = true
       }
     } else if (activeTab == 3) {
-      proxy = fboPipeline[fboIndex]
-      if (fbosIn[fboIndex]) {
+      if (fboPipeline[fboIndex]) {
         proxy = fboPipeline[fboIndex]
       } else {
         noFbo = true
@@ -3856,8 +3861,6 @@ function toggleHamburgerMenu() {
         if (fbosIn.length < fbosInMax) {
           loadInProgress = true
           getMoreProxies()
-        } else {
-          console.log('got all of em')
         }
       }
     }
@@ -3871,8 +3874,6 @@ function toggleHamburgerMenu() {
         if (fboPipeline.length < fboPipelineMax) {
           loadInProgress = true
           getMoreProxies()
-        } else {
-          console.log('got all of em')
         }
       }
     }
