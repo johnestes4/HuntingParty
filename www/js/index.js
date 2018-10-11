@@ -533,6 +533,108 @@ function openProfileDropdown() {
 }
 
 var activeSearchIndex
+
+function checkChecked() {
+  searchTerms = yourSearches[activeSearchIndex]
+
+  var numberChecked = 0
+  var checkedName = ''
+  if (searchTerms.dueDate[0].value == true) {
+    document.getElementById("search-item-right-duedate").innerHTML = "All >";
+  } else {
+    for (i = 1; i < searchTerms.dueDate.length; i++) {
+      if (searchTerms.dueDate[i].value == true) {
+        numberChecked++
+        checkedName = searchTerms.dueDate[i].name
+      }
+    }
+    document.getElementById("search-item-right-duedate").innerHTML = numberChecked + " >";
+    numberChecked = 0
+    checkedName = ''
+  }
+  if (searchTerms.naics[0].value == true) {
+    document.getElementById("search-item-right-naics").innerHTML = "All >";
+  } else {
+    for (i = 1; i < searchTerms.naics.length; i++) {
+      if (searchTerms.naics[i].value == true) {
+        numberChecked++
+        checkedName = searchTerms.naics[i].code
+      }
+    }
+    if (numberChecked > 1 || numberChecked == 0 || checkedName.length >= 6) {
+      document.getElementById("search-item-right-naics").innerHTML = numberChecked + " >";
+    } else {
+      document.getElementById("search-item-right-naics").innerHTML = checkedName + " >";
+    }
+    numberChecked = 0
+    checkedName = ''
+  }
+  if (searchTerms.psc[0].value == true) {
+    document.getElementById("search-item-right-psc").innerHTML = "All >";
+  } else {
+    for (i = 1; i < searchTerms.psc.length; i++) {
+      if (searchTerms.psc[i].value == true) {
+        numberChecked++
+        checkedName = searchTerms.psc[i].name
+      }
+    }
+    if (numberChecked > 1 || numberChecked == 0 || checkedName.length >= 6) {
+      document.getElementById("search-item-right-psc").innerHTML = numberChecked + " >";
+    } else {
+      document.getElementById("search-item-right-psc").innerHTML = checkedName + " >";
+    }
+    document.getElementById("search-item-right-psc").innerHTML = numberChecked + " >";
+    numberChecked = 0
+    checkedName = ''
+  }
+  if (searchTerms.agency[0].value == true) {
+    document.getElementById("search-item-right-agency").innerHTML = "All >";
+  } else {
+    for (i = 1; i < searchTerms.agency.length; i++) {
+      if (searchTerms.agency[i].value == true) {
+        numberChecked++
+        checkedName = searchTerms.agency[i].name
+      }
+    }
+    document.getElementById("search-item-right-agency").innerHTML = numberChecked + " >";
+    numberChecked = 0
+    checkedName = ''
+  }
+  if (searchTerms.place[0].value == true) {
+  }
+  checkedName = ''
+  for (i = 0; i < searchTerms.place.length; i++) {
+    if (searchTerms.place[i].value == true) {
+      numberChecked++
+      checkedName = searchTerms.place[i].name
+    }
+  }
+  if (numberChecked > 1 || numberChecked == 0) {
+    document.getElementById("search-item-right-location").innerHTML = numberChecked + " >";
+  } else {
+    if (checkedName == 'United States of America') {
+      document.getElementById("search-item-right-location").innerHTML = "USA >";
+    } else if (checkedName.length < 6) {
+      document.getElementById("search-item-right-location").innerHTML = checkedName + " >";
+    } else {
+      document.getElementById("search-item-right-location").innerHTML = numberChecked + " >";
+    }
+  }
+  numberChecked = 0
+  if (searchTerms.setAside[0].value == true) {
+    document.getElementById("search-item-right-setaside").innerHTML = "All >";
+  } else {
+    for (i = 1; i < searchTerms.setAside.length; i++) {
+      if (searchTerms.setAside[i].value == true) {
+        numberChecked++
+      }
+    }
+    document.getElementById("search-item-right-setaside").innerHTML = numberChecked + " >";
+    numberChecked = 0
+    checkedName = ''
+  }
+}
+
 function viewSearch(index) {
   if (index > -1) {
     searchTerms = yourSearches[index]
@@ -581,6 +683,7 @@ function viewSearch(index) {
   } else {
     document.getElementById("search-name").value = ''
   }
+  checkChecked()
   document.getElementById("saved-search-view").classList.add('inactive')
   document.getElementById("search-terms-view").classList.remove('inactive')
   document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(1)">'
@@ -1365,15 +1468,15 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-place')) {
-    if (elem.value == searchTerms.place[0].name) {
-      for (i = 0; i < searchTerms.place.length; i++) {
-        searchTerms.place[i].value = elem.checked
-      }
-      var a = document.getElementsByClassName('checkbox-place')
-      for (i2 = 0; i2 < a.length; i2++) {
-        a[i2].checked = elem.checked
-      }
-    } else {
+    // if (elem.value == searchTerms.place[0].name) {
+    //   for (i = 0; i < searchTerms.place.length; i++) {
+    //     searchTerms.place[i].value = elem.checked
+    //   }
+    //   var a = document.getElementsByClassName('checkbox-place')
+    //   for (i2 = 0; i2 < a.length; i2++) {
+    //     a[i2].checked = elem.checked
+    //   }
+    // } else {
       for (i = 0; i < searchTerms.place.length; i++) {
         if (searchTerms.place[i].name == elem.value) {
           searchTerms.place[i].value = elem.checked
@@ -1384,7 +1487,7 @@ function calculateSearch(elem) {
           }
         }
       }
-    }
+    // }
   } else if (elem.classList.contains('checkbox-setaside')) {
     if (elem.value == searchTerms.setaside[0].name) {
       for (i = 0; i < searchTerms.setaside.length; i++) {
@@ -1407,6 +1510,7 @@ function calculateSearch(elem) {
       }
     }
   }
+  checkChecked()
 }
 
 function closeSearchPopup() {
