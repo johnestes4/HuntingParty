@@ -822,7 +822,7 @@ function renderSavedSearches() {
 }
 
 function deleteSearchTerms() {
-  if (document.getElementById("saved-searches").value > -1 && activeSearchIndex) {
+  if (activeSearchIndex > -1) {
     var searchSucceeded = false
     for (i = 0; i < huntingPartyData.users.length; i++) {
       if (huntingPartyData.users[i].userId == currentUser._id) {
@@ -842,7 +842,7 @@ function deleteSearchTerms() {
           console.log('search is gone!')
           yourSearches = []
           renderSavedSearches()
-          viewSearch()
+          switchTab(1)
         }
       };
       var url = apiUrl+"/huntingpartydata/" + id;
@@ -2095,6 +2095,7 @@ function toggleHamburgerMenu() {
           // }
           if (!expired) {
             fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
+            '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
             '<div class="fbo-item-avatar">'+
             '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
             '</div>'+
@@ -3644,7 +3645,7 @@ function toggleHamburgerMenu() {
     }
     console.log(company)
     // showAd()
-    // switchTab(2)
+    // switchTab(1)
     // goToFbo(2, 0);
     // openPopups(2)
     // goToCompanyCreate()
