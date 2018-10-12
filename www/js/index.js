@@ -535,8 +535,6 @@ function openProfileDropdown() {
 var activeSearchIndex
 
 function checkChecked() {
-  searchTerms = yourSearches[activeSearchIndex]
-
   var numberChecked = 0
   var checkedName = ''
   if (searchTerms.dueDate[0].value == true) {
@@ -686,6 +684,7 @@ function viewSearch(index) {
   checkChecked()
   document.getElementById("saved-search-view").classList.add('inactive')
   document.getElementById("search-terms-view").classList.remove('inactive')
+  document.getElementById("topbar-center-text").innerHTML = "Filter"
   document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(1)">'
 }
 
@@ -1893,7 +1892,7 @@ function toggleHamburgerMenu() {
       });
 
       fboProxy.reverse()
-      break;      
+      break;
       default:
       fboProxy.sort(function(proxy1, proxy2){
         var p1num = 0
@@ -2402,14 +2401,15 @@ function toggleHamburgerMenu() {
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
-            console.log('it voted')
+            console.log('saved the proxy')
             fbo = JSON.parse(xhttp.responseText)
+            console.log(fbo)
           }
         };
         var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
         xhttp.open("PUT", url, true);
         xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-        xhttp.send(JSON.stringify(req));
+        xhttp.send(JSON.stringify(fbo));
       }
       // elem.classList.add('bold')
       console.log(elem)
@@ -2835,7 +2835,7 @@ function toggleHamburgerMenu() {
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
     document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
     var fboDescHTML = ''
-    var outputArray2 = parseThroughFboDesc(proxy.fbo.desc)
+    var outputArray2 = proxy.fboDesc
     activeFboDesc = outputArray2
     for (i = 0; i < outputArray2.length; i++) {
       if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
@@ -3645,7 +3645,7 @@ function toggleHamburgerMenu() {
     console.log(company)
     // showAd()
     // switchTab(2)
-    // goToFbo(159, 0);
+    // goToFbo(2, 0);
     // openPopups(2)
     // goToCompanyCreate()
     // expandData(2)
