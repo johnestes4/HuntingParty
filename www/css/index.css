@@ -1315,6 +1315,24 @@ h1 {
   line-height: 7vh;
   font-family: 'Lato Semibold', sans-serif;
 }
+
+.topbar-right-button {
+  height: 100%;
+  width: 67%;
+  margin-left: 33%;
+}
+
+.topbar-right-button:active #topbar-right-text  {
+  color: rgba(255,255,255,0.75)!important;
+}
+
+#topbar-right-text {
+  padding-right: 20px;
+  text-align: right;
+  font-size: 18px;
+  color: white;
+  line-height: 7.2vh;
+}
 .topbar-half-active {
   color: white!important;
   font-weight: bold;
@@ -1345,6 +1363,23 @@ h1 {
   border-right: 8px solid transparent;
   border-bottom: 8px solid rgba(255,255,255,1);
   bottom: 0px;
+}
+
+#opportunities-topbar {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+#opportunities-topbar-select {
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+  height: 7vh;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: rgba(0,0,0,0.9);
 }
 
 .circle {

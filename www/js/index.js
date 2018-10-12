@@ -686,6 +686,7 @@ function viewSearch(index) {
   document.getElementById("search-terms-view").classList.remove('inactive')
   document.getElementById("topbar-center-text").innerHTML = "Filter"
   document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(1)">'
+  document.getElementById("topbar-right").innerHTML = '<div class="topbar-right-button" onclick="saveSearchTerms()"><p id="topbar-right-text">Done</p></div>'
 }
 
 function openSearchBox(which) {
@@ -782,7 +783,6 @@ function openSearchBox(which) {
     }
   }
 }
-
 function renderSavedSearches() {
   var html = ''
   // '<option disabled selected value> -- select an option -- </option>'
@@ -790,15 +790,18 @@ function renderSavedSearches() {
   // yourSearches = huntingPartyData.searches
 
   yourSearches = []
+  var searchDropdownHtml = '<option value="-1">All Searches</option>'
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId == currentUser._id) {
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
           yourSearches.push(huntingPartyData.users[i].searches[i2])
+          searchDropdownHtml = searchDropdownHtml + '<option value="'+i2+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
         }
       }
     }
   }
+  document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml
   for (i = 0; i < yourSearches.length; i++) {
     html = html + '<div class="search-item" onclick="viewSearch('+i+')">'+
     '<div class="search-item-text">'+
@@ -819,6 +822,16 @@ function renderSavedSearches() {
   '</div>'
 
   document.getElementById("saved-search-view").innerHTML = html
+}
+
+function filterOpportunitiesBySearch(elem) {
+  var searchIndex = elem.value
+  if (searchIndex > -1) {
+    searchFilterName = yourSearches[searchIndex].name
+  } else {
+    searchFilterName = null
+  }
+  renderFbos()
 }
 
 function deleteSearchTerms() {
@@ -1658,12 +1671,14 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "News"
+      document.getElementById("topbar-right").innerHTML = ''
     } else if (num == 1) {
       document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.remove('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Search"
+      document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("saved-search-view").classList.remove('inactive')
       document.getElementById("search-terms-view").classList.add('inactive')
     } else if (num == 2) {
@@ -1672,6 +1687,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.remove('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Opportunities"
+      document.getElementById("topbar-right").innerHTML = ''
       renderFbos()
     } else if (num == 3) {
       document.getElementById("news-block").classList.add('inactive')
@@ -1679,6 +1695,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.remove('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
+      document.getElementById("topbar-right").innerHTML = ''
     }
     activeTab = num
     document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="" onclick="openSidebar()">'
@@ -1946,6 +1963,8 @@ function toggleHamburgerMenu() {
 
   }
 
+  var searchFilterName = null
+
   function renderFbos() {
     var fboHtml = ''
     var pipelineHtml = ''
@@ -2088,6 +2107,9 @@ function toggleHamburgerMenu() {
         var commentsCount = proxy.voteYes.length + proxy.voteNo.length
         var votesYesCount = proxy.voteYes.length
         var votesNoCount = proxy.voteNo.length
+        if (searchFilterName && activeTab == 2 && proxy.originSearch !== searchFilterName) {
+          expired = true
+        }
         if (proxy.voteYes.length < 1 && vote !== 1) {
           // if (timeToDue < -14) {
           //   expired = true
@@ -3645,7 +3667,7 @@ function toggleHamburgerMenu() {
     }
     console.log(company)
     // showAd()
-    // switchTab(1)
+    switchTab(2)
     // goToFbo(2, 0);
     // openPopups(2)
     // goToCompanyCreate()

@@ -205,7 +205,7 @@ under the License.
     <div class="topbar-center">
       <p id="topbar-center-text">News</p>
     </div>
-    <div class="topbar-side">
+    <div id="topbar-right" class="topbar-side">
 
     </div>
     <div id="sidebar" class="inactive">
@@ -570,8 +570,8 @@ under the License.
 </div> -->
 <!-- <input type="text" name="" value="" placeholder="Award ID" style="margin-bottom: 1vh; width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);">
 <input type="text" name="" value="" placeholder="Key personnel" style="width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);"> -->
-<button style="width: 40%; margin-left: 30%; margin-bottom: 2vh; margin-top: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>
-<button id="delete-search-button" class="inactive" style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
+<!-- <button style="width: 40%; margin-left: 30%; margin-bottom: 2vh; margin-top: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button> -->
+<button id="delete-search-button" class="inactive" style="width: 40%; margin-top: 2vh; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
 
 </div>
 </div>
@@ -649,14 +649,10 @@ under the License.
 </div>
 <div id="fbo-view" class="body-block inactive">
   <div class="second-topbar">
-    <div class="second-topbar-half topbar-half-active" style="padding-left: 20px;">
-      Opportunities
-      <div class="second-topbar-arrow" style="left: 50px;">
-
-      </div>
-    </div>
-    <div class="second-topbar-half" style="padding-right: 40px; text-align: right;">
-      News
+    <div id="opportunities-topbar" style="">
+      <select id="opportunities-topbar-select" onchange="filterOpportunitiesBySearch(this)">
+        <option value="-1">All Searches</option>
+      </select>
     </div>
   </div>
   <div id="fbo-list-view" class="body-block" style="height: 86vh;">
