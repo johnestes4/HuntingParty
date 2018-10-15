@@ -3675,11 +3675,10 @@ function toggleHamburgerMenu() {
       // document.getElementById("iconbar-4").classList.add('inactive');
       // document.getElementById("iconbar-5").classList.add('inactive');
     }
-    console.log(company)
     // showAd()
     // TAB SWITCH HERE
-    switchTab(1)
-    viewSearch(0)
+    // switchTab(2)
+    // viewSearch(0)
     // goToFbo(2, 0);
     // openPopups(2)
     // goToCompanyCreate()

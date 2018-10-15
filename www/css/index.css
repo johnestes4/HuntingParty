@@ -810,17 +810,21 @@ h1, .instructions{
   padding-right: 4px;
   overflow-y: auto;
 }
+.fbo-detail-left-text {
+  padding-left: 10px;
+}
 #fbo-detail-right {
   height: 55vh;
   width: calc(100% - 140px);
+  padding-right: 8px;
   float: left;
 }
 .fbo-detail-right-larger {
   height: calc(86vh - 40px)!important;
 }
 .fbo-detail-img {
-  width: 132px;
-  height: 132px;
+  width: 120px;
+  height: 120px;
   float: left;
   margin-bottom: 4px;
   position: relative;
@@ -837,17 +841,27 @@ h1, .instructions{
   max-width: 132px;
 }
 
+.fbo-title-box {
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  width: calc(100% - 1vw);
+  margin-left: 1vw;
+  margin-top: 15px;
+  height: 40px;
+}
+
 #fbo-title {
-  padding: 1vh 1vw 1vh 1vw;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 22px;
+  line-height: 36px;
   font-family: 'Lato Semibold', sans-serif;
-  height: calc(2vh + 50px);
+  white-space: nowrap;
 }
 
 #abstract-text {
   padding: 1vh 1vw 60px 1vw;
-  height: calc(100% - (2vh + 100px));
+  height: calc(100% - 105px);
+  font-size: 14px;
   display: block;
   position: relative;
   z-index: 10;
@@ -871,27 +885,32 @@ h1, .instructions{
 }
 
 .fbo-detail-left-details {
-  height: 22px;
+  height: 20px;
+  float: left;
   width: 100%;
-  margin-bottom: 3px;
+  margin-bottom: 6px;
 }
 .fbo-detail-left-details img {
-  height: 22px;
-  width: 22px;
+  opacity: 0.6;
+  margin-top: 2px;
+  height: auto;
+  width: 18px;
   float: left;
 }
 .fbo-detail-left-details p {
-  padding-left: 5px;
+  padding-left: 8px;
   float: left;
-  width: calc(100% - 22px);
-  font-size: 11px;
+  width: calc(100% - 18px);
+  color: rgba(0,0,0,0.6);
+  font-size: 14px;
   line-height: 22px;
 }
 .fbo-detail-left button {
-  width: calc(100% - 20px);
-  height: 20px;
-  line-height: 16px;
-  font-size: 12px;
+  width: calc(100% - 35px);
+  margin-top: 10px;
+  height: 30px;
+  line-height: 24px;
+  font-size: 14px;
   font-weight: normal;
   margin-bottom: 5px;
   background: rgba(0,175,217,1);
