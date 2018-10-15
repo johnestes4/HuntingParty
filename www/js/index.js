@@ -801,6 +801,16 @@ function renderSavedSearches() {
       }
     }
   }
+  for (i = 0; i < huntingPartyData.users.length; i++) {
+    if (huntingPartyData.users[i].userId !== currentUser._id) {
+      if (huntingPartyData.users[i].searches) {
+        for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+          yourSearches.push(huntingPartyData.users[i].searches[i2])
+          searchDropdownHtml = searchDropdownHtml + '<option value="'+i2+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
+        }
+      }
+    }
+  }
   document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml
   for (i = 0; i < yourSearches.length; i++) {
     html = html + '<div class="search-item" onclick="viewSearch('+i+')">'+
@@ -3667,7 +3677,9 @@ function toggleHamburgerMenu() {
     }
     console.log(company)
     // showAd()
-    switchTab(2)
+    // TAB SWITCH HERE
+    switchTab(1)
+    viewSearch(0)
     // goToFbo(2, 0);
     // openPopups(2)
     // goToCompanyCreate()
