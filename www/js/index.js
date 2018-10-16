@@ -1735,6 +1735,30 @@ function toggleHamburgerMenu() {
     return today
   }
 
+  function displaySortOptions(fboProxy, htmlID){
+    htmlID = "fbosIn-sort"
+    console.log(htmlID);
+    renderOptions = [
+      "Earliest Due",
+      "Latest Due",
+      "Date Posted",
+      "Title A - Z",
+      "Title Z - A",
+      "Agency A - Z",
+      "Agency Z - A"
+    ];
+    var dropdownOptionHTML = document.createElement("option");
+    var dropdownOptionText;
+    for (p = 0; p < renderOptions.length; p++){
+      dropdownOptionText = document.createTextNode(renderOptions[p]);
+      dropdownOptionHTML.appendChild(dropdownOptionText);
+      dropdownOptionHTML.setAttribute("onchange", "sortFboRenders(" + fboProxy + ", "+ p +")");
+      document.getElementById(htmlID).appendChild(dropdownOptionHTML);
+      dropdownOptionHTML.removeChild(dropdownOptionText);
+      // dropdownOptionHTML += "<option oninput=\"sortFboRenders("+ fboProxy +", "+ p + ")\">" + renderOptions[p] +  "</option>";
+    }
+
+  }
   function sortFboRenders(fboProxy, renderOption){
     const BY_EARLIEST_DUE = 0 //Also most recent expired for pipeline
     const BY_LATEST_DUE = 1 //Includes data with no deadline at top; Also oldest expired for pipeline
@@ -3604,7 +3628,7 @@ function toggleHamburgerMenu() {
       for (i = huntingPartyData.news.length-1; i >=0; i--) {
         var img = 'profile'
         // console.log(huntingPartyData.news[i])
-        console.log(huntingPartyData.news[i].body)
+        // console.log(huntingPartyData.news[i].body)
         if (huntingPartyData.news[i].type) {
           if (huntingPartyData.news[i].type == 'vote') {
             img = 'contact'
@@ -3623,7 +3647,7 @@ function toggleHamburgerMenu() {
           }
         }
         if (fboI == -1){
-          console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
+          // console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
           newsHtml = newsHtml + '<div class="news-item">'
         }
         else{
@@ -3640,8 +3664,8 @@ function toggleHamburgerMenu() {
   }
 
   function startMainApp() {
-    console.log(fbosIn)
-    console.log(fboPipeline)
+    console.log("Number of FBOs", fbosIn.length)
+    console.log("Amount in Pipeline",fboPipeline.length)
     if (fbosIn.length + fboPipeline.length > 0) {
       // setActiveFbo(fboIndex)
       renderSavedSearches()
