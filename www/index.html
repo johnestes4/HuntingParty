@@ -209,12 +209,16 @@ under the License.
 
     </div>
     <div id="sidebar" class="inactive">
-      <div class="sidebar-item" style="background: rgba(0,0,0,0.2);">
-        <div id="profile-circle" class="circle" style="">
-          <div id="profile-circle-inside" class="circle-inside" style="">
-            <img class="circle-img" src="./img/profile.png" alt="">
+      <div class="sidebar-item sidebar-item-long" style="background: rgba(0,0,0,0.2);">
+        <div class="profile-circle-box">
+          <div id="profile-circle" class="circle" style="">
+            <div id="profile-circle-inside" class="circle-inside" style="">
+              <img class="circle-img" src="./img/profile.png" alt="">
+            </div>
           </div>
         </div>
+        <p style="font-size: 20px;">Level X</p>
+        <p id="sidebar-points-text" style="color: rgba(255,255,255,0.5);">0 Points</p>
       </div>
       <div class="sidebar-item" onclick="switchTab(0)">
         <div class="sidebar-img-wrapper">
@@ -240,7 +244,7 @@ under the License.
         </div>
         <p>Search</p>
       </div>
-      <div class="sidebar-item" onclick="logOut()" style="line-height: 100%;">
+      <div class="sidebar-item sidebar-item-short" onclick="logOut()" style="line-height: 100%;">
         <p>Log Out</p>
       </div>
 

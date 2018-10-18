@@ -442,8 +442,6 @@ function login() {
   var xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
-      console.log('why doesnt this work')
-
       // Typical action to be performed when the document is ready:
       document.getElementById("loading-details").innerHTML = 'Sending login request...'
       var res = JSON.parse(xhttp.responseText)
@@ -2256,6 +2254,47 @@ function toggleHamburgerMenu() {
 
   }
 
+  function addPoints(points) {
+    var user = null
+    for (i = 0; i < huntingPartyData.users.length; i++) {
+      if (huntingPartyData.users[i].userId == currentUser._id) {
+        if (huntingPartyData.users[i].score) {
+          delete huntingPartyData.users[i].score
+        }
+        user = huntingPartyData.users[i]
+        huntingPartyData.users[i].points = huntingPartyData.users[i].points + 50
+        break
+      }
+    }
+    if (user) {
+      // if (!user.points) {
+      //   user.points = 0
+      // }
+      // var pointsUpdate = {
+      //   uid: currentUser._id,
+      //   points: points
+      // }
+      delete huntingPartyData['__v']
+      var xhttpHPD = new XMLHttpRequest();
+      xhttpHPD.onreadystatechange = function() {
+        if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+          huntingPartyData = JSON.parse(xhttpHPD.responseText);
+          for (i = 0; i < huntingPartyData.users.length; i++) {
+            if (huntingPartyData.users[i].userId == currentUser._id) {
+              document.getElementById("sidebar-points-text").innerHTML = huntingPartyData.users[i].points + ' Points'
+              break
+            }
+          }
+          console.log('updated your score')
+          console.log(huntingPartyData)
+        }
+      }
+      xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
+      xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttpHPD.send(JSON.stringify(huntingPartyData));
+    }
+  }
+
   function parseThroughFboDesc(desc) {
     var separators = [' ', '\n'];
     var outputArray = desc.split(new RegExp(separators.join('|'), 'g'));
@@ -3131,22 +3170,6 @@ function toggleHamburgerMenu() {
         console.log('it voted')
         fbo = JSON.parse(xhttp.responseText)
         checkVote(fbo)
-        var voteScore = fbo.voteYes.length - fbo.voteNo.length
-        if (document.getElementById("vote-circle-" + index)) {
-          if (voteScore < 0) {
-            document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: red;">'+voteScore+'</p>'
-            document.getElementById("vote-circle-" + index).classList.remove('inactive')
-          } else if (voteScore > 0) {
-            document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
-            document.getElementById("vote-circle-" + index).classList.remove('inactive')
-          } else if (voteScore == 0 && ((fbo.voteNo.length + fbo.voteYes.length) > 0)) {
-            document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: white;">+'+voteScore+'</p>'
-            document.getElementById("vote-circle-" + index).classList.remove('inactive')
-          } else {
-            document.getElementById("vote-circle-" + index).innerHTML = '<p style="color: green;">+'+voteScore+'</p>'
-            document.getElementById("vote-circle-" + index).classList.add('inactive')
-          }
-        }
         if (peopleToRefer.length > 0) {
           sendReferNotifications()
         }
@@ -3169,7 +3192,9 @@ function toggleHamburgerMenu() {
           adCounter++
           closePopups(true)
           switchTab(activeTab)
+
         }
+        addPoints(50)
       }
     };
     var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
@@ -3381,7 +3406,6 @@ function toggleHamburgerMenu() {
             // agencyLogos = JSON.parse(xobj.responseText);
             var xhttp3 = new XMLHttpRequest();
             // xhttp3.setRequestHeader("Content-type", "application/json");
-            console.log(window.device)
             document.getElementById("loading-details").innerHTML = 'Getting full search terms...'
             xhttp3.onreadystatechange = function() {
               if (xhttp3.readyState == 4 && xhttp3.status == 200) {
@@ -3427,7 +3451,8 @@ function toggleHamburgerMenu() {
                             email: currentUser.username,
                             deviceId: null,
                             regId: null,
-                            tosRead: 0
+                            tosRead: 0,
+                            points: 0
                           })
                           if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
                             doTheUpdateAnyway = true
@@ -3464,8 +3489,18 @@ function toggleHamburgerMenu() {
                           }
                           var doTheUpdateAnyway = false
                           for (i = 0; i < huntingPartyData.users.length; i++) {
+                            console.log(huntingPartyData.users[i])
+                            if (huntingPartyData.users[i].points == undefined) {
+                              huntingPartyData.users[i].points = 0
+                              console.log('no points!');
+                              doTheUpdateAnyway = true
+                            }
                             if (huntingPartyData.users[i].userId == currentUser._id) {
                               userInList = true
+                              if (huntingPartyData.users[i].points !== undefined) {
+                                console.log('YOUR POINTS: ' + huntingPartyData.users[i].points)
+                                document.getElementById("sidebar-points-text").innerHTML = huntingPartyData.users[i].points + ' Points'
+                              }
                               if (huntingPartyData.users[i].tosRead) {
                                 tosRead = huntingPartyData.users[i].tosRead
                               }
@@ -3481,7 +3516,7 @@ function toggleHamburgerMenu() {
                               }
                             }
                           }
-                          if (device !== undefined || !userInList) {
+                          if (device !== undefined || !userInList || doTheUpdateAnyway) {
                             if (!userInList || doTheUpdateAnyway) {
                               console.log('not in the list')
                               if (!userInList) {
@@ -3499,7 +3534,8 @@ function toggleHamburgerMenu() {
                                   email: currentUser.username,
                                   deviceId: deviceId,
                                   regId: regId,
-                                  tosRead: 0
+                                  tosRead: 0,
+                                  points: 0
                                 })
                                 tosRead = 0
                               }
@@ -3512,6 +3548,7 @@ function toggleHamburgerMenu() {
                                     document.getElementById("tos-popup").classList.remove('inactive');
                                     // document.getElementById("login-register").classList.remove('inactive');
                                   } else {
+                                    console.log('updated HPD')
                                     document.getElementById("loading-details").innerHTML = 'Done'
                                     startMainApp()
                                   }
@@ -3604,7 +3641,7 @@ function toggleHamburgerMenu() {
       for (i = huntingPartyData.news.length-1; i >=0; i--) {
         var img = 'profile'
         // console.log(huntingPartyData.news[i])
-        console.log(huntingPartyData.news[i].body)
+        // console.log(huntingPartyData.news[i].body)
         if (huntingPartyData.news[i].type) {
           if (huntingPartyData.news[i].type == 'vote') {
             img = 'contact'
@@ -3623,7 +3660,7 @@ function toggleHamburgerMenu() {
           }
         }
         if (fboI == -1){
-          console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
+          // console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
           newsHtml = newsHtml + '<div class="news-item">'
         }
         else{
