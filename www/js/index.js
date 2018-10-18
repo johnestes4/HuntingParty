@@ -2951,9 +2951,56 @@ function toggleHamburgerMenu() {
     document.getElementById("fbo-detail-left-details-shares").innerHTML = '2' + ' Shares'
 
     fboIndex = index
+    if (!proxy.viewed) {
+      proxy.viewed = []
+    }
+    if (!proxy.viewed.includes(currentUser._id)) {
+      proxy.viewed.push(currentUser._id)
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('marked as read')
+          proxy = JSON.parse(xhttp.responseText)
+          checkProxiesViewed()
+        }
+      };
+      var url = apiUrl+"/fbocompanyproxy/" + proxy._id;
+      xhttp.open("PUT", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(proxy));
+    }
     renderChart()
     updateComments(proxy)
     checkVote(proxy, index)
+  }
+
+  var fbosInUnread = 0
+  var pipelineUnread = 0
+
+  function checkProxiesViewed() {
+    fbosInUnread = 0
+    pipelineUnread = 0
+    for (i = 0; i < fbosIn.length; i++) {
+      if (fbosIn[i].viewed) {
+        if (!fbosIn[i].viewed.includes(currentUser._id)) {
+          fbosInUnread++
+        }
+      } else {
+        fbosInUnread++
+      }
+    }
+    for (i = 0; i < fboPipeline.length; i++) {
+      if (fboPipeline[i].viewed) {
+        if (!fboPipeline[i].viewed.includes(currentUser._id)) {
+          pipelineUnread++
+        }
+      } else {
+        pipelineUnread++
+      }
+    }
+    document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread
+    document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread
+
   }
 
   function switchFboDetailTab(which) {
@@ -3426,6 +3473,7 @@ function toggleHamburgerMenu() {
                     fboPipeline = proxiesRes.fboPipeline
                     fbosInMax = proxiesRes.fbosInMax
                     fboPipelineMax = proxiesRes.fboPipelineMax
+                    checkProxiesViewed()
                     if (!fbosIn) {
                       fbosIn = []
                     } else if (!fboPipeline) {

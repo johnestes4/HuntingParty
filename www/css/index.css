@@ -1605,6 +1605,9 @@ h1 {
   margin-bottom: 5%;
   width: 100%;
 }
+.sidebar-item p {
+  position: relative;
+}
 
 .sidebar-img {
   height: 90%;
@@ -1613,6 +1616,19 @@ h1 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.sidebar-item-unread-popup {
+  position: absolute;
+  background: rgba(255,198,0,1);
+  border-radius: 90%;
+  width: 20px;
+  line-height: 21px;
+  font-size: 15px;
+  height: 20px;
+  color: white;
+  top: 10%;
+  right: 5%;
 }
 
 .profile-circle-box {
