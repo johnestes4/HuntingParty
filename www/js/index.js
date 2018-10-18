@@ -1909,7 +1909,7 @@ function toggleHamburgerMenu() {
             duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
           }
           else{due2 = "No Date", duenum2 = 99999}
-          return duenum1 - duenum2
+          return duenum2 - duenum1
         }
         else{
           return prox1.localeCompare(prox2)
@@ -2223,7 +2223,7 @@ function toggleHamburgerMenu() {
         // }
       }
     }
-    sortFboRenders(fbosIn, 0)
+    sortFboRenders(fbosIn, 6)
     for (var i = 0; i < fbosIn.length; i++) {
       parseProxy(fbosIn[i], i)
     }
