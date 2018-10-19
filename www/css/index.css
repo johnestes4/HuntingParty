@@ -933,7 +933,12 @@ h1, .instructions{
 }
 
 .fbo-desc-word-start::after {
-  content: "";
+  content: "1";
+  color: black;
+  text-align: center;
+  font-weight: bold;
+  font-size: 19px;
+  line-height: 24px;
   display: block;
   position: absolute;
   top: 17px;
@@ -1159,8 +1164,8 @@ h1, .instructions{
   font-size: 14px;
   text-align: left;
   background: rgba(235,235,235,1);
-  padding: 1vh 5vw 1vh 5vw;
-  max-height: 238px;
+  padding: 6px 30px 6px 30px;
+  max-height: 350px;
   width: 100%;
   overflow-y: auto;
   border-bottom: 1px solid rgba(0,0,0,0.25);
