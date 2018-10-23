@@ -415,7 +415,7 @@ h1, .instructions{
   /* border-bottom: 1px solid rgba(0,0,0,0.75); */
   background: rgba(255,255,255,1);
   position: relative;
-  height: 93vh;
+  height: calc(93vh - 60px);
   overflow-y: auto;
   width: 100%;
 }
@@ -431,7 +431,6 @@ h1, .instructions{
   float: left;
   position: relative;
   width: 100%;
-  height: 93vh;
   background: rgba(60,85,136,1);
 }
 
@@ -1317,6 +1316,51 @@ h1 {
   display: none;
 }
 
+#bottombar {
+  width: 100%;
+  height: 59px;
+  border-top: 1px solid rgba(0,0,0,0.2)!important;
+  z-index: 9;
+  position: relative;
+  float: left;
+}
+
+.bottombar-item {
+  position: relative;
+  height: 100%;
+  width: 20%;
+  float: left;
+}
+.sidebar-item:active {
+  filter: brightness(95%);
+}
+
+.icon-2 {
+  filter: brightness(0.95) invert(1);
+}
+.icon-2-active {
+  filter: brightness(0.75) sepia(100%) contrast(50%) saturate(500%) hue-rotate(150deg);
+}
+
+.bottombar-img-wrapper {
+  margin-top: 14px;
+  margin-bottom: 15px;
+  position: relative;
+  height: 30px;
+}
+.sidebar-item p {
+  position: relative;
+}
+
+.bottombar-img {
+  height: 90%;
+  width: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .topbar {
   position: relative;
   width: 100%;
@@ -1444,8 +1488,8 @@ h1 {
   transform: translate(-50%, -50%);
   display: block;
   object-fit: cover;
-  min-width: 9vh;
-  min-height: 9vh;
+  min-width: 30px;
+  min-height: 30px;
   height: 100%;
 }
 .circle-img-2 {
@@ -1636,7 +1680,9 @@ h1 {
 .profile-circle-box {
   float: left;
   width: 100%;
-  height: 50%;
+  height: 30px;
+  margin-top: 14px;
+  margin-bottom: 15px;
   position: relative;
 }
 
@@ -1645,9 +1691,9 @@ h1 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: calc((100vh / 6) * 0.6);
-  height: calc((100vh / 6) * 0.6);
-  border: 3px solid white;
+  width: 30px;
+  height: 30px;
+  border: 1px solid white;
 }
 
 #profile-circle:active {

@@ -1519,12 +1519,10 @@ function calculateSearch(elem) {
             }
           }
           if (searchTerms.place[i].regions[regionIndex].value == false) {
-            console.log('nope')
             allChecked = false
           }
         }
         if (matchFound && allChecked) {
-          console.log('all checked!')
           document.getElementById('search-box-checkbox-'+i).checked = true
           searchTerms.place[i].value = elem.checked
         }
@@ -1700,6 +1698,11 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("bottombar-img-home").classList.add('icon-2-active')
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
+
       document.getElementById("topbar-center-text").innerHTML = "News"
       document.getElementById("topbar-right").innerHTML = ''
     } else if (num == 1) {
@@ -1711,6 +1714,10 @@ function toggleHamburgerMenu() {
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("saved-search-view").classList.remove('inactive')
       document.getElementById("search-terms-view").classList.add('inactive')
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-search").classList.add('icon-2-active')
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
     } else if (num == 2) {
       document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -1718,6 +1725,10 @@ function toggleHamburgerMenu() {
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Opportunities"
       document.getElementById("topbar-right").innerHTML = ''
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-opportunities").classList.add('icon-2-active')
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
       renderFbos()
     } else if (num == 3) {
       document.getElementById("news-block").classList.add('inactive')
@@ -1726,6 +1737,10 @@ function toggleHamburgerMenu() {
       document.getElementById("pipeline-view").classList.remove('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
       document.getElementById("topbar-right").innerHTML = ''
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-pipeline").classList.add('icon-2-active')
     }
     activeTab = num
     document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="" onclick="openSidebar()">'
