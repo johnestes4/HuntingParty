@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -339,86 +339,7 @@ var emptySearchTerms = {
 }
 var yesRefer = []
 var naics = []
-var psc = [
-  "10 Weapons",
-  "11 Nuclear ordnance",
-  "12 Fire control equipment",
-  "13 Ammunition & explosives",
-  "14 Guided missiles",
-  "15 Aircraft & airframe structural components",
-  "16 Aircraft components & accessories",
-  "17 Aircraft launching, landing & ground handling equipment",
-  "18 Space vehicles",
-  "19 Ships, small craft, pontoons & floating docks",
-  "20 Ship and marine equipment",
-  "22 Railway equipment",
-  "23 Ground effects vehicles, motor vehicles, trailers & cycles",
-  "24 Tractors",
-  "25 Vehicular equipment components",
-  "26 Tires and tubes",
-  "28 Engines, turbines & components",
-  "29 Engine accessories",
-  "30 Mechanical power transmission equipment",
-  "31 Bearings",
-  "32 Woodworking machinery and equipment",
-  "34 Metalworking machinery",
-  "35 Service and trade equipment",
-  "36 Special industry machinery",
-  "37 Agricultural machinery & equipment",
-  "38 Construction, mining, excavating & highway maintenance equipment",
-  "39 Materials handling equipment",
-  "40 Rope, cable, chain & fittings",
-  "41 Refrigeration, air-conditioning & air circulating equipment",
-  "42 Fire fighting, rescue & safety equipment",
-  "43 Pumps & compressors",
-  "44 Furnace, steam plant & drying equipment; & nuclear reactors",
-  "45 Plumbing, heating, & sanitation equipment",
-  "46 Water purification & sewage treatment equipment",
-  "47 Pipe, tubing, hose & fittings",
-  "48 Valves",
-  "49 Maintenance & repair shop equipment",
-  "51 Hand tools",
-  "52 Measuring tools",
-  "53 Hardware & abrasives",
-  "54 Prefabricated structures and scaffolding",
-  "55 Lumber, millwork, plywood & veneer",
-  "56 Construction & building materials",
-  "58 Communication, detection, & coherent radiation equipment",
-  "59 Electrical and electronic equipment components",
-  "60 Fiber optics materials, components, assemblies & accessories",
-  "61 Electric wire & power & distribution equipment",
-  "62 Lighting fixtures & lamps",
-  "63 Alarm, signal & security detection equipment",
-  "65 Medical, dental & veterinary equipment & supplies",
-  "66 Instruments & laboratory equipment",
-  "67 Photographic equipment",
-  "68 Chemicals & chemical products",
-  "69 Training aids & devices",
-  "70 General purpose information technology equipment",
-  "71 Furniture",
-  "72 Household & commercial furnishings & appliances",
-  "73 Food preparation and serving equipment",
-  "74 Office machines, text processing systems & visible record equipment",
-  "75 Office supplies and devices",
-  "76 Books, maps & other publications",
-  "77 Musical instruments, phonographs & home-type radios",
-  "78 Recreational & athletic equipment",
-  "79 Cleaning equipment and supplies",
-  "80 Brushes, paints, sealers & adhesives",
-  "81 Containers, packaging, & packing supplies",
-  "83 Textiles, leather, furs, apparel & shoe findings, tents & flags",
-  "84 Clothing, individual equipment & insignia",
-  "85 Toiletries",
-  "87 Agricultural supplies",
-  "88 Live animals",
-  "89 Subsistence",
-  "91 Fuels, lubricants, oils & waxes",
-  "93 Nonmetallic fabricated materials",
-  "94 Nonmetallic crude materials",
-  "95 Metal bars, sheets & shapes",
-  "96 Ores, minerals & their primary products",
-  "99 Miscellaneous"
-]
+var psc = []
 var tosRead = 0
 var tutorialsOpen = false
 var allCompanies
@@ -1038,30 +959,57 @@ function searchFilter(which) {
       }
       var arrowHtml = ''
       var onclickHtml = ''
-      if (searchTerms.place[i].subcategories) {
+      if (searchTerms.place[i].regions) {
         arrowHtml = '<span id="place-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
-        onclickHtml = 'onclick="calculateLocationSearch('+i+')"'
+        onclickHtml = 'onclick="calculateLocationSearch('+i+', null)"'
       }
       html = html + '<div class="search-box-checkbox-item '+inactiveHtml+'">'+
-      '<input class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
-      if (searchTerms.place[i].subcategories) {
+      '<input id="search-box-checkbox-'+i+'" class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
+      if (searchTerms.place[i].regions) {
         var inactiveHtml2 = ''
         if (document.getElementById("location-subcategory-box-"+i+"").classList.contains('inactive')) {
           inactiveHtml2 = ' inactive'
         }
         html = html + '<div id="location-subcategory-box-'+i+'" class="subcategory-box '+inactiveHtml2+'">'
-        for (subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].subcategories.length; subcategoryIndex++) {
+        for (subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].regions.length; subcategoryIndex++) {
+          var arrowHtml = ''
+          var onclickHtml = ''
+          if (searchTerms.place[i].regions[subcategoryIndex].regions) {
+            arrowHtml = '<span id="place-arrow-'+i+'-'+subcategoryIndex+'" class="checkbox-text-arrow">▼</span>'
+            onclickHtml = 'onclick="calculateLocationSearch('+i+', '+subcategoryIndex+')"'
+          }
           var inactiveHtml3 = ''
-          if (!searchTerms.place[i].subcategories[subcategoryIndex].name.toLowerCase().includes(string.toLowerCase()) && searchTerms.place[i].subcategories[subcategoryIndex].value == false) {
+          if (!searchTerms.place[i].regions[subcategoryIndex].name.toLowerCase().includes(string.toLowerCase()) && searchTerms.place[i].regions[subcategoryIndex].value == false) {
             inactiveHtml3 = ' inactive'
           }
           var subCheckedHTML = ''
-          if (searchTerms.place[i].subcategories[subcategoryIndex].value) {
+          if (searchTerms.place[i].regions[subcategoryIndex].value) {
             subCheckedHTML = ' checked'
           }
           html = html + '<div class="search-box-checkbox-item '+inactiveHtml3+'">'+
-          '<input class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].subcategories[subcategoryIndex].name+'" onclick="calculateSearch(this)" '+subCheckedHTML+'> <div class="search-box-checkbox-text"> '+searchTerms.place[i].subcategories[subcategoryIndex].name+'</div>'+
-          '</div>'
+          '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].name+'" onclick="calculateSearch(this)" '+subCheckedHTML+'> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].regions[subcategoryIndex].name+arrowHtml+'</div>'
+          if (searchTerms.place[i].regions[subcategoryIndex].regions) {
+            var inactiveHtml4 = ''
+            if (document.getElementById("location-subcategory-box-"+i+"-"+subcategoryIndex).classList.contains('inactive')) {
+              inactiveHtml4 = ' inactive'
+            }
+            html = html + '<div id="location-subcategory-box-'+i+'-'+subcategoryIndex+'" class="subcategory-box '+inactiveHtml4+'">'
+            for (subcategoryIndex2 = 0; subcategoryIndex2 < searchTerms.place[i].regions[subcategoryIndex].regions.length; subcategoryIndex2++) {
+              var inactiveHtml5 = ''
+              if (!searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name.toLowerCase().includes(string.toLowerCase()) && searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].value == false) {
+                inactiveHtml5 = ' inactive'
+              }
+              var subCheckedHTML = ''
+              if (searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].value) {
+                subCheckedHTML = ' checked'
+              }
+              html = html + '<div class="search-box-checkbox-item '+inactiveHtml5+'">'+
+              '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'-'+subcategoryIndex2+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name+'" onclick="calculateSearch(this)" '+subCheckedHTML+'> <div class="search-box-checkbox-text"> '+searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name+'</div>'+
+              '</div>'
+            }
+            html = html + '</div>'
+          }
+          html = html + '</div>'
         }
         html = html + '</div>'
       }
@@ -1159,18 +1107,31 @@ function renderSearch() {
   for (i = 0; i < searchTerms.place.length; i++) {
     var arrowHtml = ''
     var onclickHtml = ''
-    if (searchTerms.place[i].subcategories) {
+    if (searchTerms.place[i].regions) {
       arrowHtml = '<span id="place-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
-      onclickHtml = 'onclick="calculateLocationSearch('+i+')"'
+      onclickHtml = 'onclick="calculateLocationSearch('+i+', null)"'
     }
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
-    if (searchTerms.place[i].subcategories) {
+    '<input id="search-box-checkbox-'+i+'" class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
+    if (searchTerms.place[i].regions) {
       html = html + '<div id="location-subcategory-box-'+i+'" class="subcategory-box inactive">'
-      for (subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].subcategories.length; subcategoryIndex++) {
+      for (subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].regions.length; subcategoryIndex++) {
+        if (searchTerms.place[i].regions[subcategoryIndex].regions) {
+          arrowHtml = '<span id="place-arrow-'+i+'-'+subcategoryIndex+'" class="checkbox-text-arrow">▼</span>'
+          onclickHtml = 'onclick="calculateLocationSearch('+i+', '+subcategoryIndex+')"'
+        }
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].subcategories[subcategoryIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.place[i].subcategories[subcategoryIndex].name+'</div>'+
-        '</div>'
+        '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].regions[subcategoryIndex].name+arrowHtml+'</div>'
+        if (searchTerms.place[i].regions[subcategoryIndex].regions) {
+          html = html + '<div id="location-subcategory-box-'+i+'-'+subcategoryIndex+'" class="subcategory-box inactive">'
+          for (subcategoryIndex2 = 0; subcategoryIndex2 < searchTerms.place[i].regions[subcategoryIndex].regions.length; subcategoryIndex2++) {
+            html = html + '<div class="search-box-checkbox-item">'+
+            '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'-'+subcategoryIndex2+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name+'</div>'+
+            '</div>'
+          }
+          html = html + '</div>'
+        }
+        html = html + '</div>'
       }
       html = html + '</div>'
     }
@@ -1291,13 +1252,23 @@ function calculateOfficeSearch(agencyIndex, subagencyIndex) {
   }
 }
 
-function calculateLocationSearch(locationIndex) {
-  if (!document.getElementById('location-subcategory-box-'+locationIndex+'').classList.contains('inactive')) {
-    document.getElementById('location-subcategory-box-'+locationIndex+'').classList.add('inactive')
-    document.getElementById('place-arrow-'+locationIndex).innerHTML = '▼'
+function calculateLocationSearch(locationIndex, subLocationIndex) {
+  if (subLocationIndex !== null) {
+    if (!document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.contains('inactive')) {
+      document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.add('inactive')
+      document.getElementById('place-arrow-'+locationIndex+'-'+subLocationIndex).innerHTML = '▼'
+    } else {
+      document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.remove('inactive')
+      document.getElementById('place-arrow-'+locationIndex+'-'+subLocationIndex).innerHTML = '▲'
+    }
   } else {
-    document.getElementById('location-subcategory-box-'+locationIndex+'').classList.remove('inactive')
-    document.getElementById('place-arrow-'+locationIndex).innerHTML = '▲'
+    if (!document.getElementById('location-subcategory-box-'+locationIndex+'').classList.contains('inactive')) {
+      document.getElementById('location-subcategory-box-'+locationIndex+'').classList.add('inactive')
+      document.getElementById('place-arrow-'+locationIndex).innerHTML = '▼'
+    } else {
+      document.getElementById('location-subcategory-box-'+locationIndex+'').classList.remove('inactive')
+      document.getElementById('place-arrow-'+locationIndex).innerHTML = '▲'
+    }
   }
 }
 
@@ -1488,26 +1459,57 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-place')) {
-    // if (elem.value == searchTerms.place[0].name) {
-    //   for (i = 0; i < searchTerms.place.length; i++) {
-    //     searchTerms.place[i].value = elem.checked
-    //   }
-    //   var a = document.getElementsByClassName('checkbox-place')
-    //   for (i2 = 0; i2 < a.length; i2++) {
-    //     a[i2].checked = elem.checked
-    //   }
-    // } else {
-      for (i = 0; i < searchTerms.place.length; i++) {
-        if (searchTerms.place[i].name == elem.value) {
-          searchTerms.place[i].value = elem.checked
-          if (!elem.checked) {
-            searchTerms.place[0].value = false
-            var a = document.getElementsByClassName('checkbox-place')
-            a[0].checked = false
+    for (i = 0; i < searchTerms.place.length; i++) {
+      if (searchTerms.place[i].name == elem.value) {
+        searchTerms.place[i].value = elem.checked
+        if (searchTerms.place[i].regions) {
+          for (regionIndex = 0; regionIndex < searchTerms.place[i].regions.length; regionIndex++) {
+            searchTerms.place[i].regions[regionIndex].value = elem.checked
+            document.getElementById('search-box-checkbox-'+i+'-'+regionIndex).checked = elem.checked
+            if (searchTerms.place[i].regions[regionIndex].regions) {
+              for (regionIndex2 = 0; regionIndex2 < searchTerms.place[i].regions[regionIndex].regions.length; regionIndex2++) {
+                searchTerms.place[i].regions[regionIndex].regions[regionIndex2].value = elem.checked
+                document.getElementById('search-box-checkbox-'+i+'-'+regionIndex+'-'+regionIndex2).checked = elem.checked
+              }
+            }
           }
         }
       }
-    // }
+    }
+  } else if (elem.classList.contains('checkbox-subplace')) {
+    console.log('subplace')
+    for (i = 0; i < searchTerms.place.length; i++) {
+      if (searchTerms.place[i].regions) {
+        for (regionIndex = 0; regionIndex < searchTerms.place[i].regions.length; regionIndex++) {
+          if (searchTerms.place[i].regions[regionIndex].name == elem.value) {
+            searchTerms.place[i].regions[regionIndex].value = elem.checked
+
+            if (!elem.checked) {
+              document.getElementById('search-box-checkbox-'+i).checked = false
+              searchTerms.place[i].value = false
+            } else {
+              if (searchTerms.place[i].regions[regionIndex].regions) {
+                for (regionIndex2 = 0; regionIndex2 < searchTerms.place[i].regions[regionIndex].regions.length; regionIndex2++) {
+                  searchTerms.place[i].regions[regionIndex].regions[regionIndex2].value = elem.checked
+                  document.getElementById('search-box-checkbox-'+i+'-'+regionIndex+'-'+regionIndex2).checked = elem.checked
+                }
+              }
+            }
+          } else if (searchTerms.place[i].regions[regionIndex].regions) {
+            for (regionIndex2 = 0; regionIndex2 < searchTerms.place[i].regions[regionIndex].regions.length; regionIndex2++) {
+              if (searchTerms.place[i].regions[regionIndex].regions[regionIndex2].name == elem.value) {
+                searchTerms.place[i].regions[regionIndex].regions[regionIndex2].value = elem.checked
+                if (!elem.checked) {
+                  document.getElementById('search-box-checkbox-'+i).checked = false
+                  document.getElementById('search-box-checkbox-'+i+'-'+regionIndex).checked = false
+                  searchTerms.place[i].value = false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   } else if (elem.classList.contains('checkbox-setaside')) {
     if (elem.value == searchTerms.setaside[0].name) {
       for (i = 0; i < searchTerms.setaside.length; i++) {
@@ -1746,33 +1748,118 @@ function toggleHamburgerMenu() {
     // renderOption = BY_EARLIEST_DUE
     switch(renderOption){
       case BY_EARLIEST_DUE: //By Earliest Due
-        fboProxy.sort(function(p1, p2){
-          //[mm,dd,yy]
-          var due1, due2
-          var duenum1 = 0
-          var duenum2 = 0
-          if (p1.fbo.respDate){
-            mm = p1.fbo.respDate.slice(0,2)
-            dd = p1.fbo.respDate.slice(2,4)
-            yy = p1.fbo.respDate.slice(4,6)
-            due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-            duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
-          }
-          else{due1 = "No Date", duenum1 = 99999}
-          if (p2.fbo.respDate){
-            mm = p2.fbo.respDate.slice(0,2)
-            dd = p2.fbo.respDate.slice(2,4)
-            yy = p2.fbo.respDate.slice(4,6)
-            due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-            duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
-          }
-          else{due2 = "No Date", duenum2 = 99999}
-          return duenum1 - duenum2
-        });
-        break;
+      fboProxy.sort(function(p1, p2){
+        //[mm,dd,yy]
+        var due1, due2
+        var duenum1 = 0
+        var duenum2 = 0
+        if (p1.fbo.respDate){
+          mm = p1.fbo.respDate.slice(0,2)
+          dd = p1.fbo.respDate.slice(2,4)
+          yy = p1.fbo.respDate.slice(4,6)
+          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+        }
+        else{due1 = "No Date", duenum1 = 99999}
+        if (p2.fbo.respDate){
+          mm = p2.fbo.respDate.slice(0,2)
+          dd = p2.fbo.respDate.slice(2,4)
+          yy = p2.fbo.respDate.slice(4,6)
+          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+        }
+        else{due2 = "No Date", duenum2 = 99999}
+        return duenum1 - duenum2
+      });
+      break;
       case BY_LATEST_DUE:
-        fboProxy.sort(function(p1, p2){
-          //[mm,dd,yy]
+      fboProxy.sort(function(p1, p2){
+        //[mm,dd,yy]
+        var due1, due2
+        var duenum1 = 0
+        var duenum2 = 0
+        if (p1.fbo.respDate){
+          mm = p1.fbo.respDate.slice(0,2)
+          dd = p1.fbo.respDate.slice(2,4)
+          yy = p1.fbo.respDate.slice(4,6)
+          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+        }
+        else{due1 = "No Date", duenum1 = 99999}
+        if (p2.fbo.respDate){
+          mm = p2.fbo.respDate.slice(0,2)
+          dd = p2.fbo.respDate.slice(2,4)
+          yy = p2.fbo.respDate.slice(4,6)
+          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+        }
+        else{due2 = "No Date", duenum2 = 99999}
+        return duenum1 - duenum2
+      });
+      fboProxy.reverse()
+      break;
+      case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
+      break;
+      case BY_ALPHA_ASC:
+      fboProxy.sort(function(p1, p2){
+
+        var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
+        prox1bool = isNaN(parseInt(prox1.slice(0,2)))
+        prox2bool = isNaN(parseInt(prox2.slice(0,2)))
+
+        if (!prox1bool && !prox2bool){ // If both are numbers
+          prox1num = parseInt(prox1.slice(0,2))
+          prox2num = parseInt(prox2.slice(0,2))
+
+          if (prox1num > prox2num){
+            return 1
+          }
+          else if (prox2num < prox1num){
+            return -1
+          }
+        }
+        else if (prox1bool && !prox2bool){ //if proxy 2 is number
+          return 1
+        }
+        else if (!prox1bool && prox2bool){ //if prox 1 is number
+          return -1
+        }
+        return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
+      });
+      break;
+      case BY_ALPHA_DEC:
+      fboProxy.sort(function(p1, p2){
+        var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
+        prox1bool = isNaN(parseInt(prox1.slice(0,2)))
+        prox2bool = isNaN(parseInt(prox2.slice(0,2)))
+
+        if (!prox1bool && !prox2bool){ // If both are numbers
+          prox1num = parseInt(prox1.slice(0,2))
+          prox2num = parseInt(prox2.slice(0,2))
+
+          if (prox1num > prox2num){
+            return 1
+          }
+          else if (prox2num < prox1num){
+            return -1
+          }
+        }
+        else if (prox1bool && !prox2bool){ //if proxy 2 is number
+          return 1
+        }
+        else if (!prox1bool && prox2bool){ //if prox 1 is number
+          return -1
+        }
+        return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
+      });
+      fboProxy.reverse();
+      break;
+      case BY_AGENCY_ASC:
+      fboProxy.sort(function(p1, p2){
+        prox1 = p1.fbo.agency
+        prox2 = p2.fbo.agency
+
+        if (prox1.localeCompare(prox2) == 0){
           var due1, due2
           var duenum1 = 0
           var duenum2 = 0
@@ -1793,97 +1880,12 @@ function toggleHamburgerMenu() {
           }
           else{due2 = "No Date", duenum2 = 99999}
           return duenum1 - duenum2
-        });
-        fboProxy.reverse()
-        break;
-      case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
-        break;
-      case BY_ALPHA_ASC:
-        fboProxy.sort(function(p1, p2){
-
-          var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
-          prox1bool = isNaN(parseInt(prox1.slice(0,2)))
-          prox2bool = isNaN(parseInt(prox2.slice(0,2)))
-
-          if (!prox1bool && !prox2bool){ // If both are numbers
-            prox1num = parseInt(prox1.slice(0,2))
-            prox2num = parseInt(prox2.slice(0,2))
-
-            if (prox1num > prox2num){
-              return 1
-            }
-            else if (prox2num < prox1num){
-              return -1
-            }
-          }
-          else if (prox1bool && !prox2bool){ //if proxy 2 is number
-            return 1
-          }
-          else if (!prox1bool && prox2bool){ //if prox 1 is number
-            return -1
-          }
-          return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
-        });
-        break;
-      case BY_ALPHA_DEC:
-        fboProxy.sort(function(p1, p2){
-          var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
-          prox1bool = isNaN(parseInt(prox1.slice(0,2)))
-          prox2bool = isNaN(parseInt(prox2.slice(0,2)))
-
-          if (!prox1bool && !prox2bool){ // If both are numbers
-            prox1num = parseInt(prox1.slice(0,2))
-            prox2num = parseInt(prox2.slice(0,2))
-
-            if (prox1num > prox2num){
-              return 1
-            }
-            else if (prox2num < prox1num){
-              return -1
-            }
-          }
-          else if (prox1bool && !prox2bool){ //if proxy 2 is number
-            return 1
-          }
-          else if (!prox1bool && prox2bool){ //if prox 1 is number
-            return -1
-          }
-          return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
-        });
-        fboProxy.reverse();
-        break;
-      case BY_AGENCY_ASC:
-        fboProxy.sort(function(p1, p2){
-          prox1 = p1.fbo.agency
-          prox2 = p2.fbo.agency
-
-          if (prox1.localeCompare(prox2) == 0){
-            var due1, due2
-            var duenum1 = 0
-            var duenum2 = 0
-            if (p1.fbo.respDate){
-              mm = p1.fbo.respDate.slice(0,2)
-              dd = p1.fbo.respDate.slice(2,4)
-              yy = p1.fbo.respDate.slice(4,6)
-              due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-              duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
-            }
-            else{due1 = "No Date", duenum1 = 99999}
-            if (p2.fbo.respDate){
-              mm = p2.fbo.respDate.slice(0,2)
-              dd = p2.fbo.respDate.slice(2,4)
-              yy = p2.fbo.respDate.slice(4,6)
-              due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-              duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
-            }
-            else{due2 = "No Date", duenum2 = 99999}
-            return duenum1 - duenum2
-          }
-          else{
-            return prox1.localeCompare(prox2)
-          }
-        });
-        break;
+        }
+        else{
+          return prox1.localeCompare(prox2)
+        }
+      });
+      break;
       case BY_AGENCY_DEC:
       fboProxy.sort(function(p1, p2){
         prox1 = p1.fbo.agency
