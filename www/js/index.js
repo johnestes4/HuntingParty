@@ -1754,7 +1754,16 @@ function toggleHamburgerMenu() {
     today = yyyy+'/'+mm+'/'+dd;
     return today
   }
-
+  function generateOptions(){
+    renderSavedSearches()
+    renderSortOptions()
+  }
+  function generateFbos(){
+    renderSearch()
+    sortFboRenders()
+    renderFbos()
+  }
+  function renderSortOptions(){}
   function sortFboRenders(fboProxy, renderOption){
     const BY_EARLIEST_DUE = 0 //Also most recent expired for pipeline
     const BY_LATEST_DUE = 1 //Includes data with no deadline at top; Also oldest expired for pipeline
@@ -2245,11 +2254,11 @@ function toggleHamburgerMenu() {
         // }
       }
     }
-    sortFboRenders(fbosIn, 6)
+    sortFboRenders(fbosIn, 0)
     for (var i = 0; i < fbosIn.length; i++) {
       parseProxy(fbosIn[i], i)
     }
-    sortFboRenders(fboPipeline, 0)
+    sortFboRenders(fboPipeline, 1)
     for (var i = 0; i < fboPipeline.length; i++) {
       parseProxy(fboPipeline[i], i)
     }
