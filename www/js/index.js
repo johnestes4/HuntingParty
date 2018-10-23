@@ -1480,24 +1480,27 @@ function calculateSearch(elem) {
     console.log('subplace')
     for (i = 0; i < searchTerms.place.length; i++) {
       if (searchTerms.place[i].regions) {
+        var allChecked = true
+        var matchFound = false
         for (regionIndex = 0; regionIndex < searchTerms.place[i].regions.length; regionIndex++) {
           if (searchTerms.place[i].regions[regionIndex].name == elem.value) {
-            searchTerms.place[i].regions[regionIndex].value = elem.checked
-
+            matchFound = true
             if (!elem.checked) {
               document.getElementById('search-box-checkbox-'+i).checked = false
               searchTerms.place[i].value = false
-            } else {
-              if (searchTerms.place[i].regions[regionIndex].regions) {
-                for (regionIndex2 = 0; regionIndex2 < searchTerms.place[i].regions[regionIndex].regions.length; regionIndex2++) {
-                  searchTerms.place[i].regions[regionIndex].regions[regionIndex2].value = elem.checked
-                  document.getElementById('search-box-checkbox-'+i+'-'+regionIndex+'-'+regionIndex2).checked = elem.checked
-                }
+            }
+            searchTerms.place[i].regions[regionIndex].value = elem.checked
+            if (searchTerms.place[i].regions[regionIndex].regions) {
+              for (regionIndex2 = 0; regionIndex2 < searchTerms.place[i].regions[regionIndex].regions.length; regionIndex2++) {
+                searchTerms.place[i].regions[regionIndex].regions[regionIndex2].value = elem.checked
+                document.getElementById('search-box-checkbox-'+i+'-'+regionIndex+'-'+regionIndex2).checked = elem.checked
               }
             }
           } else if (searchTerms.place[i].regions[regionIndex].regions) {
+            var allChecked2 = true
             for (regionIndex2 = 0; regionIndex2 < searchTerms.place[i].regions[regionIndex].regions.length; regionIndex2++) {
               if (searchTerms.place[i].regions[regionIndex].regions[regionIndex2].name == elem.value) {
+                matchFound = true
                 searchTerms.place[i].regions[regionIndex].regions[regionIndex2].value = elem.checked
                 if (!elem.checked) {
                   document.getElementById('search-box-checkbox-'+i).checked = false
@@ -1505,8 +1508,25 @@ function calculateSearch(elem) {
                   searchTerms.place[i].value = false
                 }
               }
+              if (searchTerms.place[i].regions[regionIndex].regions[regionIndex2].value == false) {
+                allChecked = false
+                allChecked2 = false
+              }
+            }
+            if (matchFound && allChecked2) {
+              document.getElementById('search-box-checkbox-'+i+'-'+regionIndex).checked = true
+              searchTerms.place[i].regions[regionIndex].value = elem.checked
             }
           }
+          if (searchTerms.place[i].regions[regionIndex].value == false) {
+            console.log('nope')
+            allChecked = false
+          }
+        }
+        if (matchFound && allChecked) {
+          console.log('all checked!')
+          document.getElementById('search-box-checkbox-'+i).checked = true
+          searchTerms.place[i].value = elem.checked
         }
       }
     }
