@@ -1757,13 +1757,63 @@ function toggleHamburgerMenu() {
   function generateOptions(){
     renderSavedSearches()
     renderSortOptions()
+    // parseProxy()
   }
   function generateFbos(){
     renderSearch()
     sortFboRenders()
     renderFbos()
   }
-  function renderSortOptions(){}
+  function runFilters(){
+    renderSearch()
+    renderFbos()
+  }
+  function runSort(fboProxy, elem){
+    var selected = elem.value
+    sortFboRenders(fboProxy, selected)
+    renderFbos(fboProxy)
+  }
+  function renderSortOptions(){
+    var sortID = document.getElementById("sort-select")
+    var sortOptions = [
+      {
+        "name": "Earliest Due",
+        "value": 0
+      },
+      {
+        "name": "Latest Due",
+        "value": 1
+      },
+      {
+        "name": "Date Posted",
+        "value": 2
+      },
+      {
+        "name": "Alpha A-Z",
+        "value": 3
+      },
+      {
+        "name": "Alpha Z-A",
+        "value": 4
+      },
+      {
+        "name": "Agency A-Z",
+        "value": 5
+      },
+      {
+        "name": "Alpha Z-A",
+        "value": 6
+      }
+    ]
+
+   sortOptions.forEach(function (item){
+      var option = document.createElement("option")
+      option.text = item.name
+      option.value = item.value
+      console.log(option.name, option.value)
+      sortID.add(option)
+   });
+  }
   function sortFboRenders(fboProxy, renderOption){
     const BY_EARLIEST_DUE = 0 //Also most recent expired for pipeline
     const BY_LATEST_DUE = 1 //Includes data with no deadline at top; Also oldest expired for pipeline
@@ -1776,6 +1826,7 @@ function toggleHamburgerMenu() {
 
     // renderOption = BY_EARLIEST_DUE
     switch(renderOption){
+      case -1:
       case BY_EARLIEST_DUE: //By Earliest Due
       fboProxy.sort(function(p1, p2){
         //[mm,dd,yy]
@@ -1827,8 +1878,7 @@ function toggleHamburgerMenu() {
       });
       fboProxy.reverse()
       break;
-      case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
-      break;
+     // case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
       case BY_ALPHA_ASC:
       fboProxy.sort(function(p1, p2){
 
@@ -2003,6 +2053,9 @@ function toggleHamburgerMenu() {
   }
 
   var searchFilterName = null
+
+  //Sorts thru all existing data and organizes them
+  function parseFbos(){}
 
   function renderFbos() {
     var fboHtml = ''
@@ -2254,11 +2307,11 @@ function toggleHamburgerMenu() {
         // }
       }
     }
-    sortFboRenders(fbosIn, 0)
+    // sortFboRenders(fbosIn, 0)
     for (var i = 0; i < fbosIn.length; i++) {
       parseProxy(fbosIn[i], i)
     }
-    sortFboRenders(fboPipeline, 1)
+    // sortFboRenders(fboPipeline, 1)
     for (var i = 0; i < fboPipeline.length; i++) {
       parseProxy(fboPipeline[i], i)
     }
@@ -3760,7 +3813,7 @@ function toggleHamburgerMenu() {
     console.log(fboPipeline)
     if (fbosIn.length + fboPipeline.length > 0) {
       // setActiveFbo(fboIndex)
-      renderSavedSearches()
+      generateOptions()
       renderSearch()
       renderFbos()
       renderNews()
@@ -3773,7 +3826,7 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive');
       document.getElementById("login-register").classList.add('inactive');
     } else {
-      renderSavedSearches()
+      generateOptions()
       renderSearch()
       // renderFbos()
       renderNews()
