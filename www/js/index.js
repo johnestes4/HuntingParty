@@ -2170,10 +2170,10 @@ function toggleHamburgerMenu() {
             '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
             '</div>'+
             '<div class="fbo-item-icons">'+
-            '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div>'+
-            '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div>'+
-            '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
-            '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
+            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
             '</div>'+
             '</div>'+
             '</div>'

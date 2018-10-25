@@ -657,12 +657,23 @@ h1, .instructions{
 .fbo-item-icon-date {
   width: 40%;
   float: left;
+  position: relative;
   height: 100%;
 }
 .fbo-item-icon-item {
   width: 20%;
   float: left;
   height: 100%;
+  position: relative;
+}
+
+.fbo-item-icon-item-inner {
+  position: absolute;
+  width: auto;
+  height: 20px;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .fbo-item-title:active {
