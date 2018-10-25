@@ -1702,6 +1702,8 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.remove('inactive')
       document.getElementById("topbar-center-text").innerHTML = "News"
       document.getElementById("topbar-right").innerHTML = ''
     } else if (num == 1) {
@@ -1717,6 +1719,8 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-search").classList.add('icon-2-active')
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.remove('inactive')
     } else if (num == 2) {
       document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -1728,6 +1732,8 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-opportunities").classList.add('icon-2-active')
       document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.remove('inactive')
       renderFbos()
     } else if (num == 3) {
       document.getElementById("news-block").classList.add('inactive')
@@ -1740,6 +1746,8 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-pipeline").classList.add('icon-2-active')
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.remove('inactive')
     }
     activeTab = num
     document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="" onclick="openSidebar()">'
@@ -2903,17 +2911,25 @@ function toggleHamburgerMenu() {
     elem.classList.add('buttonbar-tab-active');
   }
 
+  function expandAbstract() {
+    if (document.getElementById("fbo-detail-top").classList.contains('fbo-detail-top-larger')) {
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.remove('inactive')
+    } else {
+      document.getElementById("fbo-detail-top").classList.add('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.add('inactive')
+    }
+  }
+
   function setActiveFbo(index, tab) {
     var proxy
     if (tab == 0) {
       proxy = fbosIn[index]
       document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
-      document.getElementById("fbo-detail-top").classList.add('fbo-detail-top-larger')
       document.getElementById("fbo-details-comments").classList.add('inactive')
     } else if (tab == 1) {
       proxy = fboPipeline[index]
       document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(3)">'
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
       document.getElementById("fbo-details-comments").classList.remove('inactive')
     }
     console.log(proxy)
@@ -3797,7 +3813,7 @@ function toggleHamburgerMenu() {
     // showAd()
     // TAB SWITCH HERE
     switchTab(2)
-    // goToFbo(2, 0);
+    goToFbo(5, 0);
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
