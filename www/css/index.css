@@ -583,8 +583,8 @@ h1, .instructions{
 
 .fbo-item {
   width: 100%;
-  height: 150px;
-  padding: 20px 5% 20px 5%;
+  height: 90px;
+  padding: 10px 15px 10px 15px;
   position: relative;
   background: rgba(255,255,255,1);
   border-bottom: 1px solid rgba(96,97,97,0.5);
@@ -593,7 +593,7 @@ h1, .instructions{
 
 .fbo-item-avatar {
   height: 100%;
-  width: 25%;
+  width: 15%;
   position: relative;
   float: left;
 }
@@ -607,23 +607,24 @@ h1, .instructions{
   object-fit: cover;
   min-width: 50px;
   min-height: 50px;
-  height: 80px;
+  height: 60px;
 }
 
 .fbo-item-body {
   height: 100%;
-  width: 70%;
+  width: 80%;
   margin-left: 5%;
   float: left;
 }
 
 .fbo-item-title {
+  height: 50px;
   float: left;
   position: relative;
-  font-size: 14px;
+  font-size: 16px;
+  line-height: 23px;
   font-weight: bold;
   width: 100%;
-  height: 40%;
   overflow: hidden;
 }
 
@@ -639,25 +640,27 @@ h1, .instructions{
 
 .fbo-item-icons {
   width: 100%;
-  height: 12%;
+  height: 20px;
+  float: left;
   font-size: 12px;
-  padding-top: 6px;
   line-height: 20px;
 }
 
 .fbo-item-icon-img {
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: auto;
   margin-right: 4px;
+  margin-top: 2px;
+  margin-bottom: 2px;
   float: left;
 }
 .fbo-item-icon-date {
-  width: calc(100% - 135px);
+  width: 40%;
   float: left;
   height: 100%;
 }
 .fbo-item-icon-item {
-  width: 45px;
+  width: 20%;
   float: left;
   height: 100%;
 }
@@ -819,7 +822,7 @@ h1, .instructions{
   float: left;
 }
 .fbo-detail-right-larger {
-  height: calc(86vh - 40px)!important;
+  height: calc(93vh - 100px)!important;
 }
 .fbo-detail-img {
   width: 120px;
@@ -841,24 +844,38 @@ h1, .instructions{
 }
 
 .fbo-title-box {
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto;
   position: relative;
-  width: calc(100% - 1vw);
-  margin-left: 1vw;
-  margin-top: 15px;
-  height: 40px;
+  width: 100%;
+  padding: 1.5vh 4vw 1.5vh 4vw;
+  height: 60px;
+  background: rgba(243,243,243,1);
+}
+#highlight-tutorial {
+  color: black;
+  z-index: 29;
+  position: absolute;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0px 0px 5px;
+  border-radius: 6px;
+  background: white;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: auto;
 }
 
 #fbo-title {
-  font-size: 22px;
-  line-height: 36px;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
   font-family: 'Lato Semibold', sans-serif;
-  white-space: nowrap;
 }
 
 #abstract-text {
-  padding: 1vh 1vw 60px 1vw;
+  padding: 1vh 4vw 1vh 4vw;
   height: calc(100% - 105px);
   font-size: 14px;
   display: block;
@@ -917,14 +934,57 @@ h1, .instructions{
 
 
 #fbo-detail-top {
-  height: 55vh;
+  height: calc(55vh - 60px);
   width: 100%;
   float: left;
   overflow-y: auto;
 }
 
 .fbo-detail-top-larger {
-  height: calc(86vh - 40px)!important;
+  height: calc(53vh - 100px)!important;
+}
+
+#fbo-detail-middle {
+  height: 40vh;
+  float: left;
+  width: 100%;
+  border-top: 1px solid rgba(0,0,0,0.25);
+}
+
+.fbo-detail-middle-expanded {
+  width: 100%;
+  background: rgba(243,243,243,1);
+  padding: 15px 4vw 15px 4vw;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  height: auto;
+  float: left;
+}
+.fbo-detail-middle-item {
+  padding: 15px 4vw 15px 4vw;
+  /* height: 50px; */
+  width: 100%;
+  font-size: 14px;
+  line-height: 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  overflow: auto;
+  float: left;
+}
+
+.fbo-detail-middle-item-text {
+  width: calc(100% - 80px);
+  float: left;
+}
+.fbo-detail-middle-item-right {
+  width: 80px;
+  float: left;
+  text-align: right;
+  color: rgba(0,0,0,0.5);
+  font-size: 18px;
+}
+
+.fbo-detail-middle-item-half {
+  width: 50%;
+  float: left;
 }
 
 .fbo-desc-word {
@@ -978,10 +1038,31 @@ h1, .instructions{
   overflow-y: auto;
 }
 
-#fbo-details-comment-submit {
+#fbo-details-buttonbar {
   height: 40px;
   background: rgba(255,255,255,1);
+  float: left;
+}
 
+.fbo-details-buttonbar-item {
+  height: 100%;
+  position: relative;
+  float: left;
+  width: auto;
+  padding: 0px 5px 0px 5px;
+}
+
+.fbo-details-buttonbar-item button {
+  width: calc(100% - 10px);
+  font-weight: normal;
+  overflow: hidden;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 24px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 22px;
 }
 
 #fbo-details-input {
@@ -995,10 +1076,21 @@ h1, .instructions{
 }
 
 .fbo-details-input-button {
-  width: 36px;
-  margin: 2px 15px 2px 15px;
-  height: 36px;
+  margin: 10px 0px 10px 0px;
+  height: auto;
+  width: auto;
+  max-width: 20px;
+  max-height: 20px;
   float: left;
+}
+
+.fbo-details-buttonbar-item-border {
+  position: absolute;
+  right: 0px;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(0,0,0,0.2);
 }
 
 .comment {

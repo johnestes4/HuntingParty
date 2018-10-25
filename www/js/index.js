@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -1702,7 +1702,6 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
-
       document.getElementById("topbar-center-text").innerHTML = "News"
       document.getElementById("topbar-right").innerHTML = ''
     } else if (num == 1) {
@@ -2162,7 +2161,7 @@ function toggleHamburgerMenu() {
           // }
           if (!expired) {
             fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
-            '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
+            // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
             '<div class="fbo-item-avatar">'+
             '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
             '</div>'+
@@ -2170,43 +2169,13 @@ function toggleHamburgerMenu() {
             '<div class="fbo-item-title">'+
             '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
             '</div>'+
-            '<div class="fbo-item-desc">'+
-            '<p class="">'+proxy.fbo.desc+'</p>'+
-            '</div>'+
             '<div class="fbo-item-icons">'+
-            '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
             '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div>'+
             '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div>'+
             '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
+            '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
             '</div>'+
             '</div>'+
-            // '<div class="bottom-border">'+
-            // '</div>'+
-            // ''+voteHtml+
-            // ''+originHtml+
-            // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
-            // '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-            // '<div class="fbo-item-title-bg"></div>'+
-            // '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
-            // '</div>'+
-            // '<div class="fbo-item-comments">'+
-            // comments+
-            // '</div>'+
-            // '<div class="fbo-item-buttons">'+
-            // '<div id="no-button-' + index + '" class="medium-circle fbo-item-no-button' + noString + '" onclick="openPopups(1)">'+
-            // '<div class="second-border">'+
-            // '<img class="circle-img-2" src="./img/thumbsdown.png" alt="">'+
-            // '</div>'+
-            // '</div>'+
-            // '<div class="fbo-item-time-button">'+
-            // dueDate+
-            // '</div>'+
-            // '<div id="yes-button-' + index + '" class="medium-circle fbo-item-yes-button' + yesString + '" onclick="openPopups(0)">'+
-            // '<div class="second-border">'+
-            // '<img class="circle-img-2" src="./img/thumbsup.png" alt="">'+
-            // '</div>'+
-            // '</div>'+
-            // '</div>'+
             '</div>'
           }
         } else if (proxy.voteYes.length > 0 && vote !== 1) {
@@ -2401,6 +2370,14 @@ function toggleHamburgerMenu() {
     return outputArray2
   }
 
+  function openFboDetail(which) {
+    if (document.getElementById("fbo-detail-middle-"+which).classList.contains('inactive')) {
+      document.getElementById("fbo-detail-middle-"+which).classList.remove('inactive')
+    } else {
+      document.getElementById("fbo-detail-middle-"+which).classList.add('inactive')
+    }
+  }
+
   var fboClickOpen = false
   var fboHighlightOpen
   var fboHighlightClose
@@ -2416,11 +2393,13 @@ function toggleHamburgerMenu() {
         grayOn = false
         document.getElementById("highlight-button-1").classList.add('highlight-button-active')
         document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
+        document.getElementById("highlight-tutorial").classList.remove('inactive')
       } else {
         highlightOn = false
         grayOn = false
         document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
         document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
+        document.getElementById("highlight-tutorial").classList.add('inactive')
       }
     } else {
       if (!grayOn) {
@@ -2428,6 +2407,7 @@ function toggleHamburgerMenu() {
         grayOn = true
         document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
         document.getElementById("highlight-button-2").classList.add('highlight-button-active')
+        document.getElementById("highlight-tutorial").classList.remove('inactive')
         fboClickOpen = false
         fboHighlightOpen = null
         fboHighlightClose = null
@@ -2436,6 +2416,7 @@ function toggleHamburgerMenu() {
         grayOn = false
         document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
         document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
+        document.getElementById("highlight-tutorial").classList.add('inactive')
         fboClickOpen = false
         fboHighlightOpen = null
         fboHighlightClose = null
@@ -2455,6 +2436,11 @@ function toggleHamburgerMenu() {
           fbo = fboPipeline[fboIndex]
         }
         elem.classList.add('fbo-desc-word-start')
+        if (highlightOn) {
+          elem.classList.add('highlighted')
+        } else if (grayOn) {
+          elem.classList.add('grayed')
+        }
         fboClickOpen = true
       } else {
         if (index < fboHighlightOpen) {
@@ -2499,6 +2485,7 @@ function toggleHamburgerMenu() {
           fboDescHTML = fboDescHTML + activeFboDesc[i]
         }
         fbo.fboDesc = activeFboDesc
+        document.getElementById("highlight-tutorial").classList.add('inactive')
         document.getElementById("abstract-text").innerHTML = fboDescHTML;
         document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
         document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
@@ -2910,13 +2897,11 @@ function toggleHamburgerMenu() {
       proxy = fbosIn[index]
       document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
       document.getElementById("fbo-detail-top").classList.add('fbo-detail-top-larger')
-      document.getElementById("fbo-detail-right").classList.add('fbo-detail-right-larger')
       document.getElementById("fbo-details-comments").classList.add('inactive')
     } else if (tab == 1) {
       proxy = fboPipeline[index]
       document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(3)">'
       document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("fbo-detail-right").classList.remove('fbo-detail-right-larger')
       document.getElementById("fbo-details-comments").classList.remove('inactive')
     }
     console.log(proxy)
@@ -2926,7 +2911,7 @@ function toggleHamburgerMenu() {
     } else {
       dueDateHtml = 'No Due Date'
     }
-    document.getElementById("fbo-details-input").value = ''
+    // document.getElementById("fbo-details-input").value = ''
     var dataText = '<p><span style="font-weight: bold">Solicitation Number: </span>'+
     proxy.fbo.solnbr +
     '</p><p><span style="font-weight: bold">Agency: </span>'+
@@ -3800,8 +3785,8 @@ function toggleHamburgerMenu() {
     // showAd()
     // TAB SWITCH HERE
     switchTab(2)
-    // viewSearch(0)
     // goToFbo(2, 0);
+    // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
     // expandData(2)
