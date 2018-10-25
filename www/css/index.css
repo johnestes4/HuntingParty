@@ -581,14 +581,52 @@ h1, .instructions{
   background: rgba(96,97,97,0.5);
 }
 
-.fbo-item {
+.fbo-item-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
   width: 100%;
   height: 90px;
+  position: relative;
+  float: left;
+  border-bottom: 1px solid rgba(96,97,97,0.5);
+}
+.fbo-item-wrapper-inner {
+  width: calc(100vw + 120px);
+  height: 90px;
+  position: relative;
+  float: left;
+}
+
+.fbo-item {
+  width: 100vw;
+  height: 90px;
   padding: 10px 15px 10px 15px;
+  float: left;
   position: relative;
   background: rgba(255,255,255,1);
-  border-bottom: 1px solid rgba(96,97,97,0.5);
   /* margin-bottom: calc(2vh + 10px); */
+}
+
+.fbo-item-slide {
+  height: 90px;
+  width: 120px;
+  float: left;
+}
+.fbo-item-slide-half {
+  height: 90px;
+  position: relative;
+  width: 50%;
+  float: left;
+  background: rgba(0,175,217,1);
+}
+
+.fbo-item-slide-img {
+  width: 40px;
+  height: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .fbo-item-avatar {

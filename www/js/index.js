@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -2160,7 +2160,9 @@ function toggleHamburgerMenu() {
           //   updateNeeded = true
           // }
           if (!expired) {
-            fboHtml = fboHtml + '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
+            fboHtml = fboHtml + '<div class="fbo-item-wrapper">'+
+            '<div class="fbo-item-wrapper-inner">'+
+            '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
             // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
             '<div class="fbo-item-avatar">'+
             '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
@@ -2170,10 +2172,20 @@ function toggleHamburgerMenu() {
             '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
             '</div>'+
             '<div class="fbo-item-icons">'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
+            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 70px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '<div class="fbo-item-slide">'+
+            '<div class="fbo-item-slide-half" style="background: rgba(60,85,136,1);">'+
+            '<img class="fbo-item-slide-img icon" src="./img/comment.png" alt="">'+
+            '</div>'+
+            '<div class="fbo-item-slide-half">'+
+            '<img class="fbo-item-slide-img icon" src="./img/favorite.png" alt="">'+
+            '</div>'+
             '</div>'+
             '</div>'+
             '</div>'
