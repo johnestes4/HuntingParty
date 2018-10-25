@@ -3880,7 +3880,7 @@ function toggleHamburgerMenu() {
     // showAd()
     // TAB SWITCH HERE
     switchTab(2)
-    goToFbo(5, 0);
+    // goToFbo(5, 0);
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
