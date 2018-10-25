@@ -1760,57 +1760,57 @@ function toggleHamburgerMenu() {
     // parseProxy()
   }
   function generateFbos(){
-    renderSearch()
     sortFboRenders()
     renderFbos()
   }
-  function runFilters(){
-    renderSearch()
+  function runFilters(elem){
+    filterOpportunitiesBySearch(elem)
     renderFbos()
   }
   function runSort(fboProxy, elem){
     var selected = elem.value
-    sortFboRenders(fboProxy, selected)
-    renderFbos(fboProxy)
+    // console.log("Current Val:", selected, typeof selected)
+    sortFboRenders(fboProxy, parseInt(selected))
+    // renderFbos(fboProxy)
+    renderFbos()
   }
   function renderSortOptions(){
     var sortID = document.getElementById("sort-select")
     var sortOptions = [
       {
-        "name": "Earliest Due",
+        "text": "Earliest Due",
         "value": 0
       },
       {
-        "name": "Latest Due",
+        "text": "Latest Due",
         "value": 1
       },
       {
-        "name": "Date Posted",
+        "text": "Date Posted (Inactive)",
         "value": 2
       },
       {
-        "name": "Alpha A-Z",
+        "text": "Alpha A-Z",
         "value": 3
       },
       {
-        "name": "Alpha Z-A",
+        "text": "Alpha Z-A",
         "value": 4
       },
       {
-        "name": "Agency A-Z",
+        "text": "Agency A-Z",
         "value": 5
       },
       {
-        "name": "Alpha Z-A",
+        "text": "Alpha Z-A",
         "value": 6
       }
     ]
 
    sortOptions.forEach(function (item){
       var option = document.createElement("option")
-      option.text = item.name
+      option.text = item.text
       option.value = item.value
-      console.log(option.name, option.value)
       sortID.add(option)
    });
   }
@@ -1824,9 +1824,9 @@ function toggleHamburgerMenu() {
     const BY_AGENCY_DEC = 6 //Reverse agency (duedate still in order)
     const DEFAULT = 99 //Unknown Criteria; Kept Just in case
 
+    // console.log("Current Option:", renderOption)
     // renderOption = BY_EARLIEST_DUE
     switch(renderOption){
-      case -1:
       case BY_EARLIEST_DUE: //By Earliest Due
       fboProxy.sort(function(p1, p2){
         //[mm,dd,yy]
@@ -1849,6 +1849,7 @@ function toggleHamburgerMenu() {
           duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
         }
         else{due2 = "No Date", duenum2 = 99999}
+        // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
         return duenum1 - duenum2
       });
       break;
@@ -1874,6 +1875,7 @@ function toggleHamburgerMenu() {
           duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
         }
         else{due2 = "No Date", duenum2 = 99999}
+        // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
         return duenum1 - duenum2
       });
       fboProxy.reverse()
@@ -2316,6 +2318,8 @@ function toggleHamburgerMenu() {
       parseProxy(fboPipeline[i], i)
     }
     console.log(noProxies + ' busted proxies')
+    var fboHTMLContent = document.getElementById("fbo-items")
+    var pipelineHTMLContent = document.getElementById("pipeline-items")
     // if (updateNeeded) {
     //   for (i = 0; i < toDeleteIds.length; i++) {
     //     var xhttp = new XMLHttpRequest();
@@ -2330,8 +2334,8 @@ function toggleHamburgerMenu() {
     //     xhttp.send();
     //   }
     // }
-    document.getElementById("fbo-items").innerHTML = fboHtml;
-    document.getElementById("pipeline-items").innerHTML = pipelineHtml;
+    fboHTMLContent.innerHTML = fboHtml;
+    pipelineHTMLContent.innerHTML = pipelineHtml;
     // for (i = 0; i < company.fboProxies.length; i++) {
     //   checkVote(company.fboProxies[i], i)
     // }
@@ -3813,8 +3817,9 @@ function toggleHamburgerMenu() {
     console.log(fboPipeline)
     if (fbosIn.length + fboPipeline.length > 0) {
       // setActiveFbo(fboIndex)
-      generateOptions()
       renderSearch()
+      generateOptions()
+      sortFboRenders(fbosIn, 0)
       renderFbos()
       renderNews()
       var promiseFinished = true
@@ -3826,8 +3831,8 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive');
       document.getElementById("login-register").classList.add('inactive');
     } else {
-      generateOptions()
       renderSearch()
+      generateOptions()
       // renderFbos()
       renderNews()
       document.getElementById("loading").classList.add('inactive');
