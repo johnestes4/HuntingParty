@@ -1776,7 +1776,66 @@ function toggleHamburgerMenu() {
     today = yyyy+'/'+mm+'/'+dd;
     return today
   }
+  function generateOptions(){
+    renderSavedSearches()
+    renderSortOptions()
+    // parseProxy()
+  }
+  function generateFbos(){
+    sortFboRenders()
+    renderFbos()
+  }
+  function runFilters(elem){
+    filterOpportunitiesBySearch(elem)
+    renderFbos()
+  }
+  function runSort(fboProxy, elem){
+    var selected = elem.value
+    // console.log("Current Val:", selected, typeof selected)
+    sortFboRenders(fboProxy, parseInt(selected))
+    // renderFbos(fboProxy)
+    renderFbos()
+  }
+  function renderSortOptions(){
+    var sortID = document.getElementById("sort-select")
+    var sortOptions = [
+      {
+        "text": "Earliest Due",
+        "value": 0
+      },
+      {
+        "text": "Latest Due",
+        "value": 1
+      },
+      {
+        "text": "Date Posted (Inactive)",
+        "value": 2
+      },
+      {
+        "text": "Alpha A-Z",
+        "value": 3
+      },
+      {
+        "text": "Alpha Z-A",
+        "value": 4
+      },
+      {
+        "text": "Agency A-Z",
+        "value": 5
+      },
+      {
+        "text": "Alpha Z-A",
+        "value": 6
+      }
+    ]
 
+   sortOptions.forEach(function (item){
+      var option = document.createElement("option")
+      option.text = item.text
+      option.value = item.value
+      sortID.add(option)
+   });
+  }
   function sortFboRenders(fboProxy, renderOption){
     const BY_EARLIEST_DUE = 0 //Also most recent expired for pipeline
     const BY_LATEST_DUE = 1 //Includes data with no deadline at top; Also oldest expired for pipeline
@@ -1787,6 +1846,7 @@ function toggleHamburgerMenu() {
     const BY_AGENCY_DEC = 6 //Reverse agency (duedate still in order)
     const DEFAULT = 99 //Unknown Criteria; Kept Just in case
 
+    // console.log("Current Option:", renderOption)
     // renderOption = BY_EARLIEST_DUE
     switch(renderOption){
       case BY_EARLIEST_DUE: //By Earliest Due
@@ -1811,6 +1871,7 @@ function toggleHamburgerMenu() {
           duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
         }
         else{due2 = "No Date", duenum2 = 99999}
+        // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
         return duenum1 - duenum2
       });
       break;
@@ -1836,12 +1897,12 @@ function toggleHamburgerMenu() {
           duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
         }
         else{due2 = "No Date", duenum2 = 99999}
+        // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
         return duenum1 - duenum2
       });
       fboProxy.reverse()
       break;
-      case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
-      break;
+     // case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
       case BY_ALPHA_ASC:
       fboProxy.sort(function(p1, p2){
 
@@ -2016,6 +2077,9 @@ function toggleHamburgerMenu() {
   }
 
   var searchFilterName = null
+
+  //Sorts thru all existing data and organizes them
+  function parseFbos(){}
 
   function renderFbos() {
     var fboHtml = ''
@@ -2249,15 +2313,17 @@ function toggleHamburgerMenu() {
         // }
       }
     }
-    sortFboRenders(fbosIn, 6)
+    // sortFboRenders(fbosIn, 0)
     for (var i = 0; i < fbosIn.length; i++) {
       parseProxy(fbosIn[i], i)
     }
-    sortFboRenders(fboPipeline, 0)
+    // sortFboRenders(fboPipeline, 1)
     for (var i = 0; i < fboPipeline.length; i++) {
       parseProxy(fboPipeline[i], i)
     }
     console.log(noProxies + ' busted proxies')
+    var fboHTMLContent = document.getElementById("fbo-items")
+    var pipelineHTMLContent = document.getElementById("pipeline-items")
     // if (updateNeeded) {
     //   for (i = 0; i < toDeleteIds.length; i++) {
     //     var xhttp = new XMLHttpRequest();
@@ -2272,8 +2338,8 @@ function toggleHamburgerMenu() {
     //     xhttp.send();
     //   }
     // }
-    document.getElementById("fbo-items").innerHTML = fboHtml;
-    document.getElementById("pipeline-items").innerHTML = pipelineHtml;
+    fboHTMLContent.innerHTML = fboHtml;
+    pipelineHTMLContent.innerHTML = pipelineHtml;
     // for (i = 0; i < company.fboProxies.length; i++) {
     //   checkVote(company.fboProxies[i], i)
     // }
@@ -3779,8 +3845,9 @@ function toggleHamburgerMenu() {
     console.log(fboPipeline)
     if (fbosIn.length + fboPipeline.length > 0) {
       // setActiveFbo(fboIndex)
-      renderSavedSearches()
       renderSearch()
+      generateOptions()
+      sortFboRenders(fbosIn, 0)
       renderFbos()
       renderNews()
       var promiseFinished = true
@@ -3792,8 +3859,8 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive');
       document.getElementById("login-register").classList.add('inactive');
     } else {
-      renderSavedSearches()
       renderSearch()
+      generateOptions()
       // renderFbos()
       renderNews()
       document.getElementById("loading").classList.add('inactive');
