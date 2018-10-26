@@ -200,7 +200,7 @@ under the License.
   </div>
   <div class="topbar">
     <div id="topbar-left" class="topbar-side">
-      <img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="" onclick="openSidebar()">
+
     </div>
     <div class="topbar-center">
       <p id="topbar-center-text">News</p>
@@ -707,17 +707,12 @@ Pre-selected
 </div>
 </div> -->
 <div id="identified" class="">
-  <div class="col-12">
-    <!-- <div class="pipeline-title col-12">
-    IDENTIFIED
-  </div> -->
   <div id="pipeline-items" class="">
 
   </div>
   <div id="pipeline-item-load-buffer" class="fbo-item inactive">
     <div class="loading-circle"></div>
   </div>
-</div>
 </div>
 </div>
 <div id="fbo-detail-view" class="body-block inactive">
@@ -766,34 +761,34 @@ Data
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
   </div>
   <!-- <div class="highlight-button-box">
-    <button id="highlight-button-1" class="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
-    <button id="highlight-button-2" class="" type="button" name="button" onclick="turnOnHighlight(true)" style="margin-left: 2%;">Gray Out</button>
-  </div> -->
-  <div class="fbo-detail-left inactive">
-    <div class="fbo-detail-left-text">
-      <div class="fbo-detail-left-details">
-        <img src="./img/calendar.png" alt="">
-        <p id="fbo-detail-left-details-date">11/11/2111</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/comment.png" alt="">
-        <p id="fbo-detail-left-details-comments">99 Comments</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/thumbsup.png" alt="">
-        <p id="fbo-detail-left-details-likes">99 Likes</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/thumbsdown.png" alt="">
-        <p id="fbo-detail-left-details-dislikes">99 Dislikes</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/share.png" alt="">
-        <p id="fbo-detail-left-details-shares">99 Shares</p>
-      </div>
-      <button id="" class="" type="button" name="button">Refer</button>
+  <button id="highlight-button-1" class="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
+  <button id="highlight-button-2" class="" type="button" name="button" onclick="turnOnHighlight(true)" style="margin-left: 2%;">Gray Out</button>
+</div> -->
+<div class="fbo-detail-left inactive">
+  <div class="fbo-detail-left-text">
+    <div class="fbo-detail-left-details">
+      <img src="./img/calendar.png" alt="">
+      <p id="fbo-detail-left-details-date">11/11/2111</p>
     </div>
+    <div class="fbo-detail-left-details">
+      <img src="./img/comment.png" alt="">
+      <p id="fbo-detail-left-details-comments">99 Comments</p>
+    </div>
+    <div class="fbo-detail-left-details">
+      <img src="./img/thumbsup.png" alt="">
+      <p id="fbo-detail-left-details-likes">99 Likes</p>
+    </div>
+    <div class="fbo-detail-left-details">
+      <img src="./img/thumbsdown.png" alt="">
+      <p id="fbo-detail-left-details-dislikes">99 Dislikes</p>
+    </div>
+    <div class="fbo-detail-left-details">
+      <img src="./img/share.png" alt="">
+      <p id="fbo-detail-left-details-shares">99 Shares</p>
+    </div>
+    <button id="" class="" type="button" name="button">Refer</button>
   </div>
+</div>
 </div>
 </div>
 <div id="fbo-details-buttonbar" class="">
@@ -830,85 +825,106 @@ Data
   </div>
 </div>
 <div id="fbo-detail-middle" class="">
-  <div class="fbo-detail-middle-item" onClick="openFboDetail(0)">
-    <div class="fbo-detail-middle-item-text">
-      Probable RFP Value
+  <div class="fbo-detail-middle-item">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(0)">
+      <div class="fbo-detail-middle-item-text">
+        Probable RFP Value
+      </div>
+      <div class="fbo-detail-middle-item-right">
+        <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-0">›</p>
+        <!-- <img class="" src="./img/openarrow.png" style="position: absolute; top: 3px; right: 2px; height: 13px; width: 7px;" alt=""> -->
+      </div>
     </div>
-    <div class="fbo-detail-middle-item-right">
-      >
-    </div>
-  </div>
-  <div id="fbo-detail-middle-0" class="fbo-detail-middle-expanded inactive">
-    <canvas id="chart1" style="width: 100%!important; height: 500px!important; margin-bottom: 2vh;"></canvas>
-  </div>
-  <div class="fbo-detail-middle-item" onClick="openFboDetail(1)">
-    <div class="fbo-detail-middle-item-text">
-      Probable Competition
-    </div>
-    <div class="fbo-detail-middle-item-right">
-      >
+    <div id="fbo-detail-middle-0" class="fbo-detail-middle-expanded inactive">
+      <canvas id="chart1" style="width: 100%!important; height: 500px!important; margin-bottom: 2vh;"></canvas>
     </div>
   </div>
-  <div id="fbo-detail-middle-1" class="fbo-detail-middle-expanded inactive">
-    <canvas id="chart2" style="width: 100%!important; height: 500px!important; margin-bottom: 2vh;"></canvas>
-  </div>
-  <div class="fbo-detail-middle-item" onClick="openFboDetail(2)">
-    <div class="fbo-detail-middle-item-text">
-      Value & Competition
+  <div class="fbo-detail-middle-item">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(1)">
+      <div class="fbo-detail-middle-item-text">
+        Probable Competition
+      </div>
+      <div class="fbo-detail-middle-item-right">
+        <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-1">›</p>
+        <!-- <img class="" src="./img/openarrow.png" style="position: absolute; top: 3px; right: 2px; height: 13px; width: 7px;" alt=""> -->
+      </div>
     </div>
-    <div class="fbo-detail-middle-item-right">
-      >
-    </div>
-  </div>
-  <div id="fbo-detail-middle-2" class="fbo-detail-middle-expanded inactive">
-    <canvas id="chart3" style="width: 100%!important; height: 500px!important; margin-bottom: 2vh;"></canvas>
-  </div>
-  <div class="fbo-detail-middle-item" onClick="openFboDetail(3)">
-    <div class="fbo-detail-middle-item-text">
-      Information
-    </div>
-    <div class="fbo-detail-middle-item-right">
-      >
+    <div id="fbo-detail-middle-1" class="fbo-detail-middle-expanded inactive">
+      <canvas id="chart2" style="width: 100%!important; height: 500px!important; margin-bottom: 2vh;"></canvas>
     </div>
   </div>
-  <div id="fbo-detail-middle-3" class="fbo-detail-middle-expanded inactive">
+  <div class="fbo-detail-middle-item">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(2)">
+      <div class="fbo-detail-middle-item-text">
+        Value & Competition
+      </div>
+      <div class="fbo-detail-middle-item-right">
+        <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-2">›</p>
+        <!-- <img class="" src="./img/openarrow.png" style="position: absolute; top: 3px; right: 2px; height: 13px; width: 7px;" alt=""> -->
+      </div>
+    </div>
+    <div id="fbo-detail-middle-2" class="fbo-detail-middle-expanded inactive">
+      <canvas id="chart3" style="width: 100%!important; height: 500px!important; margin-bottom: 2vh;"></canvas>
+    </div>
+  </div>
+  <div class="fbo-detail-middle-item">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(3)">
+      <div class="fbo-detail-middle-item-text">
+        <p>Information</p>
+      </div>
+      <div class="fbo-detail-middle-item-right">
+        <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-3">›</p>
+        <!-- <img class="" src="./img/openarrow.png" style="position: absolute; top: 3px; right: 2px; height: 13px; width: 7px;" alt=""> -->
+      </div>
+    </div>
+    <div id="fbo-detail-middle-3" class="fbo-detail-middle-expanded inactive">
+      <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
   </div>
   <div class="fbo-detail-middle-item" onClick="openFboDetail(4)">
-    <div class="fbo-detail-middle-item-text">
-      Companies with similar past performance
+    <div class="fbo-detail-middle-item-header">
+      <div class="fbo-detail-middle-item-text">
+        Companies with similar past performance
+      </div>
+      <div class="fbo-detail-middle-item-right">
+        <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-4">›</p>
+        <!-- <img class="" src="./img/openarrow.png" style="position: absolute; top: 3px; right: 2px; height: 13px; width: 7px;" alt=""> -->
+      </div>
     </div>
-    <div class="fbo-detail-middle-item-right">
-      >
+    <div id="fbo-detail-middle-4" class="fbo-detail-middle-expanded inactive">
     </div>
-  </div>
-  <div id="fbo-detail-middle-4" class="fbo-detail-middle-expanded inactive">
   </div>
   <div class="fbo-detail-middle-item" onClick="openFboDetail(5)">
-    <div class="fbo-detail-middle-item-text">
-      Interested Vendors
+    <div class="fbo-detail-middle-item-header">
+      <div class="fbo-detail-middle-item-text">
+        Interested Vendors
+      </div>
+      <div class="fbo-detail-middle-item-right">
+        <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-5">›</p>
+        <!-- <img class="" src="./img/openarrow.png" style="position: absolute; top: 3px; right: 2px; height: 13px; width: 7px;" alt=""> -->
+      </div>
     </div>
-    <div class="fbo-detail-middle-item-right">
-      >
+    <div id="fbo-detail-middle-5" class="fbo-detail-middle-expanded inactive">
     </div>
-  </div>
-  <div id="fbo-detail-middle-5" class="fbo-detail-middle-expanded inactive">
   </div>
   <div class="fbo-detail-middle-item" onClick="openFboDetail(6)" style="border-bottom: none;">
-    <div class="fbo-detail-middle-item-text">
-      Refer RFP
+    <div class="fbo-detail-middle-item-header">
+      <div class="fbo-detail-middle-item-text">
+        Refer RFP
+      </div>
+      <div class="fbo-detail-middle-item-right">
+        <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-6">›</p>
+        <!-- <img class="" src="./img/openarrow.png" style="position: absolute; top: 3px; right: 2px; height: 13px; width: 7px;" alt=""> -->
+      </div>
     </div>
-    <div class="fbo-detail-middle-item-right">
-      >
+    <div id="fbo-detail-middle-6" class="fbo-detail-middle-expanded inactive">
     </div>
-  </div>
-  <div id="fbo-detail-middle-6" class="fbo-detail-middle-expanded inactive">
   </div>
 </div>
 <div id="fbo-detail-data" class="inactive" style="">
   <p style="text-align: center; margin: 0px;">Projected Value</p>
   <p style="text-align: center; margin: 0px;">Projected Competition</p>
   <p style="text-align: center; margin: 0px;">Value & Competition</p>
-  <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 </div>
 <div class="fbo-detail-bottom" style="background: rgba(205,239,248,1); border-top: 1px solid rgba(0,0,0,0.2);">
   <div id="fbo-details-comments" class="">

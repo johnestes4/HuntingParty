@@ -604,7 +604,7 @@ function viewSearch(index) {
   document.getElementById("saved-search-view").classList.add('inactive')
   document.getElementById("search-terms-view").classList.remove('inactive')
   document.getElementById("topbar-center-text").innerHTML = "Filter"
-  document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(1)">'
+  document.getElementById("topbar-left").innerHTML = ''
   document.getElementById("topbar-right").innerHTML = '<div class="topbar-right-button" onclick="saveSearchTerms()"><p id="topbar-right-text">Done</p></div>'
 }
 
@@ -1639,7 +1639,6 @@ function toggleHamburgerMenu() {
 
   document.addEventListener("click", (evt) => {
     const profileDropdown = document.getElementById("sidebar");
-    const topbarHamburger = document.getElementById("topbar-hamburger");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
     const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
     let targetElement = evt.target; // clicked element
@@ -1650,10 +1649,6 @@ function toggleHamburgerMenu() {
           // This is a click inside. Do nothing, just return.
           profileInside = true;
         }
-      }
-      if (targetElement == topbarHamburger) {
-        // This is a click inside. Do nothing, just return.
-        profileInside = true;
       }
       // Go up the DOM
       targetElement = targetElement.parentNode;
@@ -1750,7 +1745,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
     }
     activeTab = num
-    document.getElementById("topbar-left").innerHTML = '<img id="topbar-hamburger" class="topbar-side-img icon" src="./img/hamburger.png" alt="" onclick="openSidebar()">'
+    document.getElementById("topbar-left").innerHTML = ''
     var a = document.getElementsByClassName('iconbar-icon')
     for (i = 0; i < a.length; i++) {
       if (i == num) {
@@ -2256,7 +2251,7 @@ function toggleHamburgerMenu() {
             '<img class="fbo-item-slide-img icon" src="./img/comment.png" alt="">'+
             '</div>'+
             '<div class="fbo-item-slide-half">'+
-            '<img class="fbo-item-slide-img icon" src="./img/favorite.png" alt="">'+
+            '<img class="fbo-item-slide-img icon" src="./img/forward2.png" alt="">'+
             '</div>'+
             '</div>'+
             '</div>'+
@@ -2268,7 +2263,10 @@ function toggleHamburgerMenu() {
           //   updateNeeded = true
           // }
           pipelineHtml = pipelineHtml +
+          '<div class="fbo-item-wrapper">'+
+          '<div class="fbo-item-wrapper-inner">'+
           '<div class="fbo-item" onclick="goToFbo(' + index + ', 1)">'+
+          // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
           '<div class="fbo-item-avatar">'+
           '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
           '</div>'+
@@ -2276,35 +2274,25 @@ function toggleHamburgerMenu() {
           '<div class="fbo-item-title">'+
           '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
           '</div>'+
-          '<div class="fbo-item-desc">'+
-          '<p class="">'+proxy.fbo.desc+'</p>'+
-          '</div>'+
           '<div class="fbo-item-icons">'+
-          '<div class="fbo-item-icon-date"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div>'+
-          '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div>'+
-          '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div>'+
-          '<div class="fbo-item-icon-item"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div>'+
+          '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
+          '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
+          '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
+          '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 70px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
           '</div>'+
           '</div>'+
-          // '<div class="fbo-item">'+
-          // '<div class="second-border">'+
-          // ''+voteHtml+
-          // '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
-          // '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-          // '<div class="fbo-item-title-bg"></div>'+
-          // '<img class="fbo-item-title-img-left" src="'+imgString+'" alt="">'+
-          // '</div>'+
-          // '<div class="fbo-item-comments">'+
-          // comments+
-          // '</div>'+
-          // '<div class="fbo-item-buttons">'+
-          // '<div class="fbo-item-time-button">'+
-          // dueDate+
-          // '</div>'+
-          // '</div>'+
-          // '</div>'+
-          // '</div>'
+          '</div>'+
+          '<div class="fbo-item-slide">'+
+          '<div class="fbo-item-slide-half" style="background: rgba(60,85,136,1);">'+
+          '<img class="fbo-item-slide-img icon" src="./img/comment.png" alt="">'+
+          '</div>'+
+          '<div class="fbo-item-slide-half">'+
+          '<img class="fbo-item-slide-img icon" src="./img/forward2.png" alt="">'+
+          '</div>'+
+          '</div>'+
+          '</div>'+
           '</div>'
+
         }
         // if (expired) {
         //   toDeleteIds.push(company.fboProxies[i]._id)
@@ -2459,8 +2447,10 @@ function toggleHamburgerMenu() {
   function openFboDetail(which) {
     if (document.getElementById("fbo-detail-middle-"+which).classList.contains('inactive')) {
       document.getElementById("fbo-detail-middle-"+which).classList.remove('inactive')
+      document.getElementById("fbo-detail-middle-item-arrow-"+which).classList.add('rotate')
     } else {
       document.getElementById("fbo-detail-middle-"+which).classList.add('inactive')
+      document.getElementById("fbo-detail-middle-item-arrow-"+which).classList.remove('rotate')
     }
   }
 
@@ -2991,11 +2981,12 @@ function toggleHamburgerMenu() {
     var proxy
     if (tab == 0) {
       proxy = fbosIn[index]
-      document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
+      document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(2)"><p>‹</p></div>'
+      // document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
       document.getElementById("fbo-details-comments").classList.add('inactive')
     } else if (tab == 1) {
       proxy = fboPipeline[index]
-      document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(3)">'
+      document.getElementById("topbar-left").innerHTML = ''
       document.getElementById("fbo-details-comments").classList.remove('inactive')
     }
     console.log(proxy)
@@ -3880,7 +3871,7 @@ function toggleHamburgerMenu() {
     // showAd()
     // TAB SWITCH HERE
     switchTab(2)
-    // goToFbo(5, 0);
+    goToFbo(5, 0);
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
