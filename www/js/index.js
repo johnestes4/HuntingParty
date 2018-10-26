@@ -2970,9 +2970,11 @@ function toggleHamburgerMenu() {
   function expandAbstract() {
     if (document.getElementById("fbo-detail-top").classList.contains('fbo-detail-top-larger')) {
       document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("abstract-box").classList.remove('abstract-box-larger')
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
     } else {
       document.getElementById("fbo-detail-top").classList.add('fbo-detail-top-larger')
+      document.getElementById("abstract-box").classList.add('abstract-box-larger')
       document.getElementById("fbo-detail-middle").classList.add('inactive')
     }
   }
@@ -3047,15 +3049,15 @@ function toggleHamburgerMenu() {
         dueDate = "<p>Due: "+timeToDue+" Days</p>"
       }
       // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
-      document.getElementById("fbo-detail-left-details-date").innerHTML = due
+      document.getElementById("fbo-details-date").innerHTML = due
     } else {
       dueDate = "<p'>No Due Date</p>"
       document.getElementById("fbo-detail-left-details-date").innerHTML = 'No Due Date'
     }
-    document.getElementById("fbo-detail-left-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
-    document.getElementById("fbo-detail-left-details-likes").innerHTML = proxy.voteYes.length + ' Likes'
-    document.getElementById("fbo-detail-left-details-dislikes").innerHTML = proxy.voteNo.length + ' Dislikes'
-    document.getElementById("fbo-detail-left-details-shares").innerHTML = '2' + ' Shares'
+    // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
+    document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
+    document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
+    document.getElementById("fbo-details-shares").innerHTML = '0'
 
     fboIndex = index
     if (!proxy.viewed) {
@@ -3871,7 +3873,7 @@ function toggleHamburgerMenu() {
     // showAd()
     // TAB SWITCH HERE
     switchTab(2)
-    goToFbo(5, 0);
+    // goToFbo(5, 0);
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
