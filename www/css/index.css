@@ -1306,35 +1306,141 @@ h1, .instructions{
   background: rgba(249, 205, 205, 1);
 }
 
-.search-item-2 {
-  padding: 1.5vh 5vw 0.5vh 5vw;
-  background: rgba(235,235,235,1);
-  font-size: 20px;
+.search-item-filters {
+  padding: 0px 3vw 0px 3vw;
+  background: rgba(243,243,243,1);
+  font-size: 16px;
   color: rgba(0,0,0,0.5);
   overflow: auto;
 }
-.search-item-2 p {
+.search-item-filters p {
   margin-bottom: 0px;
+}
+.search-item-filters-left {
+  text-align: right;
+  font-style: italic;
+  width: 60px;
+  float: left;
+}
+#search-item-filters-right {
+  width: calc(100% - 60px);
+  position: relative;
+  float: left;
+  height: 64px;
+}
+
+.filters-item {
+  width: 23%;
+  margin-left: 1%;
+  margin-right: 1%;
+  height: 24px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  float: left;
+  background: rgba(0,175,217,1);
+  border-radius: 5px;
+  font-size: 12px;
+  font-style: italic;
+  color: white;
+  line-height: 25px;
+  padding-left: 2px;
+  position: relative;
+}
+.filters-item-x {
+  position: absolute;
+  right: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border-radius: 90%;
+  width: 15px;
+  height: 15px;
+}
+.filters-item-x img {
+  position: absolute;
+  right: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+}
+
+.search-item-subbox {
+  width: 100%;
+  position: relative;
+  float: left;
 }
 
 .search-item {
-  padding: 2vh 5vw 2vh 5vw;
+  position: relative;
+  height: auto;
+  width: 100%;
+  float: left;
   font-size: 20px;
   border-bottom: 1px solid rgba(0,0,0,0.25);
-  overflow: auto;
+}
+.search-item-header {
+  padding: 5px 3vw 5px 3vw;
+  width: 100%;
+  height: 40px;
+  position: relative;
+}
+.search-item-category {
+  padding: 5px 1vw 5px 1vw;
+  width: calc(100% - 6vw);
+  margin-left: 3vw;
+  margin-right: 3vw;
+  height: 40px;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.search-item-arrow {
+  color: rgba(0,0,0,0.5);
+  font-size: 36px;
+  line-height: 16px;
+  position: absolute;
+  right: 5px;
+  bottom: -1px;
+}
+
+.search-item-img-box {
+  float: left;
+  width: 35px;
+  margin-right: 5px;
+  height: 100%;
+  position: relative;
+}
+.search-item-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 40px;
+  width: auto;
+  max-width: 35px
 }
 
 .search-item-text {
-  width: calc(100% - 80px);
+  width: calc(100% - 100px);
   float: left;
 }
 .search-item-right {
-  width: 80px;
+  width: 60px;
   padding-top: 2px;
   float: left;
   text-align: right;
   color: rgba(0,0,0,0.5);
-  font-size: 18px;
+  font-size: 17px;
+}
+
+.search-item-left {
+  width: calc(100% - 180px);
+  float: left;
+}
+
+.search-item-right-2 {
+  width: 140px;
+  float: left;
 }
 
 .search-item-half {
@@ -1342,16 +1448,34 @@ h1, .instructions{
   float: left;
 }
 
- .search-item-input {
-   width: 100%;
-   background: rgba(235,235,235,1);
-   height: 26px;
-   border-radius: 13px;
-   border: none;
-   margin: none;
-   font-size: 14px;
-   padding: 0px 8px 0px 8px;
- }
+.search-item-input {
+  width: 100%;
+  background: rgba(243,243,243,1);
+  height: 26px;
+  border-radius: 13px;
+  border: none;
+  margin: none;
+  font-size: 14px;
+  padding: 0px 8px 0px 8px;
+}
+
+.search-name-left {
+  width: 120px;
+  float: left;
+}
+
+.search-name-input {
+  float: left;
+  width: calc(100% - 130px);
+  background: white;
+  height: 26px;
+  border-radius: 13px;
+  border: none;
+  margin: none;
+  margin-top: 2px;
+  font-size: 14px;
+  padding: 0px 8px 0px 8px;
+}
 
  .search-box input {
    background: white!important;
@@ -1361,7 +1485,7 @@ h1, .instructions{
 .search-box {
   font-size: 14px;
   text-align: left;
-  background: rgba(235,235,235,1);
+  background: rgba(243,243,243,1);
   padding: 6px 30px 6px 30px;
   max-height: 350px;
   width: 100%;
@@ -1411,8 +1535,8 @@ h1, .instructions{
   border-radius: 13px 0px 0px 13px;
   font-size: 14px;
   line-height: 26px;
-  padding: 0px 12px 0px 12px;
-  background: rgba(235,235,235,1);
+  padding-left: 8px;
+  background: rgba(243,243,243,1);
 }
 #search-box-keyword-right {
   width: 100%;
@@ -1421,8 +1545,8 @@ h1, .instructions{
   font-size: 14px;
   text-align: right;
   line-height: 26px;
-  padding: 0px 12px 0px 12px;
-  background: rgba(235,235,235,1);
+  padding-right: 8px;
+  background: rgba(243,243,243,1);
 }
 .search-box-keyword-active {
   background: rgba(255,198,0,1)!important;

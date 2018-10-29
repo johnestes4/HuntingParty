@@ -348,6 +348,20 @@ under the License.
       Test2
     </div>
   </div>
+  <div class="">
+    <div class="search-item">
+      <div class="search-item-header" onclick="openSearchItems(1)" style="background: rgba(243,243,243,1);">
+        <div class="search-name-left">Create New:</div>
+        <input id="search-name" class="search-name-input inactive" type="text" name="" value="" placeholder="Name Your Search">
+        <div class="search-item-right">
+          <p class="search-item-arrow" id="search-item-arrow-1">›</p>
+        </div>
+      </div>
+      <div id="new-search" class="search-item-subbox inactive">
+
+      </div>
+    </div>
+  </div>
   <div id="search-terms-view" class="inactive">
     <div id="search-save-popup" class="inactive">
       <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
@@ -356,187 +370,6 @@ under the License.
     <div id="search-save-popup-bg" class="inactive">
 
     </div>
-    <div id="search-terms-items" class="">
-      <div class="search-item" style="padding-top: 0.5vh; border-bottom: none;">
-        <input id="search-name" class="search-item-input" type="text" name="" value="" style="margin: 0px;" placeholder="Name Your Search">
-      </div>
-      <div class="search-item-2">
-        <p>Filters</p>
-      </div>
-      <div class="search-item" onclick="openSearchBox(6)">
-        <div class="search-item-text">
-          Type
-        </div>
-        <div id="search-item-right-type" class="search-item-right">
-          All >
-        </div>
-      </div>
-      <div id="search-box-type" class="search-box inactive">
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-          <div class="" style="width: 100%; float: left;">
-            <p style="margin-bottom: 2px;">----------</p>
-          </div>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFPs</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFIs</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Projected opportunities</span>
-        </div>
-      </div>
-      <div class="search-item" onclick="openSearchBox(0)">
-        <div class="search-item-text">
-          Due Date
-        </div>
-        <div id="search-item-right-duedate" class="search-item-right">
-          All >
-        </div>
-      </div>
-      <div id="search-box-time" class="search-box inactive">
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due  Time</span>
-          <div class="" style="width: 100%; float: left;">
-            <p style="margin-bottom: 2px;">----------</p>
-          </div>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2 Weeks</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2-4 Weeks</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 4 Weeks From Now</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 6 Months From Now</span>
-        </div>
-      </div>
-      <div class="search-item" onclick="openSearchBox(1)">
-        <div class="search-item-text">
-          NAICS Codes
-        </div>
-        <div id="search-item-right-naics" class="search-item-right">
-          All >
-        </div>
-      </div>
-      <div id="search-box-naics" class="search-box inactive">
-        <input id="search-filter-0" class="search-item-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">
-        <div id="search-box-naics-list" class="">
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-          </div>
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-          </div>
-        </div>
-      </div>
-      <div class="search-item" onclick="openSearchBox(2)">
-        <div class="search-item-text">
-          Product/Service Description
-        </div>
-        <div id="search-item-right-psc" class="search-item-right">
-          All >
-        </div>
-      </div>
-      <div id="search-box-psc" class="search-box inactive">
-        <input id="search-filter-1" class="search-item-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">
-        <div id="search-box-psc-list" class="">
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-          </div>
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-          </div>
-        </div>
-      </div>
-      <div class="search-item">
-        <div class="search-item-half">
-          <input id="search-input-keyword" class="search-item-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">
-        </div>
-        <div class="search-item-half">
-          <div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">
-            <div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">
-              Title Only
-            </div>
-            <!-- <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px; "> <span style="line-height: 25px;"> Title Only</span> -->
-          </div>
-          <div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">
-            <div id="search-box-keyword-right" class="" onclick="switchKeywordSearch(1)">
-              All Text
-            </div>
-            <!-- <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All Text</span> -->
-          </div>
-        </div>
-      </div>
-      <div class="search-item" onclick="openSearchBox(3)">
-        <div class="search-item-text">
-          Agency/Office
-        </div>
-        <div id="search-item-right-agency" class="search-item-right">
-          All >
-        </div>
-      </div>
-      <div id="search-box-agency" class="search-box inactive">
-        <input id="search-filter-2" class="search-item-input" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="Filter">
-        <div id="search-box-agency-list" class="">
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-          </div>
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-          </div>
-        </div>
-      </div>
-      <div class="search-item" onclick="openSearchBox(4)">
-        <div class="search-item-text">
-          Location
-        </div>
-        <div id="search-item-right-location" class="search-item-right">
-          All >
-        </div>
-      </div>
-      <div id="search-box-location" class="search-box inactive">
-        <input id="search-filter-3" class="search-item-input" onkeyup="searchFilter(3)" type="text" name="" value="" placeholder="Filter">
-        <div id="search-box-location-list" class="">
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-          </div>
-          <div class="" style="width: 100%; float: left;">
-            <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-          </div>
-        </div>
-      </div>
-      <div class="search-item" onclick="openSearchBox(5)">
-        <div class="search-item-text">
-          Set Aside
-        </div>
-        <div id="search-item-right-setaside" class="search-item-right">
-          All >
-        </div>
-      </div>
-      <div id="search-box-setaside" class="search-box inactive">
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> 8(a)</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Small business</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SDVOSB</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> VOSB</span>
-        </div>
-      </div>
-    </div>
     <button id="delete-search-button" class="inactive" style="width: 40%; margin-top: 2vh; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
 
   </div>
@@ -544,7 +377,7 @@ under the License.
 <div id="fbo-popups" class="inactive">
   <div id="error-popup" class="vote-popup inactive">
     <h3>ERROR</h3>
-    <p id="error-text">Shit's broke</p>
+    <p id="error-text">it's broke</p>
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
   </div>
   <div id="refer-popup" class="vote-popup inactive">

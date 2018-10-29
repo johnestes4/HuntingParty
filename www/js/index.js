@@ -456,8 +456,27 @@ var activeSearchIndex
 function checkChecked() {
   var numberChecked = 0
   var checkedName = ''
+  var filtersHtml = ''
+  if (searchTerms.type[0].value == true) {
+    // document.getElementById("search-item-right-duedate").innerHTML = "All >";
+    filtersHtml = filtersHtml + '<div class="filters-item">Type<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+  } else {
+    for (i = 1; i < searchTerms.type.length; i++) {
+      if (searchTerms.type[i].value == true) {
+        numberChecked++
+        checkedName = searchTerms.type[i].name
+      }
+    }
+    // document.getElementById("search-item-right-duedate").innerHTML = numberChecked + " >";
+    if (numberChecked > 0) {
+      filtersHtml = filtersHtml + '<div class="filters-item">Type ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    }
+    numberChecked = 0
+    checkedName = ''
+  }
   if (searchTerms.dueDate[0].value == true) {
-    document.getElementById("search-item-right-duedate").innerHTML = "All >";
+    // document.getElementById("search-item-right-duedate").innerHTML = "All >";
+    filtersHtml = filtersHtml + '<div class="filters-item">Due Date<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
   } else {
     for (i = 1; i < searchTerms.dueDate.length; i++) {
       if (searchTerms.dueDate[i].value == true) {
@@ -465,12 +484,16 @@ function checkChecked() {
         checkedName = searchTerms.dueDate[i].name
       }
     }
-    document.getElementById("search-item-right-duedate").innerHTML = numberChecked + " >";
+    // document.getElementById("search-item-right-duedate").innerHTML = numberChecked + " >";
+    if (numberChecked > 0) {
+      filtersHtml = filtersHtml + '<div class="filters-item">Due Date ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    }
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.naics[0].value == true) {
-    document.getElementById("search-item-right-naics").innerHTML = "All >";
+    filtersHtml = filtersHtml + '<div class="filters-item">NAICS<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    // document.getElementById("search-item-right-naics").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.naics.length; i++) {
       if (searchTerms.naics[i].value == true) {
@@ -478,16 +501,15 @@ function checkChecked() {
         checkedName = searchTerms.naics[i].code
       }
     }
-    if (numberChecked > 1 || numberChecked == 0 || checkedName.length >= 6) {
-      document.getElementById("search-item-right-naics").innerHTML = numberChecked + " >";
-    } else {
-      document.getElementById("search-item-right-naics").innerHTML = checkedName + " >";
+    if (numberChecked > 0) {
+      filtersHtml = filtersHtml + '<div class="filters-item">NAICS ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.psc[0].value == true) {
-    document.getElementById("search-item-right-psc").innerHTML = "All >";
+    filtersHtml = filtersHtml + '<div class="filters-item">Product<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    // document.getElementById("search-item-right-psc").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.psc.length; i++) {
       if (searchTerms.psc[i].value == true) {
@@ -495,17 +517,16 @@ function checkChecked() {
         checkedName = searchTerms.psc[i].name
       }
     }
-    if (numberChecked > 1 || numberChecked == 0 || checkedName.length >= 6) {
-      document.getElementById("search-item-right-psc").innerHTML = numberChecked + " >";
-    } else {
-      document.getElementById("search-item-right-psc").innerHTML = checkedName + " >";
+    if (numberChecked > 0) {
+      filtersHtml = filtersHtml + '<div class="filters-item">Product ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
-    document.getElementById("search-item-right-psc").innerHTML = numberChecked + " >";
+    // document.getElementById("search-item-right-psc").innerHTML = numberChecked + " >";
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.agency[0].value == true) {
-    document.getElementById("search-item-right-agency").innerHTML = "All >";
+    filtersHtml = filtersHtml + '<div class="filters-item">Agency<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    // document.getElementById("search-item-right-agency").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.agency.length; i++) {
       if (searchTerms.agency[i].value == true) {
@@ -513,43 +534,45 @@ function checkChecked() {
         checkedName = searchTerms.agency[i].name
       }
     }
-    document.getElementById("search-item-right-agency").innerHTML = numberChecked + " >";
+    if (numberChecked > 0) {
+      filtersHtml = filtersHtml + '<div class="filters-item">Agency ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    }
+    // document.getElementById("search-item-right-agency").innerHTML = numberChecked + " >";
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.place[0].value == true) {
-  }
-  checkedName = ''
-  for (i = 0; i < searchTerms.place.length; i++) {
-    if (searchTerms.place[i].value == true) {
-      numberChecked++
-      checkedName = searchTerms.place[i].name
-    }
-  }
-  if (numberChecked > 1 || numberChecked == 0) {
-    document.getElementById("search-item-right-location").innerHTML = numberChecked + " >";
+    filtersHtml = filtersHtml + '<div class="filters-item">Location<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
   } else {
-    if (checkedName == 'United States of America') {
-      document.getElementById("search-item-right-location").innerHTML = "USA >";
-    } else if (checkedName.length < 6) {
-      document.getElementById("search-item-right-location").innerHTML = checkedName + " >";
-    } else {
-      document.getElementById("search-item-right-location").innerHTML = numberChecked + " >";
+    checkedName = ''
+    for (i = 0; i < searchTerms.place.length; i++) {
+      if (searchTerms.place[i].value == true) {
+        numberChecked++
+        checkedName = searchTerms.place[i].name
+      }
+    }
+    if (numberChecked > 0) {
+      filtersHtml = filtersHtml + '<div class="filters-item">Location ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
   }
   numberChecked = 0
   if (searchTerms.setAside[0].value == true) {
-    document.getElementById("search-item-right-setaside").innerHTML = "All >";
+    filtersHtml = filtersHtml + '<div class="filters-item">Set Aside<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    // document.getElementById("search-item-right-setaside").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.setAside.length; i++) {
       if (searchTerms.setAside[i].value == true) {
         numberChecked++
       }
     }
-    document.getElementById("search-item-right-setaside").innerHTML = numberChecked + " >";
+    if (numberChecked > 0) {
+      filtersHtml = filtersHtml + '<div class="filters-item">Set Aside ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    }
+    // document.getElementById("search-item-right-setaside").innerHTML = numberChecked + " >";
     numberChecked = 0
     checkedName = ''
   }
+  document.getElementById("search-item-filters-right").innerHTML = filtersHtml;
 }
 
 function viewSearch(index) {
@@ -562,7 +585,6 @@ function viewSearch(index) {
     document.getElementById("delete-search-button").classList.remove('inactive')
   } else {
     searchTerms = emptySearchTerms
-    console.log(searchTerms)
     activeSearchIndex = -1
     document.getElementById("delete-search-button").classList.add('inactive')
   }
@@ -581,7 +603,6 @@ function viewSearch(index) {
     a[i].checked = searchTerms.psc[i].value
   }
   a = document.getElementsByClassName('checkbox-agency')
-  console.log(searchTerms.agency)
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.agency[i].value
     if (searchTerms.agency[i]) {
@@ -595,14 +616,14 @@ function viewSearch(index) {
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.setAside[i].value
   }
-  if (searchTerms.name) {
-    document.getElementById("search-name").value = searchTerms.name
-  } else {
-    document.getElementById("search-name").value = ''
+  if (document.getElementById("search-name")) {
+    if (searchTerms.name) {
+      document.getElementById("search-name").value = searchTerms.name
+    } else {
+      document.getElementById("search-name").value = ''
+    }
   }
   checkChecked()
-  document.getElementById("saved-search-view").classList.add('inactive')
-  document.getElementById("search-terms-view").classList.remove('inactive')
   document.getElementById("topbar-center-text").innerHTML = "Filter"
   document.getElementById("topbar-left").innerHTML = ''
   document.getElementById("topbar-right").innerHTML = '<div class="topbar-right-button" onclick="saveSearchTerms()"><p id="topbar-right-text">Done</p></div>'
@@ -616,11 +637,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-time").classList.remove('inactive')
+      document.getElementById("search-item-arrow-duedate").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
+      document.getElementById("search-item-arrow-duedate").classList.remove('rotate')
     }
   } else if (which == 1) {
     if (document.getElementById("search-box-naics").classList.contains('inactive')) {
@@ -629,11 +652,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-naics").classList.remove('inactive')
+      document.getElementById("search-item-arrow-naics").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
+      document.getElementById("search-item-arrow-naics").classList.remove('rotate')
     }
   } else if (which == 2) {
     if (document.getElementById("search-box-psc").classList.contains('inactive')) {
@@ -642,11 +667,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-psc").classList.remove('inactive')
+      document.getElementById("search-item-arrow-psc").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
+      document.getElementById("search-item-arrow-psc").classList.remove('rotate')
     }
   } else if (which == 3) {
     if (document.getElementById("search-box-agency").classList.contains('inactive')) {
@@ -655,11 +682,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-agency").classList.remove('inactive')
+      document.getElementById("search-item-arrow-agency").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
+      document.getElementById("search-item-arrow-agency").classList.remove('rotate')
     }
   } else if (which == 4) {
     if (document.getElementById("search-box-location").classList.contains('inactive')) {
@@ -668,11 +697,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-location").classList.remove('inactive')
+      document.getElementById("search-item-arrow-location").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
+      document.getElementById("search-item-arrow-location").classList.remove('rotate')
     }
   } else if (which == 5) {
     if (document.getElementById("search-box-setaside").classList.contains('inactive')) {
@@ -681,11 +712,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-setaside").classList.remove('inactive')
+      document.getElementById("search-item-arrow-setaside").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
+      document.getElementById("search-item-arrow-setaside").classList.remove('rotate')
     }
   } else if (which == 6) {
     if (document.getElementById("search-box-type").classList.contains('inactive')) {
@@ -694,11 +727,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-type").classList.remove('inactive')
+      document.getElementById("search-item-arrow-type").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
+      document.getElementById("search-item-arrow-type").classList.remove('rotate')
     }
   }
 }
@@ -731,26 +766,298 @@ function renderSavedSearches() {
     }
   }
   document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml
+  html = html + '<div class="search-item">'+
+  '<div class="search-item-header" onclick="openSearchItems('+0+')">'+
+  '<div class="search-item-text">'+
+  'Saved Searches: '+
+  '</div>'+
+  '<div class="search-item-right">'+
+  '<p class="search-item-arrow" id="search-item-arrow-0">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="saved-searches" class="search-item-subbox inactive">'
+
   for (i = 0; i < yourSearches.length; i++) {
-    html = html + '<div class="search-item" onclick="viewSearch('+i+')">'+
+    var arrowIndex = i+2
+    html = html + '<div class="search-item">'+
+    '<div class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
     '<div class="search-item-text">'+
     yourSearches[i].name+
     '</div>'+
     '<div class="search-item-right">'+
-    '>'+
+    '<p class="search-item-arrow" id="search-item-arrow-'+arrowIndex+'">›</p>'+
+    '</div>'+
+    '</div>'+
+    '<div id="search-item-'+arrowIndex+'" class="search-item-subbox inactive">'+
+    'asdasdasd'+
     '</div>'+
     '</div>'
   }
-  html = html + '<div class="search-item" onclick="viewSearch(-1)">'+
-  '<div class="search-item-text">'+
-  'Create New Search'+
-  '</div>'+
-  '<div class="search-item-right">'+
-  '>'+
-  '</div>'+
+  html = html + '</div>'+
   '</div>'
 
   document.getElementById("saved-search-view").innerHTML = html
+}
+
+
+function generateSearchHTML(where) {
+  var inputHtml = '<div class="search-item-filters">'+
+    '<p>Filters</p>'+
+  '</div>'
+
+  if (where == 1) {
+    inputHtml = '<div class="search-item-filters">'+
+    '<div class="search-item-filters-left">'+
+    '<p>Filters:</p>'+
+    '</div>'+
+    '<div id="search-item-filters-right">'+
+    '</div>'+
+    '</div>'
+  }
+  html = '<div id="search-terms-items" class="">'+
+    inputHtml+
+    '<div class="search-item-category" onclick="openSearchBox(6)">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/type.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-text">'+
+        'Type'+
+      '</div>'+
+      '<div id="search-item-right-type" class="search-item-right">'+
+      '<p class="search-item-arrow" id="search-item-arrow-type">›</p>'+
+      '</div>'+
+    '</div>'+
+    '<div id="search-box-type" class="search-box inactive">'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<p style="margin-bottom: 2px;">----------</p>'+
+        '</div>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFPs</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFIs</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Projected opportunities</span>'+
+      '</div>'+
+    '</div>'+
+    '<div class="search-item-category" onclick="openSearchBox(0)">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/duedate.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-text">'+
+        'Due Date'+
+      '</div>'+
+      '<div id="search-item-right-duedate" class="search-item-right">'+
+        '<p class="search-item-arrow" id="search-item-arrow-duedate">›</p>'+
+      '</div>'+
+    '</div>'+
+    '<div id="search-box-time" class="search-box inactive">'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due  Time</span>'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<p style="margin-bottom: 2px;">----------</p>'+
+        '</div>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2 Weeks</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2-4 Weeks</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 4 Weeks From Now</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 6 Months From Now</span>'+
+      '</div>'+
+    '</div>'+
+    '<div class="search-item-category" onclick="openSearchBox(1)">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/naics.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-text">'+
+        'NAICS Codes'+
+      '</div>'+
+      '<div id="search-item-right-naics" class="search-item-right">'+
+      '<p class="search-item-arrow" id="search-item-arrow-naics">›</p>'+
+      '</div>'+
+    '</div>'+
+    '<div id="search-box-naics" class="search-box inactive">'+
+      '<input id="search-filter-0" class="search-item-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">'+
+      '<div id="search-box-naics-list" class="">'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+        '</div>'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="search-item-category" onclick="openSearchBox(2)">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/productservice.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-text">'+
+        'Product/Service Description'+
+      '</div>'+
+      '<div id="search-item-right-psc" class="search-item-right">'+
+      '<p class="search-item-arrow" id="search-item-arrow-psc">›</p>'+
+      '</div>'+
+    '</div>'+
+    '<div id="search-box-psc" class="search-box inactive">'+
+      '<input id="search-filter-1" class="search-item-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">'+
+      '<div id="search-box-psc-list" class="">'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+        '</div>'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="search-item-category">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/keyword.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-left">'+
+        '<input id="search-input-keyword" class="search-item-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">'+
+      '</div>'+
+      '<div class="search-item-right-2">'+
+        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
+          '<div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">'+
+            'Title Only'+
+          '</div>'+
+        '</div>'+
+        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
+          '<div id="search-box-keyword-right" class="" onclick="switchKeywordSearch(1)">'+
+            'All Text'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="search-item-category" onclick="openSearchBox(3)">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/agencyoffice.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-text">'+
+        'Agency/Office'+
+      '</div>'+
+      '<div id="search-item-right-agency" class="search-item-right">'+
+      '<p class="search-item-arrow" id="search-item-arrow-agency">›</p>'+
+      '</div>'+
+    '</div>'+
+    '<div id="search-box-agency" class="search-box inactive">'+
+      '<input id="search-filter-2" class="search-item-input" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="Filter">'+
+      '<div id="search-box-agency-list" class="">'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+        '</div>'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="search-item-category" onclick="openSearchBox(4)">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/location.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-text">'+
+        'Location'+
+      '</div>'+
+      '<div id="search-item-right-location" class="search-item-right">'+
+      '<p class="search-item-arrow" id="search-item-arrow-location">›</p>'+
+      '</div>'+
+    '</div>'+
+    '<div id="search-box-location" class="search-box inactive">'+
+      '<input id="search-filter-3" class="search-item-input" onkeyup="searchFilter(3)" type="text" name="" value="" placeholder="Filter">'+
+      '<div id="search-box-location-list" class="">'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+        '</div>'+
+        '<div class="" style="width: 100%; float: left;">'+
+          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="search-item-category" onclick="openSearchBox(5)" style="border-bottom: none;">'+
+      '<div class="search-item-img-box">'+
+        '<img class="search-item-img" src="./img/setaside.png" alt="">'+
+      '</div>'+
+      '<div class="search-item-text">'+
+        'Set Aside'+
+      '</div>'+
+      '<div id="search-item-right-setaside" class="search-item-right">'+
+      '<p class="search-item-arrow" id="search-item-arrow-setaside">›</p>'+
+      '</div>'+
+    '</div>'+
+    '<div id="search-box-setaside" class="search-box inactive">'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> 8(a)</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Small business</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SDVOSB</span>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left;">'+
+        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> VOSB</span>'+
+      '</div>'+
+    '</div>'+
+  '</div>'
+
+  if (where == 1) {
+    document.getElementById("new-search").innerHTML = html
+  } else {
+    document.getElementById("search-item-"+where).innerHTML = html
+  }
+}
+
+var previousSearchTermsIndex = null
+function openSearchItems(which) {
+  if (which == 0) {
+    if (document.getElementById("saved-searches").classList.contains('inactive')) {
+      document.getElementById("saved-searches").classList.remove('inactive')
+    } else {
+      document.getElementById("saved-searches").classList.add('inactive')
+    }
+  } else if (which == 1) {
+    if (previousSearchTermsIndex) {
+      document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
+      previousSearchTermsIndex = null
+    }
+    if (document.getElementById("new-search").classList.contains('inactive')) {
+      generateSearchHTML(which)
+      viewSearch(-1)
+      document.getElementById("new-search").classList.remove('inactive')
+    } else {
+      document.getElementById("new-search").innerHTML = ''
+      document.getElementById("new-search").classList.add('inactive')
+    }
+  } else {
+    if (previousSearchTermsIndex) {
+      document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
+      previousSearchTermsIndex = null
+    }
+    if (document.getElementById("search-item-"+which).classList.contains('inactive')) {
+      document.getElementById("new-search").innerHTML = ''
+      generateSearchHTML(which)
+      var searchIndex = which - 2
+      viewSearch(searchIndex)
+      document.getElementById("search-item-"+which).classList.remove('inactive')
+      previousSearchTermsIndex = which
+    } else {
+      document.getElementById("search-item-"+which).innerHTML = ''
+      document.getElementById("search-item-"+which).classList.add('inactive')
+    }
+  }
 }
 
 function filterOpportunitiesBySearch(elem) {
@@ -3750,7 +4057,7 @@ function toggleHamburgerMenu() {
           xhttp2.send();
         } else {
           goToCompanyCreate()
-          // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something in here for this"
+          // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something for this"
         }
       }
     };
@@ -3838,6 +4145,7 @@ function toggleHamburgerMenu() {
     console.log(fboPipeline)
     if (fbosIn.length + fboPipeline.length > 0) {
       // setActiveFbo(fboIndex)
+      generateSearchHTML(1)
       renderSearch()
       generateOptions()
       sortFboRenders(fbosIn, 0)
@@ -3872,7 +4180,8 @@ function toggleHamburgerMenu() {
     }
     // showAd()
     // TAB SWITCH HERE
-    switchTab(2)
+    switchTab(1)
+    openSearchItems(1)
     // goToFbo(5, 0);
     // viewSearch(0)
     // openPopups(2)
