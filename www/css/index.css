@@ -1326,7 +1326,9 @@ h1, .instructions{
   width: calc(100% - 60px);
   position: relative;
   float: left;
-  height: 64px;
+  min-height: 32px;
+  max-height: 64px;
+  margin-bottom: 2px;
 }
 
 .filters-item {

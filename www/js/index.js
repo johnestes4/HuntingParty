@@ -572,7 +572,9 @@ function checkChecked() {
     numberChecked = 0
     checkedName = ''
   }
-  document.getElementById("search-item-filters-right").innerHTML = filtersHtml;
+  if (document.getElementById("search-item-filters-right")) {
+    document.getElementById("search-item-filters-right").innerHTML = filtersHtml;
+  }
 }
 
 function viewSearch(index) {
@@ -829,19 +831,19 @@ function generateSearchHTML(where) {
     '</div>'+
     '<div id="search-box-type" class="search-box inactive">'+
       '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="All" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> All</span>'+
         '<div class="" style="width: 100%; float: left;">'+
           '<p style="margin-bottom: 2px;">----------</p>'+
         '</div>'+
       '</div>'+
       '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFPs</span>'+
+        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Open RFPs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Open: RFPs</span>'+
       '</div>'+
       '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Open: RFIs</span>'+
+        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Open RFIs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Open: RFIs</span>'+
       '</div>'+
       '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Projected opportunities</span>'+
+        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Historical (closed) and projected RFPs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Projected opportunities</span>'+
       '</div>'+
     '</div>'+
     '<div class="search-item-category" onclick="openSearchBox(0)">'+
@@ -1037,9 +1039,11 @@ function openSearchItems(which) {
       generateSearchHTML(which)
       viewSearch(-1)
       document.getElementById("new-search").classList.remove('inactive')
+      document.getElementById("search-name").classList.remove('inactive')
     } else {
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
+      document.getElementById("search-name").classList.add('inactive')
     }
   } else {
     if (previousSearchTermsIndex) {
@@ -1048,6 +1052,8 @@ function openSearchItems(which) {
     }
     if (document.getElementById("search-item-"+which).classList.contains('inactive')) {
       document.getElementById("new-search").innerHTML = ''
+      document.getElementById("new-search").classList.add('inactive')
+      document.getElementById("search-name").classList.add('inactive')
       generateSearchHTML(which)
       var searchIndex = which - 2
       viewSearch(searchIndex)
@@ -1153,16 +1159,16 @@ function searchFilter(which) {
 
       if (i == 0) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div></div>'
+        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].group+'</div></div>'
         html = html + '<div class="search-box-checkbox-item">'+
         '<p style="margin: 0px;">----------</p>'+
         '</div>'
-      } else if (searchTerms.psc[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
+      } else if (searchTerms.psc[i].group.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div></div>'
+        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].group+'</div></div>'
       } else {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div></div>'
+        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].group+'</div></div>'
       }
       html = html + '</div>'
     }
@@ -1596,7 +1602,29 @@ function openTutorials() {
 
 function calculateSearch(elem) {
   var anyFalse = false
-  if (elem.classList.contains('checkbox-duedate')) {
+  if (elem.classList.contains('checkbox-type')) {
+    if (elem.value == searchTerms.type[0].name) {
+      for (i = 0; i < searchTerms.type.length; i++) {
+        searchTerms.type[i].value = elem.checked
+      }
+      var a = document.getElementsByClassName('checkbox-type')
+      for (i2 = 0; i2 < a.length; i2++) {
+        a[i2].checked = elem.checked
+      }
+    } else {
+      for (i = 0; i < searchTerms.type.length; i++) {
+        if (searchTerms.type[i].name == elem.value) {
+          searchTerms.type[i].value = elem.checked
+          if (!elem.checked) {
+            searchTerms.type[0].value = false
+            var a = document.getElementsByClassName('checkbox-type')
+            a[0].checked = false
+          }
+          break;
+        }
+      }
+    }
+  } else if (elem.classList.contains('checkbox-duedate')) {
     if (elem.value == searchTerms.dueDate[0].name) {
       for (i = 0; i < searchTerms.dueDate.length; i++) {
         searchTerms.dueDate[i].value = elem.checked
@@ -4180,8 +4208,8 @@ function toggleHamburgerMenu() {
     }
     // showAd()
     // TAB SWITCH HERE
-    switchTab(1)
-    openSearchItems(1)
+    switchTab(2)
+    openSearchItems(0)
     // goToFbo(5, 0);
     // viewSearch(0)
     // openPopups(2)
