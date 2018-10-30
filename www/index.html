@@ -449,18 +449,20 @@ under the License.
 <div id="fbo-view" class="body-block inactive">
   <div class="second-topbar">
     <div id="opportunities-topbar" style="">
-      <select id="opportunities-topbar-select" onchange="filterOpportunitiesBySearch(this)">
+      <span>Filter By: </span>
+      <select class="opp-topbar-select" id="opportunities-topbar-select" onchange="filterOpportunitiesBySearch(this)">
         <option value="-1">All Searches</option>
+      </select>
+    </div>
+    <div id="sort-toolbar">
+      <span>Arrange By: </span>
+      <select class="opp-topbar-select" id="sort-select" onchange="runSort(fbosIn, this);">
       </select>
     </div>
   </div>
   <!-- Not sure what to do with this class -->
   <div class="temp">
-    <div id="sort-toolbar">
-      <span>Arrange By: </span>
-      <select id="sort-select" onchange="runSort(fbosIn, this);">
-      </select>
-    </div>
+    
   </div>
   <div id="fbo-list-view" class="body-block" style="height: 86vh;">
     <div id="fbo-scroll-box" class="" style="height: 100%; width: 100%; overflow-y: auto;">
