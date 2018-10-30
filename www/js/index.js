@@ -4297,8 +4297,8 @@ function toggleHamburgerMenu() {
     }
     // showAd()
     // TAB SWITCH HERE
-    switchTab(1)
-    openSearchItems(1)
+    switchTab(2)
+    openSearchItems(0)
     // goToFbo(5, 0);
     // viewSearch(0)
     // openPopups(2)
