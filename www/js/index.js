@@ -603,6 +603,11 @@ function viewSearch(index) {
   a = document.getElementsByClassName('checkbox-psc')
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.psc[i].value
+    if (searchTerms.psc[i].psc) {
+      for (i2 = 0; i2 < searchTerms.psc[i].psc.length; i2++) {
+        document.getElementById("psc-checkbox-"+i+"-"+i2).checked = searchTerms.psc[i].psc[i2].value
+      }
+    }
   }
   a = document.getElementsByClassName('checkbox-agency')
   for (i = 0; i < a.length; i++) {
@@ -613,6 +618,16 @@ function viewSearch(index) {
   a = document.getElementsByClassName('checkbox-place')
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.place[i].value
+    if (searchTerms.place[i].regions) {
+      for (i2 = 0; i2 < searchTerms.place[i].regions.length; i2++) {
+        document.getElementById("search-box-checkbox-"+i+"-"+i2).checked = searchTerms.place[i].regions[i2].value
+        if (searchTerms.place[i].regions[i2].regions) {
+          for (i3 = 0; i3 < searchTerms.place[i].regions[i2].regions.length; i3++) {
+            document.getElementById("search-box-checkbox-"+i+"-"+i2+"-"+i3).checked = searchTerms.place[i].regions[i2].regions[i3].value
+          }
+        }
+      }
+    }
   }
   a = document.getElementsByClassName('checkbox-setaside')
   for (i = 0; i < a.length; i++) {
@@ -621,6 +636,7 @@ function viewSearch(index) {
   if (document.getElementById("search-name")) {
     if (searchTerms.name) {
       document.getElementById("search-name").value = searchTerms.name
+      console.log(searchTerms.name)
     } else {
       document.getElementById("search-name").value = ''
     }
@@ -1013,6 +1029,13 @@ function generateSearchHTML(where) {
         '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> VOSB</span>'+
       '</div>'+
     '</div>'+
+    '<div id="double-search-buttons">'+
+    '<button class="delete-button" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>'+
+    '<button type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
+    '</div>'+
+    '<div id="single-search-button" class="inactive">'+
+    '<button type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
+    '</div>'+
   '</div>'
 
   if (where == 1) {
@@ -1038,9 +1061,13 @@ function openSearchItems(which) {
     if (document.getElementById("new-search").classList.contains('inactive')) {
       generateSearchHTML(which)
       viewSearch(-1)
+      document.getElementById("double-search-buttons").classList.add('inactive')
+      document.getElementById("single-search-button").classList.remove('inactive')
       document.getElementById("new-search").classList.remove('inactive')
       document.getElementById("search-name").classList.remove('inactive')
     } else {
+      document.getElementById("double-search-buttons").classList.remove('inactive')
+      document.getElementById("single-search-button").classList.add('inactive')
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
@@ -1051,6 +1078,10 @@ function openSearchItems(which) {
       previousSearchTermsIndex = null
     }
     if (document.getElementById("search-item-"+which).classList.contains('inactive')) {
+      if (document.getElementById("double-search-buttons") && document.getElementById("single-search-button")) {
+        document.getElementById("double-search-buttons").classList.remove('inactive')
+        document.getElementById("single-search-button").classList.add('inactive')
+      }
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
@@ -1156,18 +1187,49 @@ function searchFilter(which) {
       if (searchTerms.psc[i].value) {
         checkedHtml = ' checked'
       }
-      if (i == 0) {
+      var matchFound = false
+      if (searchTerms.psc[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
+        var inactiveHtml = ''
+        var arrowHtml = '<span id="psc-arrow-'+i+'" class="checkbox-text-arrow">▲</span>'
+        if (document.getElementById("psc-subcategory-box-"+i).classList.contains('inactive')) {
+          inactiveHtml = ' inactive'
+          arrowHtml = '<span id="psc-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
+        }
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div></div>'
-        html = html + '<div class="search-box-checkbox-item">'+
-        '<p style="margin: 0px;">----------</p>'+
-        '</div>'
-      } else if (searchTerms.psc[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
-        html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div></div>'
-      } else {
+        '<input id="psc-checkbox-'+i+'" class="search-box-checkbox checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc[i].name+arrowHtml+'</div>'+
+        '<div id="psc-subcategory-box-'+i+'" class="subcategory-box'+inactiveHtml+'">'
+        if (searchTerms.psc[i].psc) {
+          for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
+            if (searchTerms.psc[i].psc[pscIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].psc[pscIndex].value == true) {
+              html = html + '<div class="search-box-checkbox-item">'+
+              '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+              '</div>'
+              matchFound = true
+            }
+          }
+        }
+        html = html + '</div></div></div>'
+        matchFound = true
+      } else if (searchTerms.psc[i].psc) {
+        // var pscHtml = ''
+        // for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
+        //   if (searchTerms.psc[i].psc[pscIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].psc[pscIndex].value == true) {
+        //     pscHtml = pscHtml + '<div class="search-box-checkbox-item">'+
+        //     '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+        //     '</div>'
+        //     matchFound = true
+        //   } else {
+        //     pscHtml = pscHtml + '<div class="search-box-checkbox-item inactive">'+
+        //     '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+        //     '</div>'
+        //   }
+        // }
+      }
+      if (!matchFound) {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div></div>'
+        '<input id="psc-checkbox-'+i+'" class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div>'+
+        '<div id="psc-subcategory-box-'+i+'" class="subcategory-box inactive">'+
+        '</div>'
       }
       html = html + '</div>'
     }
@@ -1372,12 +1434,12 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.psc.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input class="search-box-checkbox checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc[i].name+'<span id="psc-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
+    '<input id="psc-checkbox-'+i+'" class="search-box-checkbox checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc[i].name+'<span id="psc-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
     '<div id="psc-subcategory-box-'+i+'" class="subcategory-box inactive">'
     if (searchTerms.psc[i].psc) {
       for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+        '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
         '</div>'
       }
     }
@@ -1747,15 +1809,41 @@ function calculateSearch(elem) {
     for (i = 0; i < searchTerms.psc.length; i++) {
       if (searchTerms.psc[i].name == elem.value) {
         searchTerms.psc[i].value = elem.checked
-        if (!elem.checked) {
-          searchTerms.psc[0].value = false
-          var a = document.getElementsByClassName('checkbox-psc')
-          a[0].checked = false
+        if (searchTerms.psc[i].psc) {
+          for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
+            searchTerms.psc[i].psc[pscIndex].value = elem.checked
+            var a = document.getElementsByClassName('checkbox-subpsc')
+            document.getElementById('psc-checkbox-'+i+'-'+pscIndex).checked = elem.checked
+          }
         }
       }
     }
+  } else if (elem.classList.contains('checkbox-subpsc')) {
+    for (i = 0; i < searchTerms.psc.length; i++) {
+      if (searchTerms.psc[i].psc) {
+        var allChecked = true
+        var matchFound = false
+        for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
+          if (searchTerms.psc[i].psc[pscIndex].name == elem.value) {
+            matchFound = true
+            if (!elem.checked) {
+              document.getElementById('psc-checkbox-'+i).checked = false
+              searchTerms.psc[i].value = false
+            }
+            searchTerms.psc[i].psc[pscIndex].value = elem.checked
+          }
+          if (searchTerms.psc[i].psc[pscIndex].value == false) {
+            allChecked = false
+          }
+        }
+        if (matchFound && allChecked) {
+          document.getElementById('psc-checkbox-'+i).checked = true
+          searchTerms.psc[i].value = elem.checked
+        }
+      }
+    }
+
   } else if (elem.classList.contains('checkbox-agency') || elem.classList.contains('checkbox-subagency')) {
-    console.log(elem.value + ' - ' + elem.checked)
     if (elem.value == searchTerms.agency[0].name) {
       for (i = 0; i < searchTerms.agency.length; i++) {
         searchTerms.agency[i].value = elem.checked

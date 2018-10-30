@@ -1331,6 +1331,28 @@ h1, .instructions{
   margin-bottom: 2px;
 }
 
+#single-search-button button {
+  height: 30px;
+  line-height: 26px;
+  width: 40%;
+  margin-top: 0.5vh;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-bottom: 0.5vh;
+}
+#double-search-buttons button {
+  height: 30px;
+  line-height: 26px;
+  width: 40%;
+  margin-top: 0.5vh;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 0.5vh;
+}
+.delete-button {
+  background: rgba(205,55,55,1);
+}
+
 .filters-item {
   width: 23%;
   margin-left: 1%;
@@ -1428,6 +1450,7 @@ h1, .instructions{
 }
 .search-item-right {
   width: 60px;
+  z-index: 2;
   padding-top: 2px;
   float: left;
   text-align: right;
@@ -1464,10 +1487,14 @@ h1, .instructions{
 .search-name-left {
   width: 120px;
   float: left;
+  position: relative;
+  z-index: 2;
 }
 
 .search-name-input {
   float: left;
+  z-index: 2;
+  position: relative;
   width: calc(100% - 130px);
   background: white;
   height: 26px;
