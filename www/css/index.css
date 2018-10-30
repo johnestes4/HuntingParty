@@ -2523,3 +2523,16 @@ h1 {
   animation:fade 3000ms infinite;
   -webkit-animation:fade 3000ms infinite;
 }
+
+::placeholder {/* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* InternetExplorer 10-11 */
+  color: white;
+}
+
+::-ms-input-placeholder{ /* Microsoft Edge */
+  color: white;
+}
