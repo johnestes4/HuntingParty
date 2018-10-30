@@ -465,7 +465,7 @@ under the License.
   </div>
   <!-- Not sure what to do with this class -->
   <div class="temp">
-    
+
   </div>
   <div id="fbo-list-view" class="body-block" style="height: 86vh;">
     <div id="fbo-scroll-box" class="" style="height: 100%; width: 100%; overflow-y: auto;">
@@ -588,8 +588,31 @@ Data
     Click on the first and last words of the string you want to highlight
   </div>
   <div id="fbo-detail-info" class="">
-    <div class="fbo-title-box">
-      <h2 id="fbo-title"></h2>
+    <div class="fbo-detail-middle-item-header" style="padding: 0px 4vw 0px 4vw; height: 50px;">
+      <div class="fbo-detail-middle-item-header-img">
+
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="padding: 15px 0px 15px 0px; width: calc(100% - 253px);">
+        <p>Abstract</p>
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="width: 65px;">
+        <div id="fbo-details-likes" style="height: 100%; width: 20px; line-height: 50px; float: left; text-align: center; margin-right: 5px;">13</div>
+        <img class="fbo-details-input-button" src="./img/thumbsup.png" alt="" onclick="openPopups(0)">
+        <div class="fbo-details-buttonbar-item-border"></div>
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="width: 65px;">
+        <div id="fbo-details-dislikes" style="height: 100%; width: 20px; line-height: 50px; float: left; text-align: center; margin-right: 5px;">3</div>
+        <img class="fbo-details-input-button" src="./img/thumbsdown.png" alt="" onclick="openPopups(1)">
+        <div class="fbo-details-buttonbar-item-border"></div>
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="width: 103px; padding-left: 8px;">
+        <img class="fbo-details-input-button" src="./img/calendar.png" alt="">
+        <div id="fbo-details-date" style="height: 100%; width: 60px; line-height: 50px; float: left; text-align: center; margin-left: 5px;">12/3/2018</div>
+      </div>
+    </div>
+    <div class="highlight-button-box">
+      <button id="highlight-button-2" class="" style="" type="button" name="button" onclick="turnOnHighlight(true)" style="margin-left: 2%;">Gray Out</button>
+      <button id="highlight-button-1" class="" style="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
     </div>
     <div id="abstract-box">
       <div id="abstract-text" class="">
@@ -626,39 +649,10 @@ Data
     </div>
   </div>
 </div>
+
+<div class="abstract-hover-button" onClick="expandAbstract()">
+  ...
 </div>
-<div id="fbo-details-buttonbar" class="">
-  <div class="abstract-hover-button" onClick="expandAbstract()">
-    ...
-  </div>
-  <!-- <input id="fbo-details-input" placeholder="Enter your comments ..." type="text" name="" value=""> -->
-  <div class="fbo-details-buttonbar-item" style="width: 55px;">
-    <div id="fbo-details-likes" style="height: 100%; width: 20px; line-height: 40px; float: left; text-align: center; margin-right: 5px;">13</div>
-    <img class="fbo-details-input-button" src="./img/thumbsup.png" alt="" onclick="openPopups(0)">
-    <div class="fbo-details-buttonbar-item-border"></div>
-  </div>
-  <div class="fbo-details-buttonbar-item" style="width: 55px;">
-    <div id="fbo-details-dislikes" style="height: 100%; width: 20px; line-height: 40px; float: left; text-align: center; margin-right: 5px;">3</div>
-    <img class="fbo-details-input-button" src="./img/thumbsdown.png" alt="" onclick="openPopups(1)">
-    <div class="fbo-details-buttonbar-item-border"></div>
-  </div>
-  <div class="fbo-details-buttonbar-item" style="width: 95px;">
-    <img class="fbo-details-input-button" src="./img/calendar.png" alt="">
-    <div id="fbo-details-date" style="height: 100%; width: 60px; line-height: 40px; float: left; text-align: center; margin-left: 5px;">12/3/2018</div>
-    <div class="fbo-details-buttonbar-item-border"></div>
-  </div>
-  <div class="fbo-details-buttonbar-item" style="width: 45px;">
-    <div id="fbo-details-shares" style="height: 100%; width: 10px; line-height: 40px; float: left; text-align: center; margin-right: 5px;">3</div>
-    <img class="fbo-details-input-button" src="./img/share.png" alt="">
-    <div class="fbo-details-buttonbar-item-border"></div>
-  </div>
-  <div class="fbo-details-buttonbar-item" style="width: calc((100vw - 250px) / 2)">
-    <button id="highlight-button-2" class="" style="" type="button" name="button" onclick="turnOnHighlight(true)" style="margin-left: 2%;">Gray Out</button>
-    <div class="fbo-details-buttonbar-item-border"></div>
-  </div>
-  <div class="fbo-details-buttonbar-item" style="width: calc((100vw - 250px) / 2);">
-    <button id="highlight-button-1" class="" style="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
-  </div>
 </div>
 <div id="fbo-detail-middle" class="">
   <div class="fbo-detail-middle-item">
@@ -792,13 +786,30 @@ Data
       <img id="bottombar-img-pipeline"class="bottombar-img icon-2" src="./img/pipeline.png" alt="">
     </div>
   </div>
-  <div id="bottombar-img-profile" class="bottombar-item">
+  <div id="bottombar-img-profile" class="bottombar-item" onclick="openBottombarPopup()">
     <div class="profile-circle-box">
       <div id="profile-circle" class="circle" style="">
         <div id="profile-circle-inside" class="circle-inside" style="">
           <img class="circle-img" src="./img/profile.png" alt="">
         </div>
       </div>
+    </div>
+  </div>
+  <div id="bottombar-popup" class="inactive">
+    <div class="bottombar-popup-item">
+      Profile
+    </div>
+    <div class="bottombar-popup-item">
+      Company
+    </div>
+    <div class="bottombar-popup-item">
+      Points
+    </div>
+    <div class="bottombar-popup-item">
+      Alerts
+    </div>
+    <div class="bottombar-popup-item" onclick="logOut()">
+      Log Out
     </div>
   </div>
 </div>

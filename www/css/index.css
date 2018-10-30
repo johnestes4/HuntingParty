@@ -928,32 +928,7 @@ h1, .instructions{
   font-family: 'Lato Semibold', sans-serif;
 }
 
-#abstract-text {
-  padding: 1vh 4vw 1vh 4vw;
-  /* height: calc(100% - 105px); */
-  height: 99%;
-  font-size: 14px;
-  display: block;
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
 
-.highlight-button-box {
-  height: 40px;
-}
-
-.highlight-button-box button {
-  width: 48%;
-  float: left;
-  height: 100%;
-  line-height: 36px;
-  font-size: 14px;
-  font-weight: normal;
-  background: rgba(0,175,217,1);
-}
 
 .fbo-detail-left-details {
   height: 20px;
@@ -989,31 +964,41 @@ h1, .instructions{
 
 
 #fbo-detail-top {
-  height: calc(93vh - 407px);
+  height: calc(93vh - 367px);
   position: relative;
   width: 100%;
   float: left;
 }
 
 .fbo-detail-top-larger {
-  height: calc(93vh - 100px)!important;
+  height: calc(93vh - 60px)!important;
 }
 
 #abstract-box {
   position: relative;
   width: 100%;
-  height: calc(93vh - 471px);
+  height: calc(93vh - 457px);
   overflow-y: auto;
-  background-color: rgb(248, 248, 248);
+}
+#abstract-text {
+  /* height: calc(100% - 105px); */
+  padding: 1vh 4vw 1vh 4vw;
+  font-size: 14px;
+  display: block;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .abstract-box-larger {
-  height: calc(93vh - 164px)!important;
+  height: calc(93vh - 150px)!important;
 }
 
 .abstract-hover-button {
   position: absolute;
   right: 5px;
-  bottom: 45px;
+  bottom: 5px;
   width: 30px;
   height: 30px;
   border-radius: 90%;
@@ -1187,12 +1172,18 @@ h1, .instructions{
   border-radius: 8px;
 }
 
+.fbo-detail-middle-item-header-segment {
+  float: left;
+  height: 100%;
+  position: relative;
+}
+
 .fbo-details-input-button {
   margin: 10px 0px 10px 0px;
   height: auto;
   width: auto;
-  max-width: 20px;
-  max-height: 20px;
+  max-width: 30px;
+  max-height: 30px;
   float: left;
 }
 
@@ -1479,7 +1470,7 @@ h1, .instructions{
   width: 100%;
   background: rgba(243,243,243,1);
   height: 26px;
-  border-radius: 13px;
+  border-radius: 7px;
   border: none;
   margin: none;
   font-size: 14px;
@@ -1497,10 +1488,10 @@ h1, .instructions{
   float: left;
   z-index: 2;
   position: relative;
-  width: calc(100% - 130px);
+  width: calc(100% - 135px);
   background: white;
   height: 26px;
-  border-radius: 13px;
+  border-radius: 7px;
   border: none;
   margin: none;
   margin-top: 2px;
@@ -1563,7 +1554,7 @@ h1, .instructions{
 #search-box-keyword-left {
   width: 100%;
   height: 26px;
-  border-radius: 13px 0px 0px 13px;
+  border-radius: 7px 0px 0px 7px;
   font-size: 14px;
   line-height: 26px;
   padding-left: 8px;
@@ -1572,7 +1563,7 @@ h1, .instructions{
 #search-box-keyword-right {
   width: 100%;
   height: 26px;
-  border-radius: 0px 13px 13px 0px;
+  border-radius: 0px 7px 7px 0px;
   font-size: 14px;
   text-align: right;
   line-height: 26px;
@@ -1680,12 +1671,39 @@ h1 {
   z-index: 9;
   position: relative;
   float: left;
+  background: white;
+}
+#bottombar-popup {
+  position: absolute;
+  right: 0px;
+  bottom: 58px;
+  z-index: 3;
+  background: white;
+  height: calc(50vh - 58px);
+  width: 40%;
+  box-shadow: -2px -2px 6px 1px rgba(0,0,0,0.25);
+}
+
+.bottombar-popup-item {
+  float: left;
+  width: 100%;
+  height: calc((50vh - 58px) / 5);
+  line-height: calc((50vh - 58px) / 5);
+  background: white;
+  font-size: 20px;
+  text-align: right;
+  padding: 0px 10% 0px 10%;
+}
+.bottombar-popup-item:active {
+  filter: brightness(95%);
 }
 
 .bottombar-item {
   position: relative;
+  background: white;
   height: 100%;
   width: 20%;
+  z-index: 4;
   float: left;
 }
 .sidebar-item:active {
@@ -1727,7 +1745,7 @@ h1 {
   z-index: 99;
 }
 .topbar-side {
-  width: 30%;
+  width: 40px;
   height: 100%;
   float: left;
   color: white;
@@ -1737,12 +1755,13 @@ h1 {
 #topbar-back {
   position: relative;
   height: 6vh;
-  width: 5.5vh;
+  margin-left: 2px;
+  width: 38px;
   padding: 0px;
 }
 #topbar-back p {
-  position: absolute;
   font-size: 6vh;
+  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -1754,7 +1773,8 @@ h1 {
   width: 4vh;
 }
 .topbar-center {
-  width: 40%;
+  width: calc(100% - 80px);
+  position: relative;
   height: 100%;
   float: left;
   text-align: center;
@@ -1762,6 +1782,15 @@ h1 {
   color: white;
   line-height: 7vh;
   font-family: 'Lato Semibold', sans-serif;
+}
+.topbar-center-text-2 {
+  line-height: 3vh!important;
+  font-size: 18px;
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .topbar-right-button {
@@ -2458,18 +2487,28 @@ h1 {
   display: none;
 }
 
-.highlight-button {
-  width: 48%;
-  margin-left: 1%;
-  margin-right: 1%;
-  float: left;
-  line-height: 100%;
-  font-size: 12px;
-}
-
 .highlight-button-active {
   background: rgba(255,198,0,1)!important;
 }
+
+.highlight-button-box {
+  height: 40px;
+  padding: 6px 6px 6px 6px;
+  border-top: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.highlight-button-box button {
+  width: 44%;
+  margin-left: 3%;
+  margin-right: 3%;
+  float: left;
+  height: 100%;
+  line-height: 100%;
+  font-size: 14px;
+  font-weight: normal;
+}
+
 
 .info-circle {
   border-radius: 90%;

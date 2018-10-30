@@ -644,7 +644,7 @@ function viewSearch(index) {
   checkChecked()
   document.getElementById("topbar-center-text").innerHTML = "Filter"
   document.getElementById("topbar-left").innerHTML = ''
-  document.getElementById("topbar-right").innerHTML = '<div class="topbar-right-button" onclick="saveSearchTerms()"><p id="topbar-right-text">Done</p></div>'
+  // document.getElementById("topbar-right").innerHTML = '<div class="topbar-right-button" onclick="saveSearchTerms()"><p id="topbar-right-text">Done</p></div>'
 }
 
 function openSearchBox(which) {
@@ -820,18 +820,13 @@ function renderSavedSearches() {
 
 function generateSearchHTML(where) {
   var inputHtml = '<div class="search-item-filters">'+
-    '<p>Filters</p>'+
+  '<div class="search-item-filters-left">'+
+  '<p>Filters:</p>'+
+  '</div>'+
+  '<div id="search-item-filters-right">'+
+  '</div>'+
   '</div>'
 
-  if (where == 1) {
-    inputHtml = '<div class="search-item-filters">'+
-    '<div class="search-item-filters-left">'+
-    '<p>Filters:</p>'+
-    '</div>'+
-    '<div id="search-item-filters-right">'+
-    '</div>'+
-    '</div>'
-  }
   html = '<div id="search-terms-items" class="">'+
     inputHtml+
     '<div class="search-item-category" onclick="openSearchBox(6)">'+
@@ -1001,7 +996,7 @@ function generateSearchHTML(where) {
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category" onclick="openSearchBox(5)" style="border-bottom: none;">'+
+    '<div class="search-item-category" onclick="openSearchBox(5)">'+
       '<div class="search-item-img-box">'+
         '<img class="search-item-img" src="./img/setaside.png" alt="">'+
       '</div>'+
@@ -1050,8 +1045,10 @@ function openSearchItems(which) {
   if (which == 0) {
     if (document.getElementById("saved-searches").classList.contains('inactive')) {
       document.getElementById("saved-searches").classList.remove('inactive')
+      document.getElementById("search-item-arrow-"+which).classList.add('rotate')
     } else {
       document.getElementById("saved-searches").classList.add('inactive')
+      document.getElementById("search-item-arrow-"+which).classList.remove('rotate')
     }
   } else if (which == 1) {
     if (previousSearchTermsIndex) {
@@ -1065,12 +1062,14 @@ function openSearchItems(which) {
       document.getElementById("single-search-button").classList.remove('inactive')
       document.getElementById("new-search").classList.remove('inactive')
       document.getElementById("search-name").classList.remove('inactive')
+      document.getElementById("search-item-arrow-"+which).classList.add('rotate')
     } else {
       document.getElementById("double-search-buttons").classList.remove('inactive')
       document.getElementById("single-search-button").classList.add('inactive')
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
+      document.getElementById("search-item-arrow-"+which).classList.remove('rotate')
     }
   } else {
     if (previousSearchTermsIndex) {
@@ -1085,6 +1084,7 @@ function openSearchItems(which) {
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
+      document.getElementById("search-item-arrow-"+which).classList.add('rotate')
       generateSearchHTML(which)
       var searchIndex = which - 2
       viewSearch(searchIndex)
@@ -1093,6 +1093,7 @@ function openSearchItems(which) {
     } else {
       document.getElementById("search-item-"+which).innerHTML = ''
       document.getElementById("search-item-"+which).classList.add('inactive')
+      document.getElementById("search-item-arrow-"+which).classList.remove('rotate')
     }
   }
 }
@@ -2062,14 +2063,16 @@ function toggleHamburgerMenu() {
   }
 
   document.addEventListener("click", (evt) => {
-    const profileDropdown = document.getElementById("sidebar");
+    const profilePopup = document.getElementById("bottombar-popup");
+    const profilePopupButton = document.getElementById("bottombar-img-profile");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
     const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
     let targetElement = evt.target; // clicked element
+    var profilePopupOpen = !profilePopup.classList.contains('inactive')
     var profileInside = false
     do {
-      if (profileDropdownOpen) {
-        if (targetElement == profileDropdown || targetElement == topbarHamburger) {
+      if (profilePopupOpen) {
+        if (targetElement == profilePopup || targetElement == profilePopupButton) {
           // This is a click inside. Do nothing, just return.
           profileInside = true;
         }
@@ -2079,33 +2082,18 @@ function toggleHamburgerMenu() {
     } while (targetElement);
     // This is a click outside.
     if (!profileInside) {
-      profileDropdown.classList.add('sidebar-out');
-      profileDropdown.classList.remove('sidebar-in')
-      profileDropdownOpen = false
+      profilePopup.classList.add('inactive');
     }
 
-    if (voteDropdownOpen > -1) {
-      targetElement = evt.target
-      do {
-        if (targetElement == voteDropdown) {
-          // This is a click inside. Do nothing, just return.
-          return;
-        } else if (targetElement == voteCircle) {
-          // This is a click inside. Do nothing, just return.
-          return;
-        }
-        // Go up the DOM
-        targetElement = targetElement.parentNode;
-      } while (targetElement);
-      // This is a click outside.
-      document.getElementById("vote-circle-dropdown-"+voteDropdownOpen).classList.add('inactive')
-      // var a = document.getElementsByClassName('fbo-item-points-dropdown')
-      // for (i = 0; i < a.length; i++) {
-      //   a[i].classList.add('inactive');
-      // }
-      voteDropdownOpen = -1
-    }
   });
+
+  function openBottombarPopup() {
+    if (document.getElementById("bottombar-popup").classList.contains('inactive')) {
+      document.getElementById("bottombar-popup").classList.remove('inactive')
+    } else {
+      document.getElementById("bottombar-popup").classList.add('inactive')
+    }
+  }
 
   function switchTab(num) {
     document.getElementById("fbo-list-view").classList.remove('inactive');
@@ -3438,7 +3426,7 @@ function toggleHamburgerMenu() {
     '</p><p><span style="font-weight: bold">Contact: </span>'+
     proxy.fbo.contact+
     '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
-    document.getElementById("fbo-title").innerHTML = proxy.fbo.subject;
+    document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+proxy.fbo.subject+'</p>';
     var fboDescHTML = ''
     var outputArray2 = proxy.fboDesc
     activeFboDesc = outputArray2
@@ -3481,7 +3469,6 @@ function toggleHamburgerMenu() {
     // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
     document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
     document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
-    document.getElementById("fbo-details-shares").innerHTML = '0'
 
     fboIndex = index
     if (!proxy.viewed) {
