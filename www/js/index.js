@@ -2123,7 +2123,7 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
       document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
-      document.getElementById("topbar-center-text").innerHTML = "News"
+      document.getElementById("topbar-center-text").innerHTML = "To Do/News"
       document.getElementById("topbar-right").innerHTML = ''
     } else if (num == 1) {
       document.getElementById("news-block").classList.add('inactive')

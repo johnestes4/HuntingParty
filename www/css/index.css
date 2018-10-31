@@ -413,31 +413,63 @@ h1, .instructions{
 
 .news-tab {
   float: left;
-  text-align: center;
-  height: 12vh;
-  border-bottom: .5vh solid rgba(255,198,0,1);
+  /* text-align: center; */
+  /* height: 7vh; */
+  /* border-bottom: .5vh solid rgba(255,198,0,1); */
 }
 
 #news-block {
   float: left;
   position: relative;
   width: 100%;
+  overflow: hidden;
   background: rgba(60,85,136,1);
+  background: white;
 }
-
+#todo-items{
+  overflow-y: auto;
+}
+.todo-header{
+  padding-top: .2em;
+  background-color: #bebebe;
+  color: black;
+  height: 4vh;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.5);
+}
+.ACT-tab{
+  /* border: 1px solid salmon; */
+  width: 40%; 
+  margin-left: 11%; 
+  line-height: calc(8vh / 3); 
+  text-align: right;
+  /* padding-top: 2vh;  */
+  /* padding-bottom: 2vh; */
+}
+.TD-tab{
+  /* border: 1px solid purple; */
+  width: 35%; 
+  margin-left: 5%; 
+  margin-right: 5%; 
+  /* line-height: 12vh; */
+}
 #todo-block {
   float: left;
   position: relative;
   width: 100%;
   height: auto;
+  color: white;
 }
 
 .todo-item {
-  background: rgba(136, 78, 78, 1);
+  /* background: white; */
+  background: rgb(245, 245, 245);
   border-top: 1px solid rgba(255,255,255,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.75);
+  border-bottom: 1px solid rgba(0,0,0,0.5);
   float: left;
   width: 100%;
+  color: black;
+  padding: .5em;
 }
 
 .todo-img {
@@ -490,13 +522,6 @@ h1, .instructions{
   border-bottom: 2px solid rgba(255, 255, 255, .1);
 }
 
-.news-tab {
-  float: left;
-  text-align: center;
-  height: 12vh;
-  border-bottom: .5vh solid rgb(255,198,0);
-}
-
 /* Random Test For Orientation; May be implemented */
 @media screen and (orientation: landscape){
   .news-header h6{
@@ -506,7 +531,7 @@ h1, .instructions{
 
 }
 
-.news-header{
+.news-block-header{
   border-top: 1px solid rgba(255,255,255,0.1);
   border-bottom: 1px solid rgb(133, 133, 133);
   margin: auto;
