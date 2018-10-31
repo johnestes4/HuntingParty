@@ -97,18 +97,24 @@ under the License.
     </div> -->
     <div class="login-register-content">
       <p class="sr-only">Email Address</p>
-      <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
+      <div class="login-field-box">
+        <img class="" src="./img/mail-white.png" alt="">
+        <input class="login-field" type="text" id="email" name="" value="" placeholder="Business Email">
+      </div>
       <p class="sr-only">Password</p>
-      <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
+      <div class="login-field-box">
+        <img class="" src="./img/lock-white.png" alt="">
+        <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
+      </div>
       <div id="login-error-text"></div>
     </div>
-
-
     <div class="" style="width: 100%; position: relative;">
-      <button class="center-absolute button-alt" type="button" name="button" onclick="login()">LOGIN</button>
+      <button class="login-button" type="button" name="button" onclick="login()">Sign In</button>
       <div class="login-redirect">
-        <p>New to Hunting Party? <a href="#" onclick="goToRegister()">Sign Up Here</a></p>
+        <p><a href="#">Forgot Your Password?</a></p>
       </div>
+      <button class="login-button-2" type="button" name="button" onclick="goToRegister()">Create a profile</button>
+
       <!-- <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button> -->
     </div>
   </div>
@@ -121,26 +127,41 @@ under the License.
     <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
   </div>
   <div class="login-register-content">
-    <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First Name">
+    <div class="login-field-box">
+      <img class="" src="./img/profile-white.png" alt="">
+      <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First Name">
+    </div>
     <div id="register-alert-1" class="register-field-alert"></div>
     <!-- <p class="login-info">Password</p> -->
-    <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last Name">
+    <div class="login-field-box">
+      <img class="" src="./img/profile-white.png" alt="">
+      <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last Name">
+    </div>
     <div id="register-alert-2" class="register-field-alert"></div>
 
-    <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Business Email">
+    <div class="login-field-box">
+      <img class="" src="./img/mail-white.png" alt="">
+      <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Business Email">
+    </div>
     <div id="register-alert-3" class="register-field-alert"></div>
 
-    <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
+    <div class="login-field-box">
+      <img class="" src="./img/lock-white.png" alt="">
+      <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
+    </div>
     <div id="register-alert-4" class="register-field-alert"></div>
 
-    <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
+    <div class="login-field-box">
+      <img class="" src="./img/lock-white.png" alt="">
+      <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
+    </div>
     <div id="register-alert-5" class="register-field-alert"></div>
   </div>
 
   <div class="">
-    <button class="center-absolute button-alt" type="button" name="button" onclick=register()>JOIN</button>
+    <button class="login-button" type="button" name="button" onclick=register()>Sign Up</button>
     <div class="login-redirect">
-      <p>Already have an Account? <a href="#" onclick="goToLogin()">Go Back To Login</a></p>
+      <p><a href="#" onclick="goToLogin()">Already have an Account? Sign In</a></p>
     </div>
   </div>
 </div>
