@@ -344,10 +344,10 @@ under the License.
   </div>
   <div id="saved-search-view" class="">
     <div class="search-item">
-      <div class="search-item-text">
+      <div class="category-text">
         Test
       </div>
-      <div class="search-item-right">
+      <div class="category-right">
         >
       </div>
     </div>
@@ -360,8 +360,8 @@ under the License.
       <div class="search-item-header" style="background: rgba(243,243,243,1);">
         <div class="search-name-left" onclick="openSearchItems(1)">Create New:</div>
         <input id="search-name" class="search-name-input inactive" type="text" name="" value="" placeholder="Name Your Search">
-        <div class="search-item-right">
-          <p class="search-item-arrow" id="search-item-arrow-1">›</p>
+        <div class="category-right">
+          <p class="category-arrow" id="category-arrow-1">›</p>
         </div>
         <div class="" style="position: absolute; z-index: 0; right: 0px; top: 0px; width: 100%; height: 100%;" onclick="openSearchItems(1)">
 
@@ -588,11 +588,11 @@ Data
     Click on the first and last words of the string you want to highlight
   </div>
   <div id="fbo-detail-info" class="">
-    <div class="fbo-detail-middle-item-header" style="padding: 0px 4vw 0px 4vw; height: 50px;">
+    <div class="fbo-detail-middle-item-header" style="padding: 0px 4vw 0px 4vw; height: 50px; width: 100%;">
       <div class="fbo-detail-middle-item-header-img">
-
+        <img src="./img/type-light.png" alt="">
       </div>
-      <div class="fbo-detail-middle-item-header-segment" style="padding: 15px 0px 15px 0px; width: calc(100% - 253px);">
+      <div class="fbo-detail-middle-item-header-segment" style="padding: 15px 0px 15px 0px; width: calc(100% - 293px);">
         <p>Abstract</p>
       </div>
       <div class="fbo-detail-middle-item-header-segment" style="width: 65px;">
@@ -623,31 +623,6 @@ Data
     <button id="highlight-button-1" class="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
     <button id="highlight-button-2" class="" type="button" name="button" onclick="turnOnHighlight(true)" style="margin-left: 2%;">Gray Out</button>
   </div> -->
-  <div class="fbo-detail-left inactive">
-    <div class="fbo-detail-left-text">
-      <div class="fbo-detail-left-details">
-        <img src="./img/calendar.png" alt="">
-        <p id="fbo-detail-left-details-date">11/11/2111</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/comment.png" alt="">
-        <p id="fbo-detail-left-details-comments">99 Comments</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/thumbsup.png" alt="">
-        <p id="fbo-detail-left-details-likes">99 Likes</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/thumbsdown.png" alt="">
-        <p id="fbo-detail-left-details-dislikes">99 Dislikes</p>
-      </div>
-      <div class="fbo-detail-left-details">
-        <img src="./img/share.png" alt="">
-        <p id="fbo-detail-left-details-shares">99 Shares</p>
-      </div>
-      <button id="" class="" type="button" name="button">Refer</button>
-    </div>
-  </div>
 </div>
 
 <div class="abstract-hover-button" onClick="expandAbstract()">
@@ -657,29 +632,63 @@ Data
 <div id="fbo-detail-middle" class="">
   <div class="fbo-detail-middle-item">
     <div class="fbo-detail-middle-item-header" onClick="openFboDetail(0)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/prbable-value-light.png" alt="">
+      </div>
       <div class="fbo-detail-middle-item-text">
         <p>Probable RFP Value & Competition</p>
       </div>
       <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-0">›</p>
     </div>
     <div id="fbo-detail-middle-0" class="fbo-detail-middle-expanded inactive">
-      <canvas id="chart1" style="width: 100%!important; height: 400px!important; margin-bottom: 2vh;"></canvas>
-      <canvas id="chart3" style="width: 100%!important; height: 400px!important; margin-bottom: 2vh;"></canvas>
-      <canvas id="chart2" style="width: 100%!important; height: 400px!important; margin-bottom: 2vh;"></canvas>
+      <div class="" style="float: left; width: 100%; height: 400px; margin-bottom: 2vh;">
+        <canvas id="chart1" style="width: 100%!important; height: 400px!important;"></canvas>
+      </div>
+      <div class="" style="float: left; width: 100%; height: 400px; margin-bottom: 2vh;">
+        <canvas id="chart3" style="width: 100%!important; height: 400px!important;"></canvas>
+      </div>
+      <div class="" style="float: left; width: 100%; height: 400px; margin-bottom: 2vh;">
+        <canvas id="chart2" style="width: 100%!important; height: 400px!important;"></canvas>
+      </div>
     </div>
   </div>
   <div class="fbo-detail-middle-item">
     <div class="fbo-detail-middle-item-header" onClick="openFboDetail(1)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/comments-light.png" alt="">
+      </div>
       <div class="fbo-detail-middle-item-text">
         <p>Discussion</p>
       </div>
       <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-1">›</p>
     </div>
     <div id="fbo-detail-middle-1" class="fbo-detail-middle-expanded inactive">
+      <div id="fbo-details-comments" class="">
+        <div class="comment">
+          <div class="comment-left">
+            <div class="comment-avatar">
+              <img class="comment-avatar-img" src="./img/user.png" alt="">
+            </div>
+            <img class="comment-avatar-vote" src="./img/thumbsdown.png" alt="">
+          </div>
+          <div class="comment-right">
+            <div class="comment-title" style="margin: none!important">
+              <p class="comment-name">Person's Name</p>
+              <p class="comment-time">99 mins</p>
+            </div>
+            <div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">
+              <div class="comment-text" style="padding: none!important">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="fbo-detail-middle-item">
     <div class="fbo-detail-middle-item-header" onClick="openFboDetail(2)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/information-light.png" alt="">
+      </div>
       <div class="fbo-detail-middle-item-text">
         <p>Information</p>
       </div>
@@ -691,6 +700,9 @@ Data
   </div>
   <div class="fbo-detail-middle-item">
     <div class="fbo-detail-middle-item-header" onClick="openFboDetail(3)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/companies-light.png" alt="">
+      </div>
       <div class="fbo-detail-middle-item-text">
         <p>Companies with similar past performance</p>
       </div>
@@ -701,6 +713,9 @@ Data
   </div>
   <div class="fbo-detail-middle-item" onClick="openFboDetail(4)">
     <div class="fbo-detail-middle-item-header">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/interested-vendors-light.png" alt="">
+      </div>
       <div class="fbo-detail-middle-item-text">
         <p>Interested Vendors</p>
       </div>
@@ -711,6 +726,9 @@ Data
   </div>
   <div class="fbo-detail-middle-item" onClick="openFboDetail(5)" style="border-bottom: none;">
     <div class="fbo-detail-middle-item-header">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/share-light.png" alt="">
+      </div>
       <div class="fbo-detail-middle-item-text">
         <p>Refer RFP</p>
       </div>
@@ -724,28 +742,6 @@ Data
   <p style="text-align: center; margin: 0px;">Projected Value</p>
   <p style="text-align: center; margin: 0px;">Projected Competition</p>
   <p style="text-align: center; margin: 0px;">Value & Competition</p>
-</div>
-<div class="fbo-detail-bottom" style="background: rgba(205,239,248,1); border-top: 1px solid rgba(0,0,0,0.2);">
-  <div id="fbo-details-comments" class="">
-    <div class="comment">
-      <div class="comment-left">
-        <div class="comment-avatar">
-          <img class="comment-avatar-img" src="./img/user.png" alt="">
-        </div>
-        <img class="comment-avatar-vote" src="./img/thumbsdown.png" alt="">
-      </div>
-      <div class="comment-right">
-        <div class="comment-title" style="margin: none!important">
-          <p class="comment-name">Person's Name</p>
-          <p class="comment-time">99 mins</p>
-        </div>
-        <div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">
-          <div class="comment-text" style="padding: none!important">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
 </div>
 <!-- <div class="iconbar">
@@ -770,21 +766,25 @@ Data
     <div class="bottombar-img-wrapper">
       <img id="bottombar-img-home" class="bottombar-img icon-2" src="./img/news.png" alt="">
     </div>
+    <p id="bottombar-text-0">News</p>
   </div>
   <div class="bottombar-item" onclick="switchTab(2)">
     <div class="bottombar-img-wrapper">
       <img id="bottombar-img-opportunities" class="bottombar-img icon-2" src="./img/rfp.png" alt="">
     </div>
+    <p id="bottombar-text-2">RFP(I)s</p>
   </div>
   <div class="bottombar-item" onclick="switchTab(1)">
     <div class="bottombar-img-wrapper">
       <img id="bottombar-img-search" class="bottombar-img icon-2" src="./img/search.png" alt="">
     </div>
+    <p id="bottombar-text-1">Search</p>
   </div>
   <div class="bottombar-item" onclick="switchTab(3)">
     <div class="bottombar-img-wrapper">
       <img id="bottombar-img-pipeline"class="bottombar-img icon-2" src="./img/pipeline.png" alt="">
     </div>
+    <p id="bottombar-text-3">Pipeline</p>
   </div>
   <div id="bottombar-img-profile" class="bottombar-item" onclick="openBottombarPopup()">
     <div class="profile-circle-box">

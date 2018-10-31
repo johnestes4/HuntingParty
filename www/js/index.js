@@ -458,7 +458,7 @@ function checkChecked() {
   var checkedName = ''
   var filtersHtml = ''
   if (searchTerms.type[0].value == true) {
-    // document.getElementById("search-item-right-duedate").innerHTML = "All >";
+    // document.getElementById("category-right-duedate").innerHTML = "All >";
     filtersHtml = filtersHtml + '<div class="filters-item">Type<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
   } else {
     for (i = 1; i < searchTerms.type.length; i++) {
@@ -467,7 +467,7 @@ function checkChecked() {
         checkedName = searchTerms.type[i].name
       }
     }
-    // document.getElementById("search-item-right-duedate").innerHTML = numberChecked + " >";
+    // document.getElementById("category-right-duedate").innerHTML = numberChecked + " >";
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Type ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
@@ -475,7 +475,7 @@ function checkChecked() {
     checkedName = ''
   }
   if (searchTerms.dueDate[0].value == true) {
-    // document.getElementById("search-item-right-duedate").innerHTML = "All >";
+    // document.getElementById("category-right-duedate").innerHTML = "All >";
     filtersHtml = filtersHtml + '<div class="filters-item">Due Date<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
   } else {
     for (i = 1; i < searchTerms.dueDate.length; i++) {
@@ -484,7 +484,7 @@ function checkChecked() {
         checkedName = searchTerms.dueDate[i].name
       }
     }
-    // document.getElementById("search-item-right-duedate").innerHTML = numberChecked + " >";
+    // document.getElementById("category-right-duedate").innerHTML = numberChecked + " >";
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Due Date ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
@@ -493,7 +493,7 @@ function checkChecked() {
   }
   if (searchTerms.naics[0].value == true) {
     filtersHtml = filtersHtml + '<div class="filters-item">NAICS<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("search-item-right-naics").innerHTML = "All >";
+    // document.getElementById("category-right-naics").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.naics.length; i++) {
       if (searchTerms.naics[i].value == true) {
@@ -509,7 +509,7 @@ function checkChecked() {
   }
   if (searchTerms.psc[0].value == true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Product<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("search-item-right-psc").innerHTML = "All >";
+    // document.getElementById("category-right-psc").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.psc.length; i++) {
       if (searchTerms.psc[i].value == true) {
@@ -520,13 +520,13 @@ function checkChecked() {
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Product ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
-    // document.getElementById("search-item-right-psc").innerHTML = numberChecked + " >";
+    // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.agency[0].value == true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Agency<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("search-item-right-agency").innerHTML = "All >";
+    // document.getElementById("category-right-agency").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.agency.length; i++) {
       if (searchTerms.agency[i].value == true) {
@@ -537,7 +537,7 @@ function checkChecked() {
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Agency ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
-    // document.getElementById("search-item-right-agency").innerHTML = numberChecked + " >";
+    // document.getElementById("category-right-agency").innerHTML = numberChecked + " >";
     numberChecked = 0
     checkedName = ''
   }
@@ -558,7 +558,7 @@ function checkChecked() {
   numberChecked = 0
   if (searchTerms.setAside[0].value == true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Set Aside<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("search-item-right-setaside").innerHTML = "All >";
+    // document.getElementById("category-right-setaside").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.setAside.length; i++) {
       if (searchTerms.setAside[i].value == true) {
@@ -568,7 +568,7 @@ function checkChecked() {
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Set Aside ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     }
-    // document.getElementById("search-item-right-setaside").innerHTML = numberChecked + " >";
+    // document.getElementById("category-right-setaside").innerHTML = numberChecked + " >";
     numberChecked = 0
     checkedName = ''
   }
@@ -655,13 +655,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-time").classList.remove('inactive')
-      document.getElementById("search-item-arrow-duedate").classList.add('rotate')
+      document.getElementById("category-arrow-duedate").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-item-arrow-duedate").classList.remove('rotate')
+      document.getElementById("category-arrow-duedate").classList.remove('rotate')
     }
   } else if (which == 1) {
     if (document.getElementById("search-box-naics").classList.contains('inactive')) {
@@ -670,13 +670,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-naics").classList.remove('inactive')
-      document.getElementById("search-item-arrow-naics").classList.add('rotate')
+      document.getElementById("category-arrow-naics").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-item-arrow-naics").classList.remove('rotate')
+      document.getElementById("category-arrow-naics").classList.remove('rotate')
     }
   } else if (which == 2) {
     if (document.getElementById("search-box-psc").classList.contains('inactive')) {
@@ -685,13 +685,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-psc").classList.remove('inactive')
-      document.getElementById("search-item-arrow-psc").classList.add('rotate')
+      document.getElementById("category-arrow-psc").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-item-arrow-psc").classList.remove('rotate')
+      document.getElementById("category-arrow-psc").classList.remove('rotate')
     }
   } else if (which == 3) {
     if (document.getElementById("search-box-agency").classList.contains('inactive')) {
@@ -700,13 +700,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-agency").classList.remove('inactive')
-      document.getElementById("search-item-arrow-agency").classList.add('rotate')
+      document.getElementById("category-arrow-agency").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-item-arrow-agency").classList.remove('rotate')
+      document.getElementById("category-arrow-agency").classList.remove('rotate')
     }
   } else if (which == 4) {
     if (document.getElementById("search-box-location").classList.contains('inactive')) {
@@ -715,13 +715,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-location").classList.remove('inactive')
-      document.getElementById("search-item-arrow-location").classList.add('rotate')
+      document.getElementById("category-arrow-location").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-item-arrow-location").classList.remove('rotate')
+      document.getElementById("category-arrow-location").classList.remove('rotate')
     }
   } else if (which == 5) {
     if (document.getElementById("search-box-setaside").classList.contains('inactive')) {
@@ -730,13 +730,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-setaside").classList.remove('inactive')
-      document.getElementById("search-item-arrow-setaside").classList.add('rotate')
+      document.getElementById("category-arrow-setaside").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-item-arrow-setaside").classList.remove('rotate')
+      document.getElementById("category-arrow-setaside").classList.remove('rotate')
     }
   } else if (which == 6) {
     if (document.getElementById("search-box-type").classList.contains('inactive')) {
@@ -745,13 +745,13 @@ function openSearchBox(which) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-type").classList.remove('inactive')
-      document.getElementById("search-item-arrow-type").classList.add('rotate')
+      document.getElementById("category-arrow-type").classList.add('rotate')
     } else {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-item-arrow-type").classList.remove('rotate')
+      document.getElementById("category-arrow-type").classList.remove('rotate')
     }
   }
 }
@@ -786,11 +786,11 @@ function renderSavedSearches() {
   document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml
   html = html + '<div class="search-item">'+
   '<div class="search-item-header" onclick="openSearchItems('+0+')">'+
-  '<div class="search-item-text">'+
+  '<div class="category-text">'+
   'Saved Searches: '+
   '</div>'+
-  '<div class="search-item-right">'+
-  '<p class="search-item-arrow" id="search-item-arrow-0">›</p>'+
+  '<div class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-0">›</p>'+
   '</div>'+
   '</div>'+
   '<div id="saved-searches" class="search-item-subbox inactive">'
@@ -799,11 +799,11 @@ function renderSavedSearches() {
     var arrowIndex = i+2
     html = html + '<div class="search-item">'+
     '<div class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
-    '<div class="search-item-text">'+
+    '<div class="category-text">'+
     yourSearches[i].name+
     '</div>'+
-    '<div class="search-item-right">'+
-    '<p class="search-item-arrow" id="search-item-arrow-'+arrowIndex+'">›</p>'+
+    '<div class="category-right">'+
+    '<p class="category-arrow" id="category-arrow-'+arrowIndex+'">›</p>'+
     '</div>'+
     '</div>'+
     '<div id="search-item-'+arrowIndex+'" class="search-item-subbox inactive">'+
@@ -829,15 +829,15 @@ function generateSearchHTML(where) {
 
   html = '<div id="search-terms-items" class="">'+
     inputHtml+
-    '<div class="search-item-category" onclick="openSearchBox(6)">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/type.png" alt="">'+
+    '<div class="category" onclick="openSearchBox(6)">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/type.png" alt="">'+
       '</div>'+
-      '<div class="search-item-text">'+
+      '<div class="category-text">'+
         'Type'+
       '</div>'+
-      '<div id="search-item-right-type" class="search-item-right">'+
-      '<p class="search-item-arrow" id="search-item-arrow-type">›</p>'+
+      '<div id="category-right-type" class="category-right">'+
+      '<p class="category-arrow" id="category-arrow-type">›</p>'+
       '</div>'+
     '</div>'+
     '<div id="search-box-type" class="search-box inactive">'+
@@ -857,15 +857,15 @@ function generateSearchHTML(where) {
         '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Historical (closed) and projected RFPs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Projected opportunities</span>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category" onclick="openSearchBox(0)">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/duedate.png" alt="">'+
+    '<div class="category" onclick="openSearchBox(0)">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/duedate.png" alt="">'+
       '</div>'+
-      '<div class="search-item-text">'+
+      '<div class="category-text">'+
         'Due Date'+
       '</div>'+
-      '<div id="search-item-right-duedate" class="search-item-right">'+
-        '<p class="search-item-arrow" id="search-item-arrow-duedate">›</p>'+
+      '<div id="category-right-duedate" class="category-right">'+
+        '<p class="category-arrow" id="category-arrow-duedate">›</p>'+
       '</div>'+
     '</div>'+
     '<div id="search-box-time" class="search-box inactive">'+
@@ -888,19 +888,19 @@ function generateSearchHTML(where) {
         '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 6 Months From Now</span>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category" onclick="openSearchBox(1)">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/naics.png" alt="">'+
+    '<div class="category" onclick="openSearchBox(1)">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/naics.png" alt="">'+
       '</div>'+
-      '<div class="search-item-text">'+
+      '<div class="category-text">'+
         'NAICS Codes'+
       '</div>'+
-      '<div id="search-item-right-naics" class="search-item-right">'+
-      '<p class="search-item-arrow" id="search-item-arrow-naics">›</p>'+
+      '<div id="category-right-naics" class="category-right">'+
+      '<p class="category-arrow" id="category-arrow-naics">›</p>'+
       '</div>'+
     '</div>'+
     '<div id="search-box-naics" class="search-box inactive">'+
-      '<input id="search-filter-0" class="search-item-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">'+
+      '<input id="search-filter-0" class="category-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">'+
       '<div id="search-box-naics-list" class="">'+
         '<div class="" style="width: 100%; float: left;">'+
           '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
@@ -910,19 +910,19 @@ function generateSearchHTML(where) {
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category" onclick="openSearchBox(2)">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/productservice.png" alt="">'+
+    '<div class="category" onclick="openSearchBox(2)">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/productservice.png" alt="">'+
       '</div>'+
-      '<div class="search-item-text">'+
+      '<div class="category-text">'+
         'Product/Service Description'+
       '</div>'+
-      '<div id="search-item-right-psc" class="search-item-right">'+
-      '<p class="search-item-arrow" id="search-item-arrow-psc">›</p>'+
+      '<div id="category-right-psc" class="category-right">'+
+      '<p class="category-arrow" id="category-arrow-psc">›</p>'+
       '</div>'+
     '</div>'+
     '<div id="search-box-psc" class="search-box inactive">'+
-      '<input id="search-filter-1" class="search-item-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">'+
+      '<input id="search-filter-1" class="category-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">'+
       '<div id="search-box-psc-list" class="">'+
         '<div class="" style="width: 100%; float: left;">'+
           '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
@@ -932,14 +932,14 @@ function generateSearchHTML(where) {
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/keyword.png" alt="">'+
+    '<div class="category">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/keyword.png" alt="">'+
       '</div>'+
-      '<div class="search-item-left">'+
-        '<input id="search-input-keyword" class="search-item-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">'+
+      '<div class="category-left">'+
+        '<input id="search-input-keyword" class="category-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">'+
       '</div>'+
-      '<div class="search-item-right-2">'+
+      '<div class="category-right-2">'+
         '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
           '<div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">'+
             'Title Only'+
@@ -952,19 +952,19 @@ function generateSearchHTML(where) {
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category" onclick="openSearchBox(3)">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/agencyoffice.png" alt="">'+
+    '<div class="category" onclick="openSearchBox(3)">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/agencyoffice.png" alt="">'+
       '</div>'+
-      '<div class="search-item-text">'+
+      '<div class="category-text">'+
         'Agency/Office'+
       '</div>'+
-      '<div id="search-item-right-agency" class="search-item-right">'+
-      '<p class="search-item-arrow" id="search-item-arrow-agency">›</p>'+
+      '<div id="category-right-agency" class="category-right">'+
+      '<p class="category-arrow" id="category-arrow-agency">›</p>'+
       '</div>'+
     '</div>'+
     '<div id="search-box-agency" class="search-box inactive">'+
-      '<input id="search-filter-2" class="search-item-input" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="Filter">'+
+      '<input id="search-filter-2" class="category-input" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="Filter">'+
       '<div id="search-box-agency-list" class="">'+
         '<div class="" style="width: 100%; float: left;">'+
           '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
@@ -974,19 +974,19 @@ function generateSearchHTML(where) {
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category" onclick="openSearchBox(4)">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/location.png" alt="">'+
+    '<div class="category" onclick="openSearchBox(4)">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/location.png" alt="">'+
       '</div>'+
-      '<div class="search-item-text">'+
+      '<div class="category-text">'+
         'Location'+
       '</div>'+
-      '<div id="search-item-right-location" class="search-item-right">'+
-      '<p class="search-item-arrow" id="search-item-arrow-location">›</p>'+
+      '<div id="category-right-location" class="category-right">'+
+      '<p class="category-arrow" id="category-arrow-location">›</p>'+
       '</div>'+
     '</div>'+
     '<div id="search-box-location" class="search-box inactive">'+
-      '<input id="search-filter-3" class="search-item-input" onkeyup="searchFilter(3)" type="text" name="" value="" placeholder="Filter">'+
+      '<input id="search-filter-3" class="category-input" onkeyup="searchFilter(3)" type="text" name="" value="" placeholder="Filter">'+
       '<div id="search-box-location-list" class="">'+
         '<div class="" style="width: 100%; float: left;">'+
           '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
@@ -996,15 +996,15 @@ function generateSearchHTML(where) {
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="search-item-category" onclick="openSearchBox(5)">'+
-      '<div class="search-item-img-box">'+
-        '<img class="search-item-img" src="./img/setaside.png" alt="">'+
+    '<div class="category" onclick="openSearchBox(5)">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/setaside.png" alt="">'+
       '</div>'+
-      '<div class="search-item-text">'+
+      '<div class="category-text">'+
         'Set Aside'+
       '</div>'+
-      '<div id="search-item-right-setaside" class="search-item-right">'+
-      '<p class="search-item-arrow" id="search-item-arrow-setaside">›</p>'+
+      '<div id="category-right-setaside" class="category-right">'+
+      '<p class="category-arrow" id="category-arrow-setaside">›</p>'+
       '</div>'+
     '</div>'+
     '<div id="search-box-setaside" class="search-box inactive">'+
@@ -1045,10 +1045,10 @@ function openSearchItems(which) {
   if (which == 0) {
     if (document.getElementById("saved-searches").classList.contains('inactive')) {
       document.getElementById("saved-searches").classList.remove('inactive')
-      document.getElementById("search-item-arrow-"+which).classList.add('rotate')
+      document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
       document.getElementById("saved-searches").classList.add('inactive')
-      document.getElementById("search-item-arrow-"+which).classList.remove('rotate')
+      document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   } else if (which == 1) {
     if (previousSearchTermsIndex) {
@@ -1062,14 +1062,14 @@ function openSearchItems(which) {
       document.getElementById("single-search-button").classList.remove('inactive')
       document.getElementById("new-search").classList.remove('inactive')
       document.getElementById("search-name").classList.remove('inactive')
-      document.getElementById("search-item-arrow-"+which).classList.add('rotate')
+      document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
       document.getElementById("double-search-buttons").classList.remove('inactive')
       document.getElementById("single-search-button").classList.add('inactive')
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
-      document.getElementById("search-item-arrow-"+which).classList.remove('rotate')
+      document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   } else {
     if (previousSearchTermsIndex) {
@@ -1084,7 +1084,7 @@ function openSearchItems(which) {
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
-      document.getElementById("search-item-arrow-"+which).classList.add('rotate')
+      document.getElementById("category-arrow-"+which).classList.add('rotate')
       generateSearchHTML(which)
       var searchIndex = which - 2
       viewSearch(searchIndex)
@@ -1093,7 +1093,7 @@ function openSearchItems(which) {
     } else {
       document.getElementById("search-item-"+which).innerHTML = ''
       document.getElementById("search-item-"+which).classList.add('inactive')
-      document.getElementById("search-item-arrow-"+which).classList.remove('rotate')
+      document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   }
 }
@@ -2111,6 +2111,10 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
       document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
+      document.getElementById("bottombar-text-0").classList.add('bottombar-item-text-active')
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
       document.getElementById("topbar-center-text").innerHTML = "News"
       document.getElementById("topbar-right").innerHTML = ''
     } else if (num == 1) {
@@ -2127,6 +2131,10 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-search").classList.add('icon-2-active')
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
       document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-1").classList.add('bottombar-item-text-active')
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
     } else if (num == 2) {
       document.getElementById("news-block").classList.add('inactive')
@@ -2140,6 +2148,10 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
       document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-2").classList.add('bottombar-item-text-active')
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
       renderFbos()
     } else if (num == 3) {
@@ -2155,6 +2167,10 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-img-pipeline").classList.add('icon-2-active')
       document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-3").classList.add('bottombar-item-text-active')
     }
     activeTab = num
     document.getElementById("topbar-left").innerHTML = ''
@@ -4286,7 +4302,7 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
-    // goToFbo(5, 0);
+    // goToFbo(5,0);
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
