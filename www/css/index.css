@@ -502,7 +502,7 @@ h1, .instructions{
 
 .todo-item {
   /* background: white; */
-  background: rgb(245, 245, 245);
+  background: #fafafa;
   border-top: 1px solid rgba(255,255,255,0.1);
   border-bottom: 1px solid rgba(0,0,0,0.5);
   float: left;
@@ -546,7 +546,7 @@ h1, .instructions{
 #news-items {
   height: 100%;
   width: 100%;
-  background: rgb(245, 245, 245);
+  background: #fafafa;
   overflow-y: auto;
   color: black;
   font-size: 1em;
