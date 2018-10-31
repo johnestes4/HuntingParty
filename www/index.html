@@ -203,7 +203,7 @@ under the License.
 
     </div>
     <div class="topbar-center">
-      <p id="topbar-center-text">News</p>
+      <p id="topbar-center-text">To Do/News</p>
     </div>
     <div id="topbar-right" class="topbar-side">
 
@@ -267,42 +267,45 @@ under the License.
 
 </div>
 <div id="news-block" class="body-block">
-  <div id="todo-block" class="inactive">
-    <div class="news-tab" style="width: 55%; margin-left: 15%; margin-right: 5%; line-height: 12vh;">
-      TO DO
-    </div>
-    <div class="news-tab" style="width: 20%; margin-right: 5%; line-height: calc(8vh / 3); padding-top: 2vh; padding-bottom: 2vh;">
-      Average Completion Time
-    </div>
-    <div class="" style="float: left; width: 100%; height: 2vh;">
-    </div>
-    <div class="todo-item">
-      <div class="todo-img" style="">
-        <img class="iconbar-img" src="./img/profile2.png" alt="">
+  <div id="todo-block" class="">
+    <div class="todo-header">
+      <div class="news-tab TD-tab" style="">
+        TO DO
       </div>
-      <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
-      <p class="todo-text todo-right">10/RFP</p>
-    </div>
-    <div class="todo-item">
-      <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-        <img class="iconbar-img" src="./img/profile2.png" alt="">
+      <div class="news-tab ACT-tab" style="">
+        Average Completion Time
       </div>
-      <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
-      <p class="todo-text todo-right">10/RFP</p>
     </div>
-    <div class="todo-item">
-      <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-        <img class="iconbar-img" src="./img/profile2.png" alt="">
+    <div id="todo-items">
+      <div class="todo-item">
+        <div class="todo-img" style="">
+          <img class="iconbar-img" src="./img/profile2.png" alt="">
+        </div>
+        <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
+        <p class="todo-text todo-right">10/RFP</p>
       </div>
-      <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
-      <p class="todo-text todo-right">5/RFP</p>
+      <div class="todo-item">
+        <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+          <img class="iconbar-img" src="./img/profile2.png" alt="">
+        </div>
+        <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
+        <p class="todo-text todo-right">10/RFP</p>
+      </div>
+      <div class="todo-item">
+        <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+          <img class="iconbar-img" src="./img/profile2.png" alt="">
+        </div>
+        <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
+        <p class="todo-text todo-right">5/RFP</p>
+      </div>
     </div>
+
   </div>
-  <div id="company-info" style="color: white;">
+  <div id="company-info" class="inactive" style="color: white;">
 
   </div>
   <div id="news-block " style="height: calc((93vh - 60px) - (25vh + 35px))">
-    <div class="news-header">
+    <div class="news-block-header">
       <!-- <hr class="hr-gold"> -->
       <h6>NEWS</h6>
     </div>
@@ -467,7 +470,7 @@ under the License.
   <div class="temp">
 
   </div>
-  <div id="fbo-list-view" class="body-block" style="height: 86vh;">
+  <div id="fbo-list-view" class="body-block" style="height: calc(93vh - 167px);">
     <div id="fbo-scroll-box" class="" style="height: 100%; width: 100%; overflow-y: auto;">
       <div class="" style="position: relative; height: auto; width: 100%;">
         <div class="tutorial-view inactive" style="height: 100%;">
@@ -517,7 +520,7 @@ under the License.
             </div>
           </div>
         </div>
-        <div id="fbo-item-load-buffer" class="fbo-item inactive">
+        <div id="fbo-item-load-buffer" class="fbo-item inactive" style="height: 150px;">
           <div class="loading-circle"></div>
         </div>
       </div>
@@ -794,6 +797,7 @@ Data
         </div>
       </div>
     </div>
+    <p id="bottombar-text-2">More</p>
   </div>
   <div id="bottombar-popup" class="inactive">
     <div class="bottombar-popup-item">

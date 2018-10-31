@@ -2115,7 +2115,7 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
       document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
       document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
-      document.getElementById("topbar-center-text").innerHTML = "News"
+      document.getElementById("topbar-center-text").innerHTML = "To Do/News"
       document.getElementById("topbar-right").innerHTML = ''
     } else if (num == 1) {
       document.getElementById("news-block").classList.add('inactive')
