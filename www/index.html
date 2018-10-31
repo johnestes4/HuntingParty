@@ -96,9 +96,9 @@ under the License.
       <p>Please sign in...</p>
     </div> -->
     <div class="login-register-content">
-      <p class="login-info">Email Address</p>
+      <p class="sr-only">Email Address</p>
       <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
-      <p class="login-info">Password</p>
+      <p class="sr-only">Password</p>
       <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
       <div id="login-error-text"></div>
     </div>
@@ -121,13 +121,13 @@ under the License.
     <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
   </div>
   <div class="login-register-content">
-    <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
+    <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First Name">
     <div id="register-alert-1" class="register-field-alert"></div>
     <!-- <p class="login-info">Password</p> -->
-    <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last name">
+    <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last Name">
     <div id="register-alert-2" class="register-field-alert"></div>
 
-    <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Email address">
+    <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Business Email">
     <div id="register-alert-3" class="register-field-alert"></div>
 
     <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
