@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -507,14 +507,14 @@ function checkChecked() {
     numberChecked = 0
     checkedName = ''
   }
-  if (searchTerms.psc[0].value == true) {
+  if (searchTerms.psc.products[0].value == true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Product<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     // document.getElementById("category-right-psc").innerHTML = "All >";
   } else {
-    for (i = 1; i < searchTerms.psc.length; i++) {
-      if (searchTerms.psc[i].value == true) {
+    for (i = 1; i < searchTerms.psc.products.length; i++) {
+      if (searchTerms.psc.products[i].value == true) {
         numberChecked++
-        checkedName = searchTerms.psc[i].name
+        checkedName = searchTerms.psc.products[i].name
       }
     }
     if (numberChecked > 0) {
@@ -600,12 +600,21 @@ function viewSearch(index) {
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.naics[i].value
   }
-  a = document.getElementsByClassName('checkbox-psc')
+  a = document.getElementsByClassName('checkbox-psc-product')
   for (i = 0; i < a.length; i++) {
-    a[i].checked = searchTerms.psc[i].value
-    if (searchTerms.psc[i].psc) {
-      for (i2 = 0; i2 < searchTerms.psc[i].psc.length; i2++) {
-        document.getElementById("psc-checkbox-"+i+"-"+i2).checked = searchTerms.psc[i].psc[i2].value
+    a[i].checked = searchTerms.psc.products[i].value
+    if (searchTerms.psc.products[i].psc) {
+      for (i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
+        document.getElementById("psc-product-checkbox-"+i+"-"+i2).checked = searchTerms.psc.products[i].psc[i2].value
+      }
+    }
+  }
+  a = document.getElementsByClassName('checkbox-psc-service')
+  for (i = 0; i < a.length; i++) {
+    a[i].checked = searchTerms.psc.services[i].value
+    if (searchTerms.psc.services[i].psc) {
+      for (i2 = 0; i2 < searchTerms.psc.services[i].psc.length; i2++) {
+        document.getElementById("psc-service-checkbox"+i+"-"+i2).checked = searchTerms.psc.services[i].psc[i2].value
       }
     }
   }
@@ -829,6 +838,26 @@ function generateSearchHTML(where) {
 
   html = '<div id="search-terms-items" class="">'+
     inputHtml+
+    '<div class="category">'+
+      '<div class="category-img-box">'+
+        '<img class="category-img" src="./img/keyword.png" alt="">'+
+      '</div>'+
+      '<div class="category-left">'+
+        '<input id="search-input-keyword" class="category-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">'+
+      '</div>'+
+      '<div class="category-right-2">'+
+        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
+          '<div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">'+
+            'Title Only'+
+          '</div>'+
+        '</div>'+
+        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
+          '<div id="search-box-keyword-right" class="" onclick="switchKeywordSearch(1)">'+
+            'All Text'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
     '<div class="category" onclick="openSearchBox(6)">'+
       '<div class="category-img-box">'+
         '<img class="category-img" src="./img/type.png" alt="">'+
@@ -929,26 +958,6 @@ function generateSearchHTML(where) {
         '</div>'+
         '<div class="" style="width: 100%; float: left;">'+
           '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
-        '</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/keyword.png" alt="">'+
-      '</div>'+
-      '<div class="category-left">'+
-        '<input id="search-input-keyword" class="category-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">'+
-      '</div>'+
-      '<div class="category-right-2">'+
-        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
-          '<div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">'+
-            'Title Only'+
-          '</div>'+
-        '</div>'+
-        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
-          '<div id="search-box-keyword-right" class="" onclick="switchKeywordSearch(1)">'+
-            'All Text'+
-          '</div>'+
         '</div>'+
       '</div>'+
     '</div>'+
@@ -1183,57 +1192,85 @@ function searchFilter(which) {
     document.getElementById("search-box-naics-list").innerHTML = html
   }
   if (which == 1) {
-    for (i = 0; i < searchTerms.psc.length; i++) {
+    html = '<div class="search-box-checkbox-item">'+
+    '<div class="search-box-checkbox-text" onclick="openPscCategory(0)">Products<span id="psc-product-arrow" class="checkbox-text-arrow">▼</span></div>'+
+    '</div>'+
+    '<div id="products-subcategory-box" class="subcategory-box">'
+    for (i = 0; i < searchTerms.psc.products.length; i++) {
       var checkedHtml = ''
-      if (searchTerms.psc[i].value) {
+      if (searchTerms.psc.products[i].value) {
         checkedHtml = ' checked'
       }
       var matchFound = false
-      if (searchTerms.psc[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].value == true) {
+      if (searchTerms.psc.products[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.products[i].value == true) {
         var inactiveHtml = ''
-        var arrowHtml = '<span id="psc-arrow-'+i+'" class="checkbox-text-arrow">▲</span>'
-        if (document.getElementById("psc-subcategory-box-"+i).classList.contains('inactive')) {
+        var arrowHtml = '<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▲</span>'
+        if (document.getElementById("psc-product-subcategory-box-"+i).classList.contains('inactive')) {
           inactiveHtml = ' inactive'
-          arrowHtml = '<span id="psc-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
+          arrowHtml = '<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
         }
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input id="psc-checkbox-'+i+'" class="search-box-checkbox checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc[i].name+arrowHtml+'</div>'+
-        '<div id="psc-subcategory-box-'+i+'" class="subcategory-box'+inactiveHtml+'">'
-        if (searchTerms.psc[i].psc) {
-          for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
-            if (searchTerms.psc[i].psc[pscIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].psc[pscIndex].value == true) {
+        '<input id="psc-product-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-product" type="checkbox" name="" value="'+searchTerms.psc.products[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc.products[i].name+arrowHtml+'</div>'+
+        '<div id="psc-product-subcategory-box-'+i+'" class="subcategory-box'+inactiveHtml+'">'
+        if (searchTerms.psc.products[i].psc) {
+          for (pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
+            if (searchTerms.psc.products[i].psc[pscIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.products[i].psc[pscIndex].value == true) {
               html = html + '<div class="search-box-checkbox-item">'+
-              '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+              '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc.products[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.products[i].psc[pscIndex].name+'</div>'+
               '</div>'
               matchFound = true
             }
           }
         }
-        html = html + '</div></div></div>'
+        html = html + '</div>'
         matchFound = true
-      } else if (searchTerms.psc[i].psc) {
+      } else if (searchTerms.psc.products[i].psc) {
         // var pscHtml = ''
         // for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
         //   if (searchTerms.psc[i].psc[pscIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].psc[pscIndex].value == true) {
         //     pscHtml = pscHtml + '<div class="search-box-checkbox-item">'+
-        //     '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+        //     '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
         //     '</div>'
         //     matchFound = true
         //   } else {
         //     pscHtml = pscHtml + '<div class="search-box-checkbox-item inactive">'+
-        //     '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+        //     '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
         //     '</div>'
         //   }
         // }
       }
       if (!matchFound) {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input id="psc-checkbox-'+i+'" class="search-box-checkbox checkbox-psc" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].name+'</div>'+
-        '<div id="psc-subcategory-box-'+i+'" class="subcategory-box inactive">'+
+        '<input id="psc-product-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-product" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.products[i].name+'</div>'+
+        '<div id="psc-product-subcategory-box-'+i+'" class="subcategory-box inactive">'+
         '</div>'
       }
       html = html + '</div>'
     }
+    html = html + '</div></div>'
+    html = html + '<div class="search-box-checkbox-item">'+
+    '<div class="search-box-checkbox-text" onclick="openPscCategory(1)">Services<span id="psc-service-arrow" class="checkbox-text-arrow">▲</span></div>'+
+    '</div>'+
+    '<div id="services-subcategory-box" class="subcategory-box">'
+    for (i = 0; i < searchTerms.psc.services.length; i++) {
+      var checkedHtml = ''
+      if (searchTerms.psc.services[i].value) {
+        checkedHtml = ' checked'
+      }
+      var matchFound = false
+      if (searchTerms.psc.services[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.services[i].value == true) {
+        html = html + '<div class="search-box-checkbox-item">'+
+        '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculatePscSearch2('+i+')"> '+searchTerms.psc.services[i].name+arrowHtml+'</div>'+
+        '</div>'
+        matchFound = true
+      }
+      if (!matchFound) {
+        html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
+        '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
+        '</div>'
+      }
+    }
+    html = html + '</div>'
     document.getElementById("search-box-psc-list").innerHTML = html
   }
   if (which == 2) {
@@ -1432,21 +1469,37 @@ function renderSearch() {
     naicsIndex++
   }
   document.getElementById("search-box-naics-list").innerHTML = html
-  html = ''
-  for (i = 0; i < searchTerms.psc.length; i++) {
+  html = '<div class="search-box-checkbox-item">'+
+  '<div class="search-box-checkbox-text" onclick="openPscCategory(0)">Products<span id="psc-product-arrow" class="checkbox-text-arrow">▼</span></div>'+
+  '</div>'+
+  '<div id="products-subcategory-box" class="subcategory-box inactive">'
+  for (i = 0; i < searchTerms.psc.products.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input id="psc-checkbox-'+i+'" class="search-box-checkbox checkbox-psc" type="checkbox" name="" value="'+searchTerms.psc[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc[i].name+'<span id="psc-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
-    '<div id="psc-subcategory-box-'+i+'" class="subcategory-box inactive">'
-    if (searchTerms.psc[i].psc) {
-      for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
+    '<input id="psc-product-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-product" type="checkbox" name="" value="'+searchTerms.psc.products[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc.products[i].name+'<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
+    '<div id="psc-product-subcategory-box-'+i+'" class="subcategory-box inactive">'
+    if (searchTerms.psc.products[i].psc) {
+      for (pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input id="psc-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
+        '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc.products[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.products[i].psc[pscIndex].name+'</div>'+
         '</div>'
       }
     }
     html = html + '</div>'
     html = html + '</div>'
   }
+  html = html + '</div>'
+  html = html + '<div class="search-box-checkbox-item">'+
+  '<div class="search-box-checkbox-text" onclick="openPscCategory(1)">Services<span id="psc-service-arrow" class="checkbox-text-arrow">▼</span></div>'+
+  '</div>'+
+  '<div id="services-subcategory-box" class="subcategory-box inactive">'
+  for (i = 0; i < searchTerms.psc.services.length; i++) {
+    html = html + '<div class="search-box-checkbox-item">'+
+    '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculatePscSearch2('+i+')"> '+searchTerms.psc.services[i].name+'<span id="psc-service-arrow'+i+'" class="checkbox-text-arrow">▼</span></div>'+
+    '<div id="psc-service-subcategory-box-'+i+'" class="subcategory-box inactive">'
+    html = html + '</div>'
+    html = html + '</div>'
+  }
+  html = html + '</div>'
   document.getElementById("search-box-psc-list").innerHTML = html
   html = ''
   for (i = 0; i < searchTerms.agency.length; i++) {
@@ -1612,14 +1665,46 @@ function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3
   }
 }
 
+function openPscCategory(which) {
+  if (which == 0) {
+    if (!document.getElementById('products-subcategory-box').classList.contains('inactive')) {
+      document.getElementById('products-subcategory-box').classList.add('inactive')
+      document.getElementById('psc-product-arrow').innerHTML = '▼'
+
+    } else {
+      document.getElementById('products-subcategory-box').classList.remove('inactive')
+      document.getElementById('psc-product-arrow').innerHTML = '▲'
+    }
+  } else if (which == 1) {
+    if (!document.getElementById('services-subcategory-box').classList.contains('inactive')) {
+      document.getElementById('services-subcategory-box').classList.add('inactive')
+      document.getElementById('psc-service-arrow').innerHTML = '▼'
+
+    } else {
+      document.getElementById('services-subcategory-box').classList.remove('inactive')
+      document.getElementById('psc-service-arrow').innerHTML = '▲'
+    }
+  }
+}
+
 function calculatePscSearch(pscIndex) {
-  if (!document.getElementById('psc-subcategory-box-'+pscIndex+'').classList.contains('inactive')) {
-    document.getElementById('psc-subcategory-box-'+pscIndex+'').classList.add('inactive')
-    document.getElementById('psc-arrow-'+pscIndex).innerHTML = '▼'
+  if (!document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.contains('inactive')) {
+    document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.add('inactive')
+    document.getElementById('psc-product-arrow-'+pscIndex).innerHTML = '▼'
 
   } else {
-    document.getElementById('psc-subcategory-box-'+pscIndex+'').classList.remove('inactive')
-    document.getElementById('psc-arrow-'+pscIndex).innerHTML = '▲'
+    document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.remove('inactive')
+    document.getElementById('psc-product-arrow-'+pscIndex).innerHTML = '▲'
+  }
+}
+function calculatePscSearch2(pscIndex) {
+  if (!document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.contains('inactive')) {
+    document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.add('inactive')
+    document.getElementById('psc-service-arrow'+pscIndex).innerHTML = '▼'
+
+  } else {
+    document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.remove('inactive')
+    document.getElementById('psc-service-arrow'+pscIndex).innerHTML = '▲'
   }
 }
 
@@ -1806,40 +1891,46 @@ function calculateSearch(elem) {
         }
       }
     }
-  } else if (elem.classList.contains('checkbox-psc')) {
-    for (i = 0; i < searchTerms.psc.length; i++) {
-      if (searchTerms.psc[i].name == elem.value) {
-        searchTerms.psc[i].value = elem.checked
-        if (searchTerms.psc[i].psc) {
-          for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
-            searchTerms.psc[i].psc[pscIndex].value = elem.checked
+  } else if (elem.classList.contains('checkbox-psc-service')) {
+    for (i = 0; i < searchTerms.psc.services.length; i++) {
+      if (searchTerms.psc.services[i].name == elem.value) {
+        searchTerms.psc.services[i].value = elem.checked
+      }
+    }
+  } else if (elem.classList.contains('checkbox-psc-product')) {
+    for (i = 0; i < searchTerms.psc.products.length; i++) {
+      if (searchTerms.psc.products[i].name == elem.value) {
+        searchTerms.psc.products[i].value = elem.checked
+        if (searchTerms.psc.products[i].psc) {
+          for (pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
+            searchTerms.psc.products[i].psc[pscIndex].value = elem.checked
             var a = document.getElementsByClassName('checkbox-subpsc')
-            document.getElementById('psc-checkbox-'+i+'-'+pscIndex).checked = elem.checked
+            document.getElementById('psc-product-checkbox-'+i+'-'+pscIndex).checked = elem.checked
           }
         }
       }
     }
   } else if (elem.classList.contains('checkbox-subpsc')) {
-    for (i = 0; i < searchTerms.psc.length; i++) {
-      if (searchTerms.psc[i].psc) {
+    for (i = 0; i < searchTerms.psc.products.length; i++) {
+      if (searchTerms.psc.products[i].psc) {
         var allChecked = true
         var matchFound = false
-        for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
-          if (searchTerms.psc[i].psc[pscIndex].name == elem.value) {
+        for (pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
+          if (searchTerms.psc.products[i].psc[pscIndex].name == elem.value) {
             matchFound = true
             if (!elem.checked) {
-              document.getElementById('psc-checkbox-'+i).checked = false
-              searchTerms.psc[i].value = false
+              document.getElementById('psc-product-checkbox-'+i).checked = false
+              searchTerms.psc.products[i].value = false
             }
-            searchTerms.psc[i].psc[pscIndex].value = elem.checked
+            searchTerms.psc.products[i].psc[pscIndex].value = elem.checked
           }
-          if (searchTerms.psc[i].psc[pscIndex].value == false) {
+          if (searchTerms.psc.products[i].psc[pscIndex].value == false) {
             allChecked = false
           }
         }
         if (matchFound && allChecked) {
-          document.getElementById('psc-checkbox-'+i).checked = true
-          searchTerms.psc[i].value = elem.checked
+          document.getElementById('psc-product-checkbox-'+i).checked = true
+          searchTerms.psc.products[i].value = elem.checked
         }
       }
     }
@@ -3427,10 +3518,14 @@ function toggleHamburgerMenu() {
       dueDateHtml = 'No Due Date'
     }
     // document.getElementById("fbo-details-input").value = ''
-    var dataText = '<p><span style="font-weight: bold">Solicitation Number: </span>'+
+    var dataText = '<p><span style="font-weight: bold">Item: </span>'+
+    proxy.fbo.type +
+    '<p><span style="font-weight: bold">Solicitation Number: </span>'+
     proxy.fbo.solnbr +
     '</p><p><span style="font-weight: bold">Agency: </span>'+
     proxy.fbo.agency+
+    '</p><p><span style="font-weight: bold">NAICS: </span>'+
+    proxy.fbo.classCod+
     '</p><p><span style="font-weight: bold">Office: </span>'+
     proxy.fbo.office+
     '</p><p><span style="font-weight: bold">Location: </span>'+
