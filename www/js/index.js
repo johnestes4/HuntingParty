@@ -3031,8 +3031,8 @@ function toggleHamburgerMenu() {
   function addYesRefer() {
     yesRefer.push(document.getElementById("yes-refer-input").value)
     var html = ''
-    for (i = 0; i < yesRefer.length; i++) {
-      html = html + '<p>'+yesRefer[i]+'</p>'
+    for (i = yesRefer.length - 1; i >= 0 ; i--) {
+      html = html + '<p class="yes-refer-item">'+yesRefer[i]+'</p>'
     }
     document.getElementById("yes-popup-refer-list").innerHTML = html
   }
