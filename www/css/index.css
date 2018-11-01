@@ -2385,6 +2385,18 @@ h1 {
 .buttonbar-tab:active {
   filter: brightness(90%);
 }
+#fbo-popups{
+  position: fixed;
+  z-index: 80;
+  left: 0;
+  top: 0;
+
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: rgba(0,0,0,0.15);
+}
 
 .vote-popup {
   position: absolute;
@@ -2393,9 +2405,11 @@ h1 {
   height: 70vh;
   width: 90vw;
   padding: 4vh 6vw 5vh 6vw;
-  background: rgba(33,100,126,1);
-  color: white;
-  z-index: 15;
+  /* background: rgba(33,100,126,1);
+  color: white; */
+  color: #333333;
+  background-color: #fafafa;
+  /* z-index: 15; */
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.25);
   box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
@@ -2403,17 +2417,17 @@ h1 {
 .vote-popup::after {
   content: "";
   display: block;
-  position: absolute;
+  /* position: absolute;
   top: -15vh;
   left: -5vw;
   z-index: -1;
   background: rgba(0,0,0,0.15);
   height: 100vh;
-  width: 100vw;
+  width: 100vw; */
 }
 .vote-popup button {
   width: 100%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(0,175,217,1);
 }
 .vote-popup p {
   font-size: 14px;
@@ -2452,22 +2466,34 @@ h1 {
 
 .refer-box {
   width: 100%;
-  background: rgba(155,155,155,0.75);
-  border: 1px solid rgba(0,0,0,0.75);
-  maxheight: 20vh;
+  /* background: rgba(155,155,155,0.75); */
+  /* border: 1px solid rgba(0,0,0,0.75); */
+  border: 1px solid rgba(60,85,136,1);
+  border-radius: 3px;
+  background: rgba(0,175,217,1);
+  max-height: 15vh;
   overflow-y: auto;
   color: black;
   text-align: left;
   margin-bottom: 1vh;
+  
+  
+  /* display: flex;
+  flex-direction: column;
+  flex-wrap: wrap; */
 }
 
 .refer-item {
+  /* width: 50%; */
+
   border-top: 1px solid rgba(255,255,255,0.1);
-  /* border-bottom: 1px solid rgba(0,0,0,0.75); */
+  /* border-bottom: 1px solid rgba(85, 85, 85, 0.75); */
+  border-bottom: 1px solid rgba(60,85,136,1);
+  
   height: 31px;
   line-height: 28px;
-  font-size: 18px;
-  background: rgba(155,155,155,0.85);
+  font-size: 1.3em;
+  /* background: rgba(155,155,155,0.85); */
 }
 
 .refer-item:active {
@@ -2483,8 +2509,15 @@ h1 {
   margin-right: 5px;
 }
 
+#yes-popup-refer-list{
+  width: 100%; 
+  max-height: 10vh; 
+  border: 1px solid rgba(0,0,0,0.75);
+  overflow-y: auto;
+}
+
 #yes-popup-users-list {
-  font-size: 16px;
+  font-size: 1em;
 }
 
 #yes-button {

@@ -3628,9 +3628,9 @@ function toggleHamburgerMenu() {
       var usersList = huntingPartyData.users
       for (i = 0; i < usersList.length; i++) {
         usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')"><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
-        if (i < usersList.length-1) {
-          usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
-        }
+        // if (i < usersList.length-1) {
+        //   usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+        // }
       }
       document.getElementById("refer-users-list").innerHTML = usersHtml
       document.getElementById("yes-popup-users-list").innerHTML = ''
