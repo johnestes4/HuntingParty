@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -3611,6 +3611,7 @@ function toggleHamburgerMenu() {
     }
   }
 
+  var activeFbo
   function setActiveFbo(index, tab) {
     var proxy
     if (tab == 0) {
@@ -3694,6 +3695,7 @@ function toggleHamburgerMenu() {
     document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
     document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
 
+    activeFbo = proxy
     fboIndex = index
     if (!proxy.viewed) {
       proxy.viewed = []
@@ -4017,8 +4019,19 @@ function toggleHamburgerMenu() {
         fbo.voteYes = newFbo.voteYes
         fbo.voteNo = newFbo.voteNo
         var chatString = ''
+        var allComments = []
         for (i = 0; i < newFbo.voteYes.length; i++) {
           var vote = newFbo.voteYes[i]
+          vote.vote = 'yes'
+          allComments.push(vote)
+        }
+        for (i = 0; i < newFbo.voteNo.length; i++) {
+          var vote = newFbo.voteNo[i]
+          vote.vote = 'no'
+          allComments.push(vote)
+        }
+        for (i = 0; i < allComments.length; i++) {
+          var vote = allComments[i]
           var voteString = ''
           console.log(vote)
           if (vote.comment) {
@@ -4028,50 +4041,57 @@ function toggleHamburgerMenu() {
           if (vote.avatar) {
             avatar = vote.avatar
           }
-          var newString = '<div class="comment yes-comment">'+
-          '<div class="comment-left">'+
-          '<div class="comment-avatar">'+
-          '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
-          '</div>'+
-          '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
-          '</div>'+
-          '<div class="comment-right">'+
-          '<div class="comment-title" style="margin: none!important">'+
-          '<p class="comment-name">'+vote.name+'</p>'+
-          '<p class="comment-time">99 mins</p>'+
-          '</div>'+
-          '<div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">'+
-          '<div class="comment-text" style="padding: none!important">'+voteString+'</div>'+
-          '</div>'+
-          '</div>'+
-          '</div>'
-
-          chatString = chatString + newString
-        }
-        for (i = 0; i < newFbo.voteNo.length; i++) {
-          var vote = newFbo.voteNo[i]
-          var voteString = ''
-          if (vote.comment) {
-            voteString = ' - "'+vote.comment+'"'
+          var imgString = ''
+          if (vote.vote == 'yes') {
+            imgString = '<img class="icon" src="./img/like-light.png" alt="">'
+          } else if (vote.vote == 'no') {
+            imgString = '<img class="icon" src="./img/dislike-light.png" alt="">'
           }
-          var newString = '<div class="comment no-comment">'+
-          '<div class="comment-left">'+
-          '<div class="comment-avatar">'+
-          '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
-          '</div>'+
-          '<img class="comment-avatar-vote" src="./img/thumbsdown.png" alt="">'+
-          '</div>'+
-          '<div class="comment-right">'+
-          '<div class="comment-title" style="margin: none!important">'+
-          '<p class="comment-name">'+vote.name+'</p>'+
-          '<p class="comment-time">99 mins</p>'+
-          '</div>'+
-          '<div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">'+
-          '<div class="comment-text" style="padding: none!important">'+voteString+'</div>'+
-          '</div>'+
-          '</div>'+
-          '</div>'
-          chatString = chatString + newString
+          if (vote.id == currentUser._id) {
+            var newString = '<div class="comment">'+
+            '<div class="comment-right">'+
+              '<div class="comment-bubble-yours">'+
+              // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
+              // '<div class="comment-title" style="margin: none!important">'+
+              //   '<p class="comment-name">'+vote.name+'</p>'+
+              //   '<p class="comment-time">99 mins</p>'+
+              // '</div>'+
+                '<p class="comment-text">'+imgString+voteString+' here is more text i am padding this out to stretch the bubble with these words</p>'+
+              '</div>'+
+            '</div>'+
+            '<div class="comment-left">'+
+              '<div class="comment-avatar-padding">'+
+              '</div>'+
+              '<div class="comment-avatar">'+
+              '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
+              '</div>'+
+            '</div>'+
+            '</div>'
+
+            chatString = chatString + newString
+          } else {
+            var newString = '<div class="comment">'+
+            '<div class="comment-left">'+
+            '<div class="comment-avatar-padding">'+
+            '</div>'+
+            '<div class="comment-avatar">'+
+            '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
+            '</div>'+
+            '</div>'+
+            '<div class="comment-right">'+
+            '<div class="comment-bubble">'+
+            // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
+            // '<div class="comment-title" style="margin: none!important">'+
+            //   '<p class="comment-name">'+vote.name+'</p>'+
+            //   '<p class="comment-time">99 mins</p>'+
+            // '</div>'+
+            '<p class="comment-text">'+imgString+voteString+'</p>'+
+            '</div>'+
+            '</div>'+
+            '</div>'
+
+            chatString = chatString + newString
+          }
         }
         if ((newFbo.voteYes.length + newFbo.voteNo.length) < 1) {
           var newString = '<div class="comment">'+
@@ -4095,40 +4115,60 @@ function toggleHamburgerMenu() {
   }
 
   function sendComment() {
-    var comment = document.getElementById("chat-input").value
+    var comment = document.getElementById("new-comment-input").value
     if (comment.length > 0) {
-      fbos[fboIndex].comments.push({
+      var vote = {
         id: currentUser._id,
-        name: currentUser.firstName,
-        comment: comment
-      })
+        name: currentUser.firstName + ' ' + currentUser.lastName,
+        avatar: currentUser.avatar,
+        position: '',
+        comment: '',
+        date: ''
+      }
+      var fbo = fbosIn[fboIndex]
+      if (activeTab == 2) {
+        fbo = fbosIn[fboIndex]
+      } else if (activeTab == 3) {
+        fbo = fboPipeline[fboIndex]
+      }
+      var now = new Date()
+      now = now.getTime()
+      vote.date = now
+      for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
+        if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
+          vote.position = currentUser.companyUserProxies[i].position
+          break
+        }
+      }
+      fbo.comments.push(vote)
       var xhttp3 = new XMLHttpRequest();
       xhttp3.onload = function() {
         if (xhttp3.readyState == 4 && xhttp3.status == 200) {
           // Typical action to be performed when the document is ready:
           var newFbo = JSON.parse(xhttp3.responseText)
           console.log('sent the comment i think')
-          var chatString = ''
-          for (i = 0; i < newFbo.comments.length; i++) {
-            var newString = '<p class="comment"><span style="font-weight: bold;">' + newFbo.comments[i].name + ': </span>' + newFbo.comments[i].comment + '</p>'
-            chatString = chatString + newString
+          if (activeTab == 2) {
+            fbosIn[fboIndex] = newFbo
+          } else if (activeTab == 3) {
+            fboPipeline[fboIndex] = newFbo
           }
-          document.getElementById("chat-box").innerHTML = chatString;
-          document.getElementById("chat-input").value = ''
-          fbos[fboIndex] = newFbo
+          updateComments(fbo)
+          document.getElementById("new-comment-input").value = ''
         } else {
           console.log('it didnt send i dont know why')
         }
       };
 
-      var url = apiUrl+"/fbocompanyproxy/" + fbos[fboIndex]._id;
+      var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
 
       xhttp3.open("PUT", url, true);
       xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
-      var toSend = fbos[fboIndex]
+      var savedId = fbo._id
+      var toSend = fbo
       delete toSend['_id'];
       console.log(toSend)
       xhttp3.send(JSON.stringify(toSend));
+      toSend['_id'] = savedId
     }
   }
 
@@ -4510,7 +4550,8 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
-    // goToFbo(5,0);
+    // goToFbo(0,1);
+    // openFboDetail(1)
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()

@@ -1208,10 +1208,12 @@ h1, .instructions{
 }
 
 #fbo-details-comments {
+  padding: 15px 4vw 15px 4vw;
   max-height: 600px;
+  position: relative;
+  display: block;
   width: 100%;
   float: left;
-  border-top: 1px solid rgba(0,0,0,0.35);
   overflow-y: auto;
 }
 
@@ -1278,19 +1280,80 @@ h1, .instructions{
 }
 
 .comment {
-  background: rgba(205,239,248,1);
-  min-height: 95px;
-  overflow: auto;
+  min-height: 50px;
   width: 100%;
   position: relative;
+  float: left;
   height: auto;
-  border-bottom: rgba(0,0,0,0.75);
   text-align: left;
   margin-bottom: 0px;
-  padding: 12px 6px 12px 6px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(0,0,0,0.375);
+  padding: 8px 6px 8px 6px;
 }
+.comment-bubble {
+  max-width: calc(80% - 8px);
+  margin-left: 8px;
+  position: relative;
+  line-height: 26px;
+  font-size: 18px;
+  min-height: 26px;
+  height: auto;
+  border-radius: 17px;
+  background: rgba(229,229,229,1);
+  z-index: 4;
+  color: rgba(12,12,12,1);
+  padding: 8px 8px 8px 8px;
+}
+.comment-bubble::after {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 10px;
+  width: 0px;
+  height: 0px;
+  border-top: 7px solid transparent;
+  border-right: 10px solid rgba(229,229,229,1);
+  border-bottom: 7px solid transparent;
+  z-index: 1;
+}
+.comment-bubble-yours {
+  width: calc(80% - 8px);
+  margin-left: 20%;
+  margin-right: 8px;
+  position: relative;
+  line-height: 26px;
+  font-size: 18px;
+  min-height: 26px;
+  height: auto;
+  border-radius: 17px;
+  background: rgba(0,175,217,1);
+  z-index: 4;
+  color: white;
+  padding: 8px 8px 8px 8px;
+}
+.comment-bubble-yours::after {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: 10px;
+  width: 0px;
+  height: 0px;
+  border-top: 7px solid transparent;
+  border-left: 10px solid rgba(0,175,217,1);
+  border-bottom: 7px solid transparent;
+  z-index: 1;
+}
+
+.comment-bubble-yours img {
+  margin-top: -4px;
+  margin-left: 4px;
+  float: right;
+}
+.comment-bubble img {
+  margin-top: -4px;
+  margin-right: 4px;
+  float: left;
+}
+
 .comment p {
   margin: none;
   margin: 0px!important;
@@ -1298,22 +1361,24 @@ h1, .instructions{
 }
 
 .comment-left {
-  width: 80px;
+  width: 30px;
+  height: 100%;
   float: left;
-  display: block;
   position: relative;
 }
 
 .comment-right {
-  width: calc(100% - 80px);
+  width: calc(100% - 30px);
+  height: 100%;
   padding-left: 4px;
   float: left;
-  display: block;
   position: relative;
 }
 .comment-avatar {
-  width: 50px;
-  height: 50px;
+  float: left;
+  margin-top: 1px;
+  width: 30px;
+  height: 30px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -1329,9 +1394,15 @@ h1, .instructions{
   transform: translate(-50%, -50%);
   display: block;
   object-fit: cover;
-  min-width: 50px;
-  min-height: 50px;
+  min-width: 30px;
+  min-height: 30px;
   height: 100%;
+}
+.comment-avatar-padding {
+  float: left;
+  position: relative;
+  width: 30px;
+  height: calc(100% - 30px);
 }
 .comment-avatar-vote {
   position: absolute;
@@ -1373,11 +1444,48 @@ h1, .instructions{
   margin: 0px;
 }
 
-.yes-comment {
-  background: rgba(205, 249, 208, 1);
+.new-comment-bar {
+  float: left;
+  width: 100%;
+  height: 50px;
+  background: rgba(243,243,243,1);
+  padding: 0px;
+  position: relative;
 }
-.no-comment {
-  background: rgba(249, 205, 205, 1);
+.new-comment-bar input {
+  padding: 0px 4px 0px 4px;
+  font-size: 14px;
+  width: calc(100% - 54px);
+  height: 36px;
+  margin-left: 2px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(0,0,0,0.2);
+  float: left;
+}
+.new-comment-bar button {
+  width: 48px;
+  height: 46px;
+  margin-left: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  float: left;
+  position: relative;
+  background: rgba(229,229,229,1);
+  border: 1px solid rgba(0,0,0,0.2)
+}
+.new-comment-bar button:active {
+  filter: brightness(95%);
+}
+
+.new-comment-bar button img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: auto;
 }
 
 .search-item-filters {
@@ -2693,17 +2801,4 @@ h1 {
 .blink {
   animation:fade 3000ms infinite;
   -webkit-animation:fade 3000ms infinite;
-}
-
-::placeholder {/* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: white;
-  opacity: 1; /* Firefox */
-}
-
-:-ms-input-placeholder { /* InternetExplorer 10-11 */
-  color: white;
-}
-
-::-ms-input-placeholder{ /* Microsoft Edge */
-  color: white;
 }
