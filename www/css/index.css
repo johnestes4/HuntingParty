@@ -2388,16 +2388,19 @@ h1 {
 }
 
 #search-save-popup {
-  position: fixed;
+  position: absolute;
+  height: auto;
   width: 60vw;
-  left: 20vw;
-  height: 20vh;
-  padding-top: 5vh;
-  text-align: center;
-  top: 35vh;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4vh 6vw 3vh 6vw;
+  background: rgba(33,100,126,1);
+  color: white;
   z-index: 19;
-  background: rgba(0,175,217,1);
-  border: 1px solid rgba(0,0,0,0.75);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
 }
 
 #search-save-popup-bg {

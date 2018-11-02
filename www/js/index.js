@@ -2224,7 +2224,16 @@ function saveSearchTerms() {
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById('search-save-popup').classList.remove('inactive')
+          document.getElementById('search-save-popup-bg').classList.remove('inactive')
+          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
           renderSavedSearches()
+          if (!document.getElementById("new-search").classList.contains('inactive')) {
+            openSearchItems(1)
+          }
+          if (document.getElementById("saved-searches").classList.contains('inactive')) {
+            openSearchItems(0)
+          }
           switchTab(1)
           console.log('UPDATED')
         }
