@@ -349,6 +349,27 @@ var fbosIn = []
 var fboPipeline = []
 var fbosInMax = 0
 var fboPipelineMax = 0
+var searchItemSuggestions = {
+  naics: {
+    it: [
+      '541511',
+      '541512',
+      '541513',
+      '541519',
+      '561320',
+      '518210',
+      '541990',
+      '611420'
+    ],
+    professional: [
+      '541611',
+      '541618',
+      '541990',
+      '561110',
+      '561320'
+    ]
+  }
+}
 
 function login() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -602,6 +623,26 @@ function viewSearch(index) {
   a = document.getElementsByClassName('checkbox-naics')
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.naics[i].value
+    if (searchTerms.naics[i].subcategories) {
+      for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+        document.getElementById('checkbox-subnaics-'+i+'-'+i2).checked = searchTerms.naics[i].subcategories[i2].value
+        if (searchTerms.naics[i].subcategories[i2].subcategories) {
+          for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+            document.getElementById('checkbox-subnaics-'+i+'-'+i2+'-'+i3).checked = searchTerms.naics[i].subcategories[i2].subcategories[i3].value
+            if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
+              for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                document.getElementById('checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4).checked = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].value
+                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
+                  for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                    document.getElementById('checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'-'+i5).checked = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
   a = document.getElementsByClassName('checkbox-psc-product')
   for (i = 0; i < a.length; i++) {
@@ -932,6 +973,12 @@ function generateSearchHTML(where) {
       '</div>'+
     '</div>'+
     '<div id="search-box-naics" class="search-box inactive">'+
+    '<div class="" style="width: 100%; float: left; position: relative;">'+
+    '<input id="search-item-suggestion-0" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(0)" value=""> <div class="search-box-checkbox-text" >Typical IT services</div>'+
+    '</div>'+
+    '<div class="" style="width: 100%; float: left; position: relative;">'+
+    '<input id="search-item-suggestion-1" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(1)" value=""> <div class="search-box-checkbox-text" >Typical professional services</div>'+
+    '</div>'+
       '<input id="search-filter-0" class="category-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">'+
       '<div id="search-box-naics-list" class="">'+
         '<div class="" style="width: 100%; float: left;">'+
@@ -1049,6 +1096,35 @@ function generateSearchHTML(where) {
     document.getElementById("new-search").innerHTML = html
   } else {
     document.getElementById("search-item-"+where).innerHTML = html
+  }
+}
+
+function calculateSuggestion(which) {
+  var toRun = []
+  if (which == 0) {
+    var a = document.getElementsByClassName('checkbox-subnaics')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.naics.it.includes(a[i].value)) {
+        console.log(a[i].value)
+        toRun.push(a[i])
+      }
+    }
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-0").checked
+      calculateSearch(toRun[i])
+    }
+  } else if (which == 1) {
+    var a = document.getElementsByClassName('checkbox-subnaics')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.naics.professional.includes(a[i].value)) {
+        console.log(a[i].value)
+        toRun.push(a[i])
+      }
+    }
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-1").checked
+      calculateSearch(toRun[i])
+    }
   }
 }
 
@@ -1464,12 +1540,52 @@ function renderSearch() {
       '</div>'
     } else {
       html = html + '<div class="search-box-checkbox-item">'+
-      '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(searchTerms.naics['+i+'], '+i+', this)"> '+
-      searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
-      '<div id="naics-subcategory-box-'+i+'"></div>'
+      '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'\')"> '+
+      searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'
+      if (searchTerms.naics[i].subcategories) {
+        html = html + '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">'
+        for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+          html = html + '<div class="search-box-checkbox-item">'+
+          '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"> '+
+          searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+'<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span></div>'
+          if (searchTerms.naics[i].subcategories[i2].subcategories) {
+            html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">'
+            for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+              html = html + '<div class="search-box-checkbox-item">'+
+              '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"> '+
+              searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+'<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'" class="checkbox-text-arrow">▼</span></div>'
+              if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
+                html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">'
+                for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                  html = html + '<div class="search-box-checkbox-item">'+
+                  '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"> '+
+                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+'<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="checkbox-text-arrow">▼</span></div>'
+                  if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
+                    html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">'
+                    for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                      html = html + '<div class="search-box-checkbox-item">'+
+                      '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'-'+i5+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+'" onclick="calculateSearch(this)">'+
+                      '<div class="search-box-checkbox-text"> '+
+                        searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].name+
+                      '</div>'+
+                      '</div>'
+                    }
+                    html = html + '</div>'
+                  }
+                  html = html + '</div>'
+                }
+                html = html + '</div>'
+              }
+              html = html + '</div>'
+            }
+            html = html + '</div>'
+          }
+          html = html + '</div>'
+        }
+        html = html + '</div>'
+      }
+      html = html + '</div>'
     }
-    html = html + '</div>'
-    naicsIndex++
   }
   document.getElementById("search-box-naics-list").innerHTML = html
   html = '<div class="search-box-checkbox-item">'+
@@ -1589,28 +1705,13 @@ function renderSearch() {
   document.getElementById("search-box-setaside").innerHTML = html
 }
 
-function calculateNaicsSearch(naicsItem, index, elem) {
-  var a = document.getElementsByClassName('naics-subcategory-box')
-  var newSubBoxIndex = a.length
-  var divId = 'naics-subcategory-box-'+index
-  if (!elem.classList.contains('naics-open')) {
-    if (naicsItem.subcategories) {
-      var html = '<div class="naics-subcategory-box subcategory-box">'
-      for (i = 0; i < naicsItem.subcategories.length; i++) {
-        html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSubSearch('+index+', '+i+', -1, -1, -1, \''+index+'-'+i+'\', this)"> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+'<span id="naics-arrow-'+index+'-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
-        '<div id="naics-subcategory-box-'+index+'-'+i+'"></div>'+
-        '</div>'
-      }
-      html = html + '</div>'
-      elem.classList.add('naics-open');
-      document.getElementById('naics-arrow-'+index).innerHTML = '▲'
-      document.getElementById(divId).innerHTML = html
-    }
+function calculateNaicsSearch(idString) {
+  if (!document.getElementById('naics-subcategory-box-'+idString).classList.contains('inactive')) {
+    document.getElementById('naics-subcategory-box-'+idString).classList.add('inactive')
+    document.getElementById('naics-arrow-'+idString).innerHTML = '▼'
   } else {
-    document.getElementById(divId).innerHTML = ''
-    document.getElementById('naics-arrow-'+index).innerHTML = '▼'
-    elem.classList.remove('naics-open');
+    document.getElementById('naics-subcategory-box-'+idString).classList.remove('inactive')
+    document.getElementById('naics-arrow-'+idString).innerHTML = '▲'
   }
 }
 
@@ -1652,7 +1753,7 @@ function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3
         }
 
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+arrowHtml+'</div>'+
+        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+naicsItem.subcategories[i].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+naicsItem.subcategories[i].code+' '+naicsItem.subcategories[i].name+arrowHtml+'</div>'+
         '<div id="naics-subcategory-box-'+divIdNum+'"></div>'+
         '</div>'
       }
