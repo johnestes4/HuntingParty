@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -3611,6 +3611,68 @@ function toggleHamburgerMenu() {
     }
   }
 
+  function addInterestedVendor() {
+    var fbo = fbosIn[fboIndex]
+    if (activeTab == 2) {
+      fbo = fbosIn[fboIndex]
+    } else if (activeTab == 3) {
+      fbo = fboPipeline[fboIndex]
+    }
+    if (!fbo.fbo.interestedVendors) {
+      fbo.fbo.interestedVendors = []
+    }
+    var companyThere = false
+    for (i = 0; i < fbo.fbo.interestedVendors.length; i++) {
+      if (fbo.fbo.interestedVendors[i].id == company._id) {
+        companyThere = true
+        break
+      }
+    }
+    if (!companyThere) {
+      fbo.fbo.interestedVendors.push({
+        name: company.name,
+        id: company._id
+      })
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('done???')
+          var newFbo = JSON.parse(xhttp.responseText)
+          fbo.fbo = newFbo
+          var partiesHtml = ''
+          var companyAlreadyInterested = false
+          document.getElementById("interested-vendors").innerHTML = ''
+          if (fbo.fbo.interestedVendors.length < 1) {
+            partiesHtml = '<div class="interested-vendor">'+
+              'No interested vendors yet'+
+            '</div>'
+          } else {
+            for (i = 0; i < fbo.fbo.interestedVendors.length; i++) {
+              if (fbo.fbo.interestedVendors[i].id == company._id) {
+                companyAlreadyInterested = true
+              }
+              partiesHtml = partiesHtml + '<div class="interested-vendor">'+
+              fbo.fbo.interestedVendors[i].name+
+              '</div>'
+            }
+          }
+          document.getElementById("interested-vendors").innerHTML = partiesHtml
+          if (companyAlreadyInterested) {
+            document.getElementById("interested-vendor-button").classList.add('inactive')
+          }
+          if (document.getElementById("fbo-detail-middle-4").classList.contains('inactive')) {
+            openFboDetail(4)
+          }
+        }
+      };
+      var url = apiUrl+"/fbo/" + fbo.fbo._id;
+      xhttp.open("PUT", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
+      xhttp.send(JSON.stringify(fbo.fbo));
+    }
+  }
+
   var activeFbo
   function setActiveFbo(index, tab) {
     var proxy
@@ -3625,6 +3687,30 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-details-comments").classList.remove('inactive')
     }
     console.log(proxy)
+    if (!proxy.fbo.interestedVendors) {
+      proxy.fbo.interestedVendors = []
+    }
+    var partiesHtml = ''
+    var companyAlreadyInterested = false
+    document.getElementById("interested-vendors").innerHTML = ''
+    if (proxy.fbo.interestedVendors.length < 1) {
+      partiesHtml = '<div class="interested-vendor">'+
+        'No interested vendors yet'+
+      '</div>'
+    } else {
+      for (i = 0; i < proxy.fbo.interestedVendors.length; i++) {
+        if (proxy.fbo.interestedVendors[i].id == company._id) {
+          companyAlreadyInterested = true
+        }
+        partiesHtml = partiesHtml + '<div class="interested-vendor">'+
+        proxy.fbo.interestedVendors[i].name+
+        '</div>'
+      }
+    }
+    document.getElementById("interested-vendors").innerHTML = partiesHtml
+    if (companyAlreadyInterested) {
+      document.getElementById("interested-vendor-button").classList.add('inactive')
+    }
     var dueDateHtml = 'No Due Date'
     if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
       dueDateHtml = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
@@ -3921,9 +4007,11 @@ function toggleHamburgerMenu() {
     now = now.getTime()
     vote.date = now
     for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
-      if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
-        vote.position = currentUser.companyUserProxies[i].position
-        break
+      if (currentUser.companyUserProxies[i].company) {
+        if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
+          vote.position = currentUser.companyUserProxies[i].position
+          break
+        }
       }
     }
     var voteChanged = false
@@ -4016,6 +4104,7 @@ function toggleHamburgerMenu() {
       if (xhttp2.readyState == 4 && xhttp2.status == 200) {
         // Typical action to be performed when the document is ready:
         var newFbo = JSON.parse(xhttp2.responseText)
+        console.log(newFbo)
         fbo.voteYes = newFbo.voteYes
         fbo.voteNo = newFbo.voteNo
         var chatString = ''
@@ -4030,10 +4119,16 @@ function toggleHamburgerMenu() {
           vote.vote = 'no'
           allComments.push(vote)
         }
+        for (i = 0; i < newFbo.comments.length; i++) {
+          var vote = newFbo.comments[i]
+          allComments.push(vote)
+        }
+        allComments.sort(function(vote1, vote2){
+          return vote1.date - vote2.date
+        });
         for (i = 0; i < allComments.length; i++) {
           var vote = allComments[i]
-          var voteString = ''
-          console.log(vote)
+          var voteString = 'No Text '
           if (vote.comment) {
             voteString = vote.comment
           }
@@ -4056,7 +4151,7 @@ function toggleHamburgerMenu() {
               //   '<p class="comment-name">'+vote.name+'</p>'+
               //   '<p class="comment-time">99 mins</p>'+
               // '</div>'+
-                '<p class="comment-text">'+imgString+voteString+' here is more text i am padding this out to stretch the bubble with these words</p>'+
+                '<p class="comment-text">'+imgString+voteString+'</p>'+
               '</div>'+
             '</div>'+
             '<div class="comment-left">'+
@@ -4093,7 +4188,7 @@ function toggleHamburgerMenu() {
             chatString = chatString + newString
           }
         }
-        if ((newFbo.voteYes.length + newFbo.voteNo.length) < 1) {
+        if (allComments.length < 1) {
           var newString = '<div class="comment">'+
           '<div class="comment-left">'+
           '</div>'+
@@ -4105,6 +4200,7 @@ function toggleHamburgerMenu() {
           '</div>'
           chatString = chatString + newString
         }
+        document.getElementById("fbo-details-comments").innerHTML = ''
         document.getElementById("fbo-details-comments").innerHTML = chatString;
         console.log('comments updated')
       }
@@ -4122,7 +4218,7 @@ function toggleHamburgerMenu() {
         name: currentUser.firstName + ' ' + currentUser.lastName,
         avatar: currentUser.avatar,
         position: '',
-        comment: '',
+        comment: comment,
         date: ''
       }
       var fbo = fbosIn[fboIndex]
@@ -4146,6 +4242,7 @@ function toggleHamburgerMenu() {
         if (xhttp3.readyState == 4 && xhttp3.status == 200) {
           // Typical action to be performed when the document is ready:
           var newFbo = JSON.parse(xhttp3.responseText)
+          console.log(newFbo.comments)
           console.log('sent the comment i think')
           if (activeTab == 2) {
             fbosIn[fboIndex] = newFbo
@@ -4550,8 +4647,8 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
-    // goToFbo(0,1);
-    // openFboDetail(1)
+    goToFbo(0,0);
+    openFboDetail(4)
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
