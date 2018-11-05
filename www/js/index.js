@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -4647,8 +4647,8 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
-    goToFbo(0,0);
-    openFboDetail(4)
+    // goToFbo(0,0);
+    // openFboDetail(4)
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
