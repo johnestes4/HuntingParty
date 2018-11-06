@@ -339,6 +339,7 @@ var emptySearchTerms = {
 }
 var yesRefer = []
 var noRefer = []
+var referRefer = []
 var naics = []
 var psc = []
 var tosRead = 0
@@ -3083,6 +3084,22 @@ function toggleHamburgerMenu() {
     if (document.getElementById("fbo-detail-middle-"+which).classList.contains('inactive')) {
       document.getElementById("fbo-detail-middle-"+which).classList.remove('inactive')
       document.getElementById("fbo-detail-middle-item-arrow-"+which).classList.add('rotate')
+      if (which == 5) {
+        var usersList = []
+        for (i = 0; i < huntingPartyData.users.length; i++) {
+          if (huntingPartyData.users[i].userId !== currentUser._id) {
+            usersList.push(huntingPartyData.users[i])
+          }
+        }
+        var usersHtml = ''
+        for (i = 0; i < usersList.length; i++) {
+          usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'b" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', false)">'+usersList[i].name+'</div></div>'
+          if (i < usersList.length-1) {
+            // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+          }
+        }
+        document.getElementById("refer-users-list").innerHTML = usersHtml
+      }
     } else {
       document.getElementById("fbo-detail-middle-"+which).classList.add('inactive')
       document.getElementById("fbo-detail-middle-item-arrow-"+which).classList.remove('rotate')
@@ -3250,6 +3267,14 @@ function toggleHamburgerMenu() {
       html = html + '<div class="refer-item" style="padding-left: 34px;">'+noRefer[i]+'</div>'
     }
     document.getElementById("no-popup-refer-list").innerHTML = html
+  }
+  function addReferRefer() {
+    referRefer.push(document.getElementById("refer-input").value)
+    var html = ''
+    for (i = 0; i < referRefer.length; i++) {
+      html = html + '<div class="refer-item" style="padding-left: 34px;">'+referRefer[i]+'</div>'
+    }
+    document.getElementById("refer-refer-list").innerHTML = html
   }
 
   function goToFbo(num, tab) {
@@ -3922,7 +3947,7 @@ function toggleHamburgerMenu() {
       }
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
-        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
         if (i < usersList.length-1) {
           // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
         }
@@ -3938,7 +3963,7 @@ function toggleHamburgerMenu() {
       document.getElementById("refer-popup").classList.remove('inactive');
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
-        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
         if (i < usersList.length-1) {
           usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
         }
@@ -3952,11 +3977,19 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function checkReferItem(i) {
-    if (document.getElementById("refer-checkbox-"+i+"").checked) {
-      document.getElementById("refer-checkbox-"+i+"").checked = false
+  function checkReferItem(i, popup) {
+    if (popup) {
+      if (document.getElementById("refer-checkbox-"+i+"").checked) {
+        document.getElementById("refer-checkbox-"+i+"").checked = false
+      } else {
+        document.getElementById("refer-checkbox-"+i+"").checked = true
+      }
     } else {
-      document.getElementById("refer-checkbox-"+i+"").checked = true
+      if (document.getElementById("refer-checkbox-"+i+"b").checked) {
+        document.getElementById("refer-checkbox-"+i+"b").checked = false
+      } else {
+        document.getElementById("refer-checkbox-"+i+"b").checked = true
+      }
     }
     calculateRefers(i)
   }
@@ -4665,8 +4698,8 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
-    goToFbo(0,0);
-    // openFboDetail(4)
+    // goToFbo(0,0);
+    // openFboDetail(5)
     // viewSearch(0)
     // openPopups(2)
     // goToCompanyCreate()
