@@ -1140,8 +1140,10 @@ function openSearchItems(which) {
     }
   } else if (which == 1) {
     if (previousSearchTermsIndex) {
-      document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
-      previousSearchTermsIndex = null
+      if (document.getElementById("search-item-"+previousSearchTermsIndex)) {
+        document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
+        previousSearchTermsIndex = null
+      }
     }
     if (document.getElementById("new-search").classList.contains('inactive')) {
       generateSearchHTML(which)
@@ -1218,6 +1220,7 @@ function deleteSearchTerms() {
           yourSearches = []
           renderSavedSearches()
           switchTab(1)
+          openSearchItems(0)
         }
       };
       var url = apiUrl+"/huntingpartydata/" + id;
@@ -2220,7 +2223,6 @@ function saveSearchTerms() {
 
     } else {
       var id = huntingPartyData._id
-      delete huntingPartyData['_id'];
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
