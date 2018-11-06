@@ -330,6 +330,16 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
+#company-confirm-view button {
+  font-size: 16px;
+  line-height: 18px;
+  padding: 8px 12px 8px 12px;
+  width: 46%;
+  margin-left: 2%;
+  margin-right: 2%;
+  float: left;
+}
+
 #company-confirm-img-wrapper {
   width: 60vw;
   height: 60vw;
@@ -397,14 +407,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 .login-button-2 {
   /* Positions */
-  width: 40%;
-  margin-left: 30%;
-  margin-right: 30%;
-  height: 40px;
+  width: auto;
+  position: absolute;
+  padding: 6px 10px 6px 10px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: auto;
   background: none;
   border: 2px solid white;
   font-size: 16px;
-  line-height: 34px;
+  line-height: 18px;
   margin-top: 15%;
 }
 .login-header h1{
@@ -1245,14 +1258,12 @@ h1, .instructions{
   line-height: 22px;
 }
 
-#fbo-details-input {
+.vote-popup-input {
   height: 36px;
   width: 100%;
-  margin-left: 4px;
-  margin-top: 2px;
-  margin-bottom: 2px;
   float: left;
   border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.2);
 }
 
 .fbo-detail-middle-item-header-segment {
@@ -2555,38 +2566,57 @@ h1 {
 
 .vote-popup {
   position: absolute;
-  left: 5vw;
-  top: 10vh;
+  left: 0px;
+  top: 20vh;
   height: 80vh;
-  width: 90vw;
-  padding: 4vh 6vw 5vh 6vw;
-  background: rgba(33,100,126,1);
-  color: white;
-  z-index: 25;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
+  width: 100vw;
+  background: white;
+  z-index: 99;
+  box-shadow: 0px -1px 7px 1px rgba(0,0,0,0.15);
 }
-.vote-popup::after {
+#popup-background {
   content: "";
   display: block;
   position: absolute;
-  top: -15vh;
-  left: -5vw;
-  z-index: -1;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
   background: rgba(0,0,0,0.15);
   height: 100vh;
   width: 100vw;
 }
-.vote-popup button {
-  width: 100%;
-  background: rgba(255,255,255,0.25);
+.vote-button {
+  width: 150px;
+  height: 40px!important;
+  line-height: 36px;
+  background: rgba(0,175,217,1);
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
 }
 .vote-popup p {
   font-size: 14px;
 }
-.vote-popup h3 {
+.popup-header {
   font-family: 'Lato Semibold', sans-serif!important;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  width: 100%;
+  height: auto;
+  float: left;
+  text-align: center;
+  font-size: 20px;
+  padding: 8px 3vw 8px 3vw;
+}
+.popup-segment {
+  padding: 8px 3vw 8px 3vw;
+  float: left;
+  width: 100%;
+  height: auto;
+}
+.popup-segment p {
+  margin-bottom: 8px;
+  font-size: 20px;
 }
 
 .ad-img {
@@ -2619,9 +2649,9 @@ h1 {
 
 .refer-box {
   width: 100%;
-  background: rgba(155,155,155,0.75);
-  border: 1px solid rgba(0,0,0,0.75);
-  max-height: 15vh;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.2);
+  height: calc(79vh - 287px);
   overflow-y: auto;
   color: black;
   text-align: left;
@@ -2629,12 +2659,11 @@ h1 {
 }
 
 .refer-item {
-  border-top: 1px solid rgba(255,255,255,0.1);
-  /* border-bottom: 1px solid rgba(0,0,0,0.75); */
+  border-bottom: 1px solid rgba(0,0,0,0.1);
   height: 31px;
   line-height: 28px;
   font-size: 18px;
-  background: rgba(155,155,155,0.85);
+  background: white;
 }
 
 .refer-item:active {
@@ -2716,7 +2745,7 @@ h1 {
 }
 
 .highlight-button-active {
-  background: rgba(255,198,0,1)!important;
+  background: rgba(255,218,20,1)!important;
 }
 
 .highlight-button-box {
@@ -2735,6 +2764,11 @@ h1 {
   line-height: 100%;
   font-size: 14px;
   font-weight: normal;
+}
+
+#highlight-button-2 {
+  margin-left: 2%;
+  background: rgba(143,143,143,1);
 }
 
 

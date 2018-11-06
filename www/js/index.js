@@ -338,6 +338,7 @@ var emptySearchTerms = {
   keyword: '',
 }
 var yesRefer = []
+var noRefer = []
 var naics = []
 var psc = []
 var tosRead = 0
@@ -3238,9 +3239,17 @@ function toggleHamburgerMenu() {
     yesRefer.push(document.getElementById("yes-refer-input").value)
     var html = ''
     for (i = 0; i < yesRefer.length; i++) {
-      html = html + '<p>'+yesRefer[i]+'</p>'
+      html = html + '<div class="refer-item" style="padding-left: 34px;">'+yesRefer[i]+'</div>'
     }
     document.getElementById("yes-popup-refer-list").innerHTML = html
+  }
+  function addNoRefer() {
+    noRefer.push(document.getElementById("no-refer-input").value)
+    var html = ''
+    for (i = 0; i < noRefer.length; i++) {
+      html = html + '<div class="refer-item" style="padding-left: 34px;">'+noRefer[i]+'</div>'
+    }
+    document.getElementById("no-popup-refer-list").innerHTML = html
   }
 
   function goToFbo(num, tab) {
@@ -3900,17 +3909,22 @@ function toggleHamburgerMenu() {
 
   function openPopups(which) {
     document.getElementById("fbo-popups").classList.remove('inactive');
+    var usersList = []
+    for (i = 0; i < huntingPartyData.users.length; i++) {
+      if (huntingPartyData.users[i].userId !== currentUser._id) {
+        usersList.push(huntingPartyData.users[i])
+      }
+    }
     if (which == 0) {
       var a = document.getElementsByClassName('yes-popup')
       for (i = 0; i < a.length; i++) {
         a[i].classList.remove('inactive');
       }
       var usersHtml = ''
-      var usersList = huntingPartyData.users
       for (i = 0; i < usersList.length; i++) {
-        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')"><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
         if (i < usersList.length-1) {
-          usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+          // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
         }
       }
       document.getElementById("yes-popup-users-list").innerHTML = usersHtml
@@ -3923,15 +3937,18 @@ function toggleHamburgerMenu() {
     } else if (which == 2) {
       document.getElementById("refer-popup").classList.remove('inactive');
       var usersHtml = ''
-      var usersList = huntingPartyData.users
       for (i = 0; i < usersList.length; i++) {
-        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')"><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+')">'+usersList[i].name+'</div></div>'
         if (i < usersList.length-1) {
           usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
         }
       }
       document.getElementById("refer-users-list").innerHTML = usersHtml
       document.getElementById("yes-popup-users-list").innerHTML = ''
+    }
+    var a = document.getElementsByClassName('refer-checkbox')
+    for (i = 0; i < a.length; i++) {
+      calculateRefers(i)
     }
   }
 
@@ -3948,7 +3965,6 @@ function toggleHamburgerMenu() {
     console.log(index)
     if (document.getElementById("refer-checkbox-"+index).checked == true) {
       peopleToRefer.push(huntingPartyData.users[index])
-      console.log(peopleToRefer)
     } else {
       for (i = 0; i < peopleToRefer.length; i++) {
         if (huntingPartyData.users[index].name == peopleToRefer[i].name) {

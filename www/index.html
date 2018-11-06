@@ -113,7 +113,9 @@ under the License.
       <div class="login-redirect">
         <p><a href="#">Forgot Your Password?</a></p>
       </div>
-      <button class="login-button-2" type="button" name="button" onclick="goToRegister()">Create a profile</button>
+      <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+        <button class="login-button-2" type="button" name="button" onclick="goToRegister()">Create a profile</button>
+      </div>
 
       <!-- <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button> -->
     </div>
@@ -430,51 +432,54 @@ under the License.
     <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
     <!-- <p>You voted YES on this opportunity!</p>
     <p>Write a quick comment to let your team know why you approve.</p> -->
-    <div id="yes-popup-text" class="">
-      <h3>Great Opportunity!</h3>
-      <p>Anyone you want to notify?</p>
+    <div class="popup-header">Great Opportunity!</div>
+    <div class="popup-segment" style="border-bottom: 1px solid rgba(0,0,0,0.2);">
+      <p>Add a comment to your vote:</p>
+      <input id="fbo-details-input" class="vote-popup-input" type="text" name="" value="">
     </div>
-    <div id="yes-popup-users-list" class="refer-box">
+    <div class="popup-segment">
+      <p>Send to other coworkers:</p>
+      <div class="refer-box">
+        <div id="yes-popup-users-list" class="">
 
+        </div>
+        <div id="yes-popup-refer-list">
+
+        </div>
+      </div>
+      <div id="yes-refer" class="">
+        <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
+          <input id="yes-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
+        </div>
+      </div>
     </div>
     <!-- <p>Add a comment:</p>
     <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;"> -->
-    <p>Anyone else you want to send it to? Add their emails here:</p>
-    <div id="yes-refer" class="">
-      <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-        <input id="yes-refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-        <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
-      </div>
-      <div id="yes-popup-refer-list" style="width: 100%; height: 10vh; border: 1px solid rgba(0,0,0,0.75);">
-
-      </div>
-    </div>
-    <div id="yes-popup-text" class="" style="margin-top: 1vh;">
-      <p>Add a comment to your vote:</p>
-    </div>
-    <input id="fbo-details-input" type="text" name="" value="">
-    <div style="width: 78vw; float: left; padding-top: 1vh; position: absolute; bottom: 3vh; left: 6vw;">
-      <button type="button" name="button" onclick="vote(fboIndex, true)" style="height: 10vh; font-size: 18px;">Send</button>
-    </div>
+    <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, true)">Send</button>
   </div>
   <div class="vote-popup no-popup inactive">
     <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-    <p>Sounds like this one isn't right for you.</p>
-    <!-- <p>Write a quick comment to explain to your team why you think that way.</p>
-    <input type="text" id="no-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;"> -->
-    <p>Know anyone it would be a better fit for? Send it their way.</p>
-    <div id="no-refer" class="">
-      <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-        <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-        <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
-      </div>
-      <div class="" style="width: 100%; height: 10vh; border: 1px solid rgba(0,0,0,0.75);">
+    <div class="popup-header">Not so great.</div>
+    <div class="popup-segment">
+      <p>Sounds like this one isn't right for you.</p>
+      <p>Know anyone it would be a better fit for? Send it their way.</p>
+      <div class="refer-box" style="height: calc(79vh - 277px);">
+        <div id="no-popup-refer-list">
 
+        </div>
+      </div>
+      <div id="no-refer" class="">
+        <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
+          <input id="no-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addNoRefer()">Add</button>
+        </div>
       </div>
     </div>
-    <div style="width: 78vw; float: left; padding-top: 1vh; position: absolute; bottom: 3vh; left: 6vw;">
-      <button type="button" name="button" onclick="vote(fboIndex, false)" style="height: 10vh; font-size: 18px;">Done</button>
-    </div>
+    <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, false)">Send</button>
+  </div>
+  <div id="popup-background">
+
   </div>
 </div>
 <div id="fbo-view" class="body-block inactive">
@@ -639,7 +644,7 @@ Data
       </div>
     </div>
     <div class="highlight-button-box">
-      <button id="highlight-button-2" class="" style="" type="button" name="button" onclick="turnOnHighlight(true)" style="margin-left: 2%;">Gray Out</button>
+      <button id="highlight-button-2" class="" style="" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
       <button id="highlight-button-1" class="" style="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
     </div>
     <div id="abstract-box">
