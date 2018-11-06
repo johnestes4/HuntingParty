@@ -3694,7 +3694,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-details-comments").classList.add('inactive')
     } else if (tab == 1) {
       proxy = fboPipeline[index]
-      document.getElementById("topbar-left").innerHTML = ''
+      document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(3)"><p>‹</p></div>'
       document.getElementById("fbo-details-comments").classList.remove('inactive')
     }
     console.log(proxy)
@@ -4665,7 +4665,7 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
-    // goToFbo(0,0);
+    goToFbo(0,0);
     // openFboDetail(4)
     // viewSearch(0)
     // openPopups(2)

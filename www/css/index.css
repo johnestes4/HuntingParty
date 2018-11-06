@@ -1042,7 +1042,7 @@ h1, .instructions{
 
 
 #fbo-detail-top {
-  height: calc(93vh - 367px);
+  height: calc(93vh - 316px);
   position: relative;
   width: 100%;
   float: left;
@@ -1055,7 +1055,7 @@ h1, .instructions{
 #abstract-box {
   position: relative;
   width: 100%;
-  height: calc(93vh - 457px);
+  height: calc(93vh - 406px);
   overflow-y: auto;
 }
 #abstract-text {
@@ -1093,7 +1093,7 @@ h1, .instructions{
 }
 
 #fbo-detail-middle {
-  height: 307px;
+  height: 256px;
   float: left;
   width: 100%;
   border-top: 1px solid rgba(0,0,0,0.25);
