@@ -370,6 +370,22 @@ var searchItemSuggestions = {
       '561110',
       '561320'
     ]
+  },
+  psc: {
+    it: [
+      'A Research & Development',
+      'B Special studies and analysis not R&D',
+      'D Information technology services, including telecommunications services',
+      'H Quality control, testing & inspection services',
+      'L Technical representative services',
+      'N Installation of equipment',
+      'U Education & training services'
+    ],
+    professional: [
+      'B Special studies and analysis not R&D',
+      'R Professional, administrative, and management support services',
+      'U Education & training services'
+    ]
   }
 }
 
@@ -1003,6 +1019,12 @@ function generateSearchHTML(where) {
       '</div>'+
     '</div>'+
     '<div id="search-box-psc" class="search-box inactive">'+
+      '<div class="" style="width: 100%; float: left; position: relative;">'+
+        '<input id="search-item-suggestion-2" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(2)" value=""> <div class="search-box-checkbox-text" >Typical IT services PSC</div>'+
+      '</div>'+
+      '<div class="" style="width: 100%; float: left; position: relative;">'+
+        '<input id="search-item-suggestion-3" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(3)" value=""> <div class="search-box-checkbox-text" >Typical professional services PSC</div>'+
+      '</div>'+
       '<input id="search-filter-1" class="category-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">'+
       '<div id="search-box-psc-list" class="">'+
         '<div class="" style="width: 100%; float: left;">'+
@@ -1087,10 +1109,10 @@ function generateSearchHTML(where) {
     '</div>'+
     '<div id="double-search-buttons">'+
     '<button class="delete-button" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>'+
-    '<button type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
+    '<button class="save-button" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
     '</div>'+
     '<div id="single-search-button" class="inactive">'+
-    '<button type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
+    '<button class="save-button" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
     '</div>'+
   '</div>'
 
@@ -1113,6 +1135,8 @@ function calculateSuggestion(which) {
     }
     for (i = 0; i < toRun.length; i++) {
       toRun[i].checked = document.getElementById("search-item-suggestion-0").checked
+    }
+    for (i = 0; i < toRun.length; i++) {
       calculateSearch(toRun[i])
     }
   } else if (which == 1) {
@@ -1125,6 +1149,38 @@ function calculateSuggestion(which) {
     }
     for (i = 0; i < toRun.length; i++) {
       toRun[i].checked = document.getElementById("search-item-suggestion-1").checked
+    }
+    for (i = 0; i < toRun.length; i++) {
+      calculateSearch(toRun[i])
+    }
+  } else if (which == 2) {
+    var a = document.getElementsByClassName('checkbox-psc-service')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.psc.it.includes(a[i].value)) {
+        console.log(a[i].value)
+        toRun.push(a[i])
+      }
+    }
+    console.log(toRun.length)
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-2").checked
+      console.log(toRun[i].checked)
+    }
+    for (i = 0; i < toRun.length; i++) {
+      calculateSearch(toRun[i])
+    }
+  } else if (which == 3) {
+    var a = document.getElementsByClassName('checkbox-psc-service')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.psc.professional.includes(a[i].value)) {
+        console.log(a[i].value)
+        toRun.push(a[i])
+      }
+    }
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-3").checked
+    }
+    for (i = 0; i < toRun.length; i++) {
       calculateSearch(toRun[i])
     }
   }
@@ -1344,7 +1400,7 @@ function searchFilter(which) {
       var matchFound = false
       if (searchTerms.psc.services[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.services[i].value == true) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculatePscSearch2('+i+')"> '+searchTerms.psc.services[i].name+arrowHtml+'</div>'+
+        '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
         '</div>'
         matchFound = true
       }
@@ -1618,7 +1674,7 @@ function renderSearch() {
   '<div id="services-subcategory-box" class="subcategory-box inactive">'
   for (i = 0; i < searchTerms.psc.services.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculatePscSearch2('+i+')"> '+searchTerms.psc.services[i].name+'<span id="psc-service-arrow'+i+'" class="checkbox-text-arrow">▼</span></div>'+
+    '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
     '<div id="psc-service-subcategory-box-'+i+'" class="subcategory-box inactive">'
     html = html + '</div>'
     html = html + '</div>'

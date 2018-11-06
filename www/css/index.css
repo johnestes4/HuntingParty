@@ -1543,7 +1543,10 @@ h1, .instructions{
   margin-bottom: 0.5vh;
 }
 .delete-button {
-  background: rgba(205,55,55,1);
+  background: rgba(143,143,143,1);
+}
+.save-button {
+  background: rgba(183,183,183,1);
 }
 
 .filters-item {
