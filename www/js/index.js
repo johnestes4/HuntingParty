@@ -1186,6 +1186,19 @@ function calculateSuggestion(which) {
   }
 }
 
+function sendEmail(mailInfo) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      console.log('email sent???????????????')
+    }
+  };
+  var url = apiUrl+"/sendMail/";
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttp.send(JSON.stringify(mailInfo));
+}
+
 var previousSearchTermsIndex = null
 function openSearchItems(which) {
   if (which == 0) {
@@ -3149,7 +3162,7 @@ function toggleHamburgerMenu() {
         }
         var usersHtml = ''
         for (i = 0; i < usersList.length; i++) {
-          usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'b" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', false)">'+usersList[i].name+'</div></div>'
+          usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'b" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', false)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', false)">'+usersList[i].name+'</div></div>'
           if (i < usersList.length-1) {
             // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
           }
@@ -3315,6 +3328,7 @@ function toggleHamburgerMenu() {
       html = html + '<div class="refer-item" style="padding-left: 34px;">'+yesRefer[i]+'</div>'
     }
     document.getElementById("yes-popup-refer-list").innerHTML = html
+    document.getElementById("yes-refer-input").value = ''
   }
   function addNoRefer() {
     noRefer.push(document.getElementById("no-refer-input").value)
@@ -3323,7 +3337,9 @@ function toggleHamburgerMenu() {
       html = html + '<div class="refer-item" style="padding-left: 34px;">'+noRefer[i]+'</div>'
     }
     document.getElementById("no-popup-refer-list").innerHTML = html
+    document.getElementById("no-refer-input").value = ''
   }
+
   function addReferRefer() {
     referRefer.push(document.getElementById("refer-input").value)
     var html = ''
@@ -3331,6 +3347,7 @@ function toggleHamburgerMenu() {
       html = html + '<div class="refer-item" style="padding-left: 34px;">'+referRefer[i]+'</div>'
     }
     document.getElementById("refer-refer-list").innerHTML = html
+    document.getElementById("refer-input").value = ''
   }
 
   function goToFbo(num, tab) {
@@ -3370,6 +3387,70 @@ function toggleHamburgerMenu() {
       xhttp.open("get", apiUrl+'/profiles/email/' + email, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send();
+    }
+  }
+
+  var referEmailValid = false
+  function checkReferEmail() {
+    var email = document.getElementById("refer-input").value
+    if (email.length < 1) {
+      document.getElementById("refer-input-button").classList.add('inactive')
+      document.getElementById("refer-input-button-inactive").classList.remove('inactive')
+      referEmailValid = false
+    } else {
+      if (invalidEmail(email)) {
+        document.getElementById("refer-input").classList.add('invalid-input')
+        document.getElementById("refer-input-button").classList.add('inactive')
+        document.getElementById("refer-input-button-inactive").classList.remove('inactive')
+        referEmailValid = false
+      } else {
+        document.getElementById("refer-input").classList.remove('invalid-input')
+        document.getElementById("refer-input-button").classList.remove('inactive')
+        document.getElementById("refer-input-button-inactive").classList.add('inactive')
+        referEmailValid = true
+      }
+    }
+  }
+  var yesEmailValid = false
+  function checkYesEmail() {
+    var email = document.getElementById("yes-refer-input").value
+    if (email.length < 1) {
+      document.getElementById("yes-refer-input-button").classList.add('inactive')
+      document.getElementById("yes-refer-input-button-inactive").classList.remove('inactive')
+      referEmailValid = false
+    } else {
+      if (invalidEmail(email)) {
+        document.getElementById("yes-refer-input").classList.add('invalid-input')
+        document.getElementById("yes-refer-input-button").classList.add('inactive')
+        document.getElementById("yes-refer-input-button-inactive").classList.remove('inactive')
+        referEmailValid = false
+      } else {
+        document.getElementById("yes-refer-input").classList.remove('invalid-input')
+        document.getElementById("yes-refer-input-button").classList.remove('inactive')
+        document.getElementById("yes-refer-input-button-inactive").classList.add('inactive')
+        referEmailValid = true
+      }
+    }
+  }
+  var noEmailValid = false
+  function checkNoEmail() {
+    var email = document.getElementById("no-refer-input").value
+    if (email.length < 1) {
+      document.getElementById("no-refer-input-button").classList.add('inactive')
+      document.getElementById("no-refer-input-button-inactive").classList.remove('inactive')
+      referEmailValid = false
+    } else {
+      if (invalidEmail(email)) {
+        document.getElementById("no-refer-input").classList.add('invalid-input')
+        document.getElementById("no-refer-input-button").classList.add('inactive')
+        document.getElementById("no-refer-input-button-inactive").classList.remove('inactive')
+        referEmailValid = false
+      } else {
+        document.getElementById("no-refer-input").classList.remove('invalid-input')
+        document.getElementById("no-refer-input-button").classList.remove('inactive')
+        document.getElementById("no-refer-input-button-inactive").classList.add('inactive')
+        referEmailValid = true
+      }
     }
   }
 
@@ -3767,6 +3848,9 @@ function toggleHamburgerMenu() {
 
   var activeFbo
   function setActiveFbo(index, tab) {
+    yesRefer = []
+    noRefer = []
+    referRefer = []
     var proxy
     if (tab == 0) {
       proxy = fbosIn[index]
@@ -4003,7 +4087,7 @@ function toggleHamburgerMenu() {
       }
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
-        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
         if (i < usersList.length-1) {
           // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
         }
@@ -4019,7 +4103,7 @@ function toggleHamburgerMenu() {
       document.getElementById("refer-popup").classList.remove('inactive');
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
-        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+')" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
+        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
         if (i < usersList.length-1) {
           usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
         }
@@ -4029,7 +4113,7 @@ function toggleHamburgerMenu() {
     }
     var a = document.getElementsByClassName('refer-checkbox')
     for (i = 0; i < a.length; i++) {
-      calculateRefers(i)
+      calculateRefers(i, true)
     }
   }
 
@@ -4040,34 +4124,56 @@ function toggleHamburgerMenu() {
       } else {
         document.getElementById("refer-checkbox-"+i+"").checked = true
       }
+      calculateRefers(i, true)
     } else {
       if (document.getElementById("refer-checkbox-"+i+"b").checked) {
         document.getElementById("refer-checkbox-"+i+"b").checked = false
       } else {
         document.getElementById("refer-checkbox-"+i+"b").checked = true
       }
+      calculateRefers(i, false)
     }
-    calculateRefers(i)
   }
 
-  function calculateRefers(index) {
+  function calculateRefers(index, popup) {
     console.log(index)
-    if (document.getElementById("refer-checkbox-"+index).checked == true) {
-      peopleToRefer.push(huntingPartyData.users[index])
-    } else {
-      for (i = 0; i < peopleToRefer.length; i++) {
-        if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
-          peopleToRefer.splice(i,1)
-          break;
+    if (popup) {
+      if (document.getElementById("refer-checkbox-"+index).checked == true) {
+        peopleToRefer.push(huntingPartyData.users[index])
+      } else {
+        for (i = 0; i < peopleToRefer.length; i++) {
+          if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
+            peopleToRefer.splice(i,1)
+            break;
+          }
         }
+        console.log('it should be gone now')
+        console.log(peopleToRefer)
       }
-      console.log('it should be gone now')
-      console.log(peopleToRefer)
+    } else {
+      if (document.getElementById("refer-checkbox-"+index+"b").checked == true) {
+        peopleToRefer.push(huntingPartyData.users[index])
+      } else {
+        for (i = 0; i < peopleToRefer.length; i++) {
+          if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
+            peopleToRefer.splice(i,1)
+            break;
+          }
+        }
+        console.log('it should be gone now')
+        console.log(peopleToRefer)
+      }
     }
   }
 
   function sendReferNotifications() {
     console.log('doing the notification guy')
+    var fbo = fbosIn[fboIndex]
+    if (activeTab == 2) {
+      fbo = fbosIn[fboIndex]
+    } else if (activeTab == 3) {
+      fbo = fboPipeline[fboIndex]
+    }
     var deviceIds = []
     for (i = 0; i < peopleToRefer.length; i++) {
       if (peopleToRefer[i].regId) {
@@ -4080,18 +4186,47 @@ function toggleHamburgerMenu() {
       platform: 'android',
       deviceIds: deviceIds
     }
+    console.log(fbo)
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         console.log('it sent i think')
         peopleToRefer = []
-      } else {
-        console.log('status: ' + xhttp.status)
       }
     }
     xhttp.open("POST", apiUrl+"/huntingpartydata/notification/", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(notification));
+    for (i = 0; i < yesRefer.length; i++) {
+      var mail = {
+        senderEmail: 'huntingparty@efassembly.com',
+        recipientEmail: yesRefer[i],
+        subject: 'Hunting Party Referral',
+        contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
+        contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
+      };
+      sendEmail(mail)
+    }
+    for (i = 0; i < noRefer.length; i++) {
+      var mail = {
+        senderEmail: 'huntingparty@efassembly.com',
+        recipientEmail: noRefer[i],
+        subject: 'Hunting Party Referral',
+        contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
+        contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
+      };
+      sendEmail(mail)
+    }
+    for (i = 0; i < referRefer.length; i++) {
+      var mail = {
+        senderEmail: 'huntingparty@efassembly.com',
+        recipientEmail: referRefer[i],
+        subject: 'Hunting Party Referral',
+        contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
+        contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
+      };
+      sendEmail(mail)
+    }
   }
 
   function vote(index, yes) {
@@ -4158,7 +4293,7 @@ function toggleHamburgerMenu() {
         console.log('it voted')
         fbo = JSON.parse(xhttp.responseText)
         checkVote(fbo)
-        if (peopleToRefer.length > 0) {
+        if (peopleToRefer.length + yesRefer.length + noRefer.length > 0) {
           sendReferNotifications()
         }
         var newsString = ''
@@ -4183,6 +4318,9 @@ function toggleHamburgerMenu() {
 
         }
         addPoints(50)
+        yesRefer = []
+        noRefer = []
+        referRefer = []
       }
     };
     var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
@@ -4757,7 +4895,7 @@ function toggleHamburgerMenu() {
     // goToFbo(0,0);
     // openFboDetail(5)
     // viewSearch(0)
-    // openPopups(2)
+    // openPopups(1)
     // goToCompanyCreate()
     // expandData(2)
   }

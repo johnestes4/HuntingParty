@@ -433,8 +433,9 @@ under the License.
       </div>
       <div id="yes-refer" class="">
         <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
-          <input id="yes-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" name="" value="" style="width: calc(100% - 65px); float: left;">
-          <button type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
+          <input id="yes-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkYesEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button id="yes-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
+          <button id="yes-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
         </div>
       </div>
     </div>
@@ -455,8 +456,9 @@ under the License.
       </div>
       <div id="no-refer" class="">
         <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
-          <input id="no-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" name="" value="" style="width: calc(100% - 65px); float: left;">
-          <button type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addNoRefer()">Add</button>
+          <input id="no-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkNoEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button id="no-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addNoRefer()">Add</button>
+          <button id="no-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
         </div>
       </div>
     </div>
@@ -769,7 +771,7 @@ Data
       </div>
       <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-5">›</p>
     </div>
-    <div id="fbo-detail-middle-5" class="fbo-detail-middle-expanded inactive" style="position: relative;">
+    <div id="fbo-detail-middle-5" class="fbo-detail-middle-expanded inactive" style="position: relative; padding-top: 0px;">
       <div class="popup-segment" style="border-bottom: 1px solid rgba(0,0,0,0.2);">
         <p style="margin: 0px;">Who would you like to send this to?</p>
       </div>
@@ -783,8 +785,9 @@ Data
           </div>
         </div>
         <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
-          <input id="refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" name="" value="" style="width: calc(100% - 65px); float: left;">
-          <button type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addReferRefer()">Add</button>
+          <input id="refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkReferEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button id="refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addReferRefer()">Add</button>
+          <button id="refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
         </div>
         <div class="" style="float: left; width: 100%; height: 40px;">
           <button class="vote-button" type="button" name="button" onclick="sendReferNotifications()">Send</button>
