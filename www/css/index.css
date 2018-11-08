@@ -137,40 +137,58 @@ h1, h2, h3, h4, h5, h6 {
   color: black!important;
 }
 
-#tos-popup {
+.tos-popup {
+  width: 90vw;
+  height: 90vh;
+  position: absolute;
+  border-radius: 8px;
+  left: 5vw;
+  top: 5vh;
+  background: white;
+  z-index: 999999999999999;
+  box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
+}
+.tos-popup button {
+  width: 100%;
+  height: 80px;
+  line-height: 76px;
+  font-size: 20px;
+  font-weight: normal;
+  color: white;
+  border-radius: 0px 0px 8px 8px;
+}
+.tos-popup-bg {
+  content: '';
+  background: rgba(0,0,0,0.25);
+  position: fixed;
   width: 100vw;
   height: 100vh;
-  position: absolute;
   left: 0px;
   top: 0px;
-  background: rgba(0,175,217,1);
-  z-index: 999999999999999;
+  z-index: 190;
 }
 
 #tos-popup p {
-  text-align: center;
   font-size: 14px;
-}
-#tos-popup button {
-  width: 50vw;
-  margin-left: 25vw;
-  height: 40px;
-  font-size: 18px;
-  line-height: 34px;
-  color: white;
-  margin-bottom: 1vh;
+  color: rgba(0,0,0,0.75);
+  margin-bottom: 15px;
 }
 
 
 .tos-box {
-  text-align: center;
+  text-align: left;
+  width: 100%;
+  height: calc(100% - 80px);
+  overflow-y: auto;
+  padding: 25px;
+}
+.tos-box h2 {
   color: black;
-  background: rgba(255,255,255,0.5);
-  border: 1px solid rgba(0,0,0,0.75);
-  width: 90%;
-  margin-left: 5%;
-  height: auto;
-  padding: 6px;
+  margin: 0px;
+  margin-bottom: 40px;
+  margin-top: 5px;
+  font-size: 20px;
+  text-align: center;
 }
 
 .subcategory-box {
