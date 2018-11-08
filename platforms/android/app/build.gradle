@@ -22,14 +22,14 @@ apply plugin: 'com.android.application'
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             url "https://maven.google.com"
         }
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
@@ -93,8 +93,6 @@ ext {
 // PLUGIN GRADLE EXTENSIONS START
 apply from: "../cordova-android-firebase-gradle-release/huntingparty-cordova-android-firebase-gradle-release.gradle"
 apply from: "../cordova-android-play-services-gradle-release/huntingparty-cordova-android-play-services-gradle-release.gradle"
-apply from: "../cordova-plugin-firebase/huntingparty-build.gradle"
-apply from: "../cordova-android-support-gradle-release/huntingparty-cordova-android-support-gradle-release.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -263,14 +261,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
-    compile "com.android.support:support-v4:27.+"
-    compile "com.google.gms:google-services:+"
-    compile "com.google.android.gms:play-services-tagmanager:15.+"
-    compile "com.google.firebase:firebase-core:15.+"
-    compile "com.google.firebase:firebase-messaging:15.+"
-    compile "com.google.firebase:firebase-crash:15.+"
-    compile "com.google.firebase:firebase-config:15.+"
-    compile "com.google.firebase:firebase-perf:15.+"
+    compile "com.android.support:support-v4:24.1.1+"
     // SUB-PROJECT DEPENDENCIES END
 }
 

@@ -452,6 +452,12 @@ h1, h2, h3, h4, h5, h6 {
 h1, .instructions{
   color: black;
 }
+#company-create-view ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(255,255,255,0.75);
+}
+#register-view ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(255,255,255,0.75);
+}
 
 .body-block {
   /* border-top: 1px solid rgba(255,255,255,0.1); */
@@ -1811,6 +1817,13 @@ a:active {
   color: rgba(255,198,0,1);
   filter: brightness(90%);
   font-weight: bold;
+}
+
+.chart-header {
+  font-size: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  float: left;
+  width: 100%;
 }
 
 button {

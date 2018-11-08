@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -834,12 +834,14 @@ function renderSavedSearches() {
 
   yourSearches = []
   var searchDropdownHtml = '<option value="-1">All Searches</option>'
+  var searchIndex = 0
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId == currentUser._id) {
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
           yourSearches.push(huntingPartyData.users[i].searches[i2])
-          searchDropdownHtml = searchDropdownHtml + '<option value="'+i2+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
+          searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
+          searchIndex++
         }
       }
     }
@@ -849,7 +851,8 @@ function renderSavedSearches() {
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
           yourSearches.push(huntingPartyData.users[i].searches[i2])
-          searchDropdownHtml = searchDropdownHtml + '<option value="'+i2+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
+          searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
+          searchIndex++
         }
       }
     }
@@ -1266,7 +1269,15 @@ function filterOpportunitiesBySearch(elem) {
   } else {
     searchFilterName = null
   }
-  renderFbos()
+  console.log(searchFilterName)
+  var searchCount = 0
+  for (i = 0; i < fbosIn.length; i++) {
+    if (fbosIn[i].originSearch == searchFilterName) {
+      searchCount++
+    }
+  }
+  console.log(searchCount)
+  // renderFbos()
 }
 
 function deleteSearchTerms() {
@@ -2772,14 +2783,14 @@ function toggleHamburgerMenu() {
         return p2num - p1num
       });
     }
-
-
   }
 
   var searchFilterName = null
 
   //Sorts thru all existing data and organizes them
-  function parseFbos(){}
+  function parseFbos(){
+
+  }
 
   function renderFbos() {
     var fboHtml = ''
@@ -2997,7 +3008,6 @@ function toggleHamburgerMenu() {
           '</div>'+
           '</div>'+
           '</div>'
-
         }
         // if (expired) {
         //   toDeleteIds.push(company.fboProxies[i]._id)
@@ -3494,6 +3504,10 @@ function toggleHamburgerMenu() {
       logOut()
     }
   }
+  function goToNewCompany() {
+    document.getElementById("company-new-view").classList.remove('inactive')
+    document.getElementById("company-search-view").classList.add('inactive')
+  }
   function goToCompanyCreate() {
     document.getElementById("login-register").classList.remove('inactive')
     document.getElementById("register-view").classList.add('inactive')
@@ -3680,21 +3694,21 @@ function toggleHamburgerMenu() {
     if (
       document.getElementById("new-company-name").value.length > 0 &&
       document.getElementById("new-company-email").value.length > 0 &&
-      document.getElementById("new-company-phone").value.length == 14 &&
-      document.getElementById("new-company-address").value.length > 0 &&
-      document.getElementById("new-company-city").value.length > 0 &&
-      document.getElementById("new-company-state").value.length > 0 &&
-      document.getElementById("new-company-zip").value.length > 0
+      document.getElementById("new-company-phone").value.length == 14
+      // document.getElementById("new-company-address").value.length > 0 &&
+      // document.getElementById("new-company-city").value.length > 0 &&
+      // document.getElementById("new-company-state").value.length > 0 &&
+      // document.getElementById("new-company-zip").value.length > 0
     ) {
       var newCompany = {
         name: document.getElementById("new-company-name").value,
         email: document.getElementById("new-company-email").value,
         avatar: '',
-        contactNumber: document.getElementById("new-company-phone").value,
-        address: document.getElementById("new-company-address").value,
-        city: document.getElementById("new-company-city").value,
-        state: document.getElementById("new-company-state").value,
-        zip:  document.getElementById("new-company-zip").value
+        contactNumber: document.getElementById("new-company-phone").value
+        // address: document.getElementById("new-company-address").value,
+        // city: document.getElementById("new-company-city").value,
+        // state: document.getElementById("new-company-state").value,
+        // zip:  document.getElementById("new-company-zip").value
       }
 
       var xhttp = new XMLHttpRequest();
@@ -3722,18 +3736,19 @@ function toggleHamburgerMenu() {
               }
               xhttp3.open("POST", apiUrl+'/companyuserproxy/add/', true);
               xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
-              xhttp3.setRequestHeader('Authorization','application/json; charset=utf-8');
+              xhttp3.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
               xhttp3.setRequestHeader('id',currentUser._id);
               xhttp3.send(JSON.stringify(request));
             }
           }
-          xhttp2.open("GET", apiUrl+'/role/title/', true);
+          xhttp2.open("GET", apiUrl+'/role/title/admin', true);
           xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-          xhttp2.send("admin");
+          xhttp2.send();
         }
       }
       xhttp.open("POST", apiUrl+'/company/add/', true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
       xhttp.send(JSON.stringify(newCompany));
     } else {
       console.log(document.getElementById("new-company-phone").value.length)
@@ -4862,6 +4877,7 @@ function toggleHamburgerMenu() {
       renderFbos()
       renderNews()
       var promiseFinished = true
+      console.log('asd')
       document.getElementById("tos-popup").classList.add('inactive');
       document.getElementById("loading").classList.add('inactive');
       document.getElementById("main-view").classList.remove('inactive');
@@ -4870,6 +4886,7 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive');
       document.getElementById("login-register").classList.add('inactive');
     } else {
+      generateSearchHTML(1)
       renderSearch()
       generateOptions()
       // renderFbos()
