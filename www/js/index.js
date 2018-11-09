@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var activeTab = 0
 var dataExpanded = 0
@@ -616,6 +616,18 @@ function checkChecked() {
   }
 }
 
+function resetSearchTerms() {
+  searchTerms.agency = emptySearchTerms.agency
+  searchTerms.dueDate = emptySearchTerms.dueDate
+  searchTerms.keyword = emptySearchTerms.keyword
+  searchTerms.naics = emptySearchTerms.naics
+  searchTerms.name = emptySearchTerms.name
+  searchTerms.place = emptySearchTerms.place
+  searchTerms.psc = emptySearchTerms.psc
+  searchTerms.setAside = emptySearchTerms.setAside
+  searchTerms.type = emptySearchTerms.type
+}
+
 function viewSearch(index) {
   if (index > -1) {
     searchTerms = yourSearches[index]
@@ -628,7 +640,7 @@ function viewSearch(index) {
     activeSearchIndex = index
     document.getElementById("delete-search-button").classList.remove('inactive')
   } else {
-    searchTerms = emptySearchTerms
+    resetSearchTerms()
     activeSearchIndex = -1
     document.getElementById("delete-search-button").classList.add('inactive')
   }
@@ -1236,6 +1248,9 @@ function openSearchItems(which) {
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   } else {
+    if (!document.getElementById("search-item-"+previousSearchTermsIndex)) {
+      generateSearchHTML(1)
+    }
     if (previousSearchTermsIndex) {
       document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
       previousSearchTermsIndex = null
@@ -1300,6 +1315,8 @@ function deleteSearchTerms() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
           console.log('search is gone!')
           yourSearches = []
+          previousSearchTermsIndex = null
+          generateSearchHTML(1)
           renderSavedSearches()
           switchTab(1)
           openSearchItems(0)
@@ -2264,6 +2281,7 @@ function closeSearchPopup() {
 }
 
 function saveSearchTerms() {
+  console.log(emptySearchTerms)
   if (document.getElementById("search-name").value.length > 0) {
     searchTerms.keyword = document.getElementById("search-input-keyword").value
     var terms = searchTerms
@@ -2297,6 +2315,10 @@ function saveSearchTerms() {
           document.getElementById('search-save-popup').classList.remove('inactive')
           document.getElementById('search-save-popup-bg').classList.remove('inactive')
           document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+          console.log(emptySearchTerms)
+          console.log('----------')
+          resetSearchTerms()
+          console.log(emptySearchTerms)
         }
       };
       var url = apiUrl+"/huntingpartydata/add";
@@ -2312,6 +2334,9 @@ function saveSearchTerms() {
           document.getElementById('search-save-popup').classList.remove('inactive')
           document.getElementById('search-save-popup-bg').classList.remove('inactive')
           document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+          console.log(emptySearchTerms)
+          console.log('----------')
+          console.log(emptySearchTerms)
           renderSavedSearches()
           if (!document.getElementById("new-search").classList.contains('inactive')) {
             openSearchItems(1)
@@ -2320,6 +2345,7 @@ function saveSearchTerms() {
             openSearchItems(0)
           }
           switchTab(1)
+          resetSearchTerms()
           console.log('UPDATED')
         }
       };
