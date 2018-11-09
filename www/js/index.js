@@ -5659,7 +5659,7 @@ function toggleHamburgerMenu() {
   }
 
   function resetPassword() {
-    var email = document.getElementById("reset-password-input").value
+    var email = document.getElementById("reset-password-input").value.toLowerCase()
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
