@@ -4304,6 +4304,8 @@ function toggleHamburgerMenu() {
     }
     if (sendingFromReferTab) {
       openReferPopup()
+      document.getElementById("refer-refer-list").innerHTML = ''
+      openFboDetail(5)
     }
   }
 
