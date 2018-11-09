@@ -2728,6 +2728,23 @@ h1 {
   filter: brightness(90%);
 }
 
+.refer-item-close {
+  float: left;
+  width: 34px;
+  height: 100%;
+  position: relative;
+}
+
+.refer-item-close img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  object-fit: cover;
+  width: 23px;
+}
+
 .refer-checkbox {
   float: left;
   margin-left: 5px;

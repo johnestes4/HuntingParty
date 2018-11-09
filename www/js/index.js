@@ -3376,7 +3376,7 @@ function toggleHamburgerMenu() {
     yesRefer.push(document.getElementById("yes-refer-input").value)
     var html = ''
     for (i = 0; i < yesRefer.length; i++) {
-      html = html + '<div class="refer-item" style="padding-left: 34px;">'+yesRefer[i]+'</div>'
+      html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(0, '+i+')"><img src="./img/close.png" alt=""></span>'+yesRefer[i]+'</div>'
     }
     document.getElementById("yes-popup-refer-list").innerHTML = html
     document.getElementById("yes-refer-input").value = ''
@@ -3385,7 +3385,7 @@ function toggleHamburgerMenu() {
     noRefer.push(document.getElementById("no-refer-input").value)
     var html = ''
     for (i = 0; i < noRefer.length; i++) {
-      html = html + '<div class="refer-item" style="padding-left: 34px;">'+noRefer[i]+'</div>'
+      html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(1, '+i+')"><img src="./img/close.png" alt=""></span>'+noRefer[i]+'</div>'
     }
     document.getElementById("no-popup-refer-list").innerHTML = html
     document.getElementById("no-refer-input").value = ''
@@ -3395,10 +3395,33 @@ function toggleHamburgerMenu() {
     referRefer.push(document.getElementById("refer-input").value)
     var html = ''
     for (i = 0; i < referRefer.length; i++) {
-      html = html + '<div class="refer-item" style="padding-left: 34px;">'+referRefer[i]+'</div>'
+      html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(2, '+i+')"><img src="./img/close.png" alt=""></span>'+referRefer[i]+'</div>'
     }
     document.getElementById("refer-refer-list").innerHTML = html
     document.getElementById("refer-input").value = ''
+  }
+
+  function deleteReferItem(which, i) {
+    var html = ''
+    if (which == 0) {
+      yesRefer.splice(i,1)
+      for (i = 0; i < yesRefer.length; i++) {
+        html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(0, '+i+')"><img src="./img/close.png" alt=""></span>'+yesRefer[i]+'</div>'
+      }
+      document.getElementById("yes-popup-refer-list").innerHTML = html
+    } else if (which == 1) {
+      noRefer.splice(i,1)
+      for (i = 0; i < noRefer.length; i++) {
+        html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(1, '+i+')"><img src="./img/close.png" alt=""></span>'+noRefer[i]+'</div>'
+      }
+      document.getElementById("no-popup-refer-list").innerHTML = html
+    } else if (which == 2) {
+      referRefer.splice(i,1)
+      for (i = 0; i < referRefer.length; i++) {
+        html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(2, '+i+')"><img src="./img/close.png" alt=""></span>'+referRefer[i]+'</div>'
+      }
+      document.getElementById("refer-refer-list").innerHTML = html
+    }
   }
 
   function goToFbo(num, tab) {
