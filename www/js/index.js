@@ -4108,11 +4108,6 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function openRefer() {
-    document.getElementById("fbo-popups").classList.remove('inactive');
-    document.getElementById("refer-popup").classList.remove('inactive');
-  }
-
   function closePopups(moveOn) {
     document.getElementById("fbo-popups").classList.add('inactive');
     var a = document.getElementsByClassName('vote-popup')
@@ -4158,7 +4153,6 @@ function toggleHamburgerMenu() {
         a[i].classList.remove('inactive');
       }
     } else if (which == 2) {
-      document.getElementById("refer-popup").classList.remove('inactive');
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
         usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
@@ -4224,7 +4218,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function sendReferNotifications() {
+  function sendReferNotifications(sendingFromReferTab) {
     console.log('doing the notification guy')
     var fbo = fbosIn[fboIndex]
     if (activeTab == 2) {
@@ -4285,6 +4279,17 @@ function toggleHamburgerMenu() {
       };
       sendEmail(mail)
     }
+    if (sendingFromReferTab) {
+      openReferPopup()
+    }
+  }
+
+  function openReferPopup() {
+    document.getElementById("refer-popup").classList.remove('inactive');
+  }
+
+  function closeReferPopup() {
+    document.getElementById("refer-popup").classList.add('inactive');
   }
 
   function vote(index, yes) {
@@ -4352,7 +4357,7 @@ function toggleHamburgerMenu() {
         fbo = JSON.parse(xhttp.responseText)
         checkVote(fbo)
         if (peopleToRefer.length + yesRefer.length + noRefer.length > 0) {
-          sendReferNotifications()
+          sendReferNotifications(false)
         }
         var newsString = ''
         console.log(fbo)

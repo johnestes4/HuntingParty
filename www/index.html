@@ -435,9 +435,6 @@ under the License.
     <p id="error-text">it's broke</p>
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
   </div>
-  <div id="refer-popup" class="vote-popup inactive">
-
-  </div>
   <div class="vote-popup yes-popup inactive">
     <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
     <!-- <p>You voted YES on this opportunity!</p>
@@ -601,6 +598,17 @@ Pre-selected
 </div>
 </div>
 <div id="fbo-detail-view" class="body-block inactive">
+  <div id="refer-popup" class="inactive">
+    <div class="popup refer-popup">
+      <div class="popup-text-box" style="font-size: 14px;">
+        <p style="color: rgba(0,0,0,0.75)!important">Refers sent</p>
+      </div>
+      <button type="button" name="button" onclick="closeReferPopup()">Okay</button>
+    </div>
+    <div class="popup-bg">
+
+    </div>
+  </div>
   <!-- <div class="second-topbar">
   <div id="fbo-detail-topbar-left" class="second-topbar-half topbar-half-active" onclick="switchFboDetailTab(0)" style="padding-left: 40px;">
   Info
@@ -821,7 +829,7 @@ Data
           <button id="refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
         </div>
         <div class="" style="float: left; width: 100%; height: 40px;">
-          <button class="vote-button" type="button" name="button" onclick="sendReferNotifications()">Send</button>
+          <button class="vote-button" type="button" name="button" onclick="sendReferNotifications(true)">Send</button>
         </div>
       </div>
     </div>

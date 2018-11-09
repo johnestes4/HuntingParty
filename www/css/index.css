@@ -142,8 +142,12 @@ h1, h2, h3, h4, h5, h6 {
   height: 90vh;
 }
 
+.refer-popup {
+  width: 60vw;
+}
+
 .popup {
-  position: absolute;
+  position: fixed;
   border-radius: 8px;
   left: 50%;
   top: 50%;
