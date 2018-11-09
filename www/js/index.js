@@ -647,6 +647,7 @@ function viewSearch(index) {
   }
 
   renderSearch()
+  document.getElementById("search-input-keyword").value = searchTerms.keyword
   var a = document.getElementsByClassName('checkbox-duedate')
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.dueDate[i].value
@@ -2311,6 +2312,8 @@ function saveSearchTerms() {
               huntingPartyData.users[i].searches = []
             }
             huntingPartyData.users[i].searches.push(terms)
+            console.log(terms.name)
+            break;
           }
         }
       }
@@ -2339,6 +2342,7 @@ function saveSearchTerms() {
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
+            huntingPartyData = JSON.parse(xhttp.responseText);
             document.getElementById('search-save-popup').classList.remove('inactive')
             document.getElementById('search-save-popup-bg').classList.remove('inactive')
             document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
@@ -3938,6 +3942,8 @@ function toggleHamburgerMenu() {
     document.getElementById("interested-vendors").innerHTML = partiesHtml
     if (companyAlreadyInterested) {
       document.getElementById("interested-vendor-button").classList.add('inactive')
+    } else {
+      document.getElementById("interested-vendor-button").classList.remove('inactive')
     }
     var dueDateHtml = 'No Due Date'
     if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
