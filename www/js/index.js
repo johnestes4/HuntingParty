@@ -2,6 +2,7 @@ var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
 // var apiUrl = 'http://localhost:4200'
 
+var saving = false
 var activeTab = 0
 var dataExpanded = 0
 var company = null
@@ -1296,38 +1297,42 @@ function filterOpportunitiesBySearch(elem) {
 }
 
 function deleteSearchTerms() {
-  if (activeSearchIndex > -1) {
-    var searchSucceeded = false
-    for (i = 0; i < huntingPartyData.users.length; i++) {
-      if (huntingPartyData.users[i].userId == currentUser._id) {
-        if (huntingPartyData.users[i].searches) {
-          huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
-          searchSucceeded = true
-          theindex = i
-          break
+  if (!saving) {
+    saving = true
+    if (activeSearchIndex > -1) {
+      var searchSucceeded = false
+      for (i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].userId == currentUser._id) {
+          if (huntingPartyData.users[i].searches) {
+            huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
+            searchSucceeded = true
+            theindex = i
+            break
+          }
         }
       }
-    }
-    if (searchSucceeded) {
-      var id = huntingPartyData._id
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('search is gone!')
-          yourSearches = []
-          previousSearchTermsIndex = null
-          generateSearchHTML(1)
-          renderSavedSearches()
-          switchTab(1)
-          openSearchItems(0)
-        }
-      };
-      var url = apiUrl+"/huntingpartydata/" + id;
-      xhttp.open("PUT", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
-    } else {
-      console.log('it failed somehow')
+      if (searchSucceeded) {
+        var id = huntingPartyData._id
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log('search is gone!')
+            yourSearches = []
+            previousSearchTermsIndex = null
+            generateSearchHTML(1)
+            renderSavedSearches()
+            switchTab(1)
+            openSearchItems(0)
+            saving = false
+          }
+        };
+        var url = apiUrl+"/huntingpartydata/" + id;
+        xhttp.open("PUT", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(huntingPartyData));
+      } else {
+        console.log('it failed somehow')
+      }
     }
   }
 }
@@ -2281,78 +2286,83 @@ function closeSearchPopup() {
 }
 
 function saveSearchTerms() {
-  console.log(emptySearchTerms)
-  if (document.getElementById("search-name").value.length > 0) {
-    searchTerms.keyword = document.getElementById("search-input-keyword").value
-    var terms = searchTerms
-    var creatingNew = false
-    if (!huntingPartyData) {
-      huntingPartyData = {
-        companyId: company._id,
-        users: [],
-        searches: []
+  if (!saving) {
+    saving = true
+    console.log(emptySearchTerms)
+    if (document.getElementById("search-name").value.length > 0) {
+      searchTerms.keyword = document.getElementById("search-input-keyword").value
+      var terms = searchTerms
+      var creatingNew = false
+      if (!huntingPartyData) {
+        huntingPartyData = {
+          companyId: company._id,
+          users: [],
+          searches: []
+        }
+        creatingNew = true
       }
-      creatingNew = true
-    }
-    terms.name = document.getElementById("search-name").value
-    if (activeSearchIndex > -1) {
-      yourSearches[activeSearchIndex] = terms
-    } else {
-      for (i = 0; i < huntingPartyData.users.length; i++) {
-        if (huntingPartyData.users[i].userId == currentUser._id) {
-          if (!huntingPartyData.users[i].searches) {
-            huntingPartyData.users[i].searches = []
+      terms.name = document.getElementById("search-name").value
+      if (activeSearchIndex > -1) {
+        yourSearches[activeSearchIndex] = terms
+      } else {
+        for (i = 0; i < huntingPartyData.users.length; i++) {
+          if (huntingPartyData.users[i].userId == currentUser._id) {
+            if (!huntingPartyData.users[i].searches) {
+              huntingPartyData.users[i].searches = []
+            }
+            huntingPartyData.users[i].searches.push(terms)
           }
-          huntingPartyData.users[i].searches.push(terms)
         }
       }
-    }
-    if (creatingNew) {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('CREATED')
-          document.getElementById('search-save-popup').classList.remove('inactive')
-          document.getElementById('search-save-popup-bg').classList.remove('inactive')
-          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
-          console.log(emptySearchTerms)
-          console.log('----------')
-          resetSearchTerms()
-          console.log(emptySearchTerms)
-        }
-      };
-      var url = apiUrl+"/huntingpartydata/add";
-      xhttp.open("POST", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
+      if (creatingNew) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log('CREATED')
+            document.getElementById('search-save-popup').classList.remove('inactive')
+            document.getElementById('search-save-popup-bg').classList.remove('inactive')
+            document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+            console.log(emptySearchTerms)
+            console.log('----------')
+            resetSearchTerms()
+            console.log(emptySearchTerms)
+            saving = false
+          }
+        };
+        var url = apiUrl+"/huntingpartydata/add";
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(huntingPartyData));
 
-    } else {
-      var id = huntingPartyData._id
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          document.getElementById('search-save-popup').classList.remove('inactive')
-          document.getElementById('search-save-popup-bg').classList.remove('inactive')
-          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
-          console.log(emptySearchTerms)
-          console.log('----------')
-          console.log(emptySearchTerms)
-          renderSavedSearches()
-          if (!document.getElementById("new-search").classList.contains('inactive')) {
-            openSearchItems(1)
+      } else {
+        var id = huntingPartyData._id
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            document.getElementById('search-save-popup').classList.remove('inactive')
+            document.getElementById('search-save-popup-bg').classList.remove('inactive')
+            document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+            console.log(emptySearchTerms)
+            console.log('----------')
+            console.log(emptySearchTerms)
+            renderSavedSearches()
+            if (!document.getElementById("new-search").classList.contains('inactive')) {
+              openSearchItems(1)
+            }
+            if (document.getElementById("saved-searches").classList.contains('inactive')) {
+              openSearchItems(0)
+            }
+            switchTab(1)
+            resetSearchTerms()
+            saving = false
+            console.log('UPDATED')
           }
-          if (document.getElementById("saved-searches").classList.contains('inactive')) {
-            openSearchItems(0)
-          }
-          switchTab(1)
-          resetSearchTerms()
-          console.log('UPDATED')
-        }
-      };
-      var url = apiUrl+"/huntingpartydata/" + id;
-      xhttp.open("PUT", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
+        };
+        var url = apiUrl+"/huntingpartydata/" + id;
+        xhttp.open("PUT", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(huntingPartyData));
+      }
     }
   }
 }
