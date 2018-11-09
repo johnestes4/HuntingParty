@@ -2265,6 +2265,7 @@ function closeSearchPopup() {
 
 function saveSearchTerms() {
   if (document.getElementById("search-name").value.length > 0) {
+    searchTerms.keyword = document.getElementById("search-input-keyword").value
     var terms = searchTerms
     var creatingNew = false
     if (!huntingPartyData) {
@@ -2958,7 +2959,7 @@ function toggleHamburgerMenu() {
             '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
             '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
             '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 70px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 75px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
             '</div>'+
             '</div>'+
             '</div>'+
@@ -2994,7 +2995,7 @@ function toggleHamburgerMenu() {
           '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
           '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
           '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-          '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 70px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+          '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 75px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
           '</div>'+
           '</div>'+
           '</div>'+
@@ -5401,7 +5402,6 @@ function toggleHamburgerMenu() {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-      document.getElementById("reg-id").value = 'it did ondeviceready'
       // app.receivedEvent('deviceready');
       app.push = PushNotification.init({
         "android": {
