@@ -45,32 +45,30 @@ under the License.
 </head>
 
 <body>
-  <div id="tos-popup" class="inactive">
-    <p>Please read the TOS. Here it is.</p>
-    <p>TOS</p>
-    <div class="tos-box">
-      Welcome to Hunting Party!
-      <br><br>
-      Out community is based on trust and we take our terms of service very seriously:
-      <br><br>
-      VIOLATIONS OF TERMS:
-      <br><br>
-      Violations will result in you being removed from our platform AND
-      <br><br>
-      The PERSON WHO INVITED YOU being removed from our platform.
-      <br><br>
-      TERMS OF SERVICE
-      <br><br>
-      1) Don't use this platform to advertise or market your professional services (if you want to market yourself here email our help desk)
-      <br><br>
-      2) Don't add yourself to an RFP's interested vendors list if you are really interested in providing professional services
-      <br><br>
-      3) No abusive, vulgar or threatening commenting or emailing
-      <br><br>
-      That's it so don't get [NAME OF PERSON WHO INVITED THEM] in trouble
+  <div id="loading-overlay" class="inactive">
+    <p id="loading-overlay-text">Text Here</p>
+    <div class="loading-circle"></div>
+    <div class="loading-overlay-bg">
     </div>
-    <div class="" style="width: 100vw; height: 40px; position: relative; margin-top: 2vh;">
+  </div>
+  <div id="tos-popup" class="inactive">
+    <div class="tos-popup">
+      <div class="tos-box">
+        <h2>Welcome to Hunting Party!</h2>
+        <p>Our community is based on trust and we take our terms of service very seriously:</p>
+        <p style="font-weight: bold;">VIOLATIONS OF TERMS:</p>
+        <p>Violations will result in you being removed from our platform AND</p>
+        <p>The PERSON WHO INVITED YOU being removed from our platform.</p>
+        <p style="font-weight: bold;">TERMS OF SERVICE</p>
+        <p>1) Don't use this platform to advertise or market your professional services (if you want to market yourself here email our help desk)</p>
+        <p>2) Don't add yourself to an RFP's interested vendors list if you are really interested in providing professional services</p>
+        <p>3) No abusive, vulgar or threatening commenting or emailing</p>
+        <p>That's it so don't get [NAME OF PERSON WHO INVITED THEM] in trouble</p>
+      </div>
       <button type="button" name="button" onclick="acceptTOS()">Accept</button>
+    </div>
+    <div class="tos-popup-bg">
+
     </div>
   </div>
   <div id="loading">
@@ -82,501 +80,420 @@ under the License.
   </div>
   <div id="login-register" class="inactive">
     <div id="login-view">
-      <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
-        <h1>HUNTING PARTY</h1>
+      <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
+        <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="" style="max-width: 65vw">
       </div>
-      <div class="instructions">
-         <p>Please sign in...</p>
-      </div>
-      <p class="login-info">Username (Email Address)</p>
-      <input class="login-field" type="text" id="email" name="" value="" placeholder="Email">
-      <p class="login-info">Password</p>
-      <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
-      <div id="login-error-text" class="" style="color: red; font-size: 14px; padding-left: 5%; width: 100%;">
-
-      </div>
-      <div class="" style="width: 100%; position: relative;">
-        <button class="center-absolute" type="button" name="button" onclick="login()">LOGIN</button>
-        <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button>
-      </div>
-    </div>
-    <div id="register-view" class="inactive">
-      <div class="instructions">
-         <p>Join Hunting Party</p>
-      </div>
-      <!-- <p class="login-info">Username (Email Address)</p> -->
-      <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First name">
-      <div id="register-alert-1" class="register-field-alert">
-
-      </div>
-      <!-- <p class="login-info">Password</p> -->
-      <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last name">
-      <div id="register-alert-2" class="register-field-alert">
-
-      </div>
-      <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Email address">
-      <div id="register-alert-3" class="register-field-alert">
-
-      </div>
-      <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
-      <div id="register-alert-4" class="register-field-alert">
-
-      </div>
-      <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
-      <div id="register-alert-5" class="register-field-alert">
-
-      </div>
-      <div class="" style="width: 100%; position: relative;">
-        <button class="center-absolute" type="button" name="button" onclick=register()>JOIN</button>
-        <div class="" style="width: 100%; text-align: center;">
-          <a href="#" onclick="goToLogin()">Go Back To Login</a>
-        </div>
-      </div>
-    </div>
-    <div id="company-create-view" class="inactive">
-      <div id="company-confirm-view" class="inactive">
-        <div id="company-confirm-img-wrapper">
-          <img class="company-confirm-img" src="./img/profile.png" alt="">
-        </div>
-        <div id="company-confirm-desc" class="">
-          <h4>Company #1</h4>
-          <p>123 Place St, 12345</p>
-          <p>email@mail.zone</p>
-          <h5>Do you want to request to join?</h5>
-          <p>If you choose JOIN, we'll send a join request to Company #1. If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>
-        </div>
-        <button type="button" name="button" onclick="sendCompanyRequest()">Join</button>
-        <button type="button" name="button" onclick="leaveCompanyConfirm()">Back</button>
-      </div>
-      <div id="company-confirm-confirm-view" class="inactive">
-        <p>Your join request has been sent.</p>
-        <p>If the company accepts, you'll gain full access to their Hunting Party.</p>
-        <p>We'll notify you when they respond.</p>
-      </div>
-      <div id="company-search-view" class="">
-        <div class="" style="width: 100%; height: 60px; background: rgba(78,96,136,1); border-bottom: 1px solid rgba(0,0,0,0.75); padding-top: 15px;">
-          <h1>Become part of a company</h1>
-        </div>
-        <div class="instructions">
-          <p>See if your company is already in our system:</p>
-        </div>
-        <div class="" style="position: relative; width: 100vw; height: 45px; margin-bottom: 2vh;">
-          <input id="company-search" type="text" name="" value="" onkeyup="companySearch()" placeholder="Find a Company">
-          <div id="company-search-dropdown" class="inactive">
-
-          </div>
-        </div>
-        <!-- <div class="instructions">
-          <p>If not, you can be the one to start it! Fill in below:</p>
-        </div>
-        <p class="login-info"></p>
-        <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
-        <input id="new-company-email" type="text" name="" value="" placeholder="Email">
-        <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
-        <input id="new-company-address" type="text" name="" value="" placeholder="Address">
-        <input id="new-company-city" type="text" name="" value="" placeholder="City">
-        <input id="new-company-state" type="text" name="" value="" placeholder="State">
-        <input id="new-company-zip" type="number" name="" value="" placeholder="Zip">
-        <button type="button" name="button" onclick="createCompany()">Create</button> -->
-      </div>
-    </div>
-  </div>
-
-  <div id="main-view" class="inactive">
-    <div id="sidebar-detector" class="" style="">
-    </div>
-    <div class="topbar">
-      <div id="profile-circle" class="circle" style="top: 0px; left: 1px;" onclick="openProfileDropdown()">
-        <div id="profile-circle-inside" class="circle-inside" style="">
-          <img class="circle-img" src="./img/profile.png" alt="">
-        </div>
-      </div>
-      <div id="profile-dropdown" class="inactive">
-        <div class="profile-dropdown-item">
-          <p id="user-name"></p>
-        </div>
-        <div class="profile-dropdown-item">
-          <p>Company Profile</p>
-        </div>
-        <div class="profile-dropdown-item">
-          <p>Points</p>
-        </div>
-        <div class="profile-dropdown-item" onclick="logOut()">
-          <p>Log Out</p>
-        </div>
-      </div>
-      <!-- <div id="profile-sidebar" class="">
-      test
+      <!-- <div class="instructions">
+      <p>Please sign in...</p>
     </div> -->
-    <div class="bar bar-left">
-      Pipeline Health
+    <div class="login-register-content">
+      <p class="sr-only">Email Address</p>
+      <div class="login-field-box">
+        <img class="" src="./img/mail-white.png" alt="">
+        <input class="login-field" type="text" id="email" name="" value="" placeholder="Business Email">
+      </div>
+      <p class="sr-only">Password</p>
+      <div class="login-field-box">
+        <img class="" src="./img/lock-white.png" alt="">
+        <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
+      </div>
+      <div id="login-error-text"></div>
     </div>
-    <div class="circle" style="top: 0px; right: 1px; padding-top: 2vh; font-size: 2.5vh; line-height: 0.1vh;">
-      <p>12,</p>
-      <p>750</p>
-    </div>
-    <div class="bar bar-right">
-      For Another Invite
-    </div>
-  </div>
-  <div id="news-view" class="body-block">
-    <div class="tutorial-view inactive">
-      <div class="tutorial-box" style="left: 10vw; top: 12vh;">
-        <div class="relative-box" style="width: 60vw; height: 40vh;">
-          <p>PIPELINE HEALTH IS OUR ESTIMATE OF YOUR CHANCES OF HITTING YOUR GROWTH GOALS BASED ON:</p>
-          <p>1) THE NUMBER OF OPPORTUNITIES YOU'VE IDENTIFIED</p>
-          <p>2) THE AVERAGE COMPETITION FOR THE KIND OF WORK YOU ARE PURSUING</p>
-          <p>3) THE RFP TARGET YOU SET</p>
-          <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(50% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
-            <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
-            </div>
-          </div>
-          <!-- <div class="" style="position: absolute; bottom: calc(100% - 0px); left: 48%; height: 40px; width: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-bottom: none;">
-        </div> -->
-        <!-- <div class="" style="position: absolute; left: calc(100% - 0px); top: 10px; width: 40px; height: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-left: none;">
+    <div class="" style="width: 100%; position: relative;">
+      <button class="login-button" type="button" name="button" onclick="login()">Sign In</button>
+      <div class="login-redirect">
+        <p><a href="#">Forgot Your Password?</a></p>
+      </div>
+      <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+        <button class="login-button-2" type="button" name="button" onclick="goToRegister()">Create a profile</button>
+      </div>
 
-      </div> -->
+      <!-- <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button> -->
+    </div>
+  </div>
+  <div id="register-view" class="inactive">
+    <!-- <div class="instructions">
+    <p>Join Hunting Party</p>
+  </div> -->
+  <!-- <p class="login-info">Username (Email Address)</p> -->
+  <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
+    <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
+  </div>
+  <div class="login-register-content">
+    <div class="login-field-box">
+      <img class="" src="./img/profile-white.png" alt="">
+      <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First Name">
+    </div>
+    <div id="register-alert-1" class="register-field-alert"></div>
+    <!-- <p class="login-info">Password</p> -->
+    <div class="login-field-box">
+      <img class="" src="./img/profile-white.png" alt="">
+      <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last Name">
+    </div>
+    <div id="register-alert-2" class="register-field-alert"></div>
+
+    <div class="login-field-box">
+      <img class="" src="./img/mail-white.png" alt="">
+      <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Business Email">
+    </div>
+    <div id="register-alert-3" class="register-field-alert"></div>
+
+    <div class="login-field-box">
+      <img class="" src="./img/lock-white.png" alt="">
+      <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
+    </div>
+    <div id="register-alert-4" class="register-field-alert"></div>
+
+    <div class="login-field-box">
+      <img class="" src="./img/lock-white.png" alt="">
+      <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
+    </div>
+    <div id="register-alert-5" class="register-field-alert"></div>
+  </div>
+
+  <div class="">
+    <button class="login-button" type="button" name="button" onclick=register()>Sign Up</button>
+    <div class="login-redirect">
+      <p><a href="#" onclick="goToLogin()">Already have an Account? Sign In</a></p>
     </div>
   </div>
 </div>
-<input id="reg-id" style="width: 100%;" class="inactive"></input>
-<div id="todo-block" class="inactive">
-  <div class="news-tab" style="width: 55%; margin-left: 15%; margin-right: 5%; line-height: 12vh;">
-    TO DO
-  </div>
-  <div class="news-tab" style="width: 20%; margin-right: 5%; line-height: calc(8vh / 3); padding-top: 2vh; padding-bottom: 2vh;">
-    Average Completion Time
-  </div>
-  <div class="" style="float: left; width: 100%; height: 2vh;">
-  </div>
-  <div class="todo-item">
-    <div class="todo-img" style="">
-      <img class="iconbar-img" src="./img/profile2.png" alt="">
+<div id="company-create-view" class="inactive">
+  <img id="company-create-back" class="icon" src="./img/back.png" alt="" onclick="goToLogin()">
+  <div id="company-confirm-view" class="inactive">
+    <div id="company-confirm-img-wrapper">
+      <img class="company-confirm-img" src="./img/profile.png" alt="">
     </div>
-    <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
-    <p class="todo-text todo-right">10/RFP</p>
-  </div>
-  <div class="todo-item">
-    <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-      <img class="iconbar-img" src="./img/profile2.png" alt="">
+    <div id="company-confirm-desc" class="">
+      <h4>Company #1</h4>
+      <p>123 Place St, 12345</p>
+      <p>email@mail.zone</p>
+      <h5>Do you want to request to join?</h5>
+      <p>If you choose JOIN, we'll send a join request to Company #1. If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>
     </div>
-    <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
-    <p class="todo-text todo-right">10/RFP</p>
+    <button type="button" name="button" onclick="sendCompanyRequest()">Join</button>
+    <button type="button" name="button" onclick="leaveCompanyConfirm()">Back</button>
   </div>
-  <div class="todo-item">
-    <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-      <img class="iconbar-img" src="./img/profile2.png" alt="">
+  <div id="company-confirm-confirm-view" class="inactive">
+    <p>Your join request has been sent.</p>
+    <p>If the company accepts, you'll gain full access to their Hunting Party.</p>
+    <p>We'll notify you when they respond.</p>
+  </div>
+  <div id="company-search-view" class="" style="">
+    <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
+      <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
     </div>
-    <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
-    <p class="todo-text todo-right">5/RFP</p>
+    <div class="instructions">
+      <h1 style="color: white; margin-bottom: 2vh">Find your company</h1>
+      <p>Search for your company's name and we'll see if they're already here:</p>
+    </div>
+    <div class="" style="position: relative; width: 100%; height: 45px; margin-bottom: 2vh;">
+      <input id="company-search" type="text" name="" value="" onkeyup="companySearch()" placeholder="Find a Company">
+      <div id="company-search-dropdown" class="inactive">
+
+      </div>
+    </div>
+    <div class="instructions">
+      <p>Or if your company's not already present, create it:</p>
+    </div>
+    <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+      <button class="login-button-2" type="button" name="button" onclick="goToNewCompany()">Create a company</button>
+    </div>
+  </div>
+  <div id="company-new-view" class="inactive">
+    <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
+      <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
+    </div>
+    <div class="instructions">
+      <h1 style="color: white; margin-bottom: 2vh">Create company</h1>
+      <p>Fill out this important information about your company:</p>
+    </div>
+    <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
+    <input id="new-company-email" type="text" name="" value="" placeholder="Email">
+    <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
+    <!-- <input id="new-company-address" type="text" name="" value="" placeholder="Address">
+    <input id="new-company-city" type="text" name="" value="" placeholder="City">
+    <input id="new-company-state" type="text" name="" value="" placeholder="State">
+    <input id="new-company-zip" type="number" name="" value="" placeholder="Zip"> -->
+    <p style="margin: 12px 0px 8px 0px; font-size: 14px;">To hit your growth targets how many proposals do you need to have in flight at a given time?</p>
+    <input id="new-company-goal" type="number" name="" value="" placeholder="Set Goal">
+      <div class="" style="width: 100%; position: relative;">
+        <button id="company-create-button" class="login-button" type="button" name="button" onclick="createCompany()">Create</button>
+    </div>
   </div>
 </div>
-<div id="company-info">
+</div>
+
+<div id="main-view" class="inactive">
+  <div id="sidebar-detector" class="" style="">
+  </div>
+  <div class="topbar">
+    <div id="topbar-left" class="topbar-side">
+
+    </div>
+    <div class="topbar-center">
+      <p id="topbar-center-text">To Do/News</p>
+    </div>
+    <div id="topbar-right" class="topbar-side">
+
+    </div>
+  </div>
+  <div id="sidebar" class="inactive">
+    <div class="sidebar-item sidebar-item-long" style="background: rgba(0,0,0,0.2);">
+      <!-- <div class="profile-circle-box">
+      <div id="profile-circle" class="circle" style="">
+      <div id="profile-circle-inside" class="circle-inside" style="">
+      <img class="circle-img" src="./img/profile.png" alt="">
+    </div>
+  </div>
+</div> -->
+<p style="font-size: 20px;">Level X</p>
+<p id="sidebar-points-text" style="color: rgba(255,255,255,0.5);">0 Points</p>
+</div>
+<div class="sidebar-item" onclick="switchTab(0)">
+  <div class="sidebar-img-wrapper">
+    <img class="sidebar-img icon" src="./img/news.png" alt="">
+  </div>
+  <p>News</p>
+</div>
+<div class="sidebar-item" onclick="switchTab(2)">
+  <div class="sidebar-img-wrapper">
+    <img class="sidebar-img icon" src="./img/rfp.png" alt="">
+  </div>
+  <p>Opportunities <div id="sidebar-item-unread-popup-fbosin" class="sidebar-item-unread-popup inactive">0</div></p>
+</div>
+<div class="sidebar-item" onclick="switchTab(3)">
+  <div class="sidebar-img-wrapper">
+    <img class="sidebar-img icon" src="./img/pipeline.png" alt="">
+  </div>
+  <p>Pipeline <div id="sidebar-item-unread-popup-pipeline" class="sidebar-item-unread-popup inactive">0</div></p>
+</div>
+<div class="sidebar-item" onclick="switchTab(1)">
+  <div class="sidebar-img-wrapper">
+    <img class="sidebar-img icon" src="./img/search.png" alt="">
+  </div>
+  <p>Search</p>
+</div>
+<div class="sidebar-item sidebar-item-short" onclick="logOut()" style="line-height: 100%;">
+  <p>Log Out</p>
+</div>
+
+<!--
+<div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
+</div>
+<div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
+<img class="iconbar-img" src="./img/search.png" alt="">
+</div>
+<div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
+<img class="iconbar-img" src="./img/contact.png" alt="">
+</div>
+<div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
+<img class="iconbar-img" src="./img/settings.png" alt="">
+</div>
+<div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
+<img class="iconbar-img" src="./img/info.png" alt="">
+</div> -->
 
 </div>
-<div id="news-block">
-  <div class="" style="width: 100%; text-align: center; float: left; margin-bottom: 2vh;">
-    NEWS
+<div id="news-block" class="body-block">
+  <div id="todo-block" class="">
+    <div class="todo-header">
+      <div class="news-tab TD-tab" style="">
+        TO DO
+      </div>
+      <div class="news-tab ACT-tab" style="">
+        Average Completion Time
+      </div>
+    </div>
+    <div id="todo-items">
+      <div class="todo-item">
+        <div class="todo-img" style="">
+          <img class="iconbar-img" src="./img/profile2.png" alt="">
+        </div>
+        <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
+        <p class="todo-text todo-right">10/RFP</p>
+      </div>
+      <div class="todo-item">
+        <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+          <img class="iconbar-img" src="./img/profile2.png" alt="">
+        </div>
+        <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
+        <p class="todo-text todo-right">10/RFP</p>
+      </div>
+      <div class="todo-item">
+        <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+          <img class="iconbar-img" src="./img/profile2.png" alt="">
+        </div>
+        <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
+        <p class="todo-text todo-right">5/RFP</p>
+      </div>
+    </div>
+
   </div>
-  <div id="news-items" class="">
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/profile.png" alt="">
-      </div>
-      <p class="news-text">Person joined your company</p>
+  <div id="company-info" class="inactive" style="color: white;">
+
+  </div>
+  <div id="news-block " style="height: calc((93vh - 60px) - (25vh + 35px))">
+    <div class="news-block-header">
+      <!-- <hr class="hr-gold"> -->
+      <h6>NEWS</h6>
     </div>
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/profile.png" alt="">
+    <div id="news-items" class="">
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/profile.png" alt="">
+        </div>
+        <p class="news-text">Person joined your company</p>
       </div>
-      <p class="news-text">Person2 left a comment on an RFP</p>
-    </div>
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/profile.png" alt="">
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/profile.png" alt="">
+        </div>
+        <p class="news-text">Person2 left a comment on an RFP</p>
       </div>
-      <p class="news-text">Person3 left a comment on an RFP</p>
-    </div>
-    <div class="news-item">
-      <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-        <img class="iconbar-img" src="./img/contact.png" alt="">
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/profile.png" alt="">
+        </div>
+        <p class="news-text">Person3 left a comment on an RFP</p>
       </div>
-      <p class="news-text">Person4: here is some comment text</p>
+      <div class="news-item">
+        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+          <img class="iconbar-img" src="./img/contact.png" alt="">
+        </div>
+        <p class="news-text">Person4: here is some comment text</p>
+      </div>
     </div>
   </div>
-</div>
 </div>
 <div id="search-view" class="body-block inactive">
-  <div id="search-terms-view" class="">
-    <div id="search-save-popup" class="inactive">
-      <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
-      <button style="width: 30vw; margin-top: 1vh" type="button" name="button" onclick="closeSearchPopup()">OKAY</button>
-    </div>
-    <div id="search-save-popup-bg" class="inactive">
+  <div id="search-save-popup" class="inactive" style="text-align: center;">
+    <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
+    <button style="width: 80%; margin-left: 10%; margin-right: 10%; margin-top: 2vh" type="button" name="button" onclick="closeSearchPopup()">OKAY</button>
+  </div>
+  <div id="search-save-popup-bg" class="inactive">
 
+  </div>
+  <div id="saved-search-view" class="">
+    <div class="search-item">
+      <div class="category-text">
+        Test
+      </div>
+      <div class="category-right">
+        >
+      </div>
     </div>
-    <div class="search-box-details">
-      Saved Searches
+    <div class="search-item">
+      Test2
     </div>
-    <select id="saved-searches" class="" style="width: 100%; height: 30px; margin-bottom: 2vh;" name="searches" onchange="viewSearch()">
+  </div>
+  <div class="">
+    <div class="search-item">
+      <div class="search-item-header" style="background: rgba(243,243,243,1);">
+        <div class="search-name-left" onclick="openSearchItems(1)">Create New:</div>
+        <input id="search-name" class="search-name-input inactive" type="text" name="" value="" placeholder="Name Your Search">
+        <div class="category-right">
+          <p class="category-arrow" id="category-arrow-1">›</p>
+        </div>
+        <div class="" style="position: absolute; z-index: 0; right: 0px; top: 0px; width: 100%; height: 100%;" onclick="openSearchItems(1)">
 
-    </select>
-    <div class="search-box-details">
-      OPPORTUNITY STAGE/TIME AVAILABLE
-    </div>
-    <div class="search-box">
-      <div class="col-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
-        <p>Time til response due / projected to be due</p>
-      </div>
-      <div id="search-box-time" class="col-12 search-sub-box">
-        <div class="" style="width: 100%; float: left;">
-          <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due  Time</span>
-          <div class="" style="width: 100%; float: left;">
-            <p style="margin-bottom: 2px;">----------</p>
-          </div>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2 Weeks</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2-4 Weeks</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 4 Weeks From Now</span>
-        </div>
-        <div class="" style="width: 100%; float: left;">
-          <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 6 Months From Now</span>
         </div>
       </div>
-    </div>
-    <div class="search-box-details">
-      WHAT THE GOVERNMENT WANTS
-    </div>
-    <div class="search-box">
-      <input id="search-filter-0" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Relevant industry (NAICS)" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
-      <div id="search-box-naics" class="col-12 search-sub-box">
-        <div class="" style="width: 100%; float: left;">
-          <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-          <!-- <div class="" style="width: 100%; float: left;">
-          <p style="margin-bottom: 2px;">----------</p>
-        </div> -->
-      </div>
-      <div class="" style="width: 100%; float: left;">
-        <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-      </div>
-    </div>
-  </div>
-  <div class="search-box">
-    <input id="search-input-1" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Product/service description" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
-    <div id="search-box-psc" class="col-12 search-sub-box">
-      <div class="" style="width: 100%; float: left;">
-        <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-        <!-- <div class="" style="width: 100%; float: left;">
-        <p style="margin-bottom: 2px;">----------</p>
-      </div> -->
-    </div>
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-    </div>
-  </div>
-</div>
-<div class="" style="width: 100%; height: 85px; float: left; border-bottom: 2px solid white; margin-bottom: 2vh;">
-  <input id="search-input-keyword" type="text" name="" value="" placeholder="Keyword" style="width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);">
-  <div class="" style="width: 100%; height: 25px; position: relative;">
-    <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SEARCH IN TITLE ONLY</span>
-  </div>
-  <div class="" style="width: 100%; height: 25px; position: relative;">
-    <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SEARCH IN ALL TEXT</span>
-  </div>
-</div>
-<div class="search-box-details">
-  CUSTOMER / LOCATION
-</div>
-<div class="search-box">
-  <input id="search-filter-2" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="AGENCY/OFFICE" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
-  <div id="search-box-agency" class="col-12 search-sub-box">
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-      <!-- <div class="" style="width: 100%; float: left;">
-      <p style="margin-bottom: 2px;">----------</p>
-    </div> -->
-  </div>
-  <div class="" style="width: 100%; float: left;">
-    <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-  </div>
-</div>
-</div>
-<div class="search-box">
-  <input id="search-filter-3" onchange="searchFilter(3)" type="text" name="" value="" placeholder="LOCATION" style="width: 100%; padding: 0px 15px 0px 15px; margin: 0px 0px 0.5vh 0px; border: none; border-bottom: 2px solid rgba(20,20,20,1);">
-  <div id="search-box-location" class="col-12 search-sub-box">
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-      <!-- <div class="" style="width: 100%; float: left;">
-      <p style="margin-bottom: 2px;">----------</p>
-    </div> -->
-  </div>
-  <div class="" style="width: 100%; float: left;">
-    <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>
-  </div>
-</div>
-</div>
-<div class="search-box-details">
-  ADMIN
-</div>
-<div class="search-box">
-  <div class="col-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
-    <p>SET-ASIDE</p>
-  </div>
-  <div id="search-box-setaside" class="col-12 search-sub-box">
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>
-    </div>
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> 8(a)</span>
-    </div>
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Small business</span>
-    </div>
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SDVOSB</span>
-    </div>
-    <div class="" style="width: 100%; float: left;">
-      <input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> VOSB</span>
-    </div>
-  </div>
-</div>
-<!-- <div class="search-box">
-<div class="col-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
-<p>PRICING</p>
-</div>
-<div class="col-12 search-sub-box">
-<div class="" style="width: 100%; float: left;">
-<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Any pricing</span>
-<div class="" style="width: 100%; float: left;">
-<p style="margin-bottom: 2px;">----------</p>
-</div>
-</div>
-<div class="" style="width: 100%; float: left;">
-<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Firm Fixed</span>
-</div>
-<div class="" style="width: 100%; float: left;">
-<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Time and materi</span>
-</div>
-</div>
-</div> -->
-<!-- <div class="search-box">
-<div class="col-12" style="padding: 0px 15px 0px 15px; font-weight: bold;">
-<p>LEVEL OF COMPETITION</p>
-</div>
-<div class="col-12 search-sub-box">
-<div class="" style="width: 100%; float: left;">
-<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Any competition</span>
-<div class="" style="width: 100%; float: left;">
-<p style="margin-bottom: 2px;">----------</p>
-</div>
-</div>
-<div class="" style="width: 100%; float: left;">
-<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SAP</span>
-</div>
-<div class="" style="width: 100%; float: left;">
-<input type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> XX</span>
-</div>
-</div>
-</div> -->
-<!-- <input type="text" name="" value="" placeholder="Award ID" style="margin-bottom: 1vh; width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);">
-<input type="text" name="" value="" placeholder="Key personnel" style="width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);"> -->
-<div class="search-box-details" style="margin-top: 2vh;">
-</div>
-<input id="search-name" type="text" name="" value="" placeholder="NAME THIS SEARCH" style="margin-bottom: 2vh; width: 100%; padding: 0px 15px 0px 15px; font-size: 14px; border: 2px solid rgba(20,20,20,1);">
-<button style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>
-<button id="delete-search-button" class="inactive" style="width: 40%; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
+      <div id="new-search" class="search-item-subbox inactive">
 
-</div>
+      </div>
+    </div>
+  </div>
+  <div id="search-terms-view" class="inactive">
+    <button id="delete-search-button" class="inactive" style="width: 40%; margin-top: 2vh; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
+
+  </div>
 </div>
 <div id="fbo-popups" class="inactive">
   <div id="error-popup" class="vote-popup inactive">
     <h3>ERROR</h3>
-    <p id="error-text">Shit's broke</p>
+    <p id="error-text">it's broke</p>
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
   </div>
   <div id="refer-popup" class="vote-popup inactive">
-    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-      <h3>REFER</h3>
-      <p>Who would you like to send this to?</p>
 
-      <div id="refer-users-list" class="refer-box">
-
-      </div>
-      <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-        <input id="refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-        <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addRefer()">Add</button>
-      </div>
-      <div id="popup-refer-list" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
-
-      </div>
-      <div class="col-12">
-        <button type="button" name="button" onclick="sendReferNotifications(), closePopups(false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
-      </div>
-    </div>
   </div>
   <div class="vote-popup yes-popup inactive">
-    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-      <!-- <p>You voted YES on this opportunity!</p>
-      <p>Write a quick comment to let your team know why you approve.</p> -->
-      <div id="yes-popup-text" class="">
-        <h3>YOU VOTED YES</h3>
-        <p>Anyone you want to notify?</p>
-      </div>
-      <div id="yes-popup-users-list" class="refer-box">
+    <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+    <!-- <p>You voted YES on this opportunity!</p>
+    <p>Write a quick comment to let your team know why you approve.</p> -->
+    <div class="popup-header">Great Opportunity!</div>
+    <div class="popup-segment" style="border-bottom: 1px solid rgba(0,0,0,0.2);">
+      <p>Add a comment to your vote:</p>
+      <input id="fbo-details-input" class="vote-popup-input" type="text" name="" value="">
+    </div>
+    <div class="popup-segment">
+      <p>Send to other coworkers:</p>
+      <div class="refer-box">
+        <div id="yes-popup-users-list" class="">
 
+        </div>
+        <div id="yes-popup-refer-list">
+
+        </div>
       </div>
-      <p>Add a comment:</p>
-      <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
-      <p>Anyone else you want to send it to? Add their emails here:</p>
       <div id="yes-refer" class="">
-        <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-          <input id="yes-refer-input" type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-          <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
+        <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
+          <input id="yes-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkYesEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button id="yes-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
+          <button id="yes-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
         </div>
-        <div id="yes-popup-refer-list" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
-
-        </div>
-      </div>
-      <div class="col-12">
-        <button type="button" name="button" onclick="vote(fboIndex, true)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
       </div>
     </div>
+    <!-- <p>Add a comment:</p>
+    <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;"> -->
+    <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, true)">Send</button>
   </div>
   <div class="vote-popup no-popup inactive">
-    <div class="second-border" style="border-bottom: none; padding: 40px 2vw 0px 2vw">
-      <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+    <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+    <div class="popup-header">Not so great.</div>
+    <div class="popup-segment">
       <p>Sounds like this one isn't right for you.</p>
-      <p>Write a quick comment to explain to your team why you think that way.</p>
-      <input type="text" id="no-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;">
       <p>Know anyone it would be a better fit for? Send it their way.</p>
-      <div class="col-12">
-        <button id="no-refer-button" type="button" name="button" style="line-height: 26px; width: 30vw; margin-bottom: 1vh; color: white;" onclick="turnOnRefer(1)">Refer</button>
-      </div>
-      <div id="no-refer" class="inactive">
-        <div class="" style="width: 100%; height: 30px; margin-bottom: 1vh;">
-          <input type="text" placeholder="email" name="" value="" style="width: 75%; height: 30px; float: left;">
-          <button type="button" name="button" style="float: left; height: 30px; width: 25%; line-height: 26px; color: white;">Add</button>
-        </div>
-        <div class="" style="width: 100%; height: 20vh; border: 1px solid rgba(0,0,0,0.75);">
+      <div class="refer-box" style="height: calc(79vh - 277px);">
+        <div id="no-popup-refer-list">
 
         </div>
       </div>
-      <div class="col-12">
-        <button type="button" name="button" onclick="vote(fboIndex, false)" style="width: 30vw; margin-top: 1vh; color: white;">Done</button>
+      <div id="no-refer" class="">
+        <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
+          <input id="no-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkNoEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button id="no-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addNoRefer()">Add</button>
+          <button id="no-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
+        </div>
       </div>
     </div>
+    <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, false)">Send</button>
+  </div>
+  <div id="popup-background">
+
   </div>
 </div>
 <div id="fbo-view" class="body-block inactive">
-  <div id="fbo-list-view" class="body-block" style="">
-    <div class="" style="padding: 0vh 3vh 0vh 3vh; height: 100%; width: 100%; overflow-y: auto;">
+  <div class="second-topbar">
+    <div id="opportunities-topbar" style="">
+      <span>Filter By: </span>
+      <select class="opp-topbar-select" id="opportunities-topbar-select" onchange="filterOpportunitiesBySearch(this)">
+        <option value="-1">All Searches</option>
+      </select>
+    </div>
+    <div id="sort-toolbar">
+      <span>Arrange By: </span>
+      <select class="opp-topbar-select" id="sort-select" onchange="runSort(fbosIn, this);">
+      </select>
+    </div>
+  </div>
+  <!-- Not sure what to do with this class -->
+  <div class="temp">
+
+  </div>
+  <div id="fbo-list-view" class="body-block" style="height: calc(93vh - 167px);">
+    <div id="fbo-scroll-box" class="" style="height: 100%; width: 100%; overflow-y: auto;">
       <div class="" style="position: relative; height: auto; width: 100%;">
         <div class="" style="width: 100%; height: 2vh;">
         </div>
@@ -604,211 +521,367 @@ under the License.
         </div>
         <div id="fbo-items">
           <div class="fbo-item">
-            <div class="second-border">
-              <div class="fbo-item-title">
-                <p>TITLE XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX  XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX</p>
-              </div>
-              <div class="fbo-item-comments">
-                <p>Comments</p>
-              </div>
-              <div class="fbo-item-buttons">
-                <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
-                  <div class="second-border">
-                    <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
-                  </div>
+            <div class="fbo-item-title">
+              <p>TITLE XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX  XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX</p>
+            </div>
+            <div class="fbo-item-comments">
+              <p>Comments</p>
+            </div>
+            <div class="fbo-item-buttons">
+              <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
+                <div class="second-border">
+                  <img class="circle-img-2 icon" src="./img/thumbsdown.png" alt="">
                 </div>
-                <div class="fbo-item-time-button">
-                  T
-                </div>
-                <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
-                  <div class="second-border">
-                    <img class="circle-img-2" src="./img/thumbsup.png" alt="">
-                  </div>
+              </div>
+              <div class="fbo-item-time-button">
+                <img class="circle-img-2 icon" src="./img/share.png" alt="">
+              </div>
+              <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
+                <div class="second-border">
+                  <img class="circle-img-2 icon" src="./img/thumbsup.png" alt="">
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div id="fbo-item-load-buffer" class="fbo-item inactive" style="height: 150px;">
+          <div class="loading-circle"></div>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
 <div id="pipeline-view" class="body-block inactive">
   <!-- <button type="button" id="test-button" name="button" onclick="getTime()">click me </button> -->
-  <div id="opportunities" class="">
-    <div class="col-12">
-      <div class="opportunities-title col-12">
-        OPPORTUNITIES NEEDED TO HIT YOUR PROPOSAL TARGETS
-      </div>
-      <div class="col-12" style="height: 100px;">
-        <div class="" style="width: calc(100% / 3); float: left;">
-          Identified
-        </div>
-        <div class="" style="width: calc(100% / 3); float: left;">
-          Pre-selected
-        </div>
-        <div class="" style="width: calc(100% / 3); float: left;">
-          # of GO
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="identified" class="">
-    <div class="col-12">
-      <div class="pipeline-title col-12">
-        IDENTIFIED
-      </div>
-      <div id="pipeline-items" class="">
+  <!-- <div id="opportunities" class="">
+  <div class="col-12">
+  <div class="opportunities-title col-12">
+  OPPORTUNITIES NEEDED TO HIT YOUR PROPOSAL TARGETS
+</div>
+<div class="col-12" style="height: 100px;">
+<div class="" style="width: calc(100% / 3); float: left;">
+Identified
+</div>
+<div class="" style="width: calc(100% / 3); float: left;">
+Pre-selected
+</div>
+<div class="" style="width: calc(100% / 3); float: left;">
+# of GO
+</div>
+</div>
+</div>
+</div> -->
+<div id="identified" class="">
+  <div id="pipeline-items" class="">
 
-      </div>
-    </div>
   </div>
+  <div id="pipeline-item-load-buffer" class="fbo-item inactive">
+    <div class="loading-circle"></div>
+  </div>
+</div>
 </div>
 <div id="fbo-detail-view" class="body-block inactive">
-  <div id="hamburger-menu" class="inactive">
-    <div class="databar-inner" onclick='expandData(1)'>
-      ABSTRACT
-      <div class="info-circle">
-        i
-      </div>
-      <div class="arrow" id="arrow-1">
-        ▼ <!-- ▲ -->
-      </div>
-    </div>
-    <div class="databar-inner" onclick='expandData(2)'>
-      DATA
-      <div class="info-circle">
-        i
-      </div>
-      <div class="arrow" id="arrow-2">
-        ▼ <!-- ▲ -->
-      </div>
-    </div>
-    <div class="databar-inner" onclick='expandData(3)'>
-      COMMENTS
-      <div class="info-circle">
-        i
-      </div>
-      <div class="arrow" id="arrow-3">
-        ▼ <!-- ▲ -->
+  <!-- <div class="second-topbar">
+  <div id="fbo-detail-topbar-left" class="second-topbar-half topbar-half-active" onclick="switchFboDetailTab(0)" style="padding-left: 40px;">
+  Info
+  <div id="fbo-detail-topbar-arrow-left" class="second-topbar-arrow" style="left: 50px;">
+</div>
+</div>
+<div id="fbo-detail-topbar-right" class="second-topbar-half" onclick="switchFboDetailTab(1)" style="padding-right: 40px; text-align: right;">
+Data
+<div id="fbo-detail-topbar-arrow-right" class="second-topbar-arrow inactive" style="right: 50px;">
+</div>
+</div>
+</div> -->
+<div class="tutorial-view inactive">
+  <div class="tutorial-box" style="left: 15vw; top: 29vh;">
+    <div class="relative-box" style="width: 60vw; height: auto;">
+      <p>When you vote up</p>
+      <p>-It goes higher in your company's pipeline</p>
+      <p>-It is sent to the other people in your company</p>
+      <br>
+      <p>When you vote down</p>
+      <p>-It goes lower in your company's pipeline</p>
+      <p>-You can suggest it to another company</p>
+      <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(50% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
+        <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
+        </div>
       </div>
     </div>
   </div>
-  <div class="tutorial-view inactive">
-    <div class="tutorial-box" style="left: 15vw; top: 29vh;">
-      <div class="relative-box" style="width: 60vw; height: auto;">
-        <p>When you vote up</p>
-        <p>-It goes higher in your company's pipeline</p>
-        <p>-It is sent to the other people in your company</p>
-        <br>
-        <p>When you vote down</p>
-        <p>-It goes lower in your company's pipeline</p>
-        <p>-You can suggest it to another company</p>
-        <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(50% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
-          <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
+</div>
+<div id="fbo-detail-top" class="">
+  <div id="highlight-tutorial" class="inactive">
+    Click on the first and last words of the string you want to highlight
+  </div>
+  <div id="fbo-detail-info" class="">
+    <div class="fbo-detail-middle-item-header" style="padding: 0px 4vw 0px 4vw; height: 50px; width: 100%;">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/type-light.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="padding: 15px 0px 15px 0px; width: calc(100% - 293px);">
+        <p>Abstract</p>
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="width: 65px;">
+        <div id="fbo-details-likes" style="height: 100%; width: 20px; line-height: 50px; float: left; text-align: center; margin-right: 5px;">13</div>
+        <img class="fbo-details-input-button" src="./img/thumbsup.png" alt="" onclick="openPopups(0)">
+        <div class="fbo-details-buttonbar-item-border"></div>
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="width: 65px;">
+        <div id="fbo-details-dislikes" style="height: 100%; width: 20px; line-height: 50px; float: left; text-align: center; margin-right: 5px;">3</div>
+        <img class="fbo-details-input-button" src="./img/thumbsdown.png" alt="" onclick="openPopups(1)">
+        <div class="fbo-details-buttonbar-item-border"></div>
+      </div>
+      <div class="fbo-detail-middle-item-header-segment" style="width: 103px; padding-left: 8px;">
+        <img class="fbo-details-input-button" src="./img/calendar.png" alt="">
+        <div id="fbo-details-date" style="height: 100%; width: 60px; line-height: 50px; float: left; text-align: center; margin-left: 5px;">12/3/2018</div>
+      </div>
+    </div>
+    <div class="highlight-button-box">
+      <button id="highlight-button-2" class="" style="" type="button" name="button" onclick="turnOnHighlight(true)">Gray Out</button>
+      <button id="highlight-button-1" class="" style="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
+    </div>
+    <div id="abstract-box">
+      <div id="abstract-text" class="">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+      </div>
+    </div>
+    <!-- <div class="highlight-button-box">
+    <button id="highlight-button-1" class="" type="button" name="button" onclick="turnOnHighlight(false)">Highlight</button>
+    <button id="highlight-button-2" class="" type="button" name="button" onclick="turnOnHighlight(true)" style="margin-left: 2%;">Gray Out</button>
+  </div> -->
+</div>
+
+<div class="abstract-hover-button" onClick="expandAbstract()">
+  ...
+</div>
+</div>
+<div id="fbo-detail-middle" class="">
+  <div class="fbo-detail-middle-item">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(0)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/prbable-value-light.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Probable RFP Value & Competition</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-0">›</p>
+    </div>
+    <div id="fbo-detail-middle-0" class="fbo-detail-middle-expanded inactive">
+      <p class="chart-header">Probable RFP Value</p>
+      <div class="" style="float: left; width: 100%; height: 189px; margin-bottom: 2vh;">
+        <canvas id="chart1" style="width: 100%!important; height: 189px!important;"></canvas>
+      </div>
+      <p class="chart-header">Estimated Offers Received</p>
+      <div class="" style="float: left; width: 100%; height: 189px; margin-bottom: 2vh;">
+        <canvas id="chart2" style="width: 100%!important; height: 189px!important;"></canvas>
+      </div>
+      <p class="chart-header">RFP Value & Offers Received</p>
+      <div class="" style="float: left; width: 100%; height: 189px; margin-bottom: 2vh;">
+        <canvas id="chart3" style="width: 100%!important; height: 189px!important;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="fbo-detail-middle-item">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(1)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/comments-light.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Discussion</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-1">›</p>
+    </div>
+    <div id="fbo-detail-middle-1" class="fbo-detail-middle-expanded inactive" style="padding: 0px;">
+      <div id="fbo-details-comments" class="">
+        <div class="comment">
+          <div class="comment-left">
+            <div class="comment-avatar">
+              <img class="comment-avatar-img" src="./img/user.png" alt="">
+            </div>
+            <img class="comment-avatar-vote" src="./img/thumbsdown.png" alt="">
+          </div>
+          <div class="comment-right">
+            <div class="comment-title" style="margin: none!important">
+              <p class="comment-name">Person's Name</p>
+              <p class="comment-time">99 mins</p>
+            </div>
+            <div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">
+              <div class="comment-text" style="padding: none!important">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</div>
+            </div>
           </div>
         </div>
-        <!-- <div class="" style="position: absolute; bottom: calc(100% - 0px); left: 48%; height: 40px; width: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-bottom: none;">
-      </div> -->
-      <!-- <div class="" style="position: absolute; left: calc(100% - 0px); top: 10px; width: 40px; height: 4px; background: rgba(255,198,0,1); z-index: 2; border: 1px solid rgba(0,0,0,0.75); border-left: none;">
-
-    </div> -->
-  </div>
-</div>
-</div>
-<div class="buttonbar">
-  <div style="float: left; width: 100%; height: 7vh;">
-    <p id="fbo-title">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-  </div>
-  <div class="big-circle-box">
-    <div class="big-circle" id="big-no-button" onclick='openPopups(1)'>
-      <div class="second-border">
-        <img class="circle-img-2" src="./img/thumbsdown.png" alt="">
+      </div>
+      <div class="new-comment-bar">
+        <input id="new-comment-input" type="text" name="" value="" placeholder="Enter your comments ...">
+        <button type="button" name="button"><img class="" src="./img/comment.png" alt="" onclick="sendComment()"></button>
       </div>
     </div>
   </div>
-  <div class="big-circle-box" style="">
-    <div class="big-circle" style="line-height: 0.5vh; font-size: 2.5vh; padding-top: 4.0vh; height: 9vh; width: 9vh;" onclick='openPopups(2)'>
-      Refer
+  <div class="fbo-detail-middle-item">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(2)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/information-light.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Information</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-2">›</p>
     </div>
-    <div class="" id="time-button" style="width: 100%; height: 3vh; margin-top: 9vh;">
-
+    <div id="fbo-detail-middle-2" class="fbo-detail-middle-expanded inactive">
+      <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
     </div>
   </div>
-  <div class="big-circle-box">
-    <div class="big-circle" id="big-yes-button" onclick='openPopups(0)' style="font-size: 8vh;">
-      <div class="second-border">
-        <img class="circle-img-2" src="./img/thumbsup.png" alt="">
+  <div class="fbo-detail-middle-item inactive">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(3)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/companies-light.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Companies with similar past performance</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-3">›</p>
+    </div>
+    <div id="fbo-detail-middle-3" class="fbo-detail-middle-expanded inactive">
+    </div>
+  </div>
+  <div class="fbo-detail-middle-item" onClick="openFboDetail(4)">
+    <div class="fbo-detail-middle-item-header">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/interested-vendors-light.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Interested Vendors</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-4">›</p>
+    </div>
+    <div id="fbo-detail-middle-4" class="fbo-detail-middle-expanded inactive">
+      <div id="interested-vendors" class="">
+        <div class="interested-vendor">
+          Company 1
+        </div>
+        <div class="interested-vendor">
+          Company 2
+        </div>
+        <div class="interested-vendor">
+          Company 3
+        </div>
+      </div>
+      <div class="" style="width: 100%; height: 35px; position: relative; float: left; margin-top: 2vh;">
+        <button id="interested-vendor-button" type="button" name="button" onclick="addInterestedVendor()">Join Interested Vendors</button>
       </div>
     </div>
   </div>
-  <!-- <div class="" style="width: 100%; height: calc(4vh+12px)">
-  <div class="buttonbar-tab buttonbar-tab-active" onclick='switchFboTab(this, 0)'>
-  Abstract/data
-</div>
-<div class="buttonbar-tab" onclick='switchFboTab(this, 1)'>
-Refer
-</div>
-<div class="buttonbar-tab" onclick='switchFboTab(this, 2)'>
-Comments
-</div>
-</div> -->
-</div>
-<div class="lower" id="lower-1">
-  <div id="databar-active" class="databar-inner">
-    <p id="databar-title">ABSTRACT</p>
-    <div class="info-circle">
-      i
+  <div class="fbo-detail-middle-item" style="border-bottom: none;">
+    <div class="fbo-detail-middle-item-header" onClick="openFboDetail(5)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/share-light.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Refer RFP</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="fbo-detail-middle-item-arrow-5">›</p>
+    </div>
+    <div id="fbo-detail-middle-5" class="fbo-detail-middle-expanded inactive" style="position: relative; padding-top: 0px;">
+      <div class="popup-segment" style="border-bottom: 1px solid rgba(0,0,0,0.2);">
+        <p style="margin: 0px;">Who would you like to send this to?</p>
+      </div>
+      <div class="popup-segment">
+        <div class="refer-box" style="min-height: 31px; max-height: 200px; height: auto;">
+          <div id="refer-users-list">
+
+          </div>
+          <div id="refer-refer-list">
+
+          </div>
+        </div>
+        <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
+          <input id="refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkReferEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+          <button id="refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addReferRefer()">Add</button>
+          <button id="refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
+        </div>
+        <div class="" style="float: left; width: 100%; height: 40px;">
+          <button class="vote-button" type="button" name="button" onclick="sendReferNotifications()">Send</button>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="data-box" id="data-box-1">
-    <p id="abstract-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-  <div class="data-box inactive" id="data-box-2">
-    <p style="text-align: center; margin: 0px;">Projected Value</p>
-    <canvas id="chart1" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
-    <p style="text-align: center; margin: 0px;">Projected Competition</p>
-    <canvas id="chart2" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
-    <p style="text-align: center; margin: 0px;">Value & Competition</p>
-    <canvas id="chart3" style="width: 100%!important; height: 20vh!important; margin-bottom: 2vh;"></canvas>
-    <p id="data-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-<div class="data-box inactive" id="data-box-3">
-  <div class="chat-box" id="chat-box">
-
-  </div>
+</div>
+<div id="fbo-detail-data" class="inactive" style="">
+  <p style="text-align: center; margin: 0px;">Projected Value</p>
+  <p style="text-align: center; margin: 0px;">Projected Competition</p>
+  <p style="text-align: center; margin: 0px;">Value & Competition</p>
 </div>
 </div>
-<!-- <div class="lower inactive" id="lower-2">
+<!-- <div class="iconbar">
+<div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
+<img class="iconbar-img" src="./img/news.png" alt="">
 </div>
-<div class="lower inactive" id="lower-3">
+<div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
+<img class="iconbar-img" src="./img/search.png" alt="">
+</div>
+<div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
+<img class="iconbar-img" src="./img/contact.png" alt="">
+</div>
+<div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
+<img class="iconbar-img" src="./img/settings.png" alt="">
+</div>
+<div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
+<img class="iconbar-img" src="./img/info.png" alt="">
+</div>
 </div> -->
-<!-- <button type="button" name="button" onclick='hello()'>click me</button> -->
-<!-- <div class="" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 4vh;">
-<button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex-1)'>PREV</button>
-<button type="button" name="button" style="float: left; width: 50%; height: 4vh;" onclick='setActiveFbo(fboIndex+1)'>NEXT</button>
+<div id="bottombar" style="border-top: 1px solid rgba(0,0,0,0.2);">
+  <div class="bottombar-item" onclick="switchTab(0)">
+    <div class="bottombar-img-wrapper">
+      <img id="bottombar-img-home" class="bottombar-img icon-2" src="./img/news.png" alt="">
+    </div>
+    <p id="bottombar-text-0">News</p>
+  </div>
+  <div class="bottombar-item" onclick="switchTab(2)">
+    <div class="bottombar-img-wrapper">
+      <img id="bottombar-img-opportunities" class="bottombar-img icon-2" src="./img/rfp.png" alt="">
+    </div>
+    <p id="bottombar-text-2">RFP(I)s</p>
+  </div>
+  <div class="bottombar-item" onclick="switchTab(1)">
+    <div class="bottombar-img-wrapper">
+      <img id="bottombar-img-search" class="bottombar-img icon-2" src="./img/search.png" alt="">
+    </div>
+    <p id="bottombar-text-1">Search</p>
+  </div>
+  <div class="bottombar-item" onclick="switchTab(3)">
+    <div class="bottombar-img-wrapper">
+      <img id="bottombar-img-pipeline"class="bottombar-img icon-2" src="./img/pipeline.png" alt="">
+    </div>
+    <p id="bottombar-text-3">Pipeline</p>
+  </div>
+  <div id="bottombar-img-profile" class="bottombar-item" onclick="openBottombarPopup()">
+    <div class="profile-circle-box">
+      <div id="profile-circle" class="circle" style="">
+        <div id="profile-circle-inside" class="circle-inside" style="">
+          <img class="circle-img" src="./img/profile.png" alt="">
+        </div>
+      </div>
+    </div>
+    <p id="bottombar-text-2">More</p>
+  </div>
+  <div id="bottombar-popup" class="inactive">
+    <!-- <div class="bottombar-popup-item">
+    Profile
+  </div>
+  <div class="bottombar-popup-item">
+  Company
+</div>
+<div class="bottombar-popup-item">
+Points
+</div>
+<div class="bottombar-popup-item">
+Alerts
 </div> -->
-<div id="floating-hamburger" class="iconbar-floating" onclick="toggleHamburgerMenu()">
-  <img class="iconbar-img" src="./img/hamburger.png" alt="">
+<div class="bottombar-popup-item" onclick="logOut()">
+  Log Out
 </div>
 </div>
-<div class="iconbar">
-  <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
-    <img class="iconbar-img" src="./img/news.png" alt="">
-  </div>
-  <div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
-    <img class="iconbar-img" src="./img/search.png" alt="">
-  </div>
-  <div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
-    <img class="iconbar-img" src="./img/contact.png" alt="">
-  </div>
-  <div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
-    <img class="iconbar-img" src="./img/settings.png" alt="">
-  </div>
-  <div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
-    <img class="iconbar-img" src="./img/info.png" alt="">
-  </div>
 </div>
 </div>
 
