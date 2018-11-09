@@ -52,8 +52,8 @@ under the License.
     </div>
   </div>
   <div id="tos-popup" class="inactive">
-    <div class="tos-popup">
-      <div class="tos-box">
+    <div class="tos-popup popup">
+      <div class="popup-text-box">
         <h2>Welcome to Hunting Party!</h2>
         <p>Our community is based on trust and we take our terms of service very seriously:</p>
         <p style="font-weight: bold;">VIOLATIONS OF TERMS:</p>
@@ -67,7 +67,7 @@ under the License.
       </div>
       <button type="button" name="button" onclick="acceptTOS()">Accept</button>
     </div>
-    <div class="tos-popup-bg">
+    <div class="popup-bg">
 
     </div>
   </div>
@@ -76,6 +76,26 @@ under the License.
       <p style="line-height: 60vh; font-size: 8vh;">Loading...</p>
       <p style="line-height: 20vh;" id="loading-details"></p>
       <button type="button" name="button" onclick='logOut()'>cancel login (if it breaks)</button>
+    </div>
+  </div>
+  <div id="reset-password-popup" class="inactive">
+    <div class="popup reset-password-popup">
+      <div id="reset-password-box-1" class="popup-text-box" style="font-size: 14px;">
+        <h2>Reset Password</h2>
+        <p style="color: rgba(0,0,0,0.75)!important">Enter your email below and we'll send you a link to reset your password.</p>
+        <input id="reset-password-input" type="text" name="" value="" onkeyup="checkResetPasswordEmail()">
+        <p id="reset-password-error-text" style="color: red; height: 21px;"></p>
+      </div>
+      <div id="reset-password-box-2" class="popup-text-box inactive" style="font-size: 14px;">
+        <h2>Reset Email Sent</h2>
+        <p style="color: rgba(0,0,0,0.75)!important">We sent you an email with a link to reset your password.</p>
+      </div>
+      <button id="reset-password-button-inactive" type="button" name="button" style="filter: brightness(75%);">Reset Password</button>
+      <button id="reset-password-button" class="inactive" type="button" name="button" onclick="resetPassword()">Reset Password</button>
+      <button id="reset-password-button-2" class="inactive" type="button" name="button" onclick="closeResetPassword()">Okay</button>
+    </div>
+    <div class="popup-bg">
+
     </div>
   </div>
   <div id="login-register" class="inactive">
@@ -102,7 +122,7 @@ under the License.
     <div class="" style="width: 100%; position: relative;">
       <button class="login-button" type="button" name="button" onclick="login()">Sign In</button>
       <div class="login-redirect">
-        <!-- <p><a href="#">Forgot Your Password?</a></p> -->
+        <p><a href="#" onclick="openResetPassword()">Forgot Your Password?</a></p>
       </div>
       <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
         <button class="login-button-2" type="button" name="button" onclick="goToRegister()">Create a profile</button>
@@ -415,9 +435,6 @@ under the License.
     <p id="error-text">it's broke</p>
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
   </div>
-  <div id="refer-popup" class="vote-popup inactive">
-
-  </div>
   <div class="vote-popup yes-popup inactive">
     <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
     <!-- <p>You voted YES on this opportunity!</p>
@@ -581,6 +598,17 @@ Pre-selected
 </div>
 </div>
 <div id="fbo-detail-view" class="body-block inactive">
+  <div id="refer-popup" class="inactive">
+    <div class="popup refer-popup">
+      <div class="popup-text-box" style="font-size: 14px;">
+        <p style="color: rgba(0,0,0,0.75)!important">Refers sent</p>
+      </div>
+      <button type="button" name="button" onclick="closeReferPopup()">Okay</button>
+    </div>
+    <div class="popup-bg">
+
+    </div>
+  </div>
   <!-- <div class="second-topbar">
   <div id="fbo-detail-topbar-left" class="second-topbar-half topbar-half-active" onclick="switchFboDetailTab(0)" style="padding-left: 40px;">
   Info
@@ -801,7 +829,7 @@ Data
           <button id="refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
         </div>
         <div class="" style="float: left; width: 100%; height: 40px;">
-          <button class="vote-button" type="button" name="button" onclick="sendReferNotifications()">Send</button>
+          <button class="vote-button" type="button" name="button" onclick="sendReferNotifications(true)">Send</button>
         </div>
       </div>
     </div>

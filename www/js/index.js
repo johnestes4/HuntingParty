@@ -1,7 +1,8 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
+var saving = false
 var activeTab = 0
 var dataExpanded = 0
 var company = null
@@ -646,6 +647,7 @@ function viewSearch(index) {
   }
 
   renderSearch()
+  document.getElementById("search-input-keyword").value = searchTerms.keyword
   var a = document.getElementsByClassName('checkbox-duedate')
   for (i = 0; i < a.length; i++) {
     a[i].checked = searchTerms.dueDate[i].value
@@ -914,221 +916,221 @@ function generateSearchHTML(where) {
   '</div>'
 
   html = '<div id="search-terms-items" class="">'+
-    inputHtml+
-    '<div class="category">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/keyword.png" alt="">'+
-      '</div>'+
-      '<div class="category-left">'+
-        '<input id="search-input-keyword" class="category-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">'+
-      '</div>'+
-      '<div class="category-right-2">'+
-        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
-          '<div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">'+
-            'Title Only'+
-          '</div>'+
-        '</div>'+
-        '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
-          '<div id="search-box-keyword-right" class="" onclick="switchKeywordSearch(1)">'+
-            'All Text'+
-          '</div>'+
-        '</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category" onclick="openSearchBox(6)">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/type.png" alt="">'+
-      '</div>'+
-      '<div class="category-text">'+
-        'Type'+
-      '</div>'+
-      '<div id="category-right-type" class="category-right">'+
-      '<p class="category-arrow" id="category-arrow-type">›</p>'+
-      '</div>'+
-    '</div>'+
-    '<div id="search-box-type" class="search-box inactive">'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="All" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> All</span>'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<p style="margin-bottom: 2px;">----------</p>'+
-        '</div>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Open RFPs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Open: RFPs</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Open RFIs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Open: RFIs</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Historical (closed) and projected RFPs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Projected opportunities</span>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category" onclick="openSearchBox(0)">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/duedate.png" alt="">'+
-      '</div>'+
-      '<div class="category-text">'+
-        'Due Date'+
-      '</div>'+
-      '<div id="category-right-duedate" class="category-right">'+
-        '<p class="category-arrow" id="category-arrow-duedate">›</p>'+
-      '</div>'+
-    '</div>'+
-    '<div id="search-box-time" class="search-box inactive">'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due  Time</span>'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<p style="margin-bottom: 2px;">----------</p>'+
-        '</div>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2 Weeks</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2-4 Weeks</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 4 Weeks From Now</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 6 Months From Now</span>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category" onclick="openSearchBox(1)">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/naics.png" alt="">'+
-      '</div>'+
-      '<div class="category-text">'+
-        'NAICS Codes'+
-      '</div>'+
-      '<div id="category-right-naics" class="category-right">'+
-      '<p class="category-arrow" id="category-arrow-naics">›</p>'+
-      '</div>'+
-    '</div>'+
-    '<div id="search-box-naics" class="search-box inactive">'+
-    '<div class="" style="width: 100%; float: left; position: relative;">'+
-    '<input id="search-item-suggestion-0" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(0)" value=""> <div class="search-box-checkbox-text" >Typical IT services</div>'+
-    '</div>'+
-    '<div class="" style="width: 100%; float: left; position: relative;">'+
-    '<input id="search-item-suggestion-1" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(1)" value=""> <div class="search-box-checkbox-text" >Typical professional services</div>'+
-    '</div>'+
-      '<input id="search-filter-0" class="category-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">'+
-      '<div id="search-box-naics-list" class="">'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
-        '</div>'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
-        '</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category" onclick="openSearchBox(2)">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/productservice.png" alt="">'+
-      '</div>'+
-      '<div class="category-text">'+
-        'Product/Service Description'+
-      '</div>'+
-      '<div id="category-right-psc" class="category-right">'+
-      '<p class="category-arrow" id="category-arrow-psc">›</p>'+
-      '</div>'+
-    '</div>'+
-    '<div id="search-box-psc" class="search-box inactive">'+
-      '<div class="" style="width: 100%; float: left; position: relative;">'+
-        '<input id="search-item-suggestion-2" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(2)" value=""> <div class="search-box-checkbox-text" >Typical IT services PSC</div>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left; position: relative;">'+
-        '<input id="search-item-suggestion-3" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(3)" value=""> <div class="search-box-checkbox-text" >Typical professional services PSC</div>'+
-      '</div>'+
-      '<input id="search-filter-1" class="category-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">'+
-      '<div id="search-box-psc-list" class="">'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
-        '</div>'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
-        '</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category" onclick="openSearchBox(3)">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/agencyoffice.png" alt="">'+
-      '</div>'+
-      '<div class="category-text">'+
-        'Agency/Office'+
-      '</div>'+
-      '<div id="category-right-agency" class="category-right">'+
-      '<p class="category-arrow" id="category-arrow-agency">›</p>'+
-      '</div>'+
-    '</div>'+
-    '<div id="search-box-agency" class="search-box inactive">'+
-      '<input id="search-filter-2" class="category-input" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="Filter">'+
-      '<div id="search-box-agency-list" class="">'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
-        '</div>'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
-        '</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category" onclick="openSearchBox(4)">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/location.png" alt="">'+
-      '</div>'+
-      '<div class="category-text">'+
-        'Location'+
-      '</div>'+
-      '<div id="category-right-location" class="category-right">'+
-      '<p class="category-arrow" id="category-arrow-location">›</p>'+
-      '</div>'+
-    '</div>'+
-    '<div id="search-box-location" class="search-box inactive">'+
-      '<input id="search-filter-3" class="category-input" onkeyup="searchFilter(3)" type="text" name="" value="" placeholder="Filter">'+
-      '<div id="search-box-location-list" class="">'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
-        '</div>'+
-        '<div class="" style="width: 100%; float: left;">'+
-          '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
-        '</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="category" onclick="openSearchBox(5)">'+
-      '<div class="category-img-box">'+
-        '<img class="category-img" src="./img/setaside.png" alt="">'+
-      '</div>'+
-      '<div class="category-text">'+
-        'Set Aside'+
-      '</div>'+
-      '<div id="category-right-setaside" class="category-right">'+
-      '<p class="category-arrow" id="category-arrow-setaside">›</p>'+
-      '</div>'+
-    '</div>'+
-    '<div id="search-box-setaside" class="search-box inactive">'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> 8(a)</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Small business</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SDVOSB</span>'+
-      '</div>'+
-      '<div class="" style="width: 100%; float: left;">'+
-        '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> VOSB</span>'+
-      '</div>'+
-    '</div>'+
-    '<div id="double-search-buttons">'+
-    '<button class="delete-button" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>'+
-    '<button class="save-button" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
-    '</div>'+
-    '<div id="single-search-button" class="inactive">'+
-    '<button class="save-button" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
-    '</div>'+
+  inputHtml+
+  '<div class="category">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/keyword.png" alt="">'+
+  '</div>'+
+  '<div class="category-left">'+
+  '<input id="search-input-keyword" class="category-input" type="text" name="" value="" style="margin-left: -8px; margin-bottom: 4px;" placeholder="Keyword">'+
+  '</div>'+
+  '<div class="category-right-2">'+
+  '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
+  '<div id="search-box-keyword-left" class="search-box-keyword-active" onclick="switchKeywordSearch(0)">'+
+  'Title Only'+
+  '</div>'+
+  '</div>'+
+  '<div class="" style="float: left; width: 50%; height: 26px; position: relative; padding-top: 4px;">'+
+  '<div id="search-box-keyword-right" class="" onclick="switchKeywordSearch(1)">'+
+  'All Text'+
+  '</div>'+
+  '</div>'+
+  '</div>'+
+  '</div>'+
+  '<div class="category" onclick="openSearchBox(6)">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/type.png" alt="">'+
+  '</div>'+
+  '<div class="category-text">'+
+  'Type'+
+  '</div>'+
+  '<div id="category-right-type" class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-type">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="search-box-type" class="search-box inactive">'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="All" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> All</span>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<p style="margin-bottom: 2px;">----------</p>'+
+  '</div>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Open RFPs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Open: RFPs</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Open RFIs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Open: RFIs</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox checkbox-type" type="checkbox" name="" value="Historical (closed) and projected RFPs" style="float: left; height: 20px;" onclick="calculateSearch(this)"> <span style="line-height: 25px;"> Projected opportunities</span>'+
+  '</div>'+
+  '</div>'+
+  '<div class="category" onclick="openSearchBox(0)">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/duedate.png" alt="">'+
+  '</div>'+
+  '<div class="category-text">'+
+  'Due Date'+
+  '</div>'+
+  '<div id="category-right-duedate" class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-duedate">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="search-box-time" class="search-box inactive">'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due  Time</span>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<p style="margin-bottom: 2px;">----------</p>'+
+  '</div>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2 Weeks</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due In Next 2-4 Weeks</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 4 Weeks From Now</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Due More Than 6 Months From Now</span>'+
+  '</div>'+
+  '</div>'+
+  '<div class="category" onclick="openSearchBox(1)">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/naics.png" alt="">'+
+  '</div>'+
+  '<div class="category-text">'+
+  'NAICS Codes'+
+  '</div>'+
+  '<div id="category-right-naics" class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-naics">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="search-box-naics" class="search-box inactive">'+
+  '<div class="" style="width: 100%; float: left; position: relative;">'+
+  '<input id="search-item-suggestion-0" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(0)" value=""> <div class="search-box-checkbox-text" >Typical IT services</div>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left; position: relative;">'+
+  '<input id="search-item-suggestion-1" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(1)" value=""> <div class="search-box-checkbox-text" >Typical professional services</div>'+
+  '</div>'+
+  '<input id="search-filter-0" class="category-input" onkeyup="searchFilter(0)" type="text" name="" value="" placeholder="Filter">'+
+  '<div id="search-box-naics-list" class="">'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+  '</div>'+
+  '</div>'+
+  '</div>'+
+  '<div class="category" onclick="openSearchBox(2)">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/productservice.png" alt="">'+
+  '</div>'+
+  '<div class="category-text">'+
+  'Product/Service Description'+
+  '</div>'+
+  '<div id="category-right-psc" class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-psc">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="search-box-psc" class="search-box inactive">'+
+  '<div class="" style="width: 100%; float: left; position: relative;">'+
+  '<input id="search-item-suggestion-2" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(2)" value=""> <div class="search-box-checkbox-text" >Typical IT services PSC</div>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left; position: relative;">'+
+  '<input id="search-item-suggestion-3" class="search-box-checkbox" type="checkbox" name="" onclick="calculateSuggestion(3)" value=""> <div class="search-box-checkbox-text" >Typical professional services PSC</div>'+
+  '</div>'+
+  '<input id="search-filter-1" class="category-input" onkeyup="searchFilter(1)" type="text" name="" value="" placeholder="Filter">'+
+  '<div id="search-box-psc-list" class="">'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+  '</div>'+
+  '</div>'+
+  '</div>'+
+  '<div class="category" onclick="openSearchBox(3)">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/agencyoffice.png" alt="">'+
+  '</div>'+
+  '<div class="category-text">'+
+  'Agency/Office'+
+  '</div>'+
+  '<div id="category-right-agency" class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-agency">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="search-box-agency" class="search-box inactive">'+
+  '<input id="search-filter-2" class="category-input" onkeyup="searchFilter(2)" type="text" name="" value="" placeholder="Filter">'+
+  '<div id="search-box-agency-list" class="">'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+  '</div>'+
+  '</div>'+
+  '</div>'+
+  '<div class="category" onclick="openSearchBox(4)">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/location.png" alt="">'+
+  '</div>'+
+  '<div class="category-text">'+
+  'Location'+
+  '</div>'+
+  '<div id="category-right-location" class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-location">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="search-box-location" class="search-box inactive">'+
+  '<input id="search-filter-3" class="category-input" onkeyup="searchFilter(3)" type="text" name="" value="" placeholder="Filter">'+
+  '<div id="search-box-location-list" class="">'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> </span>'+
+  '</div>'+
+  '</div>'+
+  '</div>'+
+  '<div class="category" onclick="openSearchBox(5)">'+
+  '<div class="category-img-box">'+
+  '<img class="category-img" src="./img/setaside.png" alt="">'+
+  '</div>'+
+  '<div class="category-text">'+
+  'Set Aside'+
+  '</div>'+
+  '<div id="category-right-setaside" class="category-right">'+
+  '<p class="category-arrow" id="category-arrow-setaside">›</p>'+
+  '</div>'+
+  '</div>'+
+  '<div id="search-box-setaside" class="search-box inactive">'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> All</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> 8(a)</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> Small business</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> SDVOSB</span>'+
+  '</div>'+
+  '<div class="" style="width: 100%; float: left;">'+
+  '<input class="search-box-checkbox" type="checkbox" name="" value="" style="float: left; height: 20px;"> <span style="line-height: 25px;"> VOSB</span>'+
+  '</div>'+
+  '</div>'+
+  '<div id="double-search-buttons">'+
+  '<button class="delete-button" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>'+
+  '<button class="save-button" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
+  '</div>'+
+  '<div id="single-search-button" class="inactive">'+
+  '<button class="save-button" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
+  '</div>'+
   '</div>'
 
   if (where == 1) {
@@ -1296,38 +1298,42 @@ function filterOpportunitiesBySearch(elem) {
 }
 
 function deleteSearchTerms() {
-  if (activeSearchIndex > -1) {
-    var searchSucceeded = false
-    for (i = 0; i < huntingPartyData.users.length; i++) {
-      if (huntingPartyData.users[i].userId == currentUser._id) {
-        if (huntingPartyData.users[i].searches) {
-          huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
-          searchSucceeded = true
-          theindex = i
-          break
+  if (!saving) {
+    saving = true
+    if (activeSearchIndex > -1) {
+      var searchSucceeded = false
+      for (i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].userId == currentUser._id) {
+          if (huntingPartyData.users[i].searches) {
+            huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
+            searchSucceeded = true
+            theindex = i
+            break
+          }
         }
       }
-    }
-    if (searchSucceeded) {
-      var id = huntingPartyData._id
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('search is gone!')
-          yourSearches = []
-          previousSearchTermsIndex = null
-          generateSearchHTML(1)
-          renderSavedSearches()
-          switchTab(1)
-          openSearchItems(0)
-        }
-      };
-      var url = apiUrl+"/huntingpartydata/" + id;
-      xhttp.open("PUT", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
-    } else {
-      console.log('it failed somehow')
+      if (searchSucceeded) {
+        var id = huntingPartyData._id
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log('search is gone!')
+            yourSearches = []
+            previousSearchTermsIndex = null
+            generateSearchHTML(1)
+            renderSavedSearches()
+            switchTab(1)
+            openSearchItems(0)
+            saving = false
+          }
+        };
+        var url = apiUrl+"/huntingpartydata/" + id;
+        xhttp.open("PUT", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(huntingPartyData));
+      } else {
+        console.log('it failed somehow')
+      }
     }
   }
 }
@@ -1668,7 +1674,7 @@ function renderSearch() {
                       html = html + '<div class="search-box-checkbox-item">'+
                       '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'-'+i5+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+'" onclick="calculateSearch(this)">'+
                       '<div class="search-box-checkbox-text"> '+
-                        searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].name+
+                      searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].name+
                       '</div>'+
                       '</div>'
                     }
@@ -2281,78 +2287,86 @@ function closeSearchPopup() {
 }
 
 function saveSearchTerms() {
-  console.log(emptySearchTerms)
-  if (document.getElementById("search-name").value.length > 0) {
-    searchTerms.keyword = document.getElementById("search-input-keyword").value
-    var terms = searchTerms
-    var creatingNew = false
-    if (!huntingPartyData) {
-      huntingPartyData = {
-        companyId: company._id,
-        users: [],
-        searches: []
+  if (!saving) {
+    saving = true
+    console.log(emptySearchTerms)
+    if (document.getElementById("search-name").value.length > 0) {
+      searchTerms.keyword = document.getElementById("search-input-keyword").value
+      var terms = searchTerms
+      var creatingNew = false
+      if (!huntingPartyData) {
+        huntingPartyData = {
+          companyId: company._id,
+          users: [],
+          searches: []
+        }
+        creatingNew = true
       }
-      creatingNew = true
-    }
-    terms.name = document.getElementById("search-name").value
-    if (activeSearchIndex > -1) {
-      yourSearches[activeSearchIndex] = terms
-    } else {
-      for (i = 0; i < huntingPartyData.users.length; i++) {
-        if (huntingPartyData.users[i].userId == currentUser._id) {
-          if (!huntingPartyData.users[i].searches) {
-            huntingPartyData.users[i].searches = []
+      terms.name = document.getElementById("search-name").value
+      if (activeSearchIndex > -1) {
+        yourSearches[activeSearchIndex] = terms
+      } else {
+        for (i = 0; i < huntingPartyData.users.length; i++) {
+          if (huntingPartyData.users[i].userId == currentUser._id) {
+            if (!huntingPartyData.users[i].searches) {
+              huntingPartyData.users[i].searches = []
+            }
+            huntingPartyData.users[i].searches.push(terms)
+            console.log(terms.name)
+            break;
           }
-          huntingPartyData.users[i].searches.push(terms)
         }
       }
-    }
-    if (creatingNew) {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('CREATED')
-          document.getElementById('search-save-popup').classList.remove('inactive')
-          document.getElementById('search-save-popup-bg').classList.remove('inactive')
-          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
-          console.log(emptySearchTerms)
-          console.log('----------')
-          resetSearchTerms()
-          console.log(emptySearchTerms)
-        }
-      };
-      var url = apiUrl+"/huntingpartydata/add";
-      xhttp.open("POST", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
+      if (creatingNew) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log('CREATED')
+            document.getElementById('search-save-popup').classList.remove('inactive')
+            document.getElementById('search-save-popup-bg').classList.remove('inactive')
+            document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+            console.log(emptySearchTerms)
+            console.log('----------')
+            resetSearchTerms()
+            console.log(emptySearchTerms)
+            saving = false
+          }
+        };
+        var url = apiUrl+"/huntingpartydata/add";
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(huntingPartyData));
 
-    } else {
-      var id = huntingPartyData._id
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          document.getElementById('search-save-popup').classList.remove('inactive')
-          document.getElementById('search-save-popup-bg').classList.remove('inactive')
-          document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
-          console.log(emptySearchTerms)
-          console.log('----------')
-          console.log(emptySearchTerms)
-          renderSavedSearches()
-          if (!document.getElementById("new-search").classList.contains('inactive')) {
-            openSearchItems(1)
+      } else {
+        var id = huntingPartyData._id
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            huntingPartyData = JSON.parse(xhttp.responseText);
+            document.getElementById('search-save-popup').classList.remove('inactive')
+            document.getElementById('search-save-popup-bg').classList.remove('inactive')
+            document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+            console.log(emptySearchTerms)
+            console.log('----------')
+            console.log(emptySearchTerms)
+            renderSavedSearches()
+            if (!document.getElementById("new-search").classList.contains('inactive')) {
+              openSearchItems(1)
+            }
+            if (document.getElementById("saved-searches").classList.contains('inactive')) {
+              openSearchItems(0)
+            }
+            switchTab(1)
+            resetSearchTerms()
+            saving = false
+            console.log('UPDATED')
           }
-          if (document.getElementById("saved-searches").classList.contains('inactive')) {
-            openSearchItems(0)
-          }
-          switchTab(1)
-          resetSearchTerms()
-          console.log('UPDATED')
-        }
-      };
-      var url = apiUrl+"/huntingpartydata/" + id;
-      xhttp.open("PUT", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(huntingPartyData));
+        };
+        var url = apiUrl+"/huntingpartydata/" + id;
+        xhttp.open("PUT", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(huntingPartyData));
+      }
     }
   }
 }
@@ -2567,12 +2581,12 @@ function toggleHamburgerMenu() {
       }
     ]
 
-   sortOptions.forEach(function (item){
+    sortOptions.forEach(function (item){
       var option = document.createElement("option")
       option.text = item.text
       option.value = item.value
       sortID.add(option)
-   });
+    });
   }
   function sortFboRenders(fboProxy, renderOption){
     const BY_EARLIEST_DUE = 0 //Also most recent expired for pipeline
@@ -2640,7 +2654,7 @@ function toggleHamburgerMenu() {
       });
       fboProxy.reverse()
       break;
-     // case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
+      // case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
       case BY_ALPHA_ASC:
       fboProxy.sort(function(p1, p2){
 
@@ -3859,7 +3873,7 @@ function toggleHamburgerMenu() {
           document.getElementById("interested-vendors").innerHTML = ''
           if (fbo.fbo.interestedVendors.length < 1) {
             partiesHtml = '<div class="interested-vendor">'+
-              'No interested vendors yet'+
+            'No interested vendors yet'+
             '</div>'
           } else {
             for (i = 0; i < fbo.fbo.interestedVendors.length; i++) {
@@ -3913,7 +3927,7 @@ function toggleHamburgerMenu() {
     document.getElementById("interested-vendors").innerHTML = ''
     if (proxy.fbo.interestedVendors.length < 1) {
       partiesHtml = '<div class="interested-vendor">'+
-        'No interested vendors yet'+
+      'No interested vendors yet'+
       '</div>'
     } else {
       for (i = 0; i < proxy.fbo.interestedVendors.length; i++) {
@@ -3928,6 +3942,8 @@ function toggleHamburgerMenu() {
     document.getElementById("interested-vendors").innerHTML = partiesHtml
     if (companyAlreadyInterested) {
       document.getElementById("interested-vendor-button").classList.add('inactive')
+    } else {
+      document.getElementById("interested-vendor-button").classList.remove('inactive')
     }
     var dueDateHtml = 'No Due Date'
     if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
@@ -4092,11 +4108,6 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function openRefer() {
-    document.getElementById("fbo-popups").classList.remove('inactive');
-    document.getElementById("refer-popup").classList.remove('inactive');
-  }
-
   function closePopups(moveOn) {
     document.getElementById("fbo-popups").classList.add('inactive');
     var a = document.getElementsByClassName('vote-popup')
@@ -4142,7 +4153,6 @@ function toggleHamburgerMenu() {
         a[i].classList.remove('inactive');
       }
     } else if (which == 2) {
-      document.getElementById("refer-popup").classList.remove('inactive');
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
         usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
@@ -4208,7 +4218,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function sendReferNotifications() {
+  function sendReferNotifications(sendingFromReferTab) {
     console.log('doing the notification guy')
     var fbo = fbosIn[fboIndex]
     if (activeTab == 2) {
@@ -4269,6 +4279,17 @@ function toggleHamburgerMenu() {
       };
       sendEmail(mail)
     }
+    if (sendingFromReferTab) {
+      openReferPopup()
+    }
+  }
+
+  function openReferPopup() {
+    document.getElementById("refer-popup").classList.remove('inactive');
+  }
+
+  function closeReferPopup() {
+    document.getElementById("refer-popup").classList.add('inactive');
   }
 
   function vote(index, yes) {
@@ -4336,7 +4357,7 @@ function toggleHamburgerMenu() {
         fbo = JSON.parse(xhttp.responseText)
         checkVote(fbo)
         if (peopleToRefer.length + yesRefer.length + noRefer.length > 0) {
-          sendReferNotifications()
+          sendReferNotifications(false)
         }
         var newsString = ''
         console.log(fbo)
@@ -4432,21 +4453,21 @@ function toggleHamburgerMenu() {
           if (vote.id == currentUser._id) {
             var newString = '<div class="comment">'+
             '<div class="comment-right">'+
-              '<div class="comment-bubble-yours">'+
-              // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
-              // '<div class="comment-title" style="margin: none!important">'+
-              //   '<p class="comment-name">'+vote.name+'</p>'+
-              //   '<p class="comment-time">99 mins</p>'+
-              // '</div>'+
-                '<p class="comment-text">'+imgString+voteString+'</p>'+
-              '</div>'+
+            '<div class="comment-bubble-yours">'+
+            // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
+            // '<div class="comment-title" style="margin: none!important">'+
+            //   '<p class="comment-name">'+vote.name+'</p>'+
+            //   '<p class="comment-time">99 mins</p>'+
+            // '</div>'+
+            '<p class="comment-text">'+imgString+voteString+'</p>'+
+            '</div>'+
             '</div>'+
             '<div class="comment-left">'+
-              '<div class="comment-avatar-padding">'+
-              '</div>'+
-              '<div class="comment-avatar">'+
-              '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
-              '</div>'+
+            '<div class="comment-avatar-padding">'+
+            '</div>'+
+            '<div class="comment-avatar">'+
+            '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
+            '</div>'+
             '</div>'+
             '</div>'
 
@@ -5586,6 +5607,85 @@ function toggleHamburgerMenu() {
     xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
     xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp3b.send(JSON.stringify(proxyRequest));
+  }
+
+  function openResetPassword() {
+    document.getElementById("reset-password-popup").classList.remove('inactive');
+    document.getElementById("reset-password-input").value = '';
+    document.getElementById("reset-password-box-1").classList.remove('inactive');
+    document.getElementById("reset-password-box-2").classList.add('inactive');
+    document.getElementById("reset-password-button").classList.add('inactive');
+    document.getElementById("reset-password-button-inactive").classList.remove('inactive');
+    document.getElementById("reset-password-button-2").classList.add('inactive');
+  }
+  function closeResetPassword() {
+    document.getElementById("reset-password-popup").classList.add('inactive');
+    document.getElementById("reset-password-input").value = '';
+    document.getElementById("reset-password-box-1").classList.remove('inactive');
+    document.getElementById("reset-password-box-2").classList.add('inactive');
+    document.getElementById("reset-password-button").classList.add('inactive');
+    document.getElementById("reset-password-button-inactive").classList.remove('inactive');
+    document.getElementById("reset-password-button-2").classList.add('inactive');
+  }
+  function checkResetPasswordEmail() {
+    var email = document.getElementById("reset-password-input").value
+    if (!invalidEmail(email)) {
+      document.getElementById("reset-password-button").classList.remove('inactive');
+      document.getElementById("reset-password-button-inactive").classList.add('inactive');
+    }
+  }
+
+  function resetPassword() {
+    var email = document.getElementById("reset-password-input").value
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var resUser = JSON.parse(xhttp.responseText);
+        if (resUser.found == false) {
+          document.getElementById("reset-password-error-text").innerHTML = 'Account not found'
+        } else {
+          document.getElementById("reset-password-error-text").innerHTML = ''
+          var time = new Date();
+          var expTime = '' + ((time.getTime() / 1000) + 60 * 60 * 24 );
+          var resetHash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+          var token = {
+            userId: resUser.id,
+            userEmail: email,
+            expTime: expTime,
+            hash: resetHash,
+            reset: true
+          };
+          var xhttp2 = new XMLHttpRequest();
+          xhttp2.onreadystatechange = function() {
+            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+              var resCreateToken = JSON.parse(xhttp2.responseText);
+              var resetLink = 'https://efassembly.com:4432/password-reset/' + resetHash;
+              // var resetLink = "http://localhost:4200/password-reset/" + resetHash
+              var mail = ({
+                senderEmail: 'huntingparty@efassembly.com',
+                recipientEmail: email,
+                subject: 'Your Password Reset',
+                contactMessage: 'We recently received a password reset request for your Hunting Party profile. If you requested this reset, copy and paste the link below into your browser: \n \n ' + resetLink + ' \n \n and we\'ll take you to Assembly to assign a new one. If not, you can ignore this message.',
+                contactHTML: '<p>We recently received a password reset request for your Hunting Party profile. If you requested this reset, <a href="' + resetLink + '">click here to assign a new password</a> using Assembly. If not, you can ignore this message.</p>'
+              });
+              sendEmail(mail)
+              document.getElementById("reset-password-box-1").classList.add('inactive');
+              document.getElementById("reset-password-box-2").classList.remove('inactive');
+              document.getElementById("reset-password-button").classList.add('inactive');
+              document.getElementById("reset-password-button-inactive").classList.add('inactive');
+              document.getElementById("reset-password-button-2").classList.remove('inactive');
+              document.getElementById("reset-password-input").value = '';
+            }
+          }
+          xhttp2.open("POST", apiUrl+"/tokens/add/", true);
+          xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+          xhttp2.send(JSON.stringify(token));
+        }
+      }
+    };
+    xhttp.open("GET", apiUrl+"/profiles/email/" + email, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send();
   }
 
 
