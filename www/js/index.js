@@ -3608,6 +3608,7 @@ function toggleHamburgerMenu() {
   }
   function addNoRefer() {
     noRefer.push(document.getElementById("no-refer-input").value)
+    console.log(noRefer)
     var html = ''
     for (i = 0; i < noRefer.length; i++) {
       html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(1, '+i+')"><img src="./img/close.png" alt=""></span>'+noRefer[i]+'</div>'
@@ -4167,7 +4168,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-details-comments").classList.remove('inactive')
     }
     console.log(proxy)
-    if (!proxy.fbo.interestedVendors) {
+    if (!proxy.fbo.interestedVendors || proxy.fbo.interestedVendors == undefined) {
       proxy.fbo.interestedVendors = []
     }
     var partiesHtml = ''
@@ -4274,7 +4275,6 @@ function toggleHamburgerMenu() {
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
           console.log('marked as read')
-          proxy = JSON.parse(xhttp.responseText)
           checkProxiesViewed()
         }
       };
@@ -4362,8 +4362,6 @@ function toggleHamburgerMenu() {
     for (i = 0; i < a.length; i++) {
       a[i].classList.add('inactive');
     }
-    document.getElementById("yes-refer").classList.add('inactive');
-    document.getElementById("no-refer").classList.add('inactive');
     renderFbos()
     peopleToRefer = []
     if (moveOn) {
@@ -4824,16 +4822,6 @@ function toggleHamburgerMenu() {
       console.log(toSend)
       xhttp3.send(JSON.stringify(toSend));
       toSend['_id'] = savedId
-    }
-  }
-
-  function turnOnRefer(which) {
-    if (which == 0) {
-      document.getElementById("yes-refer").classList.remove('inactive');
-      document.getElementById("yes-refer-button").classList.add('inactive');
-    } else if (which == 1) {
-      document.getElementById("no-refer").classList.remove('inactive');
-      document.getElementById("no-refer-button").classList.add('inactive');
     }
   }
 
@@ -5909,7 +5897,7 @@ function toggleHamburgerMenu() {
           xhttp2.onreadystatechange = function() {
             if (xhttp2.readyState == 4 && xhttp2.status == 200) {
               var resCreateToken = JSON.parse(xhttp2.responseText);
-              var resetLink = 'https://efassembly.com:4432/password-reset/' + resetHash;
+              var resetLink = 'https://efassembly.com/password-reset/' + resetHash;
               // var resetLink = "http://localhost:4200/password-reset/" + resetHash
               var mail = ({
                 senderEmail: 'huntingparty@efassembly.com',
