@@ -1146,7 +1146,6 @@ function calculateSuggestion(which) {
     var a = document.getElementsByClassName('checkbox-subnaics')
     for (i = 0; i < a.length; i++) {
       if (searchItemSuggestions.naics.it.includes(a[i].value)) {
-        console.log(a[i].value)
         toRun.push(a[i])
       }
     }
@@ -1160,7 +1159,6 @@ function calculateSuggestion(which) {
     var a = document.getElementsByClassName('checkbox-subnaics')
     for (i = 0; i < a.length; i++) {
       if (searchItemSuggestions.naics.professional.includes(a[i].value)) {
-        console.log(a[i].value)
         toRun.push(a[i])
       }
     }
@@ -1183,7 +1181,6 @@ function calculateSuggestion(which) {
       if (toRun[i].classList.contains('checkbox-psc-service')) {
         for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
           if (searchTerms.psc.services[i2].name == toRun[i].value) {
-            console.log(searchTerms.psc.services[i2].name)
             searchTerms.psc.services[i2].value = toRun[i].checked
           }
         }
@@ -1214,7 +1211,7 @@ function calculateSuggestion(which) {
     for (i = 0; i < toRun.length; i++) {
       toRun[i].checked = document.getElementById("search-item-suggestion-3").checked
       if (toRun[i].classList.contains('checkbox-psc-service')) {
-        for (i2 = 0; i < searchTerms.psc.services.length; i2++) {
+        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
           if (searchTerms.psc.services[i2].name == toRun[i].value) {
             console.log(searchTerms.psc.services[i2].name)
             searchTerms.psc.services[i2].value = toRun[i].checked
