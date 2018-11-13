@@ -690,7 +690,7 @@ function viewSearch(index) {
     a[i].checked = searchTerms.psc.services[i].value
     if (searchTerms.psc.services[i].psc) {
       for (i2 = 0; i2 < searchTerms.psc.services[i].psc.length; i2++) {
-        document.getElementById("psc-service-checkbox"+i+"-"+i2).checked = searchTerms.psc.services[i].psc[i2].value
+        document.getElementById("psc-service-checkbox-"+i+"-"+i2).checked = searchTerms.psc.services[i].psc[i2].value
       }
     }
   }
@@ -1174,18 +1174,35 @@ function calculateSuggestion(which) {
     var a = document.getElementsByClassName('checkbox-psc-service')
     for (i = 0; i < a.length; i++) {
       if (searchItemSuggestions.psc.it.includes(a[i].value)) {
-        console.log(a[i].value)
         toRun.push(a[i])
       }
     }
     console.log(toRun.length)
     for (i = 0; i < toRun.length; i++) {
       toRun[i].checked = document.getElementById("search-item-suggestion-2").checked
-      console.log(toRun[i].checked)
+      if (toRun[i].classList.contains('checkbox-psc-service')) {
+        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
+          if (searchTerms.psc.services[i2].name == toRun[i].value) {
+            console.log(searchTerms.psc.services[i2].name)
+            searchTerms.psc.services[i2].value = toRun[i].checked
+          }
+        }
+      } else if (toRun[i].classList.contains('checkbox-psc-product')) {
+        for (i2 = 0; i2 < searchTerms.psc.products.length; i2++) {
+          if (searchTerms.psc.products[i2].name == toRun[i].value) {
+            searchTerms.psc.products[i2].value = toRun[i].checked
+            if (searchTerms.psc.products[i2].psc) {
+              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
+                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
+                var a = document.getElementsByClassName('checkbox-subpsc')
+                document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
+              }
+            }
+          }
+        }
+      }
     }
-    for (i = 0; i < toRun.length; i++) {
-      calculateSearch(toRun[i])
-    }
+    checkChecked()
   } else if (which == 3) {
     var a = document.getElementsByClassName('checkbox-psc-service')
     for (i = 0; i < a.length; i++) {
@@ -1196,10 +1213,29 @@ function calculateSuggestion(which) {
     }
     for (i = 0; i < toRun.length; i++) {
       toRun[i].checked = document.getElementById("search-item-suggestion-3").checked
+      if (toRun[i].classList.contains('checkbox-psc-service')) {
+        for (i2 = 0; i < searchTerms.psc.services.length; i2++) {
+          if (searchTerms.psc.services[i2].name == toRun[i].value) {
+            console.log(searchTerms.psc.services[i2].name)
+            searchTerms.psc.services[i2].value = toRun[i].checked
+          }
+        }
+      } else if (toRun[i].classList.contains('checkbox-psc-product')) {
+        for (i = 0; i < searchTerms.psc.products.length; i++) {
+          if (searchTerms.psc.products[i2].name == toRun[i].value) {
+            searchTerms.psc.products[i2].value = toRun[i].checked
+            if (searchTerms.psc.products[i2].psc) {
+              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
+                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
+                var a = document.getElementsByClassName('checkbox-subpsc')
+                document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
+              }
+            }
+          }
+        }
+      }
     }
-    for (i = 0; i < toRun.length; i++) {
-      calculateSearch(toRun[i])
-    }
+    checkChecked()
   }
 }
 
@@ -1281,20 +1317,54 @@ function openSearchItems(which) {
 
 function filterOpportunitiesBySearch(elem) {
   var searchIndex = elem.value
+  document.getElementById("fbo-items").innerHTML = ''
+  document.getElementById("fbo-item-load-buffer").classList.remove('inactive')
   if (searchIndex > -1) {
     searchFilterName = yourSearches[searchIndex].name
+    searchFilter = yourSearches[searchIndex]
+    var proxyRequest = {
+      searchTerms: searchFilter
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        proxiesRes = JSON.parse(xhttp.responseText);
+        fbosIn = proxiesRes.fbosIn
+        fbosInMax = proxiesRes.fbosInMax
+        checkProxiesViewed()
+        document.getElementById("fbo-item-load-buffer").classList.add('inactive')
+        renderFbos()
+      }
+    }
+    xhttp.open("PUT", apiUrl+"/company/" + company._id + "/filtered/", true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(proxyRequest));
   } else {
     searchFilterName = null
-  }
-  console.log(searchFilterName)
-  var searchCount = 0
-  for (i = 0; i < fbosIn.length; i++) {
-    if (fbosIn[i].originSearch == searchFilterName) {
-      searchCount++
+    var proxyRequest = {
+      startIndex: 0,
+      which: 2
     }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        proxiesRes = JSON.parse(xhttp.responseText);
+        fbosIn = proxiesRes.fbosIn
+        fbosInMax = proxiesRes.fbosInMax
+        checkProxiesViewed()
+        if (!fbosIn) {
+          fbosIn = []
+        } else if (!fboPipeline) {
+          fboPipeline = []
+        }
+        document.getElementById("fbo-item-load-buffer").classList.add('inactive')
+        renderFbos()
+      }
+    }
+    xhttp.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(proxyRequest));
   }
-  console.log(searchCount)
-  // renderFbos()
 }
 
 function deleteSearchTerms() {
@@ -1447,13 +1517,13 @@ function searchFilter(which) {
       var matchFound = false
       if (searchTerms.psc.services[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.services[i].value == true) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
+        '<input id="psc-service-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
         '</div>'
         matchFound = true
       }
       if (!matchFound) {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
-        '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
+        '<input id="psc-service-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
         '</div>'
       }
     }
@@ -1721,7 +1791,7 @@ function renderSearch() {
   '<div id="services-subcategory-box" class="subcategory-box inactive">'
   for (i = 0; i < searchTerms.psc.services.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input id="psc-service-checkbox'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
+    '<input id="psc-service-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
     '<div id="psc-service-subcategory-box-'+i+'" class="subcategory-box inactive">'
     html = html + '</div>'
     html = html + '</div>'
@@ -1972,6 +2042,7 @@ function openTutorials() {
 }
 
 function calculateSearch(elem) {
+  console.log(elem)
   var anyFalse = false
   if (elem.classList.contains('checkbox-type')) {
     if (elem.value == searchTerms.type[0].name) {
@@ -2104,8 +2175,10 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-psc-service')) {
+    console.log(elem.value)
     for (i = 0; i < searchTerms.psc.services.length; i++) {
       if (searchTerms.psc.services[i].name == elem.value) {
+        console.log(searchTerms.psc.services[i].name)
         searchTerms.psc.services[i].value = elem.checked
       }
     }
@@ -2975,9 +3048,9 @@ function toggleHamburgerMenu() {
         var commentsCount = proxy.voteYes.length + proxy.voteNo.length
         var votesYesCount = proxy.voteYes.length
         var votesNoCount = proxy.voteNo.length
-        if (searchFilterName && activeTab == 2 && proxy.originSearch !== searchFilterName) {
-          expired = true
-        }
+        // if (searchFilterName && activeTab == 2 && proxy.originSearch !== searchFilterName) {
+        //   expired = true
+        // }
         if (proxy.voteYes.length < 1 && vote !== 1) {
           // if (timeToDue < -14) {
           //   expired = true
