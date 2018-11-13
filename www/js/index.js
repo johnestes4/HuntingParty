@@ -1190,7 +1190,7 @@ function calculateSuggestion(which) {
                       if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == toRun[i].value) {
                         if (toRun[i].checked) {
                           if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                            calculateNaicsSearch(i2)
+                            calculateNaicsSearch(''+i2)
                           }
                           if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
                             calculateNaicsSearch(i2+'-'+i3)
@@ -1200,7 +1200,7 @@ function calculateSuggestion(which) {
                           }
                         } else {
                           if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                            calculateNaicsSearch(i2)
+                            calculateNaicsSearch(''+i2)
                           }
                           if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
                             calculateNaicsSearch(i2+'-'+i3)
@@ -1215,7 +1215,7 @@ function calculateSuggestion(which) {
                           if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code == toRun[i].value) {
                             if (toRun[i].checked) {
                               if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2)
+                                calculateNaicsSearch(''+i2)
                               }
                               if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
                                 calculateNaicsSearch(i2+'-'+i3)
@@ -1228,7 +1228,7 @@ function calculateSuggestion(which) {
                               }
                             } else {
                               if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2)
+                                calculateNaicsSearch(''+i2)
                               }
                               if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
                                 calculateNaicsSearch(i2+'-'+i3)

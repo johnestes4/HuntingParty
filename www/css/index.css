@@ -2629,16 +2629,16 @@ h1 {
   height: 80vh;
   width: 100vw;
   background: white;
-  z-index: 99;
+  z-index: 102;
   box-shadow: 0px -1px 7px 1px rgba(0,0,0,0.15);
 }
 #popup-background {
   content: "";
   display: block;
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
-  z-index: 1;
+  z-index: 101;
   background: rgba(0,0,0,0.15);
   height: 100vh;
   width: 100vw;
