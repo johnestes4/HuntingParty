@@ -854,6 +854,7 @@ function renderSavedSearches() {
   // yourSearches = huntingPartyData.searches
 
   yourSearches = []
+  var onlyYourSearches = []
   var searchDropdownHtml = '<option value="-1">All Searches</option>'
   var searchIndex = 0
   for (i = 0; i < huntingPartyData.users.length; i++) {
@@ -861,6 +862,7 @@ function renderSavedSearches() {
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
           yourSearches.push(huntingPartyData.users[i].searches[i2])
+          onlyYourSearches.push(huntingPartyData.users[i].searches[i2])
           searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
           searchIndex++
         }
@@ -890,12 +892,12 @@ function renderSavedSearches() {
   '</div>'+
   '<div id="saved-searches" class="search-item-subbox inactive">'
 
-  for (i = 0; i < yourSearches.length; i++) {
+  for (i = 0; i < onlyYourSearches.length; i++) {
     var arrowIndex = i+2
     html = html + '<div class="search-item">'+
     '<div class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
     '<div class="category-text">'+
-    yourSearches[i].name+
+    onlyYourSearches[i].name+
     '</div>'+
     '<div class="category-right">'+
     '<p class="category-arrow" id="category-arrow-'+arrowIndex+'">›</p>'+
@@ -1535,6 +1537,7 @@ function deleteSearchTerms() {
       for (i = 0; i < huntingPartyData.users.length; i++) {
         if (huntingPartyData.users[i].userId == currentUser._id) {
           if (huntingPartyData.users[i].searches) {
+            console.log(huntingPartyData.users[i].searches[activeSearchIndex])
             huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
             searchSucceeded = true
             theindex = i
@@ -2518,8 +2521,25 @@ function closeSearchPopup() {
   document.getElementById('search-save-popup-bg').classList.add('inactive')
 }
 
+function validSearchName(name) {
+  for (i = 0; i < yourSearches.length; i++) {
+    if (yourSearches[i].name.toLowerCase() == name.toLowerCase()) {
+      return false
+    }
+  }
+  return true
+}
+
+function checkSearchName(elem) {
+  if (validSearchName(elem.value)) {
+    document.getElementById("search-name").classList.remove('invalid-input')
+  } else {
+    document.getElementById("search-name").classList.add('invalid-input')
+  }
+}
+
 function saveSearchTerms() {
-  if (!saving) {
+  if (!saving && validSearchName(document.getElementById("search-name").value)) {
     saving = true
     console.log(emptySearchTerms)
     if (document.getElementById("search-name").value.length > 0) {
