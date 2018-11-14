@@ -2541,6 +2541,8 @@ function checkSearchName(elem) {
 function saveSearchTerms() {
   if (!saving && validSearchName(document.getElementById("search-name").value)) {
     saving = true
+    document.getElementById('search-save-loading').classList.remove('inactive')
+    document.getElementById('search-save-popup-bg').classList.remove('inactive')
     console.log(emptySearchTerms)
     if (document.getElementById("search-name").value.length > 0) {
       searchTerms.keyword = document.getElementById("search-input-keyword").value
@@ -2574,6 +2576,7 @@ function saveSearchTerms() {
         xhttp.onload = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
             console.log('CREATED')
+            document.getElementById('search-save-loading').classList.add('inactive')
             document.getElementById('search-save-popup').classList.remove('inactive')
             document.getElementById('search-save-popup-bg').classList.remove('inactive')
             document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
@@ -2595,6 +2598,7 @@ function saveSearchTerms() {
         xhttp.onload = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
             huntingPartyData = JSON.parse(xhttp.responseText);
+            document.getElementById('search-save-loading').classList.add('inactive')
             document.getElementById('search-save-popup').classList.remove('inactive')
             document.getElementById('search-save-popup-bg').classList.remove('inactive')
             document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
@@ -3334,8 +3338,36 @@ function toggleHamburgerMenu() {
     //     xhttp.send();
     //   }
     // }
-    fboHTMLContent.innerHTML = fboHtml;
-    pipelineHTMLContent.innerHTML = pipelineHtml;
+    if (fbosIn.length < 1) {
+      fboHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
+      '<div class="fbo-item-wrapper-inner">'+
+      '<div class="fbo-item">'+
+      '<div class="fbo-item-body">'+
+      '<div class="fbo-item-title">'+
+      '<p class="fbo-item-title-text">No Matching FBOs</p>'+
+      '</div>'+
+      '</div>'+
+      '</div>'+
+      '</div>'+
+      '</div>'
+    } else {
+      fboHTMLContent.innerHTML = fboHtml;
+    }
+    if (fboPipeline.length < 1) {
+      pipelineHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
+      '<div class="fbo-item-wrapper-inner">'+
+      '<div class="fbo-item">'+
+      '<div class="fbo-item-body">'+
+      '<div class="fbo-item-title">'+
+      '<p class="fbo-item-title-text">No Items In Pipeline</p>'+
+      '</div>'+
+      '</div>'+
+      '</div>'+
+      '</div>'+
+      '</div>'
+    } else {
+      pipelineHTMLContent.innerHTML = pipelineHtml;
+    }
     // for (i = 0; i < company.fboProxies.length; i++) {
     //   checkVote(company.fboProxies[i], i)
     // }
@@ -4242,6 +4274,11 @@ function toggleHamburgerMenu() {
     } else {
       dueDateHtml = 'No Due Date'
     }
+    var naicsHtml = ''
+    if (proxy.fbo.naics) {
+      naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
+      proxy.fbo.naics
+    }
     // document.getElementById("fbo-details-input").value = ''
     var dataText = '<p><span style="font-weight: bold">Item: </span>'+
     proxy.fbo.type +
@@ -4249,8 +4286,9 @@ function toggleHamburgerMenu() {
     proxy.fbo.solnbr +
     '</p><p><span style="font-weight: bold">Agency: </span>'+
     proxy.fbo.agency+
-    '</p><p><span style="font-weight: bold">NAICS: </span>'+
+    '</p><p><span style="font-weight: bold">PSC: </span>'+
     proxy.fbo.classCod+
+    naicsHtml+
     '</p><p><span style="font-weight: bold">Office: </span>'+
     proxy.fbo.office+
     '</p><p><span style="font-weight: bold">Location: </span>'+
