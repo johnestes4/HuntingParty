@@ -228,17 +228,37 @@ under the License.
       <h1 style="color: white; margin-bottom: 2vh">Create company</h1>
       <p>Fill out this important information about your company:</p>
     </div>
-    <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
-    <input id="new-company-email" type="text" name="" value="" placeholder="Email">
-    <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
-    <!-- <input id="new-company-address" type="text" name="" value="" placeholder="Address">
-    <input id="new-company-city" type="text" name="" value="" placeholder="City">
-    <input id="new-company-state" type="text" name="" value="" placeholder="State">
-    <input id="new-company-zip" type="number" name="" value="" placeholder="Zip"> -->
-    <p style="margin: 12px 0px 8px 0px; font-size: 14px;">To hit your growth targets how many proposals do you need to have in flight at a given time?</p>
-    <input id="new-company-goal" type="number" name="" value="" placeholder="Set Goal">
+    <div id="company-new-1" class="">
+      <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
+      <input id="new-company-email" type="text" name="" value="" placeholder="Email">
+      <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
+      <!-- <input id="new-company-address" type="text" name="" value="" placeholder="Address">
+      <input id="new-company-city" type="text" name="" value="" placeholder="City">
+      <input id="new-company-state" type="text" name="" value="" placeholder="State">
+      <input id="new-company-zip" type="number" name="" value="" placeholder="Zip"> -->
+      <p style="margin: 12px 0px 8px 0px; font-size: 14px;">To hit your growth targets how many proposals do you need to have in flight at a given time?</p>
+      <input id="new-company-goal" type="number" name="" value="" placeholder="Set Goal">
+      <div class="" style="width: 100%; position: relative;">
+        <button id="company-next-button" class="login-button" type="button" name="button" onclick="companyCreateNext()">Next</button>
+      </div>
+    </div>
+    <div id="company-new-2" class="inactive">
+      <p style="margin: 12px 0px 8px 0px; font-size: 14px;">What are your corporate email domains? If a new user joins with one of your domains, we'll automatically add them to your company. You can have up to three.</p>
+      <div class="login-field-box">
+        <span>@</span>
+        <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
+      </div>
+      <div class="login-field-box">
+        <span>@</span>
+        <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
+      </div>
+      <div class="login-field-box">
+        <span>@</span>
+        <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
+      </div>
       <div class="" style="width: 100%; position: relative;">
         <button id="company-create-button" class="login-button" type="button" name="button" onclick="createCompany()">Create</button>
+      </div>
     </div>
   </div>
 </div>
@@ -431,7 +451,7 @@ under the License.
 </div>
 <div id="fbo-popups" class="inactive">
   <div id="error-popup" class="vote-popup inactive">
-    <h3>ERROR</h3>
+    <h3>ALERT</h3>
     <p id="error-text">it's broke</p>
     <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
   </div>

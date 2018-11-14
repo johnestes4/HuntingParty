@@ -547,23 +547,30 @@ function checkChecked() {
     numberChecked = 0
     checkedName = ''
   }
-  if (searchTerms.psc.products[0].value == true) {
-    filtersHtml = filtersHtml + '<div class="filters-item">Product<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("category-right-psc").innerHTML = "All >";
-  } else {
-    for (i = 1; i < searchTerms.psc.products.length; i++) {
-      if (searchTerms.psc.products[i].value == true) {
-        numberChecked++
-        checkedName = searchTerms.psc.products[i].name
-      }
+  for (i = 0; i < searchTerms.psc.products.length; i++) {
+    if (searchTerms.psc.products[i].value == true) {
+      numberChecked++
+      checkedName = searchTerms.psc.products[i].name
     }
-    if (numberChecked > 0) {
-      filtersHtml = filtersHtml + '<div class="filters-item">Product ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
-    }
-    // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
-    numberChecked = 0
-    checkedName = ''
   }
+  if (numberChecked > 0) {
+    filtersHtml = filtersHtml + '<div class="filters-item">Product ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+  }
+  // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
+  numberChecked = 0
+  checkedName = ''
+  for (i = 0; i < searchTerms.psc.services.length; i++) {
+    if (searchTerms.psc.services[i].value == true) {
+      numberChecked++
+      checkedName = searchTerms.psc.services[i].name
+    }
+  }
+  if (numberChecked > 0) {
+    filtersHtml = filtersHtml + '<div class="filters-item">Service ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+  }
+  // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
+  numberChecked = 0
+  checkedName = ''
   if (searchTerms.agency[0].value == true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Agency<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
     // document.getElementById("category-right-agency").innerHTML = "All >";
@@ -3963,11 +3970,13 @@ function toggleHamburgerMenu() {
         password: password1,
         huntingparty: true
       }
+      console.log(newUser)
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
           document.getElementById("email").value = email
           document.getElementById("password").value = password1
+          console.log('registered')
           login()
         }
       }
@@ -3980,6 +3989,11 @@ function toggleHamburgerMenu() {
     }
   }
 
+  function companyCreateNext() {
+    document.getElementById("company-new-1").classList.add('inactive')
+    document.getElementById("company-new-2").classList.remove('inactive')
+  }
+
   function createCompany() {
     if (
       document.getElementById("new-company-name").value.length > 0 &&
@@ -3990,11 +4004,19 @@ function toggleHamburgerMenu() {
       // document.getElementById("new-company-state").value.length > 0 &&
       // document.getElementById("new-company-zip").value.length > 0
     ) {
+      var domainNames = []
+      var a = document.getElementsByClassName('company-domain')
+      for (i = 0; i < a.length; i++) {
+        if (a[i].value.length > 0 && (/^[^\s@]+\.[^\s@]+$/.test(a[i].value))) {
+          domainNames.push(a[i].value)
+        }
+      }
       var newCompany = {
         name: document.getElementById("new-company-name").value,
         email: document.getElementById("new-company-email").value,
         avatar: '',
-        contactNumber: document.getElementById("new-company-phone").value
+        contactNumber: document.getElementById("new-company-phone").value,
+        emailDomains: domainNames
         // address: document.getElementById("new-company-address").value,
         // city: document.getElementById("new-company-city").value,
         // state: document.getElementById("new-company-state").value,
@@ -5870,6 +5892,21 @@ function toggleHamburgerMenu() {
     if (!invalidEmail(email)) {
       document.getElementById("reset-password-button").classList.remove('inactive');
       document.getElementById("reset-password-button-inactive").classList.add('inactive');
+    }
+  }
+  function checkDomainEmail(elem) {
+    var email = elem.value
+    if (email.length > 0 && !(/^[^\s@]+\.[^\s@]+$/.test(email))) {
+      elem.classList.add('invalid-input')
+    } else if (email.length == 0) {
+      elem.classList.remove('invalid-input')
+    }
+  }
+  function checkDomainEmail2(elem) {
+    var email = elem.value
+    if (email.length > 0 && !(/^[^\s@]+\.[^\s@]+$/.test(email))) {
+    } else if (email.length > 0) {
+      elem.classList.remove('invalid-input')
     }
   }
 
