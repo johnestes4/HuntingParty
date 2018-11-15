@@ -3208,17 +3208,6 @@ function toggleHamburgerMenu() {
             }
           }
         }
-        var yesString = ''
-        var noString = ''
-        if (vote == 1) {
-          noString = ' voted-button'
-          fboVote.push(1)
-        } else if (vote == 2) {
-          yesString = ' voted-button'
-          fboVote.push(2)
-        } else {
-          fboVote.push(0)
-        }
         var imgString = ''
         for (i2 = 0; i2 < agencyLogos.length; i2++) {
           if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
@@ -4653,24 +4642,24 @@ function toggleHamburgerMenu() {
     // fbo.voteNo = []
     // fbo.voteYes = []
 
-    if (fboVote[index] !== 2 && yes) {
+    if (yes) {
       for (var i = 0; i < fbo.voteNo.length; i++) {
         if (fbo.voteNo[i].id == currentUser._id) {
           fbo.voteNo.splice(i,1)
+          break
         }
       }
       voteChanged = true
-      fboVote[index] = 2
       vote.comment = document.getElementById("fbo-details-input").value
       fbo.voteYes.push(vote)
-    } else if (fboVote[index] !== 1 && !yes) {
+    } else if (!yes) {
       for (var i = 0; i < fbo.voteYes.length; i++) {
         if (fbo.voteYes[i].id == currentUser._id) {
           fbo.voteYes.splice(i,1)
+          break
         }
       }
       voteChanged = true
-      fboVote[index] = 1
       vote.comment = document.getElementById("fbo-details-input").value
       fbo.voteNo.push(vote)
     }
@@ -5046,7 +5035,6 @@ function toggleHamburgerMenu() {
                           }
                           var doTheUpdateAnyway = false
                           for (i = 0; i < huntingPartyData.users.length; i++) {
-                            console.log(huntingPartyData.users[i])
                             if (huntingPartyData.users[i].points == undefined) {
                               huntingPartyData.users[i].points = 0
                               console.log('no points!');
@@ -5075,8 +5063,8 @@ function toggleHamburgerMenu() {
                           }
                           if (device !== undefined || !userInList || doTheUpdateAnyway) {
                             if (!userInList || doTheUpdateAnyway) {
-                              console.log('not in the list')
                               if (!userInList) {
+                                console.log('not in the list')
                                 var deviceId = ''
                                 var regId = ''
                                 if (device) {
@@ -5097,6 +5085,7 @@ function toggleHamburgerMenu() {
                                 tosRead = 0
                               }
                               var xhttpHPD = new XMLHttpRequest();
+
                               xhttpHPD.onreadystatechange = function() {
                                 if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
                                   huntingPartyData = JSON.parse(xhttpHPD.responseText);
@@ -5114,6 +5103,16 @@ function toggleHamburgerMenu() {
                               xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
                               xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
                               xhttpHPD.send(JSON.stringify(huntingPartyData));
+                            } else {
+                              if (tosRead < 1) {
+                                document.getElementById("loading").classList.add('inactive');
+                                document.getElementById("tos-popup").classList.remove('inactive');
+                                // document.getElementById("login-register").classList.remove('inactive');
+                              } else {
+                                document.getElementById("loading-details").innerHTML = 'Done'
+                                console.log('starting app')
+                                startMainApp()
+                              }
                             }
                           } else {
                             if (tosRead < 1) {
@@ -5122,6 +5121,7 @@ function toggleHamburgerMenu() {
                               // document.getElementById("login-register").classList.remove('inactive');
                             } else {
                               document.getElementById("loading-details").innerHTML = 'Done'
+                              console.log('starting app')
                               startMainApp()
                             }
                           }
@@ -5791,11 +5791,6 @@ function toggleHamburgerMenu() {
           // Save new registration ID
           localStorage.setItem('registrationId', data.registrationId);
           // Post registrationId to your app server as the value has changed
-        }
-        if (data.registrationId) {
-          document.getElementById("reg-id").value = data.registrationId
-        } else {
-          document.getElementById("reg-id").value = 'no id but it did call this function'
         }
       });
 
