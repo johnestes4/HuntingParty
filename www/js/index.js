@@ -4462,6 +4462,8 @@ function toggleHamburgerMenu() {
       for (i = 0; i < a.length; i++) {
         a[i].classList.remove('inactive');
       }
+      document.getElementById("yes-popup-users-list").innerHTML = ''
+      document.getElementById("refer-users-list").innerHTML = ''
     } else if (which == 2) {
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
@@ -4688,6 +4690,7 @@ function toggleHamburgerMenu() {
         } else {
           adCounter++
           closePopups(true)
+          closePopups(false)
           renderFbos()
           switchTab(activeTab)
         }
