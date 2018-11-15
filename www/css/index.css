@@ -723,7 +723,7 @@ h1, .instructions{
 }
 
 .fbo-item-wrapper {
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   width: 100%;
   height: 90px;
@@ -732,7 +732,7 @@ h1, .instructions{
   border-bottom: 1px solid rgba(96,97,97,0.5);
 }
 .fbo-item-wrapper-inner {
-  width: calc(100vw + 120px);
+  width: 100%;
   height: 90px;
   position: relative;
   float: left;

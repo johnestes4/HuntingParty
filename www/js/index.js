@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var saving = false
 var activeTab = 0
@@ -3250,14 +3250,6 @@ function toggleHamburgerMenu() {
             '</div>'+
             '</div>'+
             '</div>'+
-            '<div class="fbo-item-slide">'+
-            '<div class="fbo-item-slide-half" style="background: rgba(60,85,136,1);">'+
-            '<img class="fbo-item-slide-img icon" src="./img/comment.png" alt="">'+
-            '</div>'+
-            '<div class="fbo-item-slide-half">'+
-            '<img class="fbo-item-slide-img icon" src="./img/forward2.png" alt="">'+
-            '</div>'+
-            '</div>'+
             '</div>'+
             '</div>'
           }
@@ -3286,14 +3278,6 @@ function toggleHamburgerMenu() {
           '</div>'+
           '</div>'+
           '</div>'+
-          '<div class="fbo-item-slide">'+
-          '<div class="fbo-item-slide-half" style="background: rgba(60,85,136,1);">'+
-          '<img class="fbo-item-slide-img icon" src="./img/comment.png" alt="">'+
-          '</div>'+
-          '<div class="fbo-item-slide-half">'+
-          '<img class="fbo-item-slide-img icon" src="./img/forward2.png" alt="">'+
-          '</div>'+
-          '</div>'+
           '</div>'+
           '</div>'
         }
@@ -3306,9 +3290,16 @@ function toggleHamburgerMenu() {
     }
     // sortFboRenders(fbosIn, 0)
     for (var i = 0; i < fbosIn.length; i++) {
-      parseProxy(fbosIn[i], i)
+      if (fbosIn[i].voteYes.length > 0) {
+        fboPipeline.push(fbosIn[i])
+        fbosIn.splice(i,1)
+        i = i - 1
+      } else {
+        parseProxy(fbosIn[i], i)
+      }
     }
     // sortFboRenders(fboPipeline, 1)
+    console.log(fboPipeline)
     for (var i = 0; i < fboPipeline.length; i++) {
       parseProxy(fboPipeline[i], i)
     }
@@ -4612,7 +4603,6 @@ function toggleHamburgerMenu() {
   }
 
   function vote(index, yes) {
-    console.log('length of the thing is ' + peopleToRefer.length)
     var fbo = fbos[index]
     if (activeTab == 2) {
       fbo = fbosIn[index]
@@ -4696,8 +4686,8 @@ function toggleHamburgerMenu() {
         } else {
           adCounter++
           closePopups(true)
+          renderFbos()
           switchTab(activeTab)
-
         }
         addPoints(50)
         yesRefer = []
