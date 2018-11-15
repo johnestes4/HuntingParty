@@ -2535,8 +2535,10 @@ function validSearchName(name) {
 function checkSearchName(elem) {
   if (validSearchName(elem.value)) {
     document.getElementById("search-name").classList.remove('invalid-input')
+    document.getElementById("search-name-popup").classList.add('inactive')
   } else {
     document.getElementById("search-name").classList.add('invalid-input')
+    document.getElementById("search-name-popup").classList.remove('inactive')
   }
 }
 
@@ -5269,6 +5271,7 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
+    // openSearchItems(1)
     // goToFbo(0,0);
     // openFboDetail(5)
     // viewSearch(0)
