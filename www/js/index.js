@@ -411,9 +411,9 @@ function checkLoginEmail2() {
 }
 
 function login() {
+  var username = document.getElementById("email").value.toLowerCase()
+  var password = document.getElementById("password").value
   if (!invalidEmail(username)) {
-    var username = document.getElementById("email").value.toLowerCase()
-    var password = document.getElementById("password").value
     document.getElementById("login-name-popup").classList.add('inactive');
     document.getElementById("email").classList.remove('invalid-input');
     var xhttp = new XMLHttpRequest();
@@ -3885,7 +3885,9 @@ function toggleHamburgerMenu() {
   }
 
   function invalidEmail(email) {
-    return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
+    if (email) {
+      return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
+    }
   }
 
   function goToRegister() {
