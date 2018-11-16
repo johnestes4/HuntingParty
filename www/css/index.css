@@ -1666,44 +1666,54 @@ h1, .instructions{
   height: 40px;
   position: relative;
 }
-#search-name-popup {
-  position: absolute;
-  top: -15px;
-  left: 140px;
+
+.arrow-popup {
   width: auto;
   height: auto;
-  padding: 1px 6px 1px 6px;
+  padding: 2px 8px 2px 8px;
   background: rgba(255,98,98,1);
   color: white;
-  border-radius: 2px;
+  border-radius: 4px;
   border: 1px solid rgba(0,0,0,0.15);
   box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25);
   z-index: 4;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
 }
-#search-name-popup:after, #search-name-popup:before {
-	top: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
+.arrow-popup:after, .arrow-popup:before {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
 }
 
-#search-name-popup:after {
+.arrow-popup:after {
 	border-color: rgba(255, 255, 255, 0);
 	border-top-color: rgba(255,98,98,1);
 	border-width: 8px;
 	margin-left: -8px;
 }
-#search-name-popup:before {
+.arrow-popup:before {
 	border-color: rgba(235, 235, 235, 0);
 	border-top-color: rgba(170,170,170,1);
 	border-width: 9px;
 	margin-left: -9px;
+}
+#search-name-popup {
+  position: absolute;
+  top: -28px;
+  left: 140px;
+}
+
+#login-name-popup {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .category {

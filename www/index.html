@@ -109,8 +109,11 @@ under the License.
     <div class="login-register-content">
       <p class="sr-only">Email Address</p>
       <div class="login-field-box">
+        <div id="login-name-popup" class="arrow-popup inactive">
+          Account not found
+        </div>
         <img class="" src="./img/mail-white.png" alt="">
-        <input class="login-field" type="text" id="email" name="" value="" placeholder="Business Email">
+        <input class="login-field" type="text" id="email" name="" value="" placeholder="Business Email" onkeyup="checkLoginEmail()" onblur="checkLoginEmail2()">
       </div>
       <p class="sr-only">Password</p>
       <div class="login-field-box">
@@ -431,7 +434,7 @@ under the License.
   <div class="">
     <div class="search-item">
       <div class="search-item-header" style="background: rgba(243,243,243,1);">
-        <div id="search-name-popup" class="inactive">
+        <div id="search-name-popup" class="arrow-popup inactive">
           Name in use
         </div>
         <div class="search-name-left" onclick="openSearchItems(1)">Create New:</div>

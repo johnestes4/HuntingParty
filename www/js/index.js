@@ -390,74 +390,97 @@ var searchItemSuggestions = {
   }
 }
 
-function login() {
+function checkLoginEmail() {
   var username = document.getElementById("email").value.toLowerCase()
-  var password = document.getElementById("password").value
-  document.getElementById("loading-details").innerHTML = 'Checking if email has account...'
-  document.getElementById("loading").classList.remove('inactive');
-  document.getElementById("main-view").classList.add('inactive');
-  document.getElementById("fbo-view").classList.add('inactive');
-  document.getElementById("fbo-list-view").classList.add('inactive');
-  document.getElementById("fbo-detail-view").classList.add('inactive');
-  document.getElementById("login-register").classList.add('inactive');
-  var xhttp = new XMLHttpRequest();
-  xhttp.onload = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-      // Typical action to be performed when the document is ready:
-      document.getElementById("loading-details").innerHTML = 'Sending login request...'
-      var res = JSON.parse(xhttp.responseText)
-      if (res.id) {
-        var xhttp2 = new XMLHttpRequest();
-        console.log('why doesnt this work')
-        xhttp2.onreadystatechange = function() {
-          if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-            document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...'
-            // console.log(res.id)
-            var xhttp3 = new XMLHttpRequest();
-            xhttp3.onreadystatechange = function() {
-              if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-                document.getElementById("loading-details").innerHTML = 'Profile info found, getting the rest of the data...'
-                localStorage.setItem('uid', res.id)
-                loggedIn = true
-                currentUser = JSON.parse(xhttp3.responseText)
-                console.log('we did it')
-                getTheData()
-                // console.log(currentUser)
-              }
-            };
-            xhttp3.open("GET", apiUrl+"/profiles/" + res.id, true);
-            xhttp3.setRequestHeader("Content-type", "application/json");
-            xhttp3.send();
-          } else if (xhttp2.readyState == 4 && xhttp2.status == 400) {
-            document.getElementById("loading").classList.add('inactive');
-            document.getElementById("main-view").classList.add('inactive');
-            document.getElementById("fbo-view").classList.add('inactive');
-            document.getElementById("fbo-list-view").classList.add('inactive');
-            document.getElementById("fbo-detail-view").classList.add('inactive');
-            document.getElementById("login-register").classList.remove('inactive');
-            document.getElementById("login-error-text").innerHTML = 'Password/username mismatch'
+  if (username.length < 1 || !invalidEmail(username)) {
+    document.getElementById("login-name-popup").classList.add('inactive');
+    document.getElementById("email").classList.remove('invalid-input');
+  }
+}
+
+function checkLoginEmail2() {
+  var username = document.getElementById("email").value.toLowerCase()
+  if (invalidEmail(username)) {
+    document.getElementById("login-name-popup").innerHTML = 'Invalid email'
+    document.getElementById("login-name-popup").classList.remove('inactive');
+    document.getElementById("email").classList.add('invalid-input');
+  } else {
+    document.getElementById("login-name-popup").classList.add('inactive');
+    document.getElementById("email").classList.remove('invalid-input');
+  }
+}
+
+function login() {
+  if (!invalidEmail(username)) {
+    var username = document.getElementById("email").value.toLowerCase()
+    var password = document.getElementById("password").value
+    document.getElementById("login-name-popup").classList.add('inactive');
+    document.getElementById("email").classList.remove('invalid-input');
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        // Typical action to be performed when the document is ready:
+        var res = JSON.parse(xhttp.responseText)
+        if (res.id) {
+          document.getElementById("loading-details").innerHTML = 'Account found, logging in...'
+          document.getElementById("loading").classList.remove('inactive');
+          document.getElementById("main-view").classList.add('inactive');
+          document.getElementById("fbo-view").classList.add('inactive');
+          document.getElementById("fbo-list-view").classList.add('inactive');
+          document.getElementById("fbo-detail-view").classList.add('inactive');
+          document.getElementById("login-register").classList.add('inactive');
+          var xhttp2 = new XMLHttpRequest();
+          xhttp2.onreadystatechange = function() {
+            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+              document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...'
+              // console.log(res.id)
+              var xhttp3 = new XMLHttpRequest();
+              xhttp3.onreadystatechange = function() {
+                if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                  document.getElementById("loading-details").innerHTML = 'Profile info found, getting the rest of the data...'
+                  localStorage.setItem('uid', res.id)
+                  loggedIn = true
+                  currentUser = JSON.parse(xhttp3.responseText)
+                  getTheData()
+                  // console.log(currentUser)
+                }
+              };
+              xhttp3.open("GET", apiUrl+"/profiles/" + res.id, true);
+              xhttp3.setRequestHeader("Content-type", "application/json");
+              xhttp3.send();
+            } else if (xhttp2.readyState == 4 && xhttp2.status == 400) {
+              document.getElementById("loading").classList.add('inactive');
+              document.getElementById("main-view").classList.add('inactive');
+              document.getElementById("fbo-view").classList.add('inactive');
+              document.getElementById("fbo-list-view").classList.add('inactive');
+              document.getElementById("fbo-detail-view").classList.add('inactive');
+              document.getElementById("login-register").classList.remove('inactive');
+              document.getElementById("login-error-text").innerHTML = 'Password/username mismatch'
+            }
+          };
+          var body = {
+            email: username,
+            password: password
           }
-        };
-        var body = {
-          email: username,
-          password: password
+          xhttp2.open("POST", apiUrl+"/auth/login/" + res.id, true);
+          xhttp2.setRequestHeader("Content-type", "application/json");
+          xhttp2.send(JSON.stringify(body));
+        } else {
+          emailNotFound = true
+          document.getElementById("login-name-popup").innerHTML = 'Account not found'
+          document.getElementById("login-name-popup").classList.remove('inactive');
+          document.getElementById("email").classList.add('invalid-input');
         }
-        xhttp2.open("POST", apiUrl+"/auth/login/" + res.id, true);
-        xhttp2.setRequestHeader("Content-type", "application/json");
-        xhttp2.send(JSON.stringify(body));
+      } else if (xhttp.status !== 200) {
+        document.getElementById("loading-details").innerHTML = 'Status code ' + xhttp.status + ', status ' + xhttp.statusText
       } else {
-        emailNotFound = true
+        document.getElementById("loading-details").innerHTML = 'Ready state ' + xhttp.readyState + ', status code ' + xhttp.status
       }
-    } else if (xhttp.status !== 200) {
-      document.getElementById("loading-details").innerHTML = 'Status code ' + xhttp.status + ', status ' + xhttp.statusText
-    } else {
-      document.getElementById("loading-details").innerHTML = 'Ready state ' + xhttp.readyState + ', status code ' + xhttp.status
-    }
-  };
-  console.log(username)
-  xhttp.open("GET", apiUrl+"/profiles/email/" + username, true);
-  xhttp.setRequestHeader("Content-type", "application/json");
-  xhttp.send();
+    };
+    xhttp.open("GET", apiUrl+"/profiles/email/" + username, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+  }
 }
 
 function logOut() {
