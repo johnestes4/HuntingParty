@@ -1149,258 +1149,6 @@ function generateSearchHTML(where) {
   }
 }
 
-function calculateSuggestion(which) {
-  var toRun = []
-  if (which == 0) {
-    var a = document.getElementsByClassName('checkbox-subnaics')
-    for (i = 0; i < a.length; i++) {
-      if (searchItemSuggestions.naics.it.includes(a[i].value)) {
-        toRun.push(a[i])
-      }
-    }
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-0").checked
-      if (toRun[i].classList.contains('checkbox-subnaics')) {
-        for (i2 = 0; i2 < searchTerms.naics.length; i2++) {
-          if (searchTerms.naics[i2].subcategories) {
-            for (i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
-              if (searchTerms.naics[i2].subcategories[i3].code == toRun[i].value) {
-                if (toRun[i].checked) {
-                  if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                    calculateNaicsSearch(i2)
-                  }
-                } else {
-                  if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                    calculateNaicsSearch(i2)
-                  }
-                }
-                searchTerms.naics[i2].subcategories[i3].value = toRun[i].checked
-              } else if (searchTerms.naics[i2].subcategories[i3].subcategories) {
-                for (i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
-                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code == toRun[i].value) {
-                    if (toRun[i].checked) {
-                      if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                        calculateNaicsSearch(''+i2)
-                      }
-                      if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                        calculateNaicsSearch(i2+'-'+i3)
-                      }
-                    } else {
-                      if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                        calculateNaicsSearch(''+i2)
-                      }
-                      if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                        calculateNaicsSearch(i2+'-'+i3)
-                      }
-                    }
-                    searchTerms.naics[i2].subcategories[i3].subcategories[i4].value = toRun[i].checked
-                  } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories) {
-                    for (i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == toRun[i].value) {
-                        if (toRun[i].checked) {
-                          if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                            calculateNaicsSearch(''+i2)
-                          }
-                          if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                            calculateNaicsSearch(i2+'-'+i3)
-                          }
-                          if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
-                            calculateNaicsSearch(i2+'-'+i3+'-'+i4)
-                          }
-                        } else {
-                          if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                            calculateNaicsSearch(''+i2)
-                          }
-                          if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                            calculateNaicsSearch(i2+'-'+i3)
-                          }
-                          if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
-                            calculateNaicsSearch(i2+'-'+i3+'-'+i4)
-                          }
-                        }
-                        searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = toRun[i].checked
-                      } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories) {
-                        for (i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
-                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code == toRun[i].value) {
-                            if (toRun[i].checked) {
-                              if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                                calculateNaicsSearch(''+i2)
-                              }
-                              if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2+'-'+i3)
-                              }
-                              if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2+'-'+i3+'-'+i4)
-                              }
-                              if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4+"-"+i5).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2+'-'+i3+'-'+i4+'-'+i5)
-                              }
-                            } else {
-                              if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                                calculateNaicsSearch(''+i2)
-                              }
-                              if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2+'-'+i3)
-                              }
-                              if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2+'-'+i3+'-'+i4)
-                              }
-                              if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4+"-"+i5).classList.contains('inactive')) {
-                                calculateNaicsSearch(i2+'-'+i3+'-'+i4+'-'+i5)
-                              }
-                            }
-                            searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].value = toRun[i].checked
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    checkChecked()
-  } else if (which == 1) {
-    var a = document.getElementsByClassName('checkbox-subnaics')
-    for (i = 0; i < a.length; i++) {
-      if (searchItemSuggestions.naics.professional.includes(a[i].value)) {
-        toRun.push(a[i])
-      }
-    }
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-1").checked
-      if (toRun[i].classList.contains('checkbox-subnaics')) {
-        for (i2 = 0; i2 < searchTerms.naics.length; i2++) {
-          if (searchTerms.naics[i2].subcategories) {
-            for (i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
-              if (searchTerms.naics[i2].subcategories[i3].code == toRun[i].value) {
-                if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                  calculateNaicsSearch(i2)
-                }
-                searchTerms.naics[i2].subcategories[i3].value = toRun[i].checked
-              } else if (searchTerms.naics[i2].subcategories[i3].subcategories) {
-                for (i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
-                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code == toRun[i].value) {
-                    if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                      calculateNaicsSearch(''+i2)
-                    }
-                    if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                      calculateNaicsSearch(i2+'-'+i3)
-                    }
-                    searchTerms.naics[i2].subcategories[i3].subcategories[i4].value = toRun[i].checked
-                  } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories) {
-                    for (i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == toRun[i].value) {
-                        if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                          calculateNaicsSearch(i2)
-                        }
-                        if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                          calculateNaicsSearch(i2+'-'+i3)
-                        }
-                        if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
-                          calculateNaicsSearch(i2+'-'+i3+'-'+i4)
-                        }
-                        searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = toRun[i].checked
-                      } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories) {
-                        for (i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
-                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code == toRun[i].value) {
-                            if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
-                              calculateNaicsSearch(i2)
-                            }
-                            if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
-                              calculateNaicsSearch(i2+'-'+i3)
-                            }
-                            if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
-                              calculateNaicsSearch(i2+'-'+i3+'-'+i4)
-                            }
-                            if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4+"-"+i5).classList.contains('inactive')) {
-                              calculateNaicsSearch(i2+'-'+i3+'-'+i4+'-'+i5)
-                            }
-                            searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].value = toRun[i].checked
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    checkChecked()
-  } else if (which == 2) {
-    var a = document.getElementsByClassName('checkbox-psc-service')
-    for (i = 0; i < a.length; i++) {
-      if (searchItemSuggestions.psc.it.includes(a[i].value)) {
-        toRun.push(a[i])
-      }
-    }
-    console.log(toRun.length)
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-2").checked
-      if (toRun[i].classList.contains('checkbox-psc-service')) {
-        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
-          if (searchTerms.psc.services[i2].name == toRun[i].value) {
-            searchTerms.psc.services[i2].value = toRun[i].checked
-          }
-        }
-      } else if (toRun[i].classList.contains('checkbox-psc-product')) {
-        for (i2 = 0; i2 < searchTerms.psc.products.length; i2++) {
-          if (searchTerms.psc.products[i2].name == toRun[i].value) {
-            searchTerms.psc.products[i2].value = toRun[i].checked
-            if (searchTerms.psc.products[i2].psc) {
-              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
-                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
-                var a = document.getElementsByClassName('checkbox-subpsc')
-                document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
-              }
-            }
-          }
-        }
-      }
-    }
-    checkChecked()
-  } else if (which == 3) {
-    var a = document.getElementsByClassName('checkbox-psc-service')
-    for (i = 0; i < a.length; i++) {
-      if (searchItemSuggestions.psc.professional.includes(a[i].value)) {
-        console.log(a[i].value)
-        toRun.push(a[i])
-      }
-    }
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-3").checked
-      if (toRun[i].classList.contains('checkbox-psc-service')) {
-        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
-          if (searchTerms.psc.services[i2].name == toRun[i].value) {
-            console.log(searchTerms.psc.services[i2].name)
-            searchTerms.psc.services[i2].value = toRun[i].checked
-          }
-        }
-      } else if (toRun[i].classList.contains('checkbox-psc-product')) {
-        for (i = 0; i < searchTerms.psc.products.length; i++) {
-          if (searchTerms.psc.products[i2].name == toRun[i].value) {
-            searchTerms.psc.products[i2].value = toRun[i].checked
-            if (searchTerms.psc.products[i2].psc) {
-              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
-                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
-                var a = document.getElementsByClassName('checkbox-subpsc')
-                document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
-              }
-            }
-          }
-        }
-      }
-    }
-    checkChecked()
-  }
-}
-
 function sendEmail(mailInfo) {
   var xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
@@ -2277,54 +2025,85 @@ function calculateSearch(elem) {
           if (searchTerms.naics[i].subcategories) {
             // LEVEL 1 OF SUBCATEGORIES
             for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-              if (searchTerms.naics[i].subcategories[i2].code == elem.value) {
-                searchTerms.naics[i].subcategories[i2].value = elem.checked
+
+            }
+            //
+          }
+        }
+      }
+    }
+  } else if (elem.classList.contains('checkbox-subnaics')) {
+    for (i = 0; i < searchTerms.naics.length; i++) {
+      if (searchTerms.naics[i].subcategories) {
+        for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+        if (searchTerms.naics[i].subcategories[i2].code == elem.value) {
+          searchTerms.naics[i].subcategories[i2].value = elem.checked
+          if (!elem.checked) {
+            if (searchItemSuggestions.naics.it.includes(elem.value)) {
+              document.getElementById("search-item-suggestion-0").checked = false
+            }
+            if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+              document.getElementById("search-item-suggestion-1").checked = false
+            }
+            searchTerms.naics[0].value = false
+            var a = document.getElementsByClassName('checkbox-naics')
+            a[0].checked = false
+          }
+          break;
+        } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].code.length) == searchTerms.naics[i].subcategories[i2].code) {
+          if (searchTerms.naics[i].subcategories[i2].subcategories) {
+            // LEVEL 2 OF SUBCATEGORIES
+            for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+              if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code == elem.value) {
+                searchTerms.naics[i].subcategories[i2].subcategories[i3].value = elem.checked
                 if (!elem.checked) {
+                  if (searchItemSuggestions.naics.it.includes(elem.value)) {
+                    document.getElementById("search-item-suggestion-0").checked = false
+                  }
+                  if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+                    document.getElementById("search-item-suggestion-1").checked = false
+                  }
                   searchTerms.naics[0].value = false
                   var a = document.getElementsByClassName('checkbox-naics')
                   a[0].checked = false
                 }
                 break;
-              } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].code.length) == searchTerms.naics[i].subcategories[i2].code) {
-                if (searchTerms.naics[i].subcategories[i2].subcategories) {
-                  // LEVEL 2 OF SUBCATEGORIES
-                  for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-                    if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code == elem.value) {
-                      searchTerms.naics[i].subcategories[i2].subcategories[i3].value = elem.checked
+              } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].code) {
+                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
+                  // LEVEL 3 OF SUBCATEGORIES
+                  for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                    if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code == elem.value) {
+                      searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].value = elem.checked
                       if (!elem.checked) {
+                        if (searchItemSuggestions.naics.it.includes(elem.value)) {
+                          document.getElementById("search-item-suggestion-0").checked = false
+                        }
+                        if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+                          document.getElementById("search-item-suggestion-1").checked = false
+                        }
                         searchTerms.naics[0].value = false
                         var a = document.getElementsByClassName('checkbox-naics')
                         a[0].checked = false
                       }
                       break;
-                    } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].code) {
-                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                        // LEVEL 3 OF SUBCATEGORIES
-                        for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                          if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code == elem.value) {
-                            searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].value = elem.checked
+                    } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code) {
+                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
+                        // LEVEL 4 OF SUBCATEGORIES
+                        for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                          if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == elem.value) {
+                            searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = elem.checked
                             if (!elem.checked) {
+                              if (searchItemSuggestions.naics.it.includes(elem.value)) {
+                                document.getElementById("search-item-suggestion-0").checked = false
+                              }
+                              if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+                                document.getElementById("search-item-suggestion-1").checked = false
+                              }
                               searchTerms.naics[0].value = false
                               var a = document.getElementsByClassName('checkbox-naics')
                               a[0].checked = false
                             }
                             break;
-                          } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code) {
-                            if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                              // LEVEL 4 OF SUBCATEGORIES
-                              for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == elem.value) {
-                                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = elem.checked
-                                  if (!elem.checked) {
-                                    searchTerms.naics[0].value = false
-                                    var a = document.getElementsByClassName('checkbox-naics')
-                                    a[0].checked = false
-                                  }
-                                  break;
-                                }
-                              }
-                              //
-                            }
                           }
                         }
                         //
@@ -2339,13 +2118,21 @@ function calculateSearch(elem) {
           }
         }
       }
+      }
     }
+
   } else if (elem.classList.contains('checkbox-psc-service')) {
     console.log(elem.value)
     for (i = 0; i < searchTerms.psc.services.length; i++) {
       if (searchTerms.psc.services[i].name == elem.value) {
         console.log(searchTerms.psc.services[i].name)
         searchTerms.psc.services[i].value = elem.checked
+        if (searchItemSuggestions.psc.it.includes(searchTerms.psc.services[i].name) && elem.checked == false) {
+          document.getElementById("search-item-suggestion-2").checked = false
+        }
+        if (searchItemSuggestions.psc.professional.includes(searchTerms.psc.services[i].name) && elem.checked == false) {
+          document.getElementById("search-item-suggestion-3").checked = false
+        }
       }
     }
   } else if (elem.classList.contains('checkbox-psc-product')) {
@@ -2518,6 +2305,258 @@ function calculateSearch(elem) {
     }
   }
   checkChecked()
+}
+
+function calculateSuggestion(which) {
+  var toRun = []
+  if (which == 0) {
+    var a = document.getElementsByClassName('checkbox-subnaics')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.naics.it.includes(a[i].value)) {
+        toRun.push(a[i])
+      }
+    }
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-0").checked
+      if (toRun[i].classList.contains('checkbox-subnaics')) {
+        for (i2 = 0; i2 < searchTerms.naics.length; i2++) {
+          if (searchTerms.naics[i2].subcategories) {
+            for (i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
+              if (searchTerms.naics[i2].subcategories[i3].code == toRun[i].value) {
+                if (toRun[i].checked) {
+                  if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                    calculateNaicsSearch(i2)
+                  }
+                } else {
+                  if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                    calculateNaicsSearch(i2)
+                  }
+                }
+                searchTerms.naics[i2].subcategories[i3].value = toRun[i].checked
+              } else if (searchTerms.naics[i2].subcategories[i3].subcategories) {
+                for (i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
+                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code == toRun[i].value) {
+                    if (toRun[i].checked) {
+                      if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                        calculateNaicsSearch(''+i2)
+                      }
+                      if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                        calculateNaicsSearch(i2+'-'+i3)
+                      }
+                    } else {
+                      if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                        calculateNaicsSearch(''+i2)
+                      }
+                      if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                        calculateNaicsSearch(i2+'-'+i3)
+                      }
+                    }
+                    searchTerms.naics[i2].subcategories[i3].subcategories[i4].value = toRun[i].checked
+                  } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories) {
+                    for (i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == toRun[i].value) {
+                        if (toRun[i].checked) {
+                          if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                            calculateNaicsSearch(''+i2)
+                          }
+                          if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                            calculateNaicsSearch(i2+'-'+i3)
+                          }
+                          if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
+                            calculateNaicsSearch(i2+'-'+i3+'-'+i4)
+                          }
+                        } else {
+                          if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                            calculateNaicsSearch(''+i2)
+                          }
+                          if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                            calculateNaicsSearch(i2+'-'+i3)
+                          }
+                          if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
+                            calculateNaicsSearch(i2+'-'+i3+'-'+i4)
+                          }
+                        }
+                        searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = toRun[i].checked
+                      } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories) {
+                        for (i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
+                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code == toRun[i].value) {
+                            if (toRun[i].checked) {
+                              if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                                calculateNaicsSearch(''+i2)
+                              }
+                              if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                                calculateNaicsSearch(i2+'-'+i3)
+                              }
+                              if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
+                                calculateNaicsSearch(i2+'-'+i3+'-'+i4)
+                              }
+                              if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4+"-"+i5).classList.contains('inactive')) {
+                                calculateNaicsSearch(i2+'-'+i3+'-'+i4+'-'+i5)
+                              }
+                            } else {
+                              if (!document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                                calculateNaicsSearch(''+i2)
+                              }
+                              if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                                calculateNaicsSearch(i2+'-'+i3)
+                              }
+                              if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
+                                calculateNaicsSearch(i2+'-'+i3+'-'+i4)
+                              }
+                              if (!document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4+"-"+i5).classList.contains('inactive')) {
+                                calculateNaicsSearch(i2+'-'+i3+'-'+i4+'-'+i5)
+                              }
+                            }
+                            searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].value = toRun[i].checked
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    checkChecked()
+  } else if (which == 1) {
+    var a = document.getElementsByClassName('checkbox-subnaics')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.naics.professional.includes(a[i].value)) {
+        toRun.push(a[i])
+      }
+    }
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-1").checked
+      if (toRun[i].classList.contains('checkbox-subnaics')) {
+        for (i2 = 0; i2 < searchTerms.naics.length; i2++) {
+          if (searchTerms.naics[i2].subcategories) {
+            for (i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
+              if (searchTerms.naics[i2].subcategories[i3].code == toRun[i].value) {
+                if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                  calculateNaicsSearch(i2)
+                }
+                searchTerms.naics[i2].subcategories[i3].value = toRun[i].checked
+              } else if (searchTerms.naics[i2].subcategories[i3].subcategories) {
+                for (i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
+                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code == toRun[i].value) {
+                    if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                      calculateNaicsSearch(''+i2)
+                    }
+                    if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                      calculateNaicsSearch(i2+'-'+i3)
+                    }
+                    searchTerms.naics[i2].subcategories[i3].subcategories[i4].value = toRun[i].checked
+                  } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories) {
+                    for (i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == toRun[i].value) {
+                        if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                          calculateNaicsSearch(i2)
+                        }
+                        if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                          calculateNaicsSearch(i2+'-'+i3)
+                        }
+                        if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
+                          calculateNaicsSearch(i2+'-'+i3+'-'+i4)
+                        }
+                        searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = toRun[i].checked
+                      } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories) {
+                        for (i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
+                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code == toRun[i].value) {
+                            if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
+                              calculateNaicsSearch(i2)
+                            }
+                            if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3).classList.contains('inactive')) {
+                              calculateNaicsSearch(i2+'-'+i3)
+                            }
+                            if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4).classList.contains('inactive')) {
+                              calculateNaicsSearch(i2+'-'+i3+'-'+i4)
+                            }
+                            if (document.getElementById("naics-subcategory-box-"+i2+"-"+i3+"-"+i4+"-"+i5).classList.contains('inactive')) {
+                              calculateNaicsSearch(i2+'-'+i3+'-'+i4+'-'+i5)
+                            }
+                            searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].value = toRun[i].checked
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    checkChecked()
+  } else if (which == 2) {
+    var a = document.getElementsByClassName('checkbox-psc-service')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.psc.it.includes(a[i].value)) {
+        toRun.push(a[i])
+      }
+    }
+    console.log(toRun.length)
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-2").checked
+      if (toRun[i].classList.contains('checkbox-psc-service')) {
+        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
+          if (searchTerms.psc.services[i2].name == toRun[i].value) {
+            searchTerms.psc.services[i2].value = toRun[i].checked
+          }
+        }
+      } else if (toRun[i].classList.contains('checkbox-psc-product')) {
+        for (i2 = 0; i2 < searchTerms.psc.products.length; i2++) {
+          if (searchTerms.psc.products[i2].name == toRun[i].value) {
+            searchTerms.psc.products[i2].value = toRun[i].checked
+            if (searchTerms.psc.products[i2].psc) {
+              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
+                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
+                var a = document.getElementsByClassName('checkbox-subpsc')
+                document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
+              }
+            }
+          }
+        }
+      }
+    }
+    checkChecked()
+  } else if (which == 3) {
+    var a = document.getElementsByClassName('checkbox-psc-service')
+    for (i = 0; i < a.length; i++) {
+      if (searchItemSuggestions.psc.professional.includes(a[i].value)) {
+        console.log(a[i].value)
+        toRun.push(a[i])
+      }
+    }
+    for (i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-3").checked
+      if (toRun[i].classList.contains('checkbox-psc-service')) {
+        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
+          if (searchTerms.psc.services[i2].name == toRun[i].value) {
+            console.log(searchTerms.psc.services[i2].name)
+            searchTerms.psc.services[i2].value = toRun[i].checked
+          }
+        }
+      } else if (toRun[i].classList.contains('checkbox-psc-product')) {
+        for (i = 0; i < searchTerms.psc.products.length; i++) {
+          if (searchTerms.psc.products[i2].name == toRun[i].value) {
+            searchTerms.psc.products[i2].value = toRun[i].checked
+            if (searchTerms.psc.products[i2].psc) {
+              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
+                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
+                var a = document.getElementsByClassName('checkbox-subpsc')
+                document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
+              }
+            }
+          }
+        }
+      }
+    }
+    checkChecked()
+  }
 }
 
 function closeSearchPopup() {
