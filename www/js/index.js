@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var saving = false
 var activeTab = 0
@@ -1661,21 +1661,39 @@ function renderSearch() {
       if (searchTerms.naics[i].subcategories) {
         html = html + '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">'
         for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+          var subcategoryHtml = ''
+          var arrowHtml = ''
+          if (searchTerms.naics[i].subcategories[i2].subcategories) {
+            subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"'
+            arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span>'
+          }
           html = html + '<div class="search-box-checkbox-item">'+
-          '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"> '+
-          searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+'<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span></div>'
+          '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
+          searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>'
           if (searchTerms.naics[i].subcategories[i2].subcategories) {
             html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">'
             for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+              subcategoryHtml = ''
+              arrowHtml = ''
+              if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
+                subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"'
+                arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'" class="checkbox-text-arrow">▼</span>'
+              }
               html = html + '<div class="search-box-checkbox-item">'+
-              '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"> '+
-              searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+'<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'" class="checkbox-text-arrow">▼</span></div>'
+              '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
+              searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+arrowHtml+'</div>'
               if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
                 html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">'
                 for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                  subcategoryHtml = ''
+                  arrowHtml = ''
+                  if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
+                    subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"'
+                    arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="checkbox-text-arrow">▼</span>'
+                  }
                   html = html + '<div class="search-box-checkbox-item">'+
-                  '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"> '+
-                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+'<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="checkbox-text-arrow">▼</span></div>'
+                  '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
+                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>'
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
                     html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">'
                     for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
@@ -4082,6 +4100,8 @@ function toggleHamburgerMenu() {
           document.getElementById("password").value = password1
           console.log('registered')
           login()
+        } else {
+          console.log(JSON.parse(xhttp.responseText))
         }
       }
       xhttp.open("POST", apiUrl+'/register/', true);
