@@ -1208,6 +1208,9 @@ function openSearchItems(which) {
     }
     if (document.getElementById("new-search").classList.contains('inactive')) {
       generateSearchHTML(which)
+      // if (document.getElementById("search-name").classList.contains('invalid-input')) {
+      //   document.getElementById("search-name-popup").classList.remove('inactive')
+      // }
       viewSearch(-1)
       document.getElementById("double-search-buttons").classList.add('inactive')
       document.getElementById("single-search-button").classList.remove('inactive')
@@ -1215,6 +1218,8 @@ function openSearchItems(which) {
       document.getElementById("search-name").classList.remove('inactive')
       document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
+      document.getElementById("search-name").classList.remove('invalid-input')
+      document.getElementById("search-name-popup").classList.add('inactive')
       document.getElementById("double-search-buttons").classList.remove('inactive')
       document.getElementById("single-search-button").classList.add('inactive')
       document.getElementById("new-search").innerHTML = ''
@@ -2620,13 +2625,23 @@ function validSearchName(name) {
   return true
 }
 
+var emptySearchName = false
 function checkSearchName(elem) {
-  if (validSearchName(elem.value)) {
-    document.getElementById("search-name").classList.remove('invalid-input')
-    document.getElementById("search-name-popup").classList.add('inactive')
+  if (emptySearchName) {
+    if (document.getElementById("search-name").value.length > 0) {
+      document.getElementById("search-name").classList.remove('invalid-input')
+      document.getElementById("search-name-popup").classList.add('inactive')
+      emptySearchName = false
+    }
   } else {
-    document.getElementById("search-name").classList.add('invalid-input')
-    document.getElementById("search-name-popup").classList.remove('inactive')
+    if (validSearchName(elem.value)) {
+      document.getElementById("search-name").classList.remove('invalid-input')
+      document.getElementById("search-name-popup").classList.add('inactive')
+    } else {
+      document.getElementById("search-name").classList.add('invalid-input')
+      document.getElementById("search-name-popup").innerHTML = 'Name in use'
+      document.getElementById("search-name-popup").classList.remove('inactive')
+    }
   }
 }
 
@@ -2716,6 +2731,11 @@ function saveSearchTerms() {
         xhttp.send(JSON.stringify(huntingPartyData));
       }
     }
+  } else {
+    emptySearchName = true
+    document.getElementById("search-name").classList.add('invalid-input')
+    document.getElementById("search-name-popup").innerHTML = 'Search must have a name'
+    document.getElementById("search-name-popup").classList.remove('inactive')
   }
 }
 
