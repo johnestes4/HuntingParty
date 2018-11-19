@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var saving = false
 var activeTab = 0
@@ -882,6 +882,7 @@ function renderSavedSearches() {
 
   yourSearches = []
   var onlyYourSearches = []
+  var otherPeoplesSearches = []
   var searchDropdownHtml = '<option value="-1">All Searches</option>'
   var searchIndex = 0
   for (i = 0; i < huntingPartyData.users.length; i++) {
@@ -901,6 +902,7 @@ function renderSavedSearches() {
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
           yourSearches.push(huntingPartyData.users[i].searches[i2])
+          otherPeoplesSearches.push(huntingPartyData.users[i].searches[i2])
           searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
           searchIndex++
         }
@@ -911,7 +913,7 @@ function renderSavedSearches() {
   html = html + '<div class="search-item">'+
   '<div class="search-item-header" onclick="openSearchItems('+0+')">'+
   '<div class="category-text">'+
-  'Saved Searches: '+
+  'Your Searches: '+
   '</div>'+
   '<div class="category-right">'+
   '<p class="category-arrow" id="category-arrow-0">›</p>'+
@@ -919,8 +921,8 @@ function renderSavedSearches() {
   '</div>'+
   '<div id="saved-searches" class="search-item-subbox inactive">'
 
+  var arrowIndex = 3
   for (i = 0; i < onlyYourSearches.length; i++) {
-    var arrowIndex = i+2
     html = html + '<div class="search-item">'+
     '<div class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
     '<div class="category-text">'+
@@ -934,11 +936,45 @@ function renderSavedSearches() {
     'asdasdasd'+
     '</div>'+
     '</div>'
+    arrowIndex++
   }
+
   html = html + '</div>'+
   '</div>'
 
   document.getElementById("saved-search-view").innerHTML = html
+  if (otherPeoplesSearches.length > 0) {
+    html = '<div class="search-item">'+
+    '<div class="search-item-header" onclick="openSearchItems('+2+')">'+
+    '<div class="category-text">'+
+    'Coworkers\' Searches: '+
+    '</div>'+
+    '<div class="category-right">'+
+    '<p class="category-arrow" id="category-arrow-2">›</p>'+
+    '</div>'+
+    '</div>'+
+    '<div id="other-saved-searches" class="search-item-subbox inactive">'
+
+    for (i = 0; i < otherPeoplesSearches.length; i++) {
+      html = html + '<div class="search-item">'+
+      '<div class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
+      '<div class="category-text">'+
+      otherPeoplesSearches[i].name+
+      '</div>'+
+      '<div class="category-right">'+
+      '<p class="category-arrow" id="category-arrow-'+arrowIndex+'">›</p>'+
+      '</div>'+
+      '</div>'+
+      '<div id="search-item-'+arrowIndex+'" class="search-item-subbox coworker-search inactive">'+
+      '</div>'+
+      '</div>'
+      arrowIndex++
+    }
+
+    html = html + '</div>'+
+    '</div>'
+    document.getElementById("other-saved-search-view").innerHTML = html
+  }
 }
 
 
@@ -1227,6 +1263,14 @@ function openSearchItems(which) {
       document.getElementById("search-name").classList.add('inactive')
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
+  } else if (which == 2) {
+    if (document.getElementById("other-saved-searches").classList.contains('inactive')) {
+      document.getElementById("other-saved-searches").classList.remove('inactive')
+      document.getElementById("category-arrow-"+which).classList.add('rotate')
+    } else {
+      document.getElementById("other-saved-searches").classList.add('inactive')
+      document.getElementById("category-arrow-"+which).classList.remove('rotate')
+    }
   } else {
     if (!document.getElementById("search-item-"+previousSearchTermsIndex)) {
       generateSearchHTML(1)
@@ -1236,16 +1280,20 @@ function openSearchItems(which) {
       previousSearchTermsIndex = null
     }
     if (document.getElementById("search-item-"+which).classList.contains('inactive')) {
-      if (document.getElementById("double-search-buttons") && document.getElementById("single-search-button")) {
-        document.getElementById("double-search-buttons").classList.remove('inactive')
-        document.getElementById("single-search-button").classList.add('inactive')
-      }
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
       document.getElementById("category-arrow-"+which).classList.add('rotate')
       generateSearchHTML(which)
-      var searchIndex = which - 2
+      if (document.getElementById("search-item-"+which).classList.contains('coworker-search')) {
+        console.log('it does')
+        document.getElementById("double-search-buttons").classList.add('inactive')
+        document.getElementById("single-search-button").classList.add('inactive')
+      } else if (document.getElementById("double-search-buttons") && document.getElementById("single-search-button")) {
+        document.getElementById("double-search-buttons").classList.remove('inactive')
+        document.getElementById("single-search-button").classList.add('inactive')
+      }
+      var searchIndex = which - 3
       viewSearch(searchIndex)
       document.getElementById("search-item-"+which).classList.remove('inactive')
       previousSearchTermsIndex = which
