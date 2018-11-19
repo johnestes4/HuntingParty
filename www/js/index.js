@@ -1316,6 +1316,8 @@ function filterOpportunitiesBySearch(elem) {
 function deleteSearchTerms() {
   if (!saving) {
     saving = true
+    document.getElementById('search-save-loading').classList.remove('inactive')
+    document.getElementById('search-save-popup-bg').classList.remove('inactive')
     if (activeSearchIndex > -1) {
       var searchSucceeded = false
       for (i = 0; i < huntingPartyData.users.length; i++) {
@@ -1341,6 +1343,8 @@ function deleteSearchTerms() {
             renderSavedSearches()
             switchTab(1)
             openSearchItems(0)
+            document.getElementById('search-save-loading').classList.add('inactive')
+            document.getElementById('search-save-popup-bg').classList.add('inactive')
             saving = false
           }
         };
