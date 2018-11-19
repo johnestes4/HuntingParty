@@ -338,6 +338,7 @@ var emptySearchTerms = {
   ],
   keyword: '',
 }
+var emptySearchTerms2 = null
 var yesRefer = []
 var noRefer = []
 var referRefer = []
@@ -648,15 +649,18 @@ function checkChecked() {
 }
 
 function resetSearchTerms() {
-  searchTerms.agency = emptySearchTerms.agency
-  searchTerms.dueDate = emptySearchTerms.dueDate
-  searchTerms.keyword = emptySearchTerms.keyword
-  searchTerms.naics = emptySearchTerms.naics
-  searchTerms.name = emptySearchTerms.name
-  searchTerms.place = emptySearchTerms.place
-  searchTerms.psc = emptySearchTerms.psc
-  searchTerms.setAside = emptySearchTerms.setAside
-  searchTerms.type = emptySearchTerms.type
+  console.log('starting')
+  searchTerms = emptySearchTerms
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      var res = JSON.parse(xhttp.responseText);
+      emptySearchTerms = JSON.parse(xhttp.responseText);
+      console.log('done')
+    }
+  }
+  xhttp.open("GET", apiUrl+"/fbo/getsearchterms/", true);
+  xhttp.send();
 }
 
 function viewSearch(index) {
@@ -2692,6 +2696,7 @@ function saveSearchTerms() {
             document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
             console.log(emptySearchTerms)
             console.log('----------')
+            resetSearchTerms()
             console.log(emptySearchTerms)
             renderSavedSearches()
             if (!document.getElementById("new-search").classList.contains('inactive')) {
@@ -2701,7 +2706,6 @@ function saveSearchTerms() {
               openSearchItems(0)
             }
             switchTab(1)
-            resetSearchTerms()
             saving = false
             console.log('UPDATED')
           }
