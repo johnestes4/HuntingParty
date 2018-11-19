@@ -1889,7 +1889,7 @@ function renderSearch() {
   html = ''
   for (i = 0; i < searchTerms.setAside.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input class="search-box-checkbox checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'"> <div class="search-box-checkbox-text"> '+searchTerms.setAside[i].name+'</div>'
+    '<input class="search-box-checkbox checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.setAside[i].name+'</div>'
     if (i == 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<p style="margin: 0px;">----------</p>'+
@@ -2385,20 +2385,20 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-setaside')) {
-    if (elem.value == searchTerms.setaside[0].name) {
-      for (i = 0; i < searchTerms.setaside.length; i++) {
-        searchTerms.setaside[i].value = elem.checked
+    if (elem.value == searchTerms.setAside[0].name) {
+      for (i = 0; i < searchTerms.setAside.length; i++) {
+        searchTerms.setAside[i].value = elem.checked
       }
       var a = document.getElementsByClassName('checkbox-setaside')
       for (i2 = 0; i2 < a.length; i2++) {
         a[i2].checked = elem.checked
       }
     } else {
-      for (i = 0; i < searchTerms.setaside.length; i++) {
-        if (searchTerms.setaside[i].name == elem.value) {
-          searchTerms.setaside[i].value = elem.checked
+      for (i = 0; i < searchTerms.setAside.length; i++) {
+        if (searchTerms.setAside[i].name == elem.value) {
+          searchTerms.setAside[i].value = elem.checked
           if (!elem.checked) {
-            searchTerms.setaside[0].value = false
+            searchTerms.setAside[0].value = false
             var a = document.getElementsByClassName('checkbox-setaside')
             a[0].checked = false
           }
