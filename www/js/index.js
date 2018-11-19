@@ -523,7 +523,7 @@ function checkChecked() {
   var filtersHtml = ''
   if (searchTerms.type[0].value == true) {
     // document.getElementById("category-right-duedate").innerHTML = "All >";
-    filtersHtml = filtersHtml + '<div class="filters-item">Type<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">Type<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   } else {
     for (i = 1; i < searchTerms.type.length; i++) {
       if (searchTerms.type[i].value == true) {
@@ -533,14 +533,14 @@ function checkChecked() {
     }
     // document.getElementById("category-right-duedate").innerHTML = numberChecked + " >";
     if (numberChecked > 0) {
-      filtersHtml = filtersHtml + '<div class="filters-item">Type ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+      filtersHtml = filtersHtml + '<div class="filters-item">Type ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.dueDate[0].value == true) {
     // document.getElementById("category-right-duedate").innerHTML = "All >";
-    filtersHtml = filtersHtml + '<div class="filters-item">Due Date<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">Due Date<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   } else {
     for (i = 1; i < searchTerms.dueDate.length; i++) {
       if (searchTerms.dueDate[i].value == true) {
@@ -550,13 +550,13 @@ function checkChecked() {
     }
     // document.getElementById("category-right-duedate").innerHTML = numberChecked + " >";
     if (numberChecked > 0) {
-      filtersHtml = filtersHtml + '<div class="filters-item">Due Date ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+      filtersHtml = filtersHtml + '<div class="filters-item">Due Date ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.naics[0].value == true) {
-    filtersHtml = filtersHtml + '<div class="filters-item">NAICS<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">NAICS<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     // document.getElementById("category-right-naics").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.naics.length; i++) {
@@ -566,7 +566,7 @@ function checkChecked() {
       }
     }
     if (numberChecked > 0) {
-      filtersHtml = filtersHtml + '<div class="filters-item">NAICS ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+      filtersHtml = filtersHtml + '<div class="filters-item">NAICS ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
     numberChecked = 0
     checkedName = ''
@@ -578,7 +578,7 @@ function checkChecked() {
     }
   }
   if (numberChecked > 0) {
-    filtersHtml = filtersHtml + '<div class="filters-item">Product ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">Product ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   }
   // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
   numberChecked = 0
@@ -590,13 +590,13 @@ function checkChecked() {
     }
   }
   if (numberChecked > 0) {
-    filtersHtml = filtersHtml + '<div class="filters-item">Service ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">Service ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   }
   // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
   numberChecked = 0
   checkedName = ''
   if (searchTerms.agency[0].value == true) {
-    filtersHtml = filtersHtml + '<div class="filters-item">Agency<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">Agency<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     // document.getElementById("category-right-agency").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.agency.length; i++) {
@@ -606,14 +606,14 @@ function checkChecked() {
       }
     }
     if (numberChecked > 0) {
-      filtersHtml = filtersHtml + '<div class="filters-item">Agency ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+      filtersHtml = filtersHtml + '<div class="filters-item">Agency ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
     // document.getElementById("category-right-agency").innerHTML = numberChecked + " >";
     numberChecked = 0
     checkedName = ''
   }
   if (searchTerms.place[0].value == true) {
-    filtersHtml = filtersHtml + '<div class="filters-item">Location<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">Location<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   } else {
     checkedName = ''
     for (i = 0; i < searchTerms.place.length; i++) {
@@ -623,12 +623,12 @@ function checkChecked() {
       }
     }
     if (numberChecked > 0) {
-      filtersHtml = filtersHtml + '<div class="filters-item">Location ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+      filtersHtml = filtersHtml + '<div class="filters-item">Location ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
   }
   numberChecked = 0
   if (searchTerms.setAside[0].value == true) {
-    filtersHtml = filtersHtml + '<div class="filters-item">Set Aside<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+    filtersHtml = filtersHtml + '<div class="filters-item">Set Aside<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     // document.getElementById("category-right-setaside").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.setAside.length; i++) {
@@ -637,7 +637,7 @@ function checkChecked() {
       }
     }
     if (numberChecked > 0) {
-      filtersHtml = filtersHtml + '<div class="filters-item">Set Aside ('+numberChecked+')<div class="filters-item-x"><img src="./img/close.png" alt=""></div></div>'
+      filtersHtml = filtersHtml + '<div class="filters-item">Set Aside ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
     // document.getElementById("category-right-setaside").innerHTML = numberChecked + " >";
     numberChecked = 0
@@ -2629,7 +2629,6 @@ function calculateSuggestion(which) {
     var a = document.getElementsByClassName('checkbox-psc-service')
     for (i = 0; i < a.length; i++) {
       if (searchItemSuggestions.psc.professional.includes(a[i].value)) {
-        console.log(a[i].value)
         toRun.push(a[i])
       }
     }
@@ -2638,7 +2637,6 @@ function calculateSuggestion(which) {
       if (toRun[i].classList.contains('checkbox-psc-service')) {
         for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
           if (searchTerms.psc.services[i2].name == toRun[i].value) {
-            console.log(searchTerms.psc.services[i2].name)
             searchTerms.psc.services[i2].value = toRun[i].checked
           }
         }
@@ -4604,35 +4602,79 @@ function toggleHamburgerMenu() {
   }
 
   function openPopups(which) {
-    document.getElementById("fbo-popups").classList.remove('inactive');
-    var usersList = []
-    for (i = 0; i < huntingPartyData.users.length; i++) {
-      if (huntingPartyData.users[i].userId !== currentUser._id) {
-        usersList.push(huntingPartyData.users[i])
-      }
-    }
     if (which == 0) {
-      var a = document.getElementsByClassName('yes-popup')
-      for (i = 0; i < a.length; i++) {
-        a[i].classList.remove('inactive');
+      var alreadyVoted = false
+      var fbo = fbosIn[fboIndex]
+      if (activeTab == 2) {
+        fbo = fbosIn[fboIndex]
+      } else if (activeTab == 3) {
+        fbo = fboPipeline[fboIndex]
       }
-      var usersHtml = ''
-      for (i = 0; i < usersList.length; i++) {
-        usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
-        if (i < usersList.length-1) {
-          // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+      for (var i = 0; i < fbo.voteYes.length; i++) {
+        if (fbo.voteYes[i].id == currentUser._id) {
+          alreadyVoted = true
+          break
         }
       }
-      document.getElementById("yes-popup-users-list").innerHTML = usersHtml
-      document.getElementById("refer-users-list").innerHTML = ''
-    } else if (which == 1) {
-      var a = document.getElementsByClassName('no-popup')
-      for (i = 0; i < a.length; i++) {
-        a[i].classList.remove('inactive');
+      if (!alreadyVoted) {
+        document.getElementById("fbo-popups").classList.remove('inactive');
+        var usersList = []
+        for (i = 0; i < huntingPartyData.users.length; i++) {
+          if (huntingPartyData.users[i].userId !== currentUser._id) {
+            usersList.push(huntingPartyData.users[i])
+          }
+        }
+        var a = document.getElementsByClassName('yes-popup')
+        for (i = 0; i < a.length; i++) {
+          a[i].classList.remove('inactive');
+        }
+        var usersHtml = ''
+        for (i = 0; i < usersList.length; i++) {
+          usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
+          if (i < usersList.length-1) {
+            // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+          }
+        }
+        document.getElementById("yes-popup-users-list").innerHTML = usersHtml
+        document.getElementById("refer-users-list").innerHTML = ''
       }
-      document.getElementById("yes-popup-users-list").innerHTML = ''
-      document.getElementById("refer-users-list").innerHTML = ''
+    } else if (which == 1) {
+      var alreadyVoted = false
+      var fbo = fbosIn[fboIndex]
+      if (activeTab == 2) {
+        fbo = fbosIn[fboIndex]
+      } else if (activeTab == 3) {
+        fbo = fboPipeline[fboIndex]
+      }
+      for (var i = 0; i < fbo.voteNo.length; i++) {
+        if (fbo.voteNo[i].id == currentUser._id) {
+          alreadyVoted = true
+          break
+        }
+      }
+      if (!alreadyVoted) {
+        document.getElementById("fbo-popups").classList.remove('inactive');
+        var usersList = []
+        for (i = 0; i < huntingPartyData.users.length; i++) {
+          if (huntingPartyData.users[i].userId !== currentUser._id) {
+            usersList.push(huntingPartyData.users[i])
+          }
+        }
+        var a = document.getElementsByClassName('no-popup')
+        for (i = 0; i < a.length; i++) {
+          a[i].classList.remove('inactive');
+        }
+        document.getElementById("yes-popup-users-list").innerHTML = ''
+        document.getElementById("refer-users-list").innerHTML = ''
+      }
     } else if (which == 2) {
+      document.getElementById("fbo-popups").classList.remove('inactive');
+      var usersList = []
+      for (i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].userId !== currentUser._id) {
+          usersList.push(huntingPartyData.users[i])
+        }
+      }
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
         usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
@@ -5442,7 +5484,7 @@ function toggleHamburgerMenu() {
     // TAB SWITCH HERE
     switchTab(2)
     openSearchItems(0)
-    // openSearchItems(1)
+    // openSearchItems(3)
     // goToFbo(0,0);
     // openFboDetail(5)
     // viewSearch(0)
