@@ -360,17 +360,17 @@ var searchItemSuggestions = {
       '541512',
       '541513',
       '541519',
-      '561320',
-      '518210',
-      '541990',
-      '611420'
+      '56132',
+      '518',
+      '54199',
+      '61142'
     ],
     professional: [
       '541611',
       '541618',
-      '541990',
-      '561110',
-      '561320'
+      '54199',
+      '5611',
+      '56132'
     ]
   },
   psc: {
@@ -489,13 +489,16 @@ function logOut() {
   currentUser = null;
   company = null;
   fbos = [];
+  yourSearches = []
+  resetSearchTerms()
   loggedIn = false;
-  document.getElementById("loading").classList.add('inactive');
-  document.getElementById("main-view").classList.add('inactive');
-  document.getElementById("fbo-view").classList.add('inactive');
-  document.getElementById("fbo-list-view").classList.add('inactive');
-  document.getElementById("fbo-detail-view").classList.add('inactive');
-  document.getElementById("login-register").classList.remove('inactive');
+  // document.getElementById("loading").classList.add('inactive');
+  // document.getElementById("main-view").classList.add('inactive');
+  // document.getElementById("fbo-view").classList.add('inactive');
+  // document.getElementById("fbo-list-view").classList.add('inactive');
+  // document.getElementById("fbo-detail-view").classList.add('inactive');
+  // document.getElementById("login-register").classList.remove('inactive');
+  location.reload();
 }
 
 function hello() {
@@ -4166,7 +4169,6 @@ function toggleHamburgerMenu() {
         password: password1,
         huntingparty: true
       }
-      console.log(newUser)
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
