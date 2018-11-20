@@ -3265,7 +3265,7 @@ function toggleHamburgerMenu() {
     var noProxies = 0
     function parseProxy(proxy, index) {
       var dueDate = ''
-      var due = 'No Due Date'
+      var due = '<span style="font-size: 10px">No Due Date</span>'
       // console.log(proxy.fbo)
       if (!proxy.fbo) {
         noProxies++
@@ -3409,7 +3409,7 @@ function toggleHamburgerMenu() {
             '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
             '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
             '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 75px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
             '</div>'+
             '</div>'+
             '</div>'+
@@ -3437,7 +3437,7 @@ function toggleHamburgerMenu() {
           '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
           '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
           '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-          '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 75px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+          '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
           '</div>'+
           '</div>'+
           '</div>'+
@@ -4420,7 +4420,7 @@ function toggleHamburgerMenu() {
       if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
         dueDateHtml = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
       } else {
-        dueDateHtml = 'No Due Date'
+        dueDateHtml = '<span style="font-size: 12px">No Due Date</span>'
       }
       var naicsHtml = ''
       if (proxy.fbo.naics) {
@@ -4485,8 +4485,8 @@ function toggleHamburgerMenu() {
             // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
             document.getElementById("fbo-details-date").innerHTML = due
           } else {
-            dueDate = "<p'>No Due Date</p>"
-            document.getElementById("fbo-detail-left-details-date").innerHTML = 'No Due Date'
+            dueDate = "<span style='font-size: 10px'>No Due Date</span>"
+            document.getElementById("fbo-details-date").innerHTML = dueDate
           }
           // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
           document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
