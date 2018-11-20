@@ -2700,7 +2700,7 @@ function checkSearchName(elem) {
 
 function saveSearchTerms() {
   if (document.getElementById("search-name").value.length > 0) {
-    if (!saving && validSearchName(document.getElementById("search-name").value)) {
+    if (!saving && (validSearchName(document.getElementById("search-name").value) || activeSearchIndex > -1)) {
       saving = true
       document.getElementById('search-save-loading').classList.remove('inactive')
       document.getElementById('search-save-popup-bg').classList.remove('inactive')
