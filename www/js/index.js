@@ -4898,6 +4898,8 @@ function toggleHamburgerMenu() {
             body: newsString
           }
           document.getElementById("fbo-details-input").value = ''
+          document.getElementById("fbo-details-likes").innerHTML = fbo.voteYes.length
+          document.getElementById("fbo-details-dislikes").innerHTML = fbo.voteNo.length
           generateNewsItem(newsItem)
           saving = false
           if (adCounter >= 3) {
