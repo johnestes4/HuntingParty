@@ -3396,20 +3396,20 @@ function toggleHamburgerMenu() {
           if (!expired) {
             fboHtml = fboHtml + '<div class="fbo-item-wrapper">'+
             '<div class="fbo-item-wrapper-inner">'+
-            '<div class="fbo-item" onclick="goToFbo(' + index + ', 0)">'+
+            '<div class="fbo-item">'+
             // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
-            '<div class="fbo-item-avatar">'+
+            '<div class="fbo-item-avatar" onclick="goToFbo(' + index + ', 0)">'+
             '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
             '</div>'+
             '<div class="fbo-item-body">'+
-            '<div class="fbo-item-title">'+
+            '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
             '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
             '</div>'+
             '<div class="fbo-item-icons">'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-            '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+            '<div class="fbo-item-icon-item" onclick="goToFbo(' + index + ', 0)"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;" onclick="vote('+index+', true)"><img class="fbo-item-icon-img fbo-item-icon-img-vote" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
+            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;" onclick="vote('+index+', false)"><img class="fbo-item-icon-img fbo-item-icon-img-vote" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
+            '<div class="fbo-item-icon-date" onclick="goToFbo(' + index + ', 0)"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
             '</div>'+
             '</div>'+
             '</div>'+
@@ -3424,13 +3424,13 @@ function toggleHamburgerMenu() {
           pipelineHtml = pipelineHtml +
           '<div class="fbo-item-wrapper">'+
           '<div class="fbo-item-wrapper-inner">'+
-          '<div class="fbo-item" onclick="goToFbo(' + index + ', 1)">'+
+          '<div class="fbo-item">'+
           // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
-          '<div class="fbo-item-avatar">'+
+          '<div class="fbo-item-avatar" onclick="goToFbo(' + index + ', 1)">'+
           '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
           '</div>'+
           '<div class="fbo-item-body">'+
-          '<div class="fbo-item-title">'+
+          '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
           '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
           '</div>'+
           '<div class="fbo-item-icons">'+
@@ -4819,103 +4819,107 @@ function toggleHamburgerMenu() {
   }
 
   function vote(index, yes) {
-    var fbo = fbos[index]
-    if (activeTab == 2) {
-      fbo = fbosIn[index]
-    } else if (activeTab == 3) {
-      fbo = fboPipeline[index]
-    }
-    var vote = {
-      id: currentUser._id,
-      name: currentUser.firstName + ' ' + currentUser.lastName,
-      avatar: currentUser.avatar,
-      position: '',
-      comment: '',
-      date: ''
-    }
-    var now = new Date()
-    now = now.getTime()
-    vote.date = now
-    for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
-      if (currentUser.companyUserProxies[i].company) {
-        if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
-          vote.position = currentUser.companyUserProxies[i].position
-          break
+    if (!saving) {
+      saving = true
+      var fbo = fbos[index]
+      if (activeTab == 2) {
+        fbo = fbosIn[index]
+      } else if (activeTab == 3) {
+        fbo = fboPipeline[index]
+      }
+      var vote = {
+        id: currentUser._id,
+        name: currentUser.firstName + ' ' + currentUser.lastName,
+        avatar: currentUser.avatar,
+        position: '',
+        comment: '',
+        date: ''
+      }
+      var now = new Date()
+      now = now.getTime()
+      vote.date = now
+      for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
+        if (currentUser.companyUserProxies[i].company) {
+          if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
+            vote.position = currentUser.companyUserProxies[i].position
+            break
+          }
         }
       }
-    }
-    var voteChanged = false
-    // fbo.voteNo = []
-    // fbo.voteYes = []
+      var voteChanged = false
+      // fbo.voteNo = []
+      // fbo.voteYes = []
 
-    if (yes) {
-      for (var i = 0; i < fbo.voteNo.length; i++) {
-        if (fbo.voteNo[i].id == currentUser._id) {
-          fbo.voteNo.splice(i,1)
-          break
+      if (yes) {
+        for (var i = 0; i < fbo.voteNo.length; i++) {
+          if (fbo.voteNo[i].id == currentUser._id) {
+            fbo.voteNo.splice(i,1)
+            break
+          }
         }
-      }
-      voteChanged = true
-      vote.comment = document.getElementById("fbo-details-input").value
-      fbo.voteYes.push(vote)
-    } else if (!yes) {
-      for (var i = 0; i < fbo.voteYes.length; i++) {
-        if (fbo.voteYes[i].id == currentUser._id) {
-          fbo.voteYes.splice(i,1)
-          break
+        voteChanged = true
+        vote.comment = document.getElementById("fbo-details-input").value
+        fbo.voteYes.push(vote)
+      } else if (!yes) {
+        for (var i = 0; i < fbo.voteYes.length; i++) {
+          if (fbo.voteYes[i].id == currentUser._id) {
+            fbo.voteYes.splice(i,1)
+            break
+          }
         }
+        voteChanged = true
+        vote.comment = document.getElementById("fbo-details-input").value
+        fbo.voteNo.push(vote)
       }
-      voteChanged = true
-      vote.comment = document.getElementById("fbo-details-input").value
-      fbo.voteNo.push(vote)
+      console.log(vote)
+      var fboSubject = fbo.fbo.subject
+      var req = {};
+      req['voteYes'] = fbo.voteYes;
+      req['voteNo'] = fbo.voteNo;
+      var fboId = fbo._id
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('it voted')
+          fbo = JSON.parse(xhttp.responseText)
+          checkVote(fbo)
+          if (peopleToRefer.length + yesRefer.length + noRefer.length > 0) {
+            sendReferNotifications(false)
+          }
+          var newsString = ''
+          console.log(fbo)
+          if (yes) {
+            newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted YES on ' + fboSubject
+          } else {
+            newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted NO on ' + fboSubject
+          }
+          var newsItem = {
+            type: 'vote',
+            body: newsString
+          }
+          document.getElementById("fbo-details-input").value = ''
+          generateNewsItem(newsItem)
+          saving = false
+          if (adCounter >= 3) {
+            showAd()
+          } else {
+            adCounter++
+            closePopups(true)
+            closePopups(false)
+            renderFbos()
+            switchTab(activeTab)
+          }
+          addPoints(50)
+          yesRefer = []
+          noRefer = []
+          referRefer = []
+        }
+      };
+      var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
+      xhttp.open("PUT", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(req));
     }
-    console.log(vote)
-    var fboSubject = fbo.fbo.subject
-    var req = {};
-    req['voteYes'] = fbo.voteYes;
-    req['voteNo'] = fbo.voteNo;
-    var fboId = fbo._id
-    var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        console.log('it voted')
-        fbo = JSON.parse(xhttp.responseText)
-        checkVote(fbo)
-        if (peopleToRefer.length + yesRefer.length + noRefer.length > 0) {
-          sendReferNotifications(false)
-        }
-        var newsString = ''
-        console.log(fbo)
-        if (yes) {
-          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted YES on ' + fboSubject
-        } else {
-          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted NO on ' + fboSubject
-        }
-        var newsItem = {
-          type: 'vote',
-          body: newsString
-        }
-        document.getElementById("fbo-details-input").value = ''
-        generateNewsItem(newsItem)
-        if (adCounter >= 3) {
-          showAd()
-        } else {
-          adCounter++
-          closePopups(true)
-          closePopups(false)
-          renderFbos()
-          switchTab(activeTab)
-        }
-        addPoints(50)
-        yesRefer = []
-        noRefer = []
-        referRefer = []
-      }
-    };
-    var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
-    xhttp.open("PUT", url, true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send(JSON.stringify(req));
   }
 
   function showAd() {

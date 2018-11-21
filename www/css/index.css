@@ -424,6 +424,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0px!important;
 }
 
+.fbo-item-icon-img-vote:active {
+  filter: brightness(95%);
+}
+
 .register-field-alert {
   float: left;
   width: 90%;
