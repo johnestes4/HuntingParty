@@ -1363,7 +1363,7 @@ h1, .instructions{
   height: auto;
   text-align: left;
   margin-bottom: 0px;
-  padding: 8px 6px 8px 6px;
+  padding: 18px 6px 8px 6px;
 }
 .comment-bubble {
   max-width: calc(80% - 8px);
@@ -1494,11 +1494,13 @@ h1, .instructions{
   margin: 0px;
 }
 .comment-name {
-  width: 50%;
+  width: auto;
   float: left;
-  font-size: 18px;
-  line-height: 26px;
-  height: 30px;
+  font-size: 15px;
+  height: 15px;
+  position: absolute;
+  top: -22px;
+  left: 8px;
 }
 .comment-time {
   width: 50%;

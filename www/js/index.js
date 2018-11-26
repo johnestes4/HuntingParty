@@ -5015,7 +5015,7 @@ function toggleHamburgerMenu() {
             imgString = '<img class="icon" src="./img/dislike-light.png" alt="">'
           }
           if (vote.id == currentUser._id) {
-            var newString = '<div class="comment">'+
+            var newString = '<div class="comment" style="padding-top: 8px;">'+
             '<div class="comment-right">'+
             '<div class="comment-bubble-yours">'+
             // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
@@ -5049,7 +5049,7 @@ function toggleHamburgerMenu() {
             '<div class="comment-bubble">'+
             // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
             // '<div class="comment-title" style="margin: none!important">'+
-            //   '<p class="comment-name">'+vote.name+'</p>'+
+              '<p class="comment-name">'+vote.name+'</p>'+
             //   '<p class="comment-time">99 mins</p>'+
             // '</div>'+
             '<p class="comment-text">'+imgString+voteString+'</p>'+
