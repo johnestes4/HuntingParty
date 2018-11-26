@@ -2151,7 +2151,7 @@ h1 {
   font-family: 'Lato Semibold', sans-serif;
 }
 .topbar-center-text-2 {
-  line-height: 3vh!important;
+  line-height: calc(7vh / 3.1)!important;
   font-size: 18px;
   width: 100%;
   position: absolute;

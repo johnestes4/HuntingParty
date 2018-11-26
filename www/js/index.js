@@ -4456,6 +4456,29 @@ function toggleHamburgerMenu() {
         naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
         proxy.fbo.naics
       }
+      var psc = proxy.fbo.classCod
+      var pscFound = false
+      for (i = 0; i < searchTerms.psc.products.length; i++) {
+        for (i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
+          if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) == proxy.fbo.classCod) {
+            psc = searchTerms.psc.products[i].psc[i2].name
+            pscFound = true
+            break
+          }
+        }
+        if (pscFound) {
+          break
+        }
+      }
+      if (!pscFound) {
+        for (i = 0; i < searchTerms.psc.services.length; i++) {
+          if (searchTerms.psc.products[i].name.slice(0,1) == proxy.fbo.classCod) {
+            psc = searchTerms.psc.services[i].name
+            pscFound = true
+            break
+          }
+        }
+      }
       // document.getElementById("fbo-details-input").value = ''
       var dataText = '<p><span style="font-weight: bold">Item: </span>'+
       proxy.fbo.type +
@@ -4464,7 +4487,7 @@ function toggleHamburgerMenu() {
       '</p><p><span style="font-weight: bold">Agency: </span>'+
       proxy.fbo.agency+
       '</p><p><span style="font-weight: bold">PSC: </span>'+
-      proxy.fbo.classCod+
+      psc+
       naicsHtml+
       '</p><p><span style="font-weight: bold">Office: </span>'+
       proxy.fbo.office+
