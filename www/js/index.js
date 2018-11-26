@@ -337,6 +337,7 @@ var emptySearchTerms = {
     }
   ],
   keyword: '',
+  keywordWhich: 0
 }
 var emptySearchTerms2 = null
 var yesRefer = []
@@ -898,8 +899,14 @@ function renderSavedSearches() {
   var otherPeoplesSearches = []
   var searchDropdownHtml = '<option value="-1">All Searches</option>'
   var searchIndex = 0
+  var hasYours = false
+  var hasOtherOnes = false
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId == currentUser._id) {
+      if (!hasYours) {
+        searchDropdownHtml = searchDropdownHtml + '<optgroup label="Your Searches">'
+        hasYours = true
+      }
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
           yourSearches.push(huntingPartyData.users[i].searches[i2])
@@ -910,8 +917,16 @@ function renderSavedSearches() {
       }
     }
   }
+  if (hasYours) {
+    searchDropdownHtml = searchDropdownHtml + '</optgroup>'
+    hasYours = true
+  }
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId !== currentUser._id) {
+      if (!hasOtherOnes) {
+        searchDropdownHtml = searchDropdownHtml + '<optgroup label="Coworkers\' Searches">'
+        hasOtherOnes = true
+      }
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
           yourSearches.push(huntingPartyData.users[i].searches[i2])
@@ -921,6 +936,10 @@ function renderSavedSearches() {
         }
       }
     }
+  }
+  if (hasOtherOnes) {
+    searchDropdownHtml = searchDropdownHtml + '</optgroup>'
+    hasOtherOnes = true
   }
   document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml
   html = html + '<div class="search-item">'+
