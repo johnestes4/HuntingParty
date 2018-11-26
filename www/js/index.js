@@ -5004,6 +5004,9 @@ function toggleHamburgerMenu() {
           var avatar = './img/user.png'
           if (vote.avatar) {
             avatar = vote.avatar
+            if (avatar.slice(0,13) == '../../assets/') {
+              avatar = './' + avatar.slice(13)
+            }
           }
           var imgString = ''
           if (vote.vote == 'yes') {
