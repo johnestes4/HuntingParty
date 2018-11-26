@@ -684,6 +684,16 @@ function viewSearch(index) {
   }
 
   renderSearch()
+  if (!searchTerms.keywordWhich) {
+    searchTerms.keywordWhich = 0
+  }
+  if (searchTerms.keywordWhich == 0) {
+    document.getElementById("search-box-keyword-left").classList.add('search-box-keyword-active');
+    document.getElementById("search-box-keyword-right").classList.remove('search-box-keyword-active');
+  } else if (searchTerms.keywordWhich == 1) {
+    document.getElementById("search-box-keyword-left").classList.remove('search-box-keyword-active');
+    document.getElementById("search-box-keyword-right").classList.add('search-box-keyword-active');
+  }
   document.getElementById("search-input-keyword").value = searchTerms.keyword
   var a = document.getElementsByClassName('checkbox-duedate')
   for (i = 0; i < a.length; i++) {
@@ -5512,10 +5522,11 @@ function toggleHamburgerMenu() {
     if (which == 0) {
       document.getElementById("search-box-keyword-left").classList.add('search-box-keyword-active');
       document.getElementById("search-box-keyword-right").classList.remove('search-box-keyword-active');
+      searchTerms.keywordWhich = 0
     } else if (which == 1) {
       document.getElementById("search-box-keyword-left").classList.remove('search-box-keyword-active');
       document.getElementById("search-box-keyword-right").classList.add('search-box-keyword-active');
-
+      searchTerms.keywordWhich = 1
     }
   }
 
