@@ -903,9 +903,11 @@ function renderSavedSearches() {
   var hasOtherOnes = false
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId == currentUser._id) {
-      if (!hasYours) {
-        searchDropdownHtml = searchDropdownHtml + '<optgroup label="Your Searches">'
-        hasYours = true
+      if (!hasYours && huntingPartyData.users[i].searches) {
+        if (huntingPartyData.users[i].searches.length > 0) {
+          searchDropdownHtml = searchDropdownHtml + '<optgroup label="Your Searches">'
+          hasYours = true
+        }
       }
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
@@ -923,9 +925,12 @@ function renderSavedSearches() {
   }
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId !== currentUser._id) {
-      if (!hasOtherOnes) {
-        searchDropdownHtml = searchDropdownHtml + '<optgroup label="Coworkers\' Searches">'
-        hasOtherOnes = true
+      if (!hasOtherOnes && huntingPartyData.users[i].searches) {
+        if (huntingPartyData.users[i].searches.length > 0) {
+          console.log('hm')
+          searchDropdownHtml = searchDropdownHtml + '<optgroup label="Coworkers\' Searches">'
+          hasOtherOnes = true
+        }
       }
       if (huntingPartyData.users[i].searches) {
         for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
@@ -4033,6 +4038,10 @@ function toggleHamburgerMenu() {
     document.getElementById("company-new-view").classList.remove('inactive')
     document.getElementById("company-search-view").classList.add('inactive')
   }
+  function goToCompanySearch() {
+    document.getElementById("company-search-view").classList.remove('inactive')
+    document.getElementById("company-domain-view").classList.add('inactive')
+  }
   function goToCompanyCreate() {
     document.getElementById("login-register").classList.remove('inactive')
     document.getElementById("register-view").classList.add('inactive')
@@ -4044,6 +4053,13 @@ function toggleHamburgerMenu() {
     xhttp.onload = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         allCompanies = JSON.parse(xhttp.responseText);
+        var userDomain
+        for (i = 0; i < currentUser.username.length; i++) {
+          if (currentUser.username[i] == '@') {
+            userDomain = currentUser.username.slice(i+1)
+            break
+          }
+        }
         allCompanies.sort(function(a,b) {
           var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
           if (nameA < nameB) //sort string ascending
@@ -4052,12 +4068,69 @@ function toggleHamburgerMenu() {
           return 1
           return 0 //default return value (no sorting)
         })
-        console.log('got em')
+        var domainMatchingCompanies = []
+        if (userDomain) {
+          for (i = 0; i < allCompanies.length; i++) {
+            if (allCompanies[i].emailDomains) {
+              if (allCompanies[i].emailDomains.length > 0) {
+                console.log(allCompanies[i])
+              }
+              if (allCompanies[i].emailDomains.includes(userDomain)) {
+                domainMatchingCompanies.push(allCompanies[i])
+              }
+            }
+          }
+        }
+        if (domainMatchingCompanies.length > 0) {
+          console.log(domainMatchingCompanies)
+          document.getElementById("company-search-view").classList.add('inactive')
+          document.getElementById("company-domain-view").classList.remove('inactive')
+          if (domainMatchingCompanies.length == 1) {
+            if (domainMatchingCompanies[0].avatar) {
+              document.getElementById("company-domain-img-wrapper").innerHTML = '<img class="company-confirm-img" src="'+domainMatchingCompanies[0].avatar+'" alt="">'
+            } else {
+              document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
+                '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
+              '</div>'
+            }
+            document.getElementById("company-domain-company-name").innerHTML = domainMatchingCompanies[0].name
+            document.getElementById("company-domain-button-company-name").innerHTML = domainMatchingCompanies[0].name
+            companyToJoin = domainMatchingCompanies[0]
+          } else {
+
+          }
+        }
       }
     }
     xhttp.open("GET", apiUrl+'/company/light', true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send();
+  }
+
+  function joinCompany() {
+    if (companyToJoin) {
+      console.log('joining...')
+      var currentDate = (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
+      var request = {
+        "userProfile": currentUser._id,
+        "company": companyToJoin.id,
+        "startDate": currentDate,
+        "endDate": currentDate,
+        "stillAffiliated": true
+      }
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('joined')
+          getTheData()
+        }
+      }
+      xhttp.open("POST", apiUrl+'/companyuserproxy/add/', true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
+      xhttp.setRequestHeader('id',currentUser._id);
+      xhttp.send(JSON.stringify(request));
+    }
   }
 
   function companySearch() {
