@@ -384,14 +384,14 @@ h1, h2, h3, h4, h5, h6 {
   float: left;
 }
 
-#company-confirm-img-wrapper {
+.company-confirm-img-wrapper {
   width: 60vw;
   height: 60vw;
   margin-left: 15vw;
   margin-top: 5vh;
   position: relative;
   overflow: hidden;
-  background: rgba(205,205,205,1);
+  background: rgba(245,245,245,1);
 }
 
 .company-confirm-img {
@@ -413,6 +413,52 @@ h1, h2, h3, h4, h5, h6 {
 
 #company-confirm-desc p {
   margin-bottom: 8px;
+}
+
+#company-join-list {
+  max-height: 20vh;
+  width: 100%;
+  background: rgba(255,255,255,0.2);
+  float: left;
+  margin-bottom: 1vh;
+}
+
+.company-join-item {
+  width: 100%;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  height: 60px;
+  position: relative;
+}
+.company-join-item:active {
+  background: rgba(255,255,255,0.2);
+}
+
+.company-join-item-active {
+  background: rgba(0,98,25,1);
+}
+.company-join-item-active:active {
+  background: rgba(0,98,25,1)!important;
+}
+
+.company-join-item img {
+  max-width: 76px;
+  max-height: 56px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  float: left;
+}
+
+.company-join-item p {
+  width: calc(100% - 80px);
+  font-size: 14px;
+  float: left;
+  position: absolute;
+  left: 80px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .invalid-input {

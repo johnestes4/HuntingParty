@@ -184,7 +184,7 @@ under the License.
 <div id="company-create-view" class="inactive">
   <img id="company-create-back" class="icon" src="./img/back.png" alt="" onclick="goToLogin()">
   <div id="company-confirm-view" class="inactive">
-    <div id="company-confirm-img-wrapper">
+    <div id="company-confirm-img-wrapper" class="company-confirm-img-wrapper">
       <img class="company-confirm-img" src="./img/profile.png" alt="">
     </div>
     <div id="company-confirm-desc" class="">
@@ -219,7 +219,21 @@ under the License.
       </div>
     </div>
     <div id="company-domain-multiple" class="">
-
+      <div class="instructions" style="float: left; margin-bottom: 1vh">
+        <h1 id="company-domain-multiple-company-name" style="color: white; margin-bottom: 2vh">We found companies</h1>
+        <p>Your email domain matches multiple companies. If one of these is yours, you can join them right now.</p>
+      </div>
+      <div id="company-join-list" class="">
+      </div>
+      <div class="" style="width: 100%; height: 40px; position: relative; float: left; display: block;">
+        <button class="login-button-2" type="button" name="button" onclick="joinCompany()">Join <span id="company-domain-button-company-name-2">Company</span></button>
+      </div>
+      <div class="instructions" style="padding-top: 1vh; margin-bottom: 1vh;">
+        <p>If none of these are right, you can search for the correct one:</p>
+      </div>
+      <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+        <button class="login-button-2" type="button" name="button" onclick="goToCompanySearch()">Find another company</button>
+      </div>
     </div>
   </div>
   <div id="company-search-view" class="" style="">

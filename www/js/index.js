@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var saving = false
 var activeTab = 0
@@ -4076,7 +4076,10 @@ function toggleHamburgerMenu() {
                 console.log(allCompanies[i])
               }
               if (allCompanies[i].emailDomains.includes(userDomain)) {
-                domainMatchingCompanies.push(allCompanies[i])
+                domainMatchingCompanies.push({
+                  company: allCompanies[i],
+                  index: i
+                })
               }
             }
           }
@@ -4086,18 +4089,32 @@ function toggleHamburgerMenu() {
           document.getElementById("company-search-view").classList.add('inactive')
           document.getElementById("company-domain-view").classList.remove('inactive')
           if (domainMatchingCompanies.length == 1) {
-            if (domainMatchingCompanies[0].avatar) {
-              document.getElementById("company-domain-img-wrapper").innerHTML = '<img class="company-confirm-img" src="'+domainMatchingCompanies[0].avatar+'" alt="">'
+            if (domainMatchingCompanies[0].company.avatar) {
+              document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+domainMatchingCompanies[0].company.avatar+'" alt=""></div>'
             } else {
               document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
                 '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
               '</div>'
             }
-            document.getElementById("company-domain-company-name").innerHTML = domainMatchingCompanies[0].name
-            document.getElementById("company-domain-button-company-name").innerHTML = domainMatchingCompanies[0].name
-            companyToJoin = domainMatchingCompanies[0]
+            document.getElementById("company-domain-company-name").innerHTML = domainMatchingCompanies[0].company.name
+            document.getElementById("company-domain-button-company-name").innerHTML = domainMatchingCompanies[0].company.name
+            companyToJoin = domainMatchingCompanies[0].company
           } else {
-
+            document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
+              '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
+            '</div>'
+            var companyListHTML = ''
+            for (i = 0; i < domainMatchingCompanies.length; i++) {
+              companyListHTML = companyListHTML + '<div id="company-join-item-'+domainMatchingCompanies[i].index+'" class="company-join-item" onclick="pickCompanyFromList('+domainMatchingCompanies[i].index+')">'+
+                '<div class="" style="width: 80px; height: 60px; float: left; position: relative;">'+
+                  '<img src="'+domainMatchingCompanies[i].company.avatar+'" alt="">'+
+                '</div>'+
+                '<p>'+domainMatchingCompanies[i].company.name+'</p>'+
+              '</div>'
+            }
+            document.getElementById("company-domain-single").classList.add('inactive')
+            document.getElementById("company-domain-multiple").classList.remove('inactive')
+            document.getElementById("company-join-list").innerHTML = companyListHTML
           }
         }
       }
@@ -4105,6 +4122,28 @@ function toggleHamburgerMenu() {
     xhttp.open("GET", apiUrl+'/company/light', true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send();
+  }
+
+  function pickCompanyFromList(index) {
+    if (allCompanies[index]) {
+      companyToJoin = allCompanies[index]
+      console.log(companyToJoin)
+      if (companyToJoin.avatar) {
+        document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt=""></div>'
+      } else {
+        document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
+        '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
+        '</div>'
+      }
+      document.getElementById("company-domain-multiple-company-name").innerHTML = companyToJoin.name
+      var a = document.getElementsByClassName('company-join-item')
+      console.log(a)
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.remove('company-join-item-active')
+      }
+      document.getElementById("company-join-item-"+index).classList.add('company-join-item-active')
+      document.getElementById("company-domain-button-company-name-2").innerHTML = companyToJoin.name
+    }
   }
 
   function joinCompany() {
