@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var saving = false
 var activeTab = 0
@@ -2889,6 +2889,7 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("company-view").classList.add('inactive')
       document.getElementById("bottombar-img-home").classList.add('icon-2-active')
       document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
@@ -2906,6 +2907,7 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.remove('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("company-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Search"
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("saved-search-view").classList.remove('inactive')
@@ -2925,6 +2927,7 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.remove('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("company-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Opportunities"
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
@@ -2943,6 +2946,7 @@ function toggleHamburgerMenu() {
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.remove('inactive')
+      document.getElementById("company-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
@@ -2955,6 +2959,44 @@ function toggleHamburgerMenu() {
       document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
       document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
       document.getElementById("bottombar-text-3").classList.add('bottombar-item-text-active')
+    } else if (num == 4) {
+      document.getElementById("news-block").classList.add('inactive')
+      document.getElementById("search-view").classList.add('inactive')
+      document.getElementById("fbo-view").classList.add('inactive')
+      document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("company-view").classList.remove('inactive')
+      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Company</p>'
+      document.getElementById("topbar-right").innerHTML = ''
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.remove('inactive')
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-popup").classList.add('inactive');
+
+      // company stuff
+      if (company.avatar) {
+        var avatar = company.avatar
+        if (avatar.slice(0,13) == '../../assets/') {
+          avatar = './' + avatar.slice(13)
+        }
+        document.getElementById("company-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+company.avatar+'" alt="">'
+      }
+      document.getElementById("company-info").innerHTML = '<p class="company-info-text">'+company.name+'</p>'+
+      '<p>'+company.email+'</p>'+
+      '<p>'+company.contactNumber+'</p>'+
+      '<p>'+company.address+', '+company.city+' '+company.state+'</p>'
+      var a = document.getElementsByClassName('company-domain-2')
+      for (i = 0; i < a.length; i++) {
+        if (company.emailDomains[i]) {
+          a[i].value = company.emailDomains[i]
+        }
+      }
     }
     activeTab = num
     document.getElementById("topbar-left").innerHTML = ''
@@ -3662,6 +3704,67 @@ function toggleHamburgerMenu() {
 
     return outputArray2
   }
+
+  function openCompanyDetail(which) {
+    if (document.getElementById("company-detail-middle-"+which).classList.contains('inactive')) {
+      document.getElementById("company-detail-middle-"+which).classList.remove('inactive')
+      document.getElementById("company-detail-middle-item-arrow-"+which).classList.add('rotate')
+    } else {
+      document.getElementById("company-detail-middle-"+which).classList.add('inactive')
+      document.getElementById("company-detail-middle-item-arrow-"+which).classList.remove('rotate')
+    }
+  }
+
+  function toggleDomainsEditable() {
+    var a = document.getElementsByClassName('company-domain-2')
+    var newValue = true
+    if (a[0].disabled) {
+      newValue = false
+      document.getElementById("domain-edit-button-single").classList.add('inactive')
+      document.getElementById("domain-edit-button-double").classList.remove('inactive')
+    } else {
+      document.getElementById("domain-edit-button-single").classList.remove('inactive')
+      document.getElementById("domain-edit-button-double").classList.add('inactive')
+    }
+    for (i = 0; i < a.length; i++) {
+      a[i].disabled = newValue
+      if (newValue) {
+        a[i].classList.add('company-domain-2-disabled')
+        a[i].value = ''
+        if (company.emailDomains) {
+          if (company.emailDomains[i]) {
+            a[i].value = company.emailDomains[i]
+          }
+        }
+        checkDomainEmail(a[i])
+      } else {
+        a[i].classList.remove('company-domain-2-disabled')
+      }
+    }
+  }
+
+  function saveEmailDomains() {
+    var a = document.getElementsByClassName('company-domain-2')
+    company.emailDomains = []
+    for (i = 0; i < a.length; i++) {
+      if (a[i].value.length > 0) {
+        company.emailDomains.push(a[i].value)
+      }
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        company = JSON.parse(xhttp.responseText);
+        console.log('saved')
+        toggleDomainsEditable()
+      }
+    }
+    xhttp.open("PUT", apiUrl+"/company/" + company._id, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
+    xhttp.send(JSON.stringify(company));
+  }
+
 
   function openFboDetail(which) {
     if (document.getElementById("fbo-detail-middle-"+which).classList.contains('inactive')) {
@@ -4584,7 +4687,7 @@ function toggleHamburgerMenu() {
       }
       if (!pscFound) {
         for (i = 0; i < searchTerms.psc.services.length; i++) {
-          if (searchTerms.psc.products[i].name.slice(0,1) == proxy.fbo.classCod) {
+          if (searchTerms.psc.services[i].name.slice(0,1) == proxy.fbo.classCod) {
             psc = searchTerms.psc.services[i].name
             pscFound = true
             break
@@ -5321,7 +5424,6 @@ function toggleHamburgerMenu() {
           if (xhttp2.readyState == 4 && xhttp2.status == 200) {
             // Typical action to be performed when the document is ready:
             company = JSON.parse(xhttp2.responseText);
-            document.getElementById("company-info").innerHTML = '<div class="company-info-img-wrapper"><div class="second-border" style="border: none;"><img class="company-info-img" src="'+company.avatar+'"></div></div><div style="height: 25vh;"></div><p class="company-info-text">'+company.name+'</p>'
             // var xobj = new XMLHttpRequest();
             // xobj.overrideMimeType("application/json");
             // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file

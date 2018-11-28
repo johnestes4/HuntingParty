@@ -103,546 +103,510 @@ under the License.
       <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
         <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="" style="max-width: 65vw">
       </div>
-      <!-- <div class="instructions">
-      <p>Please sign in...</p>
-    </div> -->
-    <div class="login-register-content">
-      <p class="sr-only">Email Address</p>
-      <div class="login-field-box">
-        <div id="login-name-popup" class="arrow-popup inactive">
-          Account not found
+      <div class="login-register-content">
+        <p class="sr-only">Email Address</p>
+        <div class="login-field-box">
+          <div id="login-name-popup" class="arrow-popup inactive">
+            Account not found
+          </div>
+          <img class="" src="./img/mail-white.png" alt="">
+          <input class="login-field" type="text" id="email" name="" value="" placeholder="Business Email" onkeyup="checkLoginEmail()" onblur="checkLoginEmail2()">
         </div>
-        <img class="" src="./img/mail-white.png" alt="">
-        <input class="login-field" type="text" id="email" name="" value="" placeholder="Business Email" onkeyup="checkLoginEmail()" onblur="checkLoginEmail2()">
-      </div>
-      <p class="sr-only">Password</p>
-      <div class="login-field-box">
-        <img class="" src="./img/lock-white.png" alt="">
-        <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
-      </div>
-      <div id="login-error-text"></div>
-    </div>
-    <div class="" style="width: 100%; position: relative;">
-      <button class="login-button" type="button" name="button" onclick="login()">Sign In</button>
-      <div class="login-redirect">
-        <p><a href="#" onclick="openResetPassword()">Forgot Your Password?</a></p>
-      </div>
-      <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
-        <button class="login-button-2" type="button" name="button" onclick="goToRegister()">Create a profile</button>
-      </div>
-
-      <!-- <button class="center-absolute button-alt" type="button" name="button" onclick="goToRegister()">JOIN</button> -->
-    </div>
-  </div>
-  <div id="register-view" class="inactive">
-    <!-- <div class="instructions">
-    <p>Join Hunting Party</p>
-  </div> -->
-  <!-- <p class="login-info">Username (Email Address)</p> -->
-  <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
-    <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
-  </div>
-  <div class="login-register-content">
-    <div class="login-field-box">
-      <img class="" src="./img/profile-white.png" alt="">
-      <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First Name">
-      <div id="register-alert-1" class="register-field-alert"></div>
-    </div>
-    <!-- <p class="login-info">Password</p> -->
-    <div class="login-field-box">
-      <img class="" src="./img/profile-white.png" alt="">
-      <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last Name">
-      <div id="register-alert-2" class="register-field-alert"></div>
-    </div>
-
-    <div class="login-field-box">
-      <img class="" src="./img/mail-white.png" alt="">
-      <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Business Email">
-      <div id="register-alert-3" class="register-field-alert"></div>
-    </div>
-
-    <div class="login-field-box">
-      <img class="" src="./img/lock-white.png" alt="">
-      <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
-      <div id="register-alert-4" class="register-field-alert"></div>
-    </div>
-
-    <div class="login-field-box">
-      <img class="" src="./img/lock-white.png" alt="">
-      <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
-      <div id="register-alert-5" class="register-field-alert"></div>
-    </div>
-  </div>
-
-  <div class="">
-    <button class="login-button" type="button" name="button" onclick=register()>Sign Up</button>
-    <div class="login-redirect">
-      <p><a href="#" onclick="goToLogin()">Already have an Account? Sign In</a></p>
-    </div>
-  </div>
-</div>
-<div id="company-create-view" class="inactive">
-  <img id="company-create-back" class="icon" src="./img/back.png" alt="" onclick="goToLogin()">
-  <div id="company-confirm-view" class="inactive">
-    <div id="company-confirm-img-wrapper" class="company-confirm-img-wrapper">
-      <img class="company-confirm-img" src="./img/profile.png" alt="">
-    </div>
-    <div id="company-confirm-desc" class="">
-      <h4>Company #1</h4>
-      <p>123 Place St, 12345</p>
-      <p>email@mail.zone</p>
-      <h5>Do you want to request to join?</h5>
-      <p>If you choose JOIN, we'll send a join request to Company #1. If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>
-    </div>
-    <button type="button" name="button" onclick="sendCompanyRequest()">Join</button>
-    <button type="button" name="button" onclick="leaveCompanyConfirm()">Back</button>
-  </div>
-  <div id="company-confirm-confirm-view" class="inactive">
-    <p>Your join request has been sent.</p>
-    <p>If the company accepts, you'll gain full access to their Hunting Party.</p>
-    <p>We'll notify you when they respond.</p>
-  </div>
-  <div id="company-domain-view" class="inactive" style="">
-    <div id="company-domain-img-wrapper">
-      <img class="company-confirm-img" src="./img/profile.png" alt="">
-    </div>
-    <div id="company-domain-single" class="">
-      <div class="instructions" style="float: left;">
-        <h1 id="company-domain-company-name" style="color: white; margin-bottom: 2vh">We found a company</h1>
-        <p>Your email domain matches this company. If this is correct, we can add you now and get you started right away.</p>
-      </div>
-      <div class="" style="width: 100%; height: 40px; position: relative; float: left; display: block;">
-        <button class="login-button-2" type="button" name="button" onclick="joinCompany()">Join <span id="company-domain-button-company-name">Company</span></button>
-      </div>
-      <div class="" style="width: 100%; height: 40px; margin-top: 10px; position: relative; float: left;">
-        <button class="login-button-2" type="button" name="button" onclick="goToCompanySearch()">Find another company</button>
-      </div>
-    </div>
-    <div id="company-domain-multiple" class="">
-      <div class="instructions" style="float: left; margin-bottom: 1vh">
-        <h1 id="company-domain-multiple-company-name" style="color: white; margin-bottom: 2vh">We found companies</h1>
-        <p>Your email domain matches multiple companies. If one of these is yours, you can join them right now.</p>
-      </div>
-      <div id="company-join-list" class="">
-      </div>
-      <div class="" style="width: 100%; height: 40px; position: relative; float: left; display: block;">
-        <button class="login-button-2" type="button" name="button" onclick="joinCompany()">Join <span id="company-domain-button-company-name-2">Company</span></button>
-      </div>
-      <div class="instructions" style="padding-top: 1vh; margin-bottom: 1vh;">
-        <p>If none of these are right, you can search for the correct one:</p>
-      </div>
-      <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
-        <button class="login-button-2" type="button" name="button" onclick="goToCompanySearch()">Find another company</button>
-      </div>
-    </div>
-  </div>
-  <div id="company-search-view" class="" style="">
-    <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
-      <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
-    </div>
-    <div class="instructions">
-      <h1 style="color: white; margin-bottom: 2vh">Find your company</h1>
-      <p>Search for your company's name and we'll see if they're already here:</p>
-    </div>
-    <div class="" style="position: relative; width: 100%; height: 45px; margin-bottom: 2vh;">
-      <input id="company-search" type="text" name="" value="" onkeyup="companySearch()" placeholder="Find a Company">
-      <div id="company-search-dropdown" class="inactive">
-
-      </div>
-    </div>
-    <div class="instructions">
-      <p>Or if your company's not already present, create it:</p>
-    </div>
-    <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
-      <button class="login-button-2" type="button" name="button" onclick="goToNewCompany()">Create a company</button>
-    </div>
-  </div>
-  <div id="company-new-view" class="inactive">
-    <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
-      <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
-    </div>
-    <div class="instructions">
-      <h1 style="color: white; margin-bottom: 2vh">Create company</h1>
-      <p>Fill out this important information about your company:</p>
-    </div>
-    <div id="company-new-1" class="">
-      <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
-      <input id="new-company-email" type="text" name="" value="" placeholder="Email">
-      <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
-      <!-- <input id="new-company-address" type="text" name="" value="" placeholder="Address">
-      <input id="new-company-city" type="text" name="" value="" placeholder="City">
-      <input id="new-company-state" type="text" name="" value="" placeholder="State">
-      <input id="new-company-zip" type="number" name="" value="" placeholder="Zip"> -->
-      <p style="margin: 12px 0px 8px 0px; font-size: 14px;">To hit your growth targets how many proposals do you need to have in flight at a given time?</p>
-      <input id="new-company-goal" type="number" name="" value="" placeholder="Set Goal">
-      <div class="" style="width: 100%; position: relative;">
-        <button id="company-next-button" class="login-button" type="button" name="button" onclick="companyCreateNext()">Next</button>
-      </div>
-    </div>
-    <div id="company-new-2" class="inactive">
-      <p style="margin: 12px 0px 8px 0px; font-size: 14px;">What are your corporate email domains? If a new user joins with one of your domains, we'll automatically add them to your company. You can have up to three.</p>
-      <div class="login-field-box">
-        <span>@</span>
-        <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
-      </div>
-      <div class="login-field-box">
-        <span>@</span>
-        <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
-      </div>
-      <div class="login-field-box">
-        <span>@</span>
-        <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
+        <p class="sr-only">Password</p>
+        <div class="login-field-box">
+          <img class="" src="./img/lock-white.png" alt="">
+          <input class="login-field" type="password" id="password" name="" value="" onkeypress="handleEnterLogin(event)" placeholder="Password">
+        </div>
+        <div id="login-error-text"></div>
       </div>
       <div class="" style="width: 100%; position: relative;">
-        <button id="company-create-button" class="login-button" type="button" name="button" onclick="createCompany()">Create</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div id="main-view" class="inactive">
-  <div id="sidebar-detector" class="" style="">
-  </div>
-  <div class="topbar">
-    <div id="topbar-left" class="topbar-side">
-
-    </div>
-    <div class="topbar-center">
-      <p id="topbar-center-text">To Do/News</p>
-    </div>
-    <div id="topbar-right" class="topbar-side">
-
-    </div>
-  </div>
-  <div id="sidebar" class="inactive">
-    <div class="sidebar-item sidebar-item-long" style="background: rgba(0,0,0,0.2);">
-      <!-- <div class="profile-circle-box">
-      <div id="profile-circle" class="circle" style="">
-      <div id="profile-circle-inside" class="circle-inside" style="">
-      <img class="circle-img" src="./img/profile.png" alt="">
-    </div>
-  </div>
-</div> -->
-<p style="font-size: 20px;">Level X</p>
-<p id="sidebar-points-text" style="color: rgba(255,255,255,0.5);">0 Points</p>
-</div>
-<div class="sidebar-item" onclick="switchTab(0)">
-  <div class="sidebar-img-wrapper">
-    <img class="sidebar-img icon" src="./img/news.png" alt="">
-  </div>
-  <p>News</p>
-</div>
-<div class="sidebar-item" onclick="switchTab(2)">
-  <div class="sidebar-img-wrapper">
-    <img class="sidebar-img icon" src="./img/rfp.png" alt="">
-  </div>
-  <p>Opportunities <div id="sidebar-item-unread-popup-fbosin" class="sidebar-item-unread-popup inactive">0</div></p>
-</div>
-<div class="sidebar-item" onclick="switchTab(3)">
-  <div class="sidebar-img-wrapper">
-    <img class="sidebar-img icon" src="./img/pipeline.png" alt="">
-  </div>
-  <p>Pipeline <div id="sidebar-item-unread-popup-pipeline" class="sidebar-item-unread-popup inactive">0</div></p>
-</div>
-<div class="sidebar-item" onclick="switchTab(1)">
-  <div class="sidebar-img-wrapper">
-    <img class="sidebar-img icon" src="./img/search.png" alt="">
-  </div>
-  <p>Search</p>
-</div>
-<div class="sidebar-item sidebar-item-short" onclick="logOut()" style="line-height: 100%;">
-  <p>Log Out</p>
-</div>
-
-<!--
-<div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
-</div>
-<div id="iconbar-2" class="iconbar-icon" onclick="switchTab(1)">
-<img class="iconbar-img" src="./img/search.png" alt="">
-</div>
-<div id="iconbar-3" class="iconbar-icon" onclick="switchTab(2)">
-<img class="iconbar-img" src="./img/contact.png" alt="">
-</div>
-<div id="iconbar-4" class="iconbar-icon" onclick="switchTab(3)">
-<img class="iconbar-img" src="./img/settings.png" alt="">
-</div>
-<div id="iconbar-5" class="iconbar-icon" onclick="openTutorials()">
-<img class="iconbar-img" src="./img/info.png" alt="">
-</div> -->
-
-</div>
-<div id="news-block" class="body-block">
-  <div id="todo-block" class="">
-    <div class="todo-header">
-      <div class="news-tab TD-tab" style="">
-        TO DO
-      </div>
-      <div class="news-tab ACT-tab" style="">
-        Average Completion Time
-      </div>
-    </div>
-    <div id="todo-items">
-      <div class="todo-item">
-        <div class="todo-img" style="">
-          <img class="iconbar-img" src="./img/profile2.png" alt="">
+        <button class="login-button" type="button" name="button" onclick="login()">Sign In</button>
+        <div class="login-redirect">
+          <p><a href="#" onclick="openResetPassword()">Forgot Your Password?</a></p>
         </div>
-        <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
-        <p class="todo-text todo-right">10/RFP</p>
-      </div>
-      <div class="todo-item">
-        <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-          <img class="iconbar-img" src="./img/profile2.png" alt="">
-        </div>
-        <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
-        <p class="todo-text todo-right">10/RFP</p>
-      </div>
-      <div class="todo-item">
-        <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
-          <img class="iconbar-img" src="./img/profile2.png" alt="">
-        </div>
-        <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
-        <p class="todo-text todo-right">5/RFP</p>
-      </div>
-    </div>
-
-  </div>
-  <div id="company-info" class="inactive" style="color: white;">
-
-  </div>
-  <div id="news-block " style="height: calc((93vh - 60px) - (25vh + 35px))">
-    <div class="news-block-header">
-      <!-- <hr class="hr-gold"> -->
-      <h6>NEWS</h6>
-    </div>
-    <div id="news-items" class="">
-      <div class="news-item">
-        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-          <img class="iconbar-img" src="./img/profile.png" alt="">
-        </div>
-        <p class="news-text">Person joined your company</p>
-      </div>
-      <div class="news-item">
-        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-          <img class="iconbar-img" src="./img/profile.png" alt="">
-        </div>
-        <p class="news-text">Person2 left a comment on an RFP</p>
-      </div>
-      <div class="news-item">
-        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-          <img class="iconbar-img" src="./img/profile.png" alt="">
-        </div>
-        <p class="news-text">Person3 left a comment on an RFP</p>
-      </div>
-      <div class="news-item">
-        <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
-          <img class="iconbar-img" src="./img/contact.png" alt="">
-        </div>
-        <p class="news-text">Person4: here is some comment text</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="search-view" class="body-block inactive">
-  <div id="search-save-popup" class="inactive" style="text-align: center;">
-    <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
-    <button style="width: 80%; margin-left: 10%; margin-right: 10%; margin-top: 2vh" type="button" name="button" onclick="closeSearchPopup()">OKAY</button>
-  </div>
-  <div id="search-save-loading" class="loading-circle inactive" style="z-index: 9999"></div>
-  <div id="search-save-popup-bg" class="inactive">
-
-  </div>
-  <div id="saved-search-view" class="">
-    <div class="search-item">
-      <div class="category-text">
-        Test
-      </div>
-      <div class="category-right">
-        >
-      </div>
-    </div>
-    <div class="search-item">
-      Test2
-    </div>
-  </div>
-  <div class="">
-    <div class="search-item">
-      <div class="search-item-header" style="background: rgba(243,243,243,1);">
-        <div id="search-name-popup" class="arrow-popup inactive">
-          Name in use
-        </div>
-        <div class="search-name-left" onclick="openSearchItems(1)">Create New:</div>
-        <input id="search-name" class="search-name-input inactive" type="text" name="" value="" placeholder="Name Your Search" onkeyup="checkSearchName(this)">
-        <div class="category-right">
-          <p class="category-arrow" id="category-arrow-1">›</p>
-        </div>
-        <div class="" style="position: absolute; z-index: 0; right: 0px; top: 0px; width: 100%; height: 100%;" onclick="openSearchItems(1)">
-
-        </div>
-      </div>
-      <div id="new-search" class="search-item-subbox inactive">
-
-      </div>
-    </div>
-  </div>
-  <div id="search-terms-view" class="inactive">
-    <button id="delete-search-button" class="inactive" style="width: 40%; margin-top: 2vh; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
-
-  </div>
-  <div id="other-saved-search-view" class="">
-  </div>
-
-</div>
-<div id="fbo-popups" class="inactive">
-  <div id="error-popup" class="vote-popup inactive">
-    <h3>ALERT</h3>
-    <p id="error-text">it's broke</p>
-    <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
-  </div>
-  <div class="vote-popup yes-popup inactive">
-    <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-    <!-- <p>You voted YES on this opportunity!</p>
-    <p>Write a quick comment to let your team know why you approve.</p> -->
-    <div class="popup-header">Great Opportunity!</div>
-    <div class="popup-segment" style="border-bottom: 1px solid rgba(0,0,0,0.2);">
-      <p>Add a comment to your vote:</p>
-      <input id="fbo-details-input" class="vote-popup-input" type="text" name="" value="">
-    </div>
-    <div class="popup-segment">
-      <p>Send to other coworkers:</p>
-      <div class="refer-box">
-        <div id="yes-popup-users-list" class="">
-
-        </div>
-        <div id="yes-popup-refer-list">
-
-        </div>
-      </div>
-      <div id="yes-refer" class="">
-        <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
-          <input id="yes-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkYesEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
-          <button id="yes-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
-          <button id="yes-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
+        <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+          <button class="login-button-2" type="button" name="button" onclick="goToRegister()">Create a profile</button>
         </div>
       </div>
     </div>
-    <!-- <p>Add a comment:</p>
-    <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;"> -->
-    <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, true)">Send</button>
-  </div>
-  <div class="vote-popup no-popup inactive">
-    <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
-    <div class="popup-header">Not so great.</div>
-    <div class="popup-segment">
-      <p>Sounds like this one isn't right for you.</p>
-      <p>Know anyone it would be a better fit for? Send it their way.</p>
-      <div class="refer-box" style="height: calc(79vh - 277px);">
-        <div id="no-popup-refer-list">
+    <div id="register-view" class="inactive">
+      <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
+        <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
+      </div>
+      <div class="login-register-content">
+        <div class="login-field-box">
+          <img class="" src="./img/profile-white.png" alt="">
+          <input class="login-field register-field" type="text" id="first-name" name="" value="" placeholder="First Name">
+          <div id="register-alert-1" class="register-field-alert"></div>
+        </div>
+        <!-- <p class="login-info">Password</p> -->
+        <div class="login-field-box">
+          <img class="" src="./img/profile-white.png" alt="">
+          <input class="login-field register-field" type="text" id="last-name" name="" value="" placeholder="Last Name">
+          <div id="register-alert-2" class="register-field-alert"></div>
+        </div>
 
+        <div class="login-field-box">
+          <img class="" src="./img/mail-white.png" alt="">
+          <input class="login-field register-field" type="email" id="email-register" name="" value="" onchange="checkEmail()" placeholder="Business Email">
+          <div id="register-alert-3" class="register-field-alert"></div>
+        </div>
+
+        <div class="login-field-box">
+          <img class="" src="./img/lock-white.png" alt="">
+          <input class="login-field register-field" type="password" id="password-register" name="" value="" onkeyup="checkPasswords()" placeholder="Password">
+          <div id="register-alert-4" class="register-field-alert"></div>
+        </div>
+
+        <div class="login-field-box">
+          <img class="" src="./img/lock-white.png" alt="">
+          <input class="login-field register-field" type="password" id="password2" name="" value="" onkeyup="checkPasswords()" placeholder="Confirm Password">
+          <div id="register-alert-5" class="register-field-alert"></div>
         </div>
       </div>
-      <div id="no-refer" class="">
-        <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
-          <input id="no-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkNoEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
-          <button id="no-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addNoRefer()">Add</button>
-          <button id="no-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
+
+      <div class="">
+        <button class="login-button" type="button" name="button" onclick=register()>Sign Up</button>
+        <div class="login-redirect">
+          <p><a href="#" onclick="goToLogin()">Already have an Account? Sign In</a></p>
         </div>
       </div>
     </div>
-    <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, false)">Send</button>
-  </div>
-  <div id="popup-background">
-
-  </div>
-</div>
-<div id="fbo-view" class="body-block inactive">
-  <div class="second-topbar">
-    <div id="opportunities-topbar" style="">
-      <span>Filter By: </span>
-      <select class="opp-topbar-select" id="opportunities-topbar-select" onchange="filterOpportunitiesBySearch(this)">
-        <option value="-1">All Searches</option>
-      </select>
-    </div>
-    <div id="sort-toolbar">
-      <span>Arrange By: </span>
-      <select class="opp-topbar-select" id="sort-select" onchange="runSort(fbosIn, this);">
-      </select>
-    </div>
-  </div>
-  <!-- Not sure what to do with this class -->
-  <div class="temp">
-
-  </div>
-  <div id="fbo-list-view" class="body-block" style="height: calc(93vh - 167px); overflow-y: hidden;">
-    <div id="fbo-scroll-box" class="" style="height: 100%; width: 100%; overflow-y: auto; z-index: 99;">
-      <div class="" style="position: relative; height: auto; width: 100%;">
-        <div class="tutorial-view inactive" style="height: 100%;">
-          <div class="tutorial-box" style="left: 20vw; top: 7vh; z-index: 99">
-            <div class="relative-box" style="width: auto; height: auto;">
-              <p>WHERE THE OPPORTUNITY CAME FROM: </p>
-              <p>-WHICH SAVED SEARCH </p>
-              <p>-WHICH PERSON REFERED IT TO YOU</p>
-              <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(90% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
-                <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
-                </div>
-              </div>
-            </div>
+    <div id="company-create-view" class="inactive">
+      <img id="company-create-back" class="icon" src="./img/back.png" alt="" onclick="goToLogin()">
+      <div id="company-confirm-view" class="inactive">
+        <div id="company-confirm-img-wrapper" class="company-confirm-img-wrapper">
+          <img class="company-confirm-img" src="./img/profile.png" alt="">
+        </div>
+        <div id="company-confirm-desc" class="">
+          <h4>Company #1</h4>
+          <p>123 Place St, 12345</p>
+          <p>email@mail.zone</p>
+          <h5>Do you want to request to join?</h5>
+          <p>If you choose JOIN, we'll send a join request to Company #1. If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>
+        </div>
+        <button type="button" name="button" onclick="sendCompanyRequest()">Join</button>
+        <button type="button" name="button" onclick="leaveCompanyConfirm()">Back</button>
+      </div>
+      <div id="company-confirm-confirm-view" class="inactive">
+        <p>Your join request has been sent.</p>
+        <p>If the company accepts, you'll gain full access to their Hunting Party.</p>
+        <p>We'll notify you when they respond.</p>
+      </div>
+      <div id="company-domain-view" class="inactive" style="">
+        <div id="company-domain-img-wrapper">
+          <img class="company-confirm-img" src="./img/profile.png" alt="">
+        </div>
+        <div id="company-domain-single" class="">
+          <div class="instructions" style="float: left;">
+            <h1 id="company-domain-company-name" style="color: white; margin-bottom: 2vh">We found a company</h1>
+            <p>Your email domain matches this company. If this is correct, we can add you now and get you started right away.</p>
           </div>
-          <div class="tutorial-box" style="left: 27vw; top: 35vh; z-index: 99; width: 60vw;">
-            <div class="relative-box" style="width: auto; height: auto;">
-              <p>WHEN YOU VOTE FOR AN OPPORTUNITY IT IS SENT TO ALL THE OTHER PEOPLE IN YOUR COMPANY </p>
-              <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(90% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
-                <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
-                </div>
-              </div>
-            </div>
+          <div class="" style="width: 100%; height: 40px; position: relative; float: left; display: block;">
+            <button class="login-button-2" type="button" name="button" onclick="joinCompany()">Join <span id="company-domain-button-company-name">Company</span></button>
+          </div>
+          <div class="" style="width: 100%; height: 40px; margin-top: 10px; position: relative; float: left;">
+            <button class="login-button-2" type="button" name="button" onclick="goToCompanySearch()">Find another company</button>
           </div>
         </div>
-        <div id="fbo-items">
-          <div class="fbo-item">
-            <div class="fbo-item-title">
-              <p>TITLE XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX  XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX</p>
-            </div>
-            <div class="fbo-item-comments">
-              <p>Comments</p>
-            </div>
-            <div class="fbo-item-buttons">
-              <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
-                <div class="second-border">
-                  <img class="circle-img-2 icon" src="./img/thumbsdown.png" alt="">
-                </div>
-              </div>
-              <div class="fbo-item-time-button">
-                <img class="circle-img-2 icon" src="./img/share.png" alt="">
-              </div>
-              <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
-                <div class="second-border">
-                  <img class="circle-img-2 icon" src="./img/thumbsup.png" alt="">
-                </div>
-              </div>
-            </div>
+        <div id="company-domain-multiple" class="">
+          <div class="instructions" style="float: left; margin-bottom: 1vh">
+            <h1 id="company-domain-multiple-company-name" style="color: white; margin-bottom: 2vh">We found companies</h1>
+            <p>Your email domain matches multiple companies. If one of these is yours, you can join them right now.</p>
+          </div>
+          <div id="company-join-list" class="">
+          </div>
+          <div class="" style="width: 100%; height: 40px; position: relative; float: left; display: block;">
+            <button class="login-button-2" type="button" name="button" onclick="joinCompany()">Join <span id="company-domain-button-company-name-2">Company</span></button>
+          </div>
+          <div class="instructions" style="padding-top: 1vh; margin-bottom: 1vh;">
+            <p>If none of these are right, you can search for the correct one:</p>
+          </div>
+          <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+            <button class="login-button-2" type="button" name="button" onclick="goToCompanySearch()">Find another company</button>
           </div>
         </div>
-        <div id="fbo-item-load-buffer" class="fbo-item inactive" style="height: 150px;">
-          <div class="loading-circle"></div>
+      </div>
+      <div id="company-search-view" class="" style="">
+        <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
+          <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
+        </div>
+        <div class="instructions">
+          <h1 style="color: white; margin-bottom: 2vh">Find your company</h1>
+          <p>Search for your company's name and we'll see if they're already here:</p>
+        </div>
+        <div class="" style="position: relative; width: 100%; height: 45px; margin-bottom: 2vh;">
+          <input id="company-search" type="text" name="" value="" onkeyup="companySearch()" placeholder="Find a Company">
+          <div id="company-search-dropdown" class="inactive">
+
+          </div>
+        </div>
+        <div class="instructions">
+          <p>Or if your company's not already present, create it:</p>
+        </div>
+        <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+          <button class="login-button-2" type="button" name="button" onclick="goToNewCompany()">Create a company</button>
+        </div>
+      </div>
+      <div id="company-new-view" class="inactive">
+        <div class="" style="position: relative; width: 100%; float: left; height: 30vh;">
+          <img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">
+        </div>
+        <div class="instructions">
+          <h1 style="color: white; margin-bottom: 2vh">Create company</h1>
+          <p>Fill out this important information about your company:</p>
+        </div>
+        <div id="company-new-1" class="">
+          <input id="new-company-name" type="text" name="" value="" placeholder="Company Name">
+          <input id="new-company-email" type="text" name="" value="" placeholder="Email">
+          <input id="new-company-phone" type="text" name="" value="" onkeyup="onPhoneChange(event)" placeholder="Phone #">
+          <!-- <input id="new-company-address" type="text" name="" value="" placeholder="Address">
+          <input id="new-company-city" type="text" name="" value="" placeholder="City">
+          <input id="new-company-state" type="text" name="" value="" placeholder="State">
+          <input id="new-company-zip" type="number" name="" value="" placeholder="Zip"> -->
+          <p style="margin: 12px 0px 8px 0px; font-size: 14px;">To hit your growth targets how many proposals do you need to have in flight at a given time?</p>
+          <input id="new-company-goal" type="number" name="" value="" placeholder="Set Goal">
+          <div class="" style="width: 100%; position: relative;">
+            <button id="company-next-button" class="login-button" type="button" name="button" onclick="companyCreateNext()">Next</button>
+          </div>
+        </div>
+        <div id="company-new-2" class="inactive">
+          <p style="margin: 12px 0px 8px 0px; font-size: 14px;">What are your corporate email domains? If a new user joins with one of your domains, we'll automatically add them to your company. You can have up to three.</p>
+          <div class="login-field-box">
+            <span>@</span>
+            <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
+          </div>
+          <div class="login-field-box">
+            <span>@</span>
+            <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
+          </div>
+          <div class="login-field-box">
+            <span>@</span>
+            <input class="login-field register-field company-domain" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)">
+          </div>
+          <div class="" style="width: 100%; position: relative;">
+            <button id="company-create-button" class="login-button" type="button" name="button" onclick="createCompany()">Create</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div id="pipeline-view" class="body-block inactive">
-  <!-- <button type="button" id="test-button" name="button" onclick="getTime()">click me </button> -->
-  <!-- <div id="opportunities" class="">
-  <div class="col-12">
-  <div class="opportunities-title col-12">
-  OPPORTUNITIES NEEDED TO HIT YOUR PROPOSAL TARGETS
-</div>
-<div class="col-12" style="height: 100px;">
-<div class="" style="width: calc(100% / 3); float: left;">
-Identified
-</div>
-<div class="" style="width: calc(100% / 3); float: left;">
-Pre-selected
+
+  <div id="main-view" class="inactive">
+    <div id="sidebar-detector" class="" style="">
+    </div>
+    <div class="topbar">
+      <div id="topbar-left" class="topbar-side">
+
+      </div>
+      <div class="topbar-center">
+        <p id="topbar-center-text">To Do/News</p>
+      </div>
+      <div id="topbar-right" class="topbar-side">
+
+      </div>
+    </div>
+    <div id="sidebar" class="inactive">
+      <div class="sidebar-item sidebar-item-long" style="background: rgba(0,0,0,0.2);">
+        <p style="font-size: 20px;">Level X</p>
+        <p id="sidebar-points-text" style="color: rgba(255,255,255,0.5);">0 Points</p>
+      </div>
+      <div class="sidebar-item" onclick="switchTab(0)">
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img icon" src="./img/news.png" alt="">
+        </div>
+        <p>News</p>
+      </div>
+      <div class="sidebar-item" onclick="switchTab(2)">
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img icon" src="./img/rfp.png" alt="">
+        </div>
+        <p>Opportunities <div id="sidebar-item-unread-popup-fbosin" class="sidebar-item-unread-popup inactive">0</div></p>
+      </div>
+      <div class="sidebar-item" onclick="switchTab(3)">
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img icon" src="./img/pipeline.png" alt="">
+        </div>
+        <p>Pipeline <div id="sidebar-item-unread-popup-pipeline" class="sidebar-item-unread-popup inactive">0</div></p>
+      </div>
+      <div class="sidebar-item" onclick="switchTab(1)">
+        <div class="sidebar-img-wrapper">
+          <img class="sidebar-img icon" src="./img/search.png" alt="">
+        </div>
+        <p>Search</p>
+      </div>
+      <div class="sidebar-item sidebar-item-short" onclick="logOut()" style="line-height: 100%;">
+        <p>Log Out</p>
+      </div>
+    </div>
+    <div id="news-block" class="body-block">
+      <div id="todo-block" class="">
+        <div class="todo-header">
+          <div class="news-tab TD-tab" style="">
+            TO DO
+          </div>
+          <div class="news-tab ACT-tab" style="">
+            Average Completion Time
+          </div>
+        </div>
+        <div id="todo-items">
+          <div class="todo-item">
+            <div class="todo-img" style="">
+              <img class="iconbar-img" src="./img/profile2.png" alt="">
+            </div>
+            <p class="todo-text todo-left">Identify 7 more RFPs to stay on growth targets</p>
+            <p class="todo-text todo-right">10/RFP</p>
+          </div>
+          <div class="todo-item">
+            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+              <img class="iconbar-img" src="./img/profile2.png" alt="">
+            </div>
+            <p class="todo-text todo-left">Vote on the 12 RFPs your team has voted on</p>
+            <p class="todo-text todo-right">10/RFP</p>
+          </div>
+          <div class="todo-item">
+            <div class="" style="float: left; width: 14%; margin-left: 1%; height: 4vh; position: relative;">
+              <img class="iconbar-img" src="./img/profile2.png" alt="">
+            </div>
+            <p class="todo-text todo-left">Make pre-select decision on 15 RFPs that have been identified</p>
+            <p class="todo-text todo-right">5/RFP</p>
+          </div>
+        </div>
+
+      </div>
+      <div id="news-block " style="height: calc((93vh - 60px) - (25vh + 35px))">
+        <div class="news-block-header">
+          <!-- <hr class="hr-gold"> -->
+          <h6>NEWS</h6>
+        </div>
+        <div id="news-items" class="">
+          <div class="news-item">
+            <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+              <img class="iconbar-img" src="./img/profile.png" alt="">
+            </div>
+            <p class="news-text">Person joined your company</p>
+          </div>
+          <div class="news-item">
+            <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+              <img class="iconbar-img" src="./img/profile.png" alt="">
+            </div>
+            <p class="news-text">Person2 left a comment on an RFP</p>
+          </div>
+          <div class="news-item">
+            <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+              <img class="iconbar-img" src="./img/profile.png" alt="">
+            </div>
+            <p class="news-text">Person3 left a comment on an RFP</p>
+          </div>
+          <div class="news-item">
+            <div class="" style="width: 15%; height: 4vh; float: left; position: relative;">
+              <img class="iconbar-img" src="./img/contact.png" alt="">
+            </div>
+            <p class="news-text">Person4: here is some comment text</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="search-view" class="body-block inactive">
+      <div id="search-save-popup" class="inactive" style="text-align: center;">
+        <p id="search-save-popup-text" style="width: 100%;">Your search ___ has been saved!</p>
+        <button style="width: 80%; margin-left: 10%; margin-right: 10%; margin-top: 2vh" type="button" name="button" onclick="closeSearchPopup()">OKAY</button>
+      </div>
+      <div id="search-save-loading" class="loading-circle inactive" style="z-index: 9999"></div>
+      <div id="search-save-popup-bg" class="inactive">
+
+      </div>
+      <div id="saved-search-view" class="">
+        <div class="search-item">
+          <div class="category-text">
+            Test
+          </div>
+          <div class="category-right">
+            >
+          </div>
+        </div>
+        <div class="search-item">
+          Test2
+        </div>
+      </div>
+      <div class="">
+        <div class="search-item">
+          <div class="search-item-header" style="background: rgba(243,243,243,1);">
+            <div id="search-name-popup" class="arrow-popup inactive">
+              Name in use
+            </div>
+            <div class="search-name-left" onclick="openSearchItems(1)">Create New:</div>
+            <input id="search-name" class="search-name-input inactive" type="text" name="" value="" placeholder="Name Your Search" onkeyup="checkSearchName(this)">
+            <div class="category-right">
+              <p class="category-arrow" id="category-arrow-1">›</p>
+            </div>
+            <div class="" style="position: absolute; z-index: 0; right: 0px; top: 0px; width: 100%; height: 100%;" onclick="openSearchItems(1)">
+
+            </div>
+          </div>
+          <div id="new-search" class="search-item-subbox inactive">
+
+          </div>
+        </div>
+      </div>
+      <div id="search-terms-view" class="inactive">
+        <button id="delete-search-button" class="inactive" style="width: 40%; margin-top: 2vh; margin-left: 30%; margin-bottom: 2vh;" type="button" name="button" onclick="deleteSearchTerms()" >DELETE</button>
+
+      </div>
+      <div id="other-saved-search-view" class="">
+      </div>
+
+    </div>
+    <div id="fbo-popups" class="inactive">
+      <div id="error-popup" class="vote-popup inactive">
+        <h3>ALERT</h3>
+        <p id="error-text">it's broke</p>
+        <button type="button" name="button" style="width: 40vw;" onclick="closePopups(false)">Okay</button>
+      </div>
+      <div class="vote-popup yes-popup inactive">
+        <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+        <!-- <p>You voted YES on this opportunity!</p>
+        <p>Write a quick comment to let your team know why you approve.</p> -->
+        <div class="popup-header">Great Opportunity!</div>
+        <div class="popup-segment" style="border-bottom: 1px solid rgba(0,0,0,0.2);">
+          <p>Add a comment to your vote:</p>
+          <input id="fbo-details-input" class="vote-popup-input" type="text" name="" value="">
+        </div>
+        <div class="popup-segment">
+          <p>Send to other coworkers:</p>
+          <div class="refer-box">
+            <div id="yes-popup-users-list" class="">
+
+            </div>
+            <div id="yes-popup-refer-list">
+
+            </div>
+          </div>
+          <div id="yes-refer" class="">
+            <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
+              <input id="yes-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkYesEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+              <button id="yes-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addYesRefer()">Add</button>
+              <button id="yes-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
+            </div>
+          </div>
+        </div>
+        <!-- <p>Add a comment:</p>
+        <input type="text" id="yes-popup-comment" placeholder="Comment" name="" value="" style="width: 100%; height: 30px; margin-bottom: 2vh; float: left;"> -->
+        <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, true)">Send</button>
+      </div>
+      <div class="vote-popup no-popup inactive">
+        <button class="popup-close" type="button" name="button" onclick="closePopups(false)">X</button>
+        <div class="popup-header">Not so great.</div>
+        <div class="popup-segment">
+          <p>Sounds like this one isn't right for you.</p>
+          <p>Know anyone it would be a better fit for? Send it their way.</p>
+          <div class="refer-box" style="height: calc(79vh - 277px);">
+            <div id="no-popup-refer-list">
+
+            </div>
+          </div>
+          <div id="no-refer" class="">
+            <div class="" style="width: 100%; height: 40px; margin-bottom: 1vh;">
+              <input id="no-refer-input" class="vote-popup-input" type="text" placeholder="Add by email:" onkeyup="checkNoEmail()" name="" value="" style="width: calc(100% - 65px); float: left;">
+              <button id="no-refer-input-button" class="inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white;" onclick="addNoRefer()">Add</button>
+              <button id="no-refer-input-button-inactive" type="button" name="button" style="float: left; height: 36px; width: 60px; margin-left: 5px; line-height: 26px; color: white; filter: brightness(75%);">Add</button>
+            </div>
+          </div>
+        </div>
+        <button class="vote-button" type="button" name="button" onclick="vote(fboIndex, false)">Send</button>
+      </div>
+      <div id="popup-background">
+
+      </div>
+    </div>
+    <div id="fbo-view" class="body-block inactive">
+      <div class="second-topbar">
+        <div id="opportunities-topbar" style="">
+          <span>Filter By: </span>
+          <select class="opp-topbar-select" id="opportunities-topbar-select" onchange="filterOpportunitiesBySearch(this)">
+            <option value="-1">All Searches</option>
+          </select>
+        </div>
+        <div id="sort-toolbar">
+          <span>Arrange By: </span>
+          <select class="opp-topbar-select" id="sort-select" onchange="runSort(fbosIn, this);">
+          </select>
+        </div>
+      </div>
+      <!-- Not sure what to do with this class -->
+      <div class="temp">
+
+      </div>
+      <div id="fbo-list-view" class="body-block" style="height: calc(93vh - 167px); overflow-y: hidden;">
+        <div id="fbo-scroll-box" class="" style="height: 100%; width: 100%; overflow-y: auto; z-index: 99;">
+          <div class="" style="position: relative; height: auto; width: 100%;">
+            <div class="tutorial-view inactive" style="height: 100%;">
+              <div class="tutorial-box" style="left: 20vw; top: 7vh; z-index: 99">
+                <div class="relative-box" style="width: auto; height: auto;">
+                  <p>WHERE THE OPPORTUNITY CAME FROM: </p>
+                  <p>-WHICH SAVED SEARCH </p>
+                  <p>-WHICH PERSON REFERED IT TO YOU</p>
+                  <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(90% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
+                    <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tutorial-box" style="left: 27vw; top: 35vh; z-index: 99; width: 60vw;">
+                <div class="relative-box" style="width: auto; height: auto;">
+                  <p>WHEN YOU VOTE FOR AN OPPORTUNITY IT IS SENT TO ALL THE OTHER PEOPLE IN YOUR COMPANY </p>
+                  <div class="" style="position: absolute; bottom: calc(100% + 9px); left: calc(90% - 8px); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(0,0,0,0.75);">
+                    <div class="" style="position: absolute; bottom: calc(100% + 8px); left: -16px; width: 0; height: 0; top: 1px; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 16px solid rgba(255,198,0,1);">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="fbo-items">
+              <div class="fbo-item">
+                <div class="fbo-item-title">
+                  <p>TITLE XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX  XXXXXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXXX</p>
+                </div>
+                <div class="fbo-item-comments">
+                  <p>Comments</p>
+                </div>
+                <div class="fbo-item-buttons">
+                  <div class="medium-circle fbo-item-no-button" onclick="openPopups(1)">
+                    <div class="second-border">
+                      <img class="circle-img-2 icon" src="./img/thumbsdown.png" alt="">
+                    </div>
+                  </div>
+                  <div class="fbo-item-time-button">
+                    <img class="circle-img-2 icon" src="./img/share.png" alt="">
+                  </div>
+                  <div class="medium-circle fbo-item-yes-button" onclick="openPopups(0)">
+                    <div class="second-border">
+                      <img class="circle-img-2 icon" src="./img/thumbsup.png" alt="">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="fbo-item-load-buffer" class="fbo-item inactive" style="height: 150px;">
+              <div class="loading-circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pipeline-view" class="body-block inactive">
+      <!-- <button type="button" id="test-button" name="button" onclick="getTime()">click me </button> -->
+      <!-- <div id="opportunities" class="">
+      <div class="col-12">
+      <div class="opportunities-title col-12">
+      OPPORTUNITIES NEEDED TO HIT YOUR PROPOSAL TARGETS
+    </div>
+    <div class="col-12" style="height: 100px;">
+    <div class="" style="width: calc(100% / 3); float: left;">
+    Identified
+  </div>
+  <div class="" style="width: calc(100% / 3); float: left;">
+  Pre-selected
 </div>
 <div class="" style="width: calc(100% / 3); float: left;">
 # of GO
@@ -671,18 +635,6 @@ Pre-selected
 
     </div>
   </div>
-  <!-- <div class="second-topbar">
-  <div id="fbo-detail-topbar-left" class="second-topbar-half topbar-half-active" onclick="switchFboDetailTab(0)" style="padding-left: 40px;">
-  Info
-  <div id="fbo-detail-topbar-arrow-left" class="second-topbar-arrow" style="left: 50px;">
-</div>
-</div>
-<div id="fbo-detail-topbar-right" class="second-topbar-half" onclick="switchFboDetailTab(1)" style="padding-right: 40px; text-align: right;">
-Data
-<div id="fbo-detail-topbar-arrow-right" class="second-topbar-arrow inactive" style="right: 50px;">
-</div>
-</div>
-</div> -->
 <div class="tutorial-view inactive">
   <div class="tutorial-box" style="left: 15vw; top: 29vh;">
     <div class="relative-box" style="width: 60vw; height: auto;">
@@ -886,6 +838,53 @@ Data
   <p style="text-align: center; margin: 0px;">Value & Competition</p>
 </div>
 </div>
+<div id="company-view" class="body-block inactive">
+  <div class="" style="float: left; height: 25vh; width: 100%; position: relative;">
+    <div id="company-info-img-wrapper" class="company-info-img-wrapper">
+      <img class="company-info-img" src="./img/profile.png" alt="">
+    </div>
+  </div>
+  <div id="company-info">
+    <p class="company-info-text">Your Company</p>
+    <p>Its Email</p>
+    <p>Its Phone #</p>
+    <p>Its Address</p>
+  </div>
+  <div class="fbo-detail-middle-item" style="border-top: 1px solid rgba(0,0,0,0.2);">
+    <div class="fbo-detail-middle-item-header" onClick="openCompanyDetail(0)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/mail.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Your Email Domains</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="company-detail-middle-item-arrow-0">›</p>
+    </div>
+    <div id="company-detail-middle-0" class="fbo-detail-middle-expanded inactive">
+      <p>Here you can view or edit your company's associated email domains.</p>
+      <p>If a new user joins Hunting Party using one of these domains, they will have the option to automatically join your company.</p>
+      <div class="domain-edit-box">
+        <span>@</span>
+        <input class="company-domain-2 company-domain-2-disabled" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)" disabled>
+      </div>
+      <div class="domain-edit-box">
+        <span>@</span>
+        <input class="company-domain-2 company-domain-2-disabled" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)" disabled>
+      </div>
+      <div class="domain-edit-box">
+        <span>@</span>
+        <input class="company-domain-2 company-domain-2-disabled" type="text" name="" value="" placeholder="Domain" onkeyup="checkDomainEmail2(this)" onblur="checkDomainEmail(this)" disabled>
+      </div>
+      <div class="" style="width: 100%; height: 50px; position: relative; float: left;">
+        <button id="domain-edit-button-single" class="domain-edit-button" type="button" name="button" onclick="toggleDomainsEditable()">Edit Domains</button>
+        <div id="domain-edit-button-double" class="inactive">
+          <button class="domain-edit-button-2" type="button" name="button" onclick="toggleDomainsEditable()" style="background: rgba(143,143,143,1); margin-right: 2vw;">Cancel</button>
+          <button class="domain-edit-button-2" type="button" name="button" onclick="saveEmailDomains()" style="color: rgba(80,80,80,1);">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- <div class="iconbar">
 <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
 <img class="iconbar-img" src="./img/news.png" alt="">
@@ -940,21 +939,21 @@ Data
   </div>
   <div id="bottombar-popup" class="inactive">
     <!-- <div class="bottombar-popup-item">
-    Profile
+      Profile
+    </div> -->
+    <div class="bottombar-popup-item" onclick="switchTab(4)">
+      Company
+    </div>
+    <!-- <div class="bottombar-popup-item">
+      Points
+    </div> -->
+    <!-- <div class="bottombar-popup-item">
+      Alerts
+    </div> -->
+    <div class="bottombar-popup-item" onclick="logOut()">
+      Log Out
+    </div>
   </div>
-  <div class="bottombar-popup-item">
-  Company
-</div>
-<div class="bottombar-popup-item">
-Points
-</div>
-<div class="bottombar-popup-item">
-Alerts
-</div> -->
-<div class="bottombar-popup-item" onclick="logOut()">
-  Log Out
-</div>
-</div>
 </div>
 </div>
 
