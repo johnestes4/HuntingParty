@@ -1,6 +1,6 @@
-var apiUrl = 'https://efassembly.com:4432'
+// var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'http://localhost:4200'
 
 var saving = false
 var activeTab = 0
@@ -2175,88 +2175,88 @@ function calculateSearch(elem) {
     for (i = 0; i < searchTerms.naics.length; i++) {
       if (searchTerms.naics[i].subcategories) {
         for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-        if (searchTerms.naics[i].subcategories[i2].code == elem.value) {
-          searchTerms.naics[i].subcategories[i2].value = elem.checked
-          if (!elem.checked) {
-            if (searchItemSuggestions.naics.it.includes(elem.value)) {
-              document.getElementById("search-item-suggestion-0").checked = false
+          if (searchTerms.naics[i].subcategories[i2].code == elem.value) {
+            searchTerms.naics[i].subcategories[i2].value = elem.checked
+            if (!elem.checked) {
+              if (searchItemSuggestions.naics.it.includes(elem.value)) {
+                document.getElementById("search-item-suggestion-0").checked = false
+              }
+              if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+                document.getElementById("search-item-suggestion-1").checked = false
+              }
+              searchTerms.naics[0].value = false
+              var a = document.getElementsByClassName('checkbox-naics')
+              a[0].checked = false
             }
-            if (searchItemSuggestions.naics.professional.includes(elem.value)) {
-              document.getElementById("search-item-suggestion-1").checked = false
-            }
-            searchTerms.naics[0].value = false
-            var a = document.getElementsByClassName('checkbox-naics')
-            a[0].checked = false
-          }
-          break;
-        } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].code.length) == searchTerms.naics[i].subcategories[i2].code) {
-          if (searchTerms.naics[i].subcategories[i2].subcategories) {
-            // LEVEL 2 OF SUBCATEGORIES
-            for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-              if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code == elem.value) {
-                searchTerms.naics[i].subcategories[i2].subcategories[i3].value = elem.checked
-                if (!elem.checked) {
-                  if (searchItemSuggestions.naics.it.includes(elem.value)) {
-                    document.getElementById("search-item-suggestion-0").checked = false
+            break;
+          } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].code.length) == searchTerms.naics[i].subcategories[i2].code) {
+            if (searchTerms.naics[i].subcategories[i2].subcategories) {
+              // LEVEL 2 OF SUBCATEGORIES
+              for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code == elem.value) {
+                  searchTerms.naics[i].subcategories[i2].subcategories[i3].value = elem.checked
+                  if (!elem.checked) {
+                    if (searchItemSuggestions.naics.it.includes(elem.value)) {
+                      document.getElementById("search-item-suggestion-0").checked = false
+                    }
+                    if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+                      document.getElementById("search-item-suggestion-1").checked = false
+                    }
+                    searchTerms.naics[0].value = false
+                    var a = document.getElementsByClassName('checkbox-naics')
+                    a[0].checked = false
                   }
-                  if (searchItemSuggestions.naics.professional.includes(elem.value)) {
-                    document.getElementById("search-item-suggestion-1").checked = false
-                  }
-                  searchTerms.naics[0].value = false
-                  var a = document.getElementsByClassName('checkbox-naics')
-                  a[0].checked = false
-                }
-                break;
-              } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].code) {
-                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                  // LEVEL 3 OF SUBCATEGORIES
-                  for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                    if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code == elem.value) {
-                      searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].value = elem.checked
-                      if (!elem.checked) {
-                        if (searchItemSuggestions.naics.it.includes(elem.value)) {
-                          document.getElementById("search-item-suggestion-0").checked = false
-                        }
-                        if (searchItemSuggestions.naics.professional.includes(elem.value)) {
-                          document.getElementById("search-item-suggestion-1").checked = false
-                        }
-                        searchTerms.naics[0].value = false
-                        var a = document.getElementsByClassName('checkbox-naics')
-                        a[0].checked = false
-                      }
-                      break;
-                    } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code) {
-                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                        // LEVEL 4 OF SUBCATEGORIES
-                        for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                          if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == elem.value) {
-                            searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = elem.checked
-                            if (!elem.checked) {
-                              if (searchItemSuggestions.naics.it.includes(elem.value)) {
-                                document.getElementById("search-item-suggestion-0").checked = false
-                              }
-                              if (searchItemSuggestions.naics.professional.includes(elem.value)) {
-                                document.getElementById("search-item-suggestion-1").checked = false
-                              }
-                              searchTerms.naics[0].value = false
-                              var a = document.getElementsByClassName('checkbox-naics')
-                              a[0].checked = false
-                            }
-                            break;
+                  break;
+                } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].code) {
+                  if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
+                    // LEVEL 3 OF SUBCATEGORIES
+                    for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code == elem.value) {
+                        searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].value = elem.checked
+                        if (!elem.checked) {
+                          if (searchItemSuggestions.naics.it.includes(elem.value)) {
+                            document.getElementById("search-item-suggestion-0").checked = false
                           }
+                          if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+                            document.getElementById("search-item-suggestion-1").checked = false
+                          }
+                          searchTerms.naics[0].value = false
+                          var a = document.getElementsByClassName('checkbox-naics')
+                          a[0].checked = false
                         }
-                        //
+                        break;
+                      } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code) {
+                        if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
+                          // LEVEL 4 OF SUBCATEGORIES
+                          for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                            if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == elem.value) {
+                              searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = elem.checked
+                              if (!elem.checked) {
+                                if (searchItemSuggestions.naics.it.includes(elem.value)) {
+                                  document.getElementById("search-item-suggestion-0").checked = false
+                                }
+                                if (searchItemSuggestions.naics.professional.includes(elem.value)) {
+                                  document.getElementById("search-item-suggestion-1").checked = false
+                                }
+                                searchTerms.naics[0].value = false
+                                var a = document.getElementsByClassName('checkbox-naics')
+                                a[0].checked = false
+                              }
+                              break;
+                            }
+                          }
+                          //
+                        }
                       }
                     }
+                    //
                   }
-                  //
                 }
               }
+              //
             }
-            //
           }
         }
-      }
       }
     }
 
@@ -2796,10 +2796,12 @@ function saveSearchTerms() {
             document.getElementById('search-save-popup').classList.remove('inactive')
             document.getElementById('search-save-popup-bg').classList.remove('inactive')
             document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
-            console.log(emptySearchTerms)
-            console.log('----------')
+            var searchTermsToSearch = {
+              companyId: company._id,
+              userId: currentUser._id,
+              searchTerms: searchTerms
+            }
             resetSearchTerms()
-            console.log(emptySearchTerms)
             renderSavedSearches()
             if (!document.getElementById("new-search").classList.contains('inactive')) {
               openSearchItems(1)
@@ -2810,6 +2812,16 @@ function saveSearchTerms() {
             switchTab(1)
             saving = false
             console.log('UPDATED')
+            console.log('starting the thing')
+            var xhttp2 = new XMLHttpRequest();
+            xhttp2.onload = function() {
+              if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+                console.log('thing finished')
+              }
+            };
+            xhttp2.open("PUT", apiUrl+'/fbocompanyproxy/newbysearch', true);
+            xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xhttp2.send(JSON.stringify(searchTermsToSearch));
           }
         };
         var url = apiUrl+"/huntingpartydata/" + id;
@@ -2890,6 +2902,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("company-view").classList.add('inactive')
+      document.getElementById("user-view").classList.add('inactive')
       document.getElementById("bottombar-img-home").classList.add('icon-2-active')
       document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
       document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
@@ -2908,6 +2921,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("company-view").classList.add('inactive')
+      document.getElementById("user-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Search"
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("saved-search-view").classList.remove('inactive')
@@ -2928,6 +2942,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.remove('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("company-view").classList.add('inactive')
+      document.getElementById("user-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Opportunities"
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
@@ -2947,6 +2962,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.remove('inactive')
       document.getElementById("company-view").classList.add('inactive')
+      document.getElementById("user-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = "Pipeline"
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
@@ -2965,6 +2981,7 @@ function toggleHamburgerMenu() {
       document.getElementById("fbo-view").classList.add('inactive')
       document.getElementById("pipeline-view").classList.add('inactive')
       document.getElementById("company-view").classList.remove('inactive')
+      document.getElementById("user-view").classList.add('inactive')
       document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Company</p>'
       document.getElementById("topbar-right").innerHTML = ''
       document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
@@ -2997,6 +3014,37 @@ function toggleHamburgerMenu() {
           a[i].value = company.emailDomains[i]
         }
       }
+    } else if (num == 5) {
+      document.getElementById("news-block").classList.add('inactive')
+      document.getElementById("search-view").classList.add('inactive')
+      document.getElementById("fbo-view").classList.add('inactive')
+      document.getElementById("pipeline-view").classList.add('inactive')
+      document.getElementById("company-view").classList.add('inactive')
+      document.getElementById("user-view").classList.remove('inactive')
+      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Profile</p>'
+      document.getElementById("topbar-right").innerHTML = ''
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+      document.getElementById("fbo-detail-middle").classList.remove('inactive')
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
+      document.getElementById("bottombar-popup").classList.add('inactive');
+
+      // company stuff
+      if (currentUser.avatar) {
+        var avatar = currentUser.avatar
+        if (avatar.slice(0,13) == '../../assets/') {
+          avatar = './' + avatar.slice(13)
+        }
+        document.getElementById("user-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+currentUser.avatar+'" alt="">'
+      }
+      document.getElementById("user-info").innerHTML = '<p class="company-info-text">'+currentUser.firstName+' '+currentUser.lastName+'</p>'+
+      '<p>'+currentUser.username+'</p>'
     }
     activeTab = num
     document.getElementById("topbar-left").innerHTML = ''
@@ -4196,7 +4244,7 @@ function toggleHamburgerMenu() {
               document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+domainMatchingCompanies[0].company.avatar+'" alt=""></div>'
             } else {
               document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
-                '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
+              '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
               '</div>'
             }
             document.getElementById("company-domain-company-name").innerHTML = domainMatchingCompanies[0].company.name
@@ -4204,15 +4252,15 @@ function toggleHamburgerMenu() {
             companyToJoin = domainMatchingCompanies[0].company
           } else {
             document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
-              '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
+            '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
             '</div>'
             var companyListHTML = ''
             for (i = 0; i < domainMatchingCompanies.length; i++) {
               companyListHTML = companyListHTML + '<div id="company-join-item-'+domainMatchingCompanies[i].index+'" class="company-join-item" onclick="pickCompanyFromList('+domainMatchingCompanies[i].index+')">'+
-                '<div class="" style="width: 80px; height: 60px; float: left; position: relative;">'+
-                  '<img src="'+domainMatchingCompanies[i].company.avatar+'" alt="">'+
-                '</div>'+
-                '<p>'+domainMatchingCompanies[i].company.name+'</p>'+
+              '<div class="" style="width: 80px; height: 60px; float: left; position: relative;">'+
+              '<img src="'+domainMatchingCompanies[i].company.avatar+'" alt="">'+
+              '</div>'+
+              '<p>'+domainMatchingCompanies[i].company.name+'</p>'+
               '</div>'
             }
             document.getElementById("company-domain-single").classList.add('inactive')
@@ -4723,64 +4771,64 @@ function toggleHamburgerMenu() {
         if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
           var proxyCopy = outputArray2[i]
           // if (i == 0) {
-            //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
-            // } else {
-              // }
-              outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
-            }
-            fboDescHTML = fboDescHTML + outputArray2[i]
-          }
-          document.getElementById("abstract-text").innerHTML = fboDescHTML;
-          document.getElementById("data-text").innerHTML = dataText;
-          var dueDate = ''
-          if (proxy.fbo.respDate) {
-            var today = getToday()
-            var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-            var date2 = new Date(today);
-            var date1 = new Date(due);
-            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-            var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            if (timeToDue >= 365) {
-              dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
-            } else if (timeToDue >= 60) {
-              dueDate = "<p>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
-            } else if (timeToDue >= 14) {
-              dueDate = "<p>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
-            } else {
-              dueDate = "<p>Due: "+timeToDue+" Days</p>"
-            }
-            // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
-            document.getElementById("fbo-details-date").innerHTML = due
-          } else {
-            dueDate = "<span style='font-size: 10px'>No Due Date</span>"
-            document.getElementById("fbo-details-date").innerHTML = dueDate
-          }
-          // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
-          document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
-          document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
+          //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
+          // } else {
+          // }
+          outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
+        }
+        fboDescHTML = fboDescHTML + outputArray2[i]
+      }
+      document.getElementById("abstract-text").innerHTML = fboDescHTML;
+      document.getElementById("data-text").innerHTML = dataText;
+      var dueDate = ''
+      if (proxy.fbo.respDate) {
+        var today = getToday()
+        var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+        var date2 = new Date(today);
+        var date1 = new Date(due);
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        if (timeToDue >= 365) {
+          dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
+        } else if (timeToDue >= 60) {
+          dueDate = "<p>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
+        } else if (timeToDue >= 14) {
+          dueDate = "<p>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+        } else {
+          dueDate = "<p>Due: "+timeToDue+" Days</p>"
+        }
+        // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
+        document.getElementById("fbo-details-date").innerHTML = due
+      } else {
+        dueDate = "<span style='font-size: 10px'>No Due Date</span>"
+        document.getElementById("fbo-details-date").innerHTML = dueDate
+      }
+      // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
+      document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
+      document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
 
-          activeFbo = proxy
-          fboIndex = index
-          if (!proxy.viewed) {
-            proxy.viewed = []
+      activeFbo = proxy
+      fboIndex = index
+      if (!proxy.viewed) {
+        proxy.viewed = []
+      }
+      if (!proxy.viewed.includes(currentUser._id)) {
+        proxy.viewed.push(currentUser._id)
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log('marked as read')
+            checkProxiesViewed()
           }
-          if (!proxy.viewed.includes(currentUser._id)) {
-            proxy.viewed.push(currentUser._id)
-            var xhttp = new XMLHttpRequest();
-            xhttp.onload = function() {
-              if (xhttp.readyState == 4 && xhttp.status == 200) {
-                console.log('marked as read')
-                checkProxiesViewed()
-              }
-            };
-            var url = apiUrl+"/fbocompanyproxy/" + proxy._id;
-            xhttp.open("PUT", url, true);
-            xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-            xhttp.send(JSON.stringify(proxy));
-          }
-          renderChart()
-          updateComments(proxy)
-          checkVote(proxy, index)
+        };
+        var url = apiUrl+"/fbocompanyproxy/" + proxy._id;
+        xhttp.open("PUT", url, true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(proxy));
+      }
+      renderChart()
+      updateComments(proxy)
+      checkVote(proxy, index)
     } else {
       console.log('ERROR: no fbo on proxy')
       console.log(proxy)
@@ -5287,7 +5335,7 @@ function toggleHamburgerMenu() {
             '<div class="comment-bubble">'+
             // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
             // '<div class="comment-title" style="margin: none!important">'+
-              '<p class="comment-name">'+vote.name+'</p>'+
+            '<p class="comment-name">'+vote.name+'</p>'+
             //   '<p class="comment-time">99 mins</p>'+
             // '</div>'+
             '<p class="comment-text">'+imgString+voteString+'</p>'+
@@ -5438,79 +5486,81 @@ function toggleHamburgerMenu() {
               if (xhttp3.readyState == 4 && xhttp3.status == 200) {
                 searchTerms = JSON.parse(xhttp3.responseText);
                 emptySearchTerms = JSON.parse(xhttp3.responseText);
-                var proxyRequest = {
-                  startIndex: 0,
-                  which: 2
-                }
-                document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...'
-                var xhttp3b = new XMLHttpRequest();
-                xhttp3b.onreadystatechange = function() {
-                  if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
-                    console.log('got the thing')
-                    proxiesRes = JSON.parse(xhttp3b.responseText);
-                    console.log(proxiesRes)
-                    fbosIn = proxiesRes.fbosIn
-                    fboPipeline = proxiesRes.fboPipeline
-                    fbosInMax = proxiesRes.fbosInMax
-                    fboPipelineMax = proxiesRes.fboPipelineMax
-                    checkProxiesViewed()
-                    if (!fbosIn) {
-                      fbosIn = []
-                    } else if (!fboPipeline) {
-                      fboPipeline = []
-                    }
-                    var xhttp4 = new XMLHttpRequest();
-                    // xhttp4.setRequestHeader("Content-type", "application/json");
-                    document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
-                    xhttp4.onreadystatechange = function() {
-                      if (xhttp4.readyState == 4 && xhttp4.status == 200) {
-                        if (xhttp4.responseText === 'false') {
-                          document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
-                          console.log('did the right one')
-                          huntingPartyData = {
-                            companyId: company._id,
-                            users: [],
-                            searches: []
-                          }
+                var xhttp4 = new XMLHttpRequest();
+                // xhttp4.setRequestHeader("Content-type", "application/json");
+                document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
+                xhttp4.onreadystatechange = function() {
+                  if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+                    if (xhttp4.responseText === 'false') {
+                      document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
+                      console.log('did the right one')
+                      huntingPartyData = {
+                        companyId: company._id,
+                        users: [],
+                        searches: []
+                      }
 
-                          huntingPartyData.users.push({
-                            userId: currentUser._id,
-                            name: currentUser.firstName + ' ' + currentUser.lastName,
-                            email: currentUser.username,
-                            deviceId: null,
-                            regId: null,
-                            tosRead: 0,
-                            points: 0
-                          })
-                          if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                            doTheUpdateAnyway = true
-                            huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
+                      huntingPartyData.users.push({
+                        userId: currentUser._id,
+                        name: currentUser.firstName + ' ' + currentUser.lastName,
+                        email: currentUser.username,
+                        deviceId: null,
+                        regId: null,
+                        tosRead: 0,
+                        points: 0
+                      })
+                      if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                        doTheUpdateAnyway = true
+                        huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
+                      }
+                      if (device !== undefined) {
+                        if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
+                          doTheUpdateAnyway = true
+                          huntingPartyData.users[0].deviceId = device.uuid
+                        }
+                      }
+                      var xhttpNewHPD = new XMLHttpRequest();
+                      xhttpNewHPD.onload = function() {
+                        if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
+                          document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
+                          huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
+                          console.log('CREATED')
+                          document.getElementById("loading").classList.add('inactive');
+                          document.getElementById("tos-popup").classList.remove('inactive');
+                        }
+                      };
+                      var url = apiUrl+"/huntingpartydata/add";
+                      xhttpNewHPD.open("POST", url, true);
+                      xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                      xhttpNewHPD.send(JSON.stringify(huntingPartyData));
+                    } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
+                      document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
+                      huntingPartyData = JSON.parse(xhttp4.responseText);
+                      var yourSearches = []
+                      for (i = 0; i < huntingPartyData.users.length; i++) {
+                        if (huntingPartyData.users[i].userId == currentUser._id) {
+                          yourSearches = huntingPartyData.users[i].searches
+                          break
+                        }
+                      }
+                      document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...'
+                      var xhttp3b = new XMLHttpRequest();
+                      xhttp3b.onreadystatechange = function() {
+                        if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
+                          console.log('got the thing')
+                          proxiesRes = JSON.parse(xhttp3b.responseText);
+                          console.log(proxiesRes)
+                          fbosIn = proxiesRes.fbosIn
+                          fboPipeline = proxiesRes.fboPipeline
+                          fbosInMax = proxiesRes.fbosInMax
+                          fboPipelineMax = proxiesRes.fboPipelineMax
+                          checkProxiesViewed()
+                          if (!fbosIn) {
+                            fbosIn = []
+                          } else if (!fboPipeline) {
+                            fboPipeline = []
                           }
-                          if (device !== undefined) {
-                            if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
-                              doTheUpdateAnyway = true
-                              huntingPartyData.users[0].deviceId = device.uuid
-                            }
-                          }
-                          var xhttpNewHPD = new XMLHttpRequest();
-                          xhttpNewHPD.onload = function() {
-                            if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
-                              document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
-
-                              huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
-                              console.log('CREATED')
-                              document.getElementById("loading").classList.add('inactive');
-                              document.getElementById("tos-popup").classList.remove('inactive');
-                            }
-                          };
-                          var url = apiUrl+"/huntingpartydata/add";
-                          xhttpNewHPD.open("POST", url, true);
-                          xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                          xhttpNewHPD.send(JSON.stringify(huntingPartyData));
-                        } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
-                          document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
-                          huntingPartyData = JSON.parse(xhttp4.responseText);
-                          console.log(huntingPartyData)
+                          //
                           var userInList = false
                           if (!huntingPartyData.users) {
                             huntingPartyData.users = []
@@ -5567,7 +5617,6 @@ function toggleHamburgerMenu() {
                                 tosRead = 0
                               }
                               var xhttpHPD = new XMLHttpRequest();
-
                               xhttpHPD.onreadystatechange = function() {
                                 if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
                                   huntingPartyData = JSON.parse(xhttpHPD.responseText);
@@ -5607,16 +5656,32 @@ function toggleHamburgerMenu() {
                               startMainApp()
                             }
                           }
+                          //
                         }
                       }
+                      if (yourSearches.length > 0) {
+                        var proxyRequest = {
+                          startIndex: 0,
+                          which: 2,
+                          searches: yourSearches
+                        }
+                        xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/filtered/multi/", true);
+                        xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
+                        xhttp3b.send(JSON.stringify(proxyRequest));
+                      } else {
+                        var proxyRequest = {
+                          startIndex: 0,
+                          which: 2
+                        }
+                        xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+                        xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
+                        xhttp3b.send(JSON.stringify(proxyRequest));
+                      }
                     }
-                    xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
-                    xhttp4.send();
                   }
                 }
-                xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
-                xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
-                xhttp3b.send(JSON.stringify(proxyRequest));
+                xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
+                xhttp4.send();
               }
             }
             xhttp3.open("GET", apiUrl+"/fbo/getsearchterms/", true);
@@ -5695,22 +5760,22 @@ function toggleHamburgerMenu() {
               // console.log(
               //   "The Fbo Subject: " + fboPipeline[f].fbo.subject
               //   + " is included in "+ huntingPartyData.news[i].body)
-                fboI = f
-                // console.log("F: " +f+ ", FboI: " + fboI)
-              }
+              fboI = f
+              // console.log("F: " +f+ ", FboI: " + fboI)
             }
-            if (fboI == -1){
-              // console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
-              newsHtml = newsHtml + '<div class="news-item">'
-            }
-            else{
-              newsHtml = newsHtml + '<div class="news-item" onclick="goToFbo('+ fboI +', 1)">'
-            }
-            newsHtml += '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
-            '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
-            '</div>'+
-            '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
-            '</div>'
+          }
+          if (fboI == -1){
+            // console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
+            newsHtml = newsHtml + '<div class="news-item">'
+          }
+          else{
+            newsHtml = newsHtml + '<div class="news-item" onclick="goToFbo('+ fboI +', 1)">'
+          }
+          newsHtml += '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
+          '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
+          '</div>'+
+          '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
+          '</div>'
         }
       }
       document.getElementById("news-items").innerHTML = newsHtml
@@ -6390,6 +6455,13 @@ function toggleHamburgerMenu() {
         startIndex: fbosIn.length,
         which: 0
       }
+      var yourSearches = []
+      for (i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].userId == currentUser._id) {
+          yourSearches = huntingPartyData.users[i].searches
+          break
+        }
+      }
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -6402,9 +6474,20 @@ function toggleHamburgerMenu() {
           document.getElementById("fbo-item-load-buffer").classList.add('inactive');
         }
       }
-      xhttp.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(proxyRequest));
+      if (yourSearches.length > 0) {
+        var proxyRequest = {
+          startIndex: fbosIn.length,
+          which: 0,
+          searches: yourSearches
+        }
+        xhttp.open("PUT", apiUrl+"/company/" + company._id + "/filtered/multi/", true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(proxyRequest));
+      } else {
+        xhttp.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp.send(JSON.stringify(proxyRequest));
+      }
     }
   }
 

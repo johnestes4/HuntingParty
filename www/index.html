@@ -885,6 +885,36 @@ under the License.
     </div>
   </div>
 </div>
+
+<div id="user-view" class="body-block inactive">
+  <div class="" style="float: left; height: 25vh; width: 100%; position: relative;">
+    <div id="user-info-img-wrapper" class="company-info-img-wrapper">
+      <img class="company-info-img" src="./img/profile.png" alt="">
+    </div>
+  </div>
+  <div id="user-info" style="text-align: center;">
+    <p class="company-info-text">Your Name</p>
+    <p>Its Email</p>
+    <p>Its Phone #</p>
+    <p>Its Address</p>
+  </div>
+  <div class="fbo-detail-middle-item" style="border-top: 1px solid rgba(0,0,0,0.2);">
+    <div class="fbo-detail-middle-item-header" onClick="openUserDetail(0)">
+      <div class="fbo-detail-middle-item-header-img">
+        <img src="./img/mail.png" alt="">
+      </div>
+      <div class="fbo-detail-middle-item-text">
+        <p>Placeholder</p>
+      </div>
+      <p class="fbo-detail-middle-item-arrow" id="company-detail-middle-item-arrow-0">›</p>
+    </div>
+    <div id="user-detail-middle-0" class="fbo-detail-middle-expanded inactive">
+
+    </div>
+  </div>
+</div>
+
+
 <!-- <div class="iconbar">
 <div id="iconbar-1" class="iconbar-icon iconbar-icon-active" onclick="switchTab(0)">
 <img class="iconbar-img" src="./img/news.png" alt="">
@@ -938,9 +968,9 @@ under the License.
     <p id="bottombar-text-2">More</p>
   </div>
   <div id="bottombar-popup" class="inactive">
-    <!-- <div class="bottombar-popup-item">
+    <div class="bottombar-popup-item" onclick="switchTab(5)">
       Profile
-    </div> -->
+    </div>
     <div class="bottombar-popup-item" onclick="switchTab(4)">
       Company
     </div>
