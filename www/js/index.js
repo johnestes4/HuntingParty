@@ -2834,10 +2834,7 @@ function saveSearchTerms() {
             document.getElementById('search-save-popup').classList.remove('inactive')
             document.getElementById('search-save-popup-bg').classList.remove('inactive')
             document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
-            console.log(emptySearchTerms)
-            console.log('----------')
             resetSearchTerms()
-            console.log(emptySearchTerms)
             saving = false
           }
         };
@@ -2874,15 +2871,34 @@ function saveSearchTerms() {
             saving = false
             console.log('UPDATED')
             console.log('starting the thing')
+
+            var searchCheck = {
+              uid: currentUser._id,
+              searchTerms: terms
+            }
             var xhttp2 = new XMLHttpRequest();
             xhttp2.onload = function() {
               if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-                console.log('thing finished')
+                var finished = JSON.parse(xhttp.responseText);
+                if (!finished) {
+                  console.log('populating search')
+                  var xhttp3 = new XMLHttpRequest();
+                  xhttp3.onload = function() {
+                    if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                      console.log('thing finished')
+                    }
+                  };
+                  xhttp3.open("PUT", apiUrl+'/fbocompanyproxy/newbysearch', true);
+                  xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
+                  xhttp3.send(JSON.stringify(searchTermsToSearch));
+                } else {
+                  console.log('not populating search')
+                }
               }
             };
-            xhttp2.open("PUT", apiUrl+'/fbocompanyproxy/newbysearch', true);
+            xhttp2.open("PUT", apiUrl+"/huntingpartydata/company/" + company._id + "/checksearch/", true);
             xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-            xhttp2.send(JSON.stringify(searchTermsToSearch));
+            xhttp2.send(JSON.stringify(searchCheck));
           }
         };
         var url = apiUrl+"/huntingpartydata/" + id;
