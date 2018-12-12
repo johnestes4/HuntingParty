@@ -1,6 +1,6 @@
-// var apiUrl = 'https://efassembly.com:4432'
+var apiUrl = 'https://efassembly.com:4432'
 // var apiUrl = 'http://18.218.170.246:4200'
-var apiUrl = 'http://localhost:4200'
+// var apiUrl = 'http://localhost:4200'
 
 var saving = false
 var activeTab = 0
@@ -927,7 +927,6 @@ function renderSavedSearches() {
     if (huntingPartyData.users[i].userId !== currentUser._id) {
       if (!hasOtherOnes && huntingPartyData.users[i].searches) {
         if (huntingPartyData.users[i].searches.length > 0) {
-          console.log('hm')
           searchDropdownHtml = searchDropdownHtml + '<optgroup label="Coworkers\' Searches">'
           hasOtherOnes = true
         }
@@ -1358,6 +1357,9 @@ function recheckFilterOpportunities() {
 
 function filterOpportunitiesBySearch(elem) {
   var searchIndex = elem.value
+  if (searchIndex !== activeSearchIndex) {
+    document.getElementById("fbo-item-initialized-message").classList.add('inactive')
+  }
   document.getElementById("fbo-items").innerHTML = ''
   document.getElementById("fbo-item-load-buffer").classList.remove('inactive')
   if (searchIndex > -1) {
@@ -2879,7 +2881,7 @@ function saveSearchTerms() {
             var xhttp2 = new XMLHttpRequest();
             xhttp2.onload = function() {
               if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-                var finished = JSON.parse(xhttp.responseText);
+                var finished = JSON.parse(xhttp2.responseText);
                 if (!finished) {
                   console.log('populating search')
                   var xhttp3 = new XMLHttpRequest();
