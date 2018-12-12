@@ -590,6 +590,17 @@ under the License.
             <div id="fbo-item-load-buffer" class="fbo-item inactive" style="height: 150px;">
               <div class="loading-circle"></div>
             </div>
+            <div id="fbo-item-initialized-message" class="fbo-item inactive" style="height: auto;">
+              <div class="fbo-item-title" style="height: auto;">
+                <p>This search is still populating. Come back in a few minutes to see its results, or you can refresh below to check again if it's done.</p>
+              </div>
+              <div class="" style="width: 100%; height: 40px; position: relative; float: left;">
+                <button id="fbo-item-initialized-button" class="center-absolute" type="button" name="button" onclick="recheckFilterOpportunities()" style="width: 200px; height: 40px; line-height: 36px; background: rgba(98,98,198,1)">Refresh</button>
+              </div>
+              <div class="fbo-item-title" style="height: auto; text-align: center;">
+                <p id="fbo-item-initialized-text" class="inactive">Still Loading...</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1344,6 +1344,18 @@ function openSearchItems(which) {
 
 var activeSearch = null
 
+function recheckFilterOpportunities() {
+  console.log('checking again')
+  document.getElementById("fbo-item-initialized-button").innerHTML = 'Checking...'
+  var a = document.getElementsByClassName('opp-topbar-select')
+  for (i = 0; i < a.length; i++) {
+    if (a[i].value == activeSearchIndex) {
+      filterOpportunitiesBySearch(a[i])
+      break
+    }
+  }
+}
+
 function filterOpportunitiesBySearch(elem) {
   var searchIndex = elem.value
   document.getElementById("fbo-items").innerHTML = ''
@@ -1351,6 +1363,7 @@ function filterOpportunitiesBySearch(elem) {
   if (searchIndex > -1) {
     searchFilterName = yourSearches[searchIndex].name
     activeSearch = yourSearches[searchIndex]
+    activeSearchIndex = searchIndex
     var searchCheck = {
       uid: currentUser._id,
       searchTerms: activeSearch
@@ -1361,6 +1374,7 @@ function filterOpportunitiesBySearch(elem) {
         var finished = JSON.parse(xhttp.responseText);
         console.log(finished)
         if (finished) {
+          document.getElementById("fbo-item-initialized-message").classList.add('inactive')
           var proxyRequest = {
             searchTerms: activeSearch,
             startIndex: 0
@@ -1373,6 +1387,7 @@ function filterOpportunitiesBySearch(elem) {
               fbosInMax = proxiesRes.fbosInMax
               checkProxiesViewed()
               document.getElementById("fbo-item-load-buffer").classList.add('inactive')
+              document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
               renderFbos()
             }
           }
@@ -1380,6 +1395,8 @@ function filterOpportunitiesBySearch(elem) {
           xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
           xhttp2.send(JSON.stringify(proxyRequest));
         } else {
+          document.getElementById("fbo-item-initialized-message").classList.remove('inactive')
+          document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
           console.log('NOT DONE YET')
         }
       }
@@ -1407,6 +1424,7 @@ function filterOpportunitiesBySearch(elem) {
           fboPipeline = []
         }
         document.getElementById("fbo-item-load-buffer").classList.add('inactive')
+        document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
         renderFbos()
       }
     }
