@@ -1351,24 +1351,42 @@ function filterOpportunitiesBySearch(elem) {
   if (searchIndex > -1) {
     searchFilterName = yourSearches[searchIndex].name
     activeSearch = yourSearches[searchIndex]
-    var proxyRequest = {
-      searchTerms: activeSearch,
-      startIndex: 0
+    var searchCheck = {
+      uid: currentUser._id,
+      searchTerms: activeSearch
     }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
-        proxiesRes = JSON.parse(xhttp.responseText);
-        fbosIn = proxiesRes.fbosIn
-        fbosInMax = proxiesRes.fbosInMax
-        checkProxiesViewed()
-        document.getElementById("fbo-item-load-buffer").classList.add('inactive')
-        renderFbos()
+        var finished = JSON.parse(xhttp.responseText);
+        console.log(finished)
+        if (finished) {
+          var proxyRequest = {
+            searchTerms: activeSearch,
+            startIndex: 0
+          }
+          var xhttp2 = new XMLHttpRequest();
+          xhttp2.onreadystatechange = function() {
+            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+              proxiesRes = JSON.parse(xhttp2.responseText);
+              fbosIn = proxiesRes.fbosIn
+              fbosInMax = proxiesRes.fbosInMax
+              checkProxiesViewed()
+              document.getElementById("fbo-item-load-buffer").classList.add('inactive')
+              renderFbos()
+            }
+          }
+          xhttp2.open("PUT", apiUrl+"/company/" + company._id + "/filtered/", true);
+          xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+          xhttp2.send(JSON.stringify(proxyRequest));
+        } else {
+          console.log('NOT DONE YET')
+        }
       }
     }
-    xhttp.open("PUT", apiUrl+"/company/" + company._id + "/filtered/", true);
+    xhttp.open("PUT", apiUrl+"/huntingpartydata/company/" + company._id + "/checksearch/", true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send(JSON.stringify(proxyRequest));
+    xhttp.send(JSON.stringify(searchCheck));
   } else {
     searchFilterName = null
     activeSearch = null
@@ -1404,15 +1422,25 @@ function deleteSearchTerms() {
     document.getElementById('search-save-loading').classList.remove('inactive')
     document.getElementById('search-save-popup-bg').classList.remove('inactive')
     if (activeSearchIndex > -1) {
+      var deletedSearch
+      var allSearches = []
       var searchSucceeded = false
       for (i = 0; i < huntingPartyData.users.length; i++) {
         if (huntingPartyData.users[i].userId == currentUser._id) {
           if (huntingPartyData.users[i].searches) {
+            deletedSearch = huntingPartyData.users[i].searches[activeSearchIndex]
             console.log(huntingPartyData.users[i].searches[activeSearchIndex])
             huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
             searchSucceeded = true
             theindex = i
             break
+          }
+        }
+      }
+      for (i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].searches) {
+          for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+            allSearches.push(huntingPartyData.users[i].searches[i2])
           }
         }
       }
@@ -1428,13 +1456,26 @@ function deleteSearchTerms() {
             renderSavedSearches()
             switchTab(1)
             openSearchItems(0)
+            var deleteRequest = {
+              companyId: company._id,
+              deletedSearch: deletedSearch,
+              allSearches: allSearches
+            }
+            var xhttp2 = new XMLHttpRequest();
+            xhttp2.onload = function() {
+              if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+                console.log('proxies gone')
+              }
+            }
+            xhttp2.open("PUT", apiUrl+"/fbocompanyproxy/deletebysearch", true);
+            xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xhttp2.send(JSON.stringify(deleteRequest));
             document.getElementById('search-save-loading').classList.add('inactive')
             document.getElementById('search-save-popup-bg').classList.add('inactive')
             saving = false
           }
         };
-        var url = apiUrl+"/huntingpartydata/" + id;
-        xhttp.open("PUT", url, true);
+        xhttp.open("PUT", apiUrl+"/huntingpartydata/" + id, true);
         xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
         xhttp.send(JSON.stringify(huntingPartyData));
       } else {
@@ -2751,6 +2792,7 @@ function saveSearchTerms() {
         creatingNew = true
       }
       terms.name = document.getElementById("search-name").value
+      terms.initializing = true
       if (activeSearchIndex > -1) {
         yourSearches[activeSearchIndex] = terms
       } else {
@@ -2799,8 +2841,9 @@ function saveSearchTerms() {
             var searchTermsToSearch = {
               companyId: company._id,
               userId: currentUser._id,
-              searchTerms: searchTerms
+              searchTerms: terms
             }
+            console.log(searchTermsToSearch)
             resetSearchTerms()
             renderSavedSearches()
             if (!document.getElementById("new-search").classList.contains('inactive')) {
@@ -3407,28 +3450,28 @@ function toggleHamburgerMenu() {
           var date1 = new Date(due);
           var expired = false
 
-          if (duearray[2] < todayarray[2]) {
-            expired = true
-          }
-          else if (duearray[2] > todayarray[2]){
-            expired = false
-          }
-          else{
-            if(duearray[0] < todayarray[0]){
-              expired = true
-            }
-            else if (duearray[0] > todayarray[0]){
-              expired = false
-            }
-            else{
-              if (duearray[1] < todayarray[1]){
-                expired = true
-              }
-              else{
-                expired = false
-              }
-            }
-          }
+          // if (duearray[2] < todayarray[2]) {
+          //   expired = true
+          // }
+          // else if (duearray[2] > todayarray[2]){
+          //   expired = false
+          // }
+          // else{
+          //   if(duearray[0] < todayarray[0]){
+          //     expired = true
+          //   }
+          //   else if (duearray[0] > todayarray[0]){
+          //     expired = false
+          //   }
+          //   else{
+          //     if (duearray[1] < todayarray[1]){
+          //       expired = true
+          //     }
+          //     else{
+          //       expired = false
+          //     }
+          //   }
+          // }
 
           var timeDiff = (date1.getTime() - date2.getTime());
           var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -3496,6 +3539,9 @@ function toggleHamburgerMenu() {
           }
         }
         var imgString = ''
+        if (!proxy.fbo.agency) {
+          proxy.fbo.agency = 'No Agency Provided'
+        }
         for (i2 = 0; i2 < agencyLogos.length; i2++) {
           if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
             imgString = 'img/agencies/'+agencyLogos[i2].img
