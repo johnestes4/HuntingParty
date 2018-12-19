@@ -5997,7 +5997,8 @@ function toggleHamburgerMenu() {
         {fbo: 'Department of Veterans Affairs', agency: true, fpds: 'DEPARTMENT OF VETERANS AFFAIRS (VA)'},
         {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'}
       ]
-      if (!proxy.chartData) {
+      if (!currentFbo.chartData) {
+        console.log('no chart data')
         var query = ''
         for (i = 0; i < nameFilters.length; i++) {
           if (currentFbo.agency.toLowerCase() == nameFilters[i].fbo.toLowerCase()) {
@@ -6232,7 +6233,7 @@ function toggleHamburgerMenu() {
             labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
             datasets: [{
               label: 'Prices',
-              data: proxy.chartData.prices,
+              data: currentFbo.chartData.prices,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -6279,7 +6280,7 @@ function toggleHamburgerMenu() {
             label: 'Prices',
             labels: ["1", "2-3", "4-5", "6+"],
             datasets: [{
-              data: proxy.chartData.offers,
+              data: currentFbo.chartData.offers,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -6323,8 +6324,8 @@ function toggleHamburgerMenu() {
           data: {
             datasets: [{
               label: 'Scatter Dataset',
-              data: proxy.chartData.scatterData,
-              backgroundColor: proxy.chartData.colors
+              data: currentFbo.chartData.scatterData,
+              backgroundColor: currentFbo.chartData.colors
             }]
           },
           options: {
