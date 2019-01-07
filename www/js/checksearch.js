@@ -114,6 +114,13 @@ function checkSearchAccuracy(num) {
           }
           termsString = termsString + '</p>'
         }
+        if (parsedTerms.place) {
+          termsString = termsString + '<p>LOCATION: '
+          for (i = 0; i < parsedTerms.place.length; i++) {
+            termsString = termsString + parsedTerms.place[i] + ', '
+          }
+          termsString = termsString + '</p>'
+        }
         if (parsedTerms.keyword) {
           termsString = termsString + '<p>KEYWORD: ' + parsedTerms.keyword + '</p>'
         }
@@ -123,24 +130,13 @@ function checkSearchAccuracy(num) {
         for (i = 0; i < searchResults.length; i++) {
           resultsString = resultsString + '<p>'
           resultsString = resultsString + 'SUBJECT: ' + searchResults[i].subject
-          if (parsedTerms.type) {
-            resultsString = resultsString + ' TYPE: ' + searchResults[i].type
-          }
-          if (parsedTerms.dueDate) {
-            resultsString = resultsString + ' DUE DATE: ' + searchResults[i].dueDate
-          }
-          if (parsedTerms.naics) {
-            resultsString = resultsString + ' NAICS: ' + searchResults[i].naics
-          }
-          if (parsedTerms.psc) {
-            resultsString = resultsString + ' PSC: ' + searchResults[i].classCod
-          }
-          if (parsedTerms.agencies) {
-            resultsString = resultsString + ' AGENCY: ' + searchResults[i].agency
-          }
-          if (parsedTerms.keyword) {
-            resultsString = resultsString + ' KEYWORD: ' + searchResults[i].keyword
-          }
+          resultsString = resultsString + ' | SOLICITATION #: ' + searchResults[i].solnbr
+          resultsString = resultsString + ' | POSTED: ' + searchResults[i].date + searchResults[i].year
+          resultsString = resultsString + ' | RESP DATE: ' + searchResults[i].respDate
+          resultsString = resultsString + ' | AGENCY: ' + searchResults[i].agency
+          resultsString = resultsString + ' | NAICS: ' + searchResults[i].naics
+          resultsString = resultsString + ' | PSC: ' + searchResults[i].classCod
+          resultsString = resultsString + ' | TYPE: ' + searchResults[i].type
           resultsString = resultsString + '</p> \n'
         }
         document.getElementById("search-results-box").innerHTML = resultsString;
@@ -286,6 +282,41 @@ function parseSearch(searchTerms) {
         searchOut.setAside = []
       }
       searchOut.setAside.push(i.fboName)
+    }
+  }
+  for (let i of searchTerms.place) {
+    if (i.value) {
+      if (!searchOut.place) {
+        searchOut.place = []
+      }
+      searchOut.place.push(i.name)
+    } else if (i.regions) {
+      for (let i2 of i.regions) {
+        if (i2.value) {
+          if (!searchOut.place) {
+            searchOut.place = []
+          }
+          searchOut.place.push(i2.name)
+        } else if (i2.regions) {
+          for (let i3 of i2.regions) {
+            if (i3.value) {
+              if (!searchOut.place) {
+                searchOut.place = []
+              }
+              searchOut.place.push(i3.name)
+            } else if (i3.regions) {
+              for (let i4 of i3.regions) {
+                if (i4.value) {
+                  if (!searchOut.place) {
+                    searchOut.place = []
+                  }
+                  searchOut.place.push(i4.name)
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
   if (searchTerms.keyword.length > 0) {
