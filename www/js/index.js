@@ -1370,42 +1370,26 @@ function filterOpportunitiesBySearch(elem) {
       uid: currentUser._id,
       searchTerms: activeSearch
     }
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var finished = JSON.parse(xhttp.responseText);
-        console.log(finished)
-        if (finished) {
-          document.getElementById("fbo-item-initialized-message").classList.add('inactive')
-          var proxyRequest = {
-            searchTerms: activeSearch,
-            startIndex: 0
-          }
-          var xhttp2 = new XMLHttpRequest();
-          xhttp2.onreadystatechange = function() {
-            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-              proxiesRes = JSON.parse(xhttp2.responseText);
-              fbosIn = proxiesRes.fbosIn
-              fbosInMax = proxiesRes.fbosInMax
-              checkProxiesViewed()
-              document.getElementById("fbo-item-load-buffer").classList.add('inactive')
-              document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
-              renderFbos()
-            }
-          }
-          xhttp2.open("PUT", apiUrl+"/company/" + company._id + "/filtered/", true);
-          xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-          xhttp2.send(JSON.stringify(proxyRequest));
-        } else {
-          document.getElementById("fbo-item-initialized-message").classList.remove('inactive')
-          document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
-          console.log('NOT DONE YET')
-        }
+    document.getElementById("fbo-item-initialized-message").classList.add('inactive')
+    var proxyRequest = {
+      searchTerms: activeSearch,
+      startIndex: 0
+    }
+    var xhttp2 = new XMLHttpRequest();
+    xhttp2.onreadystatechange = function() {
+      if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+        proxiesRes = JSON.parse(xhttp2.responseText);
+        fbosIn = proxiesRes.fbosIn
+        fbosInMax = proxiesRes.fbosInMax
+        checkProxiesViewed()
+        document.getElementById("fbo-item-load-buffer").classList.add('inactive')
+        document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
+        renderFbos()
       }
     }
-    xhttp.open("PUT", apiUrl+"/huntingpartydata/company/" + company._id + "/checksearch/", true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send(JSON.stringify(searchCheck));
+    xhttp2.open("PUT", apiUrl+"/company/" + company._id + "/filtered/", true);
+    xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp2.send(JSON.stringify(proxyRequest));
   } else {
     searchFilterName = null
     activeSearch = null
@@ -2812,7 +2796,6 @@ function saveSearchTerms() {
         creatingNew = true
       }
       terms.name = document.getElementById("search-name").value
-      terms.initializing = true
       if (activeSearchIndex > -1) {
         yourSearches[activeSearchIndex] = terms
       } else {
@@ -2851,56 +2834,37 @@ function saveSearchTerms() {
         xhttp.onload = function() {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
             huntingPartyData = JSON.parse(xhttp.responseText);
-            document.getElementById('search-save-loading').classList.add('inactive')
-            document.getElementById('search-save-popup').classList.remove('inactive')
-            document.getElementById('search-save-popup-bg').classList.remove('inactive')
-            document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+
+            console.log('populating search')
             var searchTermsToSearch = {
               companyId: company._id,
               userId: currentUser._id,
               searchTerms: terms
             }
             console.log(searchTermsToSearch)
-            resetSearchTerms()
-            renderSavedSearches()
-            if (!document.getElementById("new-search").classList.contains('inactive')) {
-              openSearchItems(1)
-            }
-            if (document.getElementById("saved-searches").classList.contains('inactive')) {
-              openSearchItems(0)
-            }
-            switchTab(1)
-            saving = false
-            console.log('UPDATED')
-            console.log('starting the thing')
-
-            var searchCheck = {
-              uid: currentUser._id,
-              searchTerms: terms
-            }
             var xhttp2 = new XMLHttpRequest();
             xhttp2.onload = function() {
               if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-                var finished = JSON.parse(xhttp2.responseText);
-                if (!finished) {
-                  console.log('populating search')
-                  var xhttp3 = new XMLHttpRequest();
-                  xhttp3.onload = function() {
-                    if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-                      console.log('thing finished')
-                    }
-                  };
-                  xhttp3.open("PUT", apiUrl+'/fbocompanyproxy/newbysearch', true);
-                  xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
-                  xhttp3.send(JSON.stringify(searchTermsToSearch));
-                } else {
-                  console.log('not populating search')
+                console.log('thing finished')
+                document.getElementById('search-save-loading').classList.add('inactive')
+                document.getElementById('search-save-popup').classList.remove('inactive')
+                document.getElementById('search-save-popup-bg').classList.remove('inactive')
+                document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+                resetSearchTerms()
+                renderSavedSearches()
+                if (!document.getElementById("new-search").classList.contains('inactive')) {
+                  openSearchItems(1)
                 }
+                if (document.getElementById("saved-searches").classList.contains('inactive')) {
+                  openSearchItems(0)
+                }
+                switchTab(1)
+                saving = false
               }
             };
-            xhttp2.open("PUT", apiUrl+"/huntingpartydata/company/" + company._id + "/checksearch/", true);
+            xhttp2.open("PUT", apiUrl+'/fbocompanyproxy/newbysearch', true);
             xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-            xhttp2.send(JSON.stringify(searchCheck));
+            xhttp2.send(JSON.stringify(searchTermsToSearch));
           }
         };
         var url = apiUrl+"/huntingpartydata/" + id;
@@ -4845,7 +4809,11 @@ function toggleHamburgerMenu() {
       '</p><p><span style="font-weight: bold">Contact: </span>'+
       proxy.fbo.contact+
       '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
-      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+proxy.fbo.subject+'</p>';
+      if (proxy.fbo.subject.length < 98) {
+        document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+proxy.fbo.subject+'</p>';
+      } else {
+        document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2" style="font-size: 14px; line-height: 13px!important;">'+proxy.fbo.subject+'</p>';
+      }
       var fboDescHTML = ''
       var outputArray2 = proxy.fboDesc
       activeFboDesc = outputArray2
