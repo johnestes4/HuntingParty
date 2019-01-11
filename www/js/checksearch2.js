@@ -88,7 +88,7 @@ function checkSearchAccuracy(num) {
         var resultsString = ''
         for (i = 0; i < searchResults.length; i++) {
           resultsString = resultsString + '<p>'
-          resultsString = resultsString + 'SUBJECT: ' + searchResults[i].subject
+          resultsString = resultsString + '<a href="'+searchResults[i].url+'">SUBJECT: ' + searchResults[i].subject + '</a>'
           resultsString = resultsString + ' | SOLICITATION #: ' + searchResults[i].solnbr
           resultsString = resultsString + ' | POSTED: ' + searchResults[i].date + searchResults[i].year
           resultsString = resultsString + ' | RESP DATE: ' + searchResults[i].respDate
