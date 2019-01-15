@@ -1645,7 +1645,6 @@ function searchFilter(which) {
               if (searchTerms.naics[i].subcategories[i2].subcategories) {
                 for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code.toString().includes(string)) {
-                    console.log(searchTerms.naics[i].subcategories[i2].subcategories[i3].code)
                     inactive1 = ''
                     inactive2 = ''
                     inactive3 = ''
@@ -1654,7 +1653,6 @@ function searchFilter(which) {
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
                     for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
                       if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.toString().includes(string)) {
-                        console.log(searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code)
                         inactive1 = ''
                         inactive2 = ''
                         inactive3 = ''
@@ -1664,7 +1662,6 @@ function searchFilter(which) {
                       if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
                         for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
                           if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code.toString().includes(string)) {
-                            console.log(searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code)
                             inactive1 = ''
                             inactive2 = ''
                             inactive3 = ''
@@ -4958,6 +4955,14 @@ function toggleHamburgerMenu() {
     noRefer = []
     referRefer = []
     var proxy
+    var a = document.getElementsByClassName('fbo-detail-middle-expanded')
+    for (i = 0; i < a.length; i++) {
+      if (!a[i].classList.contains('inactive')) {
+        // console.log(a[i].id.slice(a[i].id.length-1))
+        // console.log(i)
+        openFboDetail(i)
+      }
+    }
     if (tab == 0) {
       proxy = fbosIn[index]
       document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(2)"><p>‹</p></div>'
