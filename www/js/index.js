@@ -5008,8 +5008,52 @@ function toggleHamburgerMenu() {
       }
       var naicsHtml = ''
       if (proxy.fbo.naics) {
+        var naicsToCheck = proxy.fbo.naics
+        var naicsDesc = ''
+        if (searchTerms.naics) {
+          console.log(naicsToCheck.slice(naicsToCheck.length-1))
+          for (let i of searchTerms.naics) {
+            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i.code) {
+              naicsDesc = i.name
+            } else if (i.code == naicsToCheck) {
+              naicsDesc = i.name
+            } else if (i.subcategories) {
+              for (let i2 of i.subcategories) {
+                if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i2.code) {
+                  naicsDesc = i2.name
+                } else if (i2.code == naicsToCheck) {
+                  naicsDesc = i2.name
+                } else if (i2.subcategories) {
+                  for (let i3 of i2.subcategories) {
+                    if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i3.code) {
+                      naicsDesc = i3.name
+                    } else if (i3.code == naicsToCheck) {
+                      naicsDesc = i3.name
+                    } else if (i3.subcategories) {
+                      for (let i4 of i3.subcategories) {
+                        if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i4.code) {
+                          naicsDesc = i4.name
+                        } else if (i4.code == naicsToCheck) {
+                          naicsDesc = i4.name
+                        } else if (i4.subcategories) {
+                          for (let i5 of i4.subcategories) {
+                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i5.code) {
+                              naicsDesc = i5.name
+                            } else if (i5.code == naicsToCheck) {
+                              naicsDesc = i5.name
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
         naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
-        proxy.fbo.naics
+        proxy.fbo.naics + ' ' + naicsDesc
       }
       var psc = proxy.fbo.classCod
       var pscFound = false
@@ -5047,7 +5091,7 @@ function toggleHamburgerMenu() {
       '</p><p><span style="font-weight: bold">Office: </span>'+
       proxy.fbo.office+
       '</p><p><span style="font-weight: bold">Location: </span>'+
-      proxy.fbo.location+
+      proxy.fbo.offAdd+', '
       '</p><p><span style="font-weight: bold">Setaside: </span>'+
       proxy.fbo.setaside+
       '</p><p><span style="font-weight: bold">Due Date: </span>'+
