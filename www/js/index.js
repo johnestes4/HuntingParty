@@ -1444,7 +1444,11 @@ function deleteSearchTerms() {
       for (i = 0; i < huntingPartyData.users.length; i++) {
         if (huntingPartyData.users[i].searches) {
           for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
-            allSearches.push(huntingPartyData.users[i].searches[i2])
+            if (huntingPartyData.users[i].searches[i2] !== deletedSearch) {
+              allSearches.push(huntingPartyData.users[i].searches[i2])
+            } else {
+              console.log('it did turn up in this loop')
+            }
           }
         }
       }
@@ -1465,6 +1469,7 @@ function deleteSearchTerms() {
               deletedSearch: deletedSearch,
               allSearches: allSearches
             }
+            console.log('MAKING DELETE REQUEST FOR ' + deletedSearch.name)
             var xhttp2 = new XMLHttpRequest();
             xhttp2.onload = function() {
               if (xhttp2.readyState == 4 && xhttp2.status == 200) {
@@ -6627,6 +6632,12 @@ function toggleHamburgerMenu() {
             }
           }
         });
+        document.getElementById("chart1").classList.add('inactive');
+        document.getElementById("chart2").classList.add('inactive');
+        document.getElementById("chart3").classList.add('inactive');
+        document.getElementById("chart1").classList.remove('inactive');
+        document.getElementById("chart2").classList.remove('inactive');
+        document.getElementById("chart3").classList.remove('inactive');
       }
     }
   }
