@@ -947,7 +947,7 @@ function renderSavedSearches() {
   }
   document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml
   html = html + '<div class="search-item">'+
-  '<div class="search-item-header" onclick="openSearchItems('+0+')">'+
+  '<div id="search-item-header-0" class="search-item-header" onclick="openSearchItems('+0+')">'+
   '<div class="category-text">'+
   'Your Searches: '+
   '</div>'+
@@ -960,7 +960,7 @@ function renderSavedSearches() {
   var arrowIndex = 3
   for (i = 0; i < onlyYourSearches.length; i++) {
     html = html + '<div class="search-item">'+
-    '<div class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
+    '<div id="search-item-header-'+arrowIndex+'" class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
     '<div class="category-text">'+
     onlyYourSearches[i].name+
     '</div>'+
@@ -981,7 +981,7 @@ function renderSavedSearches() {
   document.getElementById("saved-search-view").innerHTML = html
   if (otherPeoplesSearches.length > 0) {
     html = '<div class="search-item">'+
-    '<div class="search-item-header" onclick="openSearchItems('+2+')">'+
+    '<div id="search-item-header-'+2+'" class="search-item-header" onclick="openSearchItems('+2+')">'+
     '<div class="category-text">'+
     'Coworkers\' Searches: '+
     '</div>'+
@@ -993,7 +993,7 @@ function renderSavedSearches() {
 
     for (i = 0; i < otherPeoplesSearches.length; i++) {
       html = html + '<div class="search-item">'+
-      '<div class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
+      '<div id="search-item-header-'+arrowIndex+'" class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
       '<div class="category-text">'+
       otherPeoplesSearches[i].name+
       '</div>'+
@@ -1275,6 +1275,8 @@ function openSearchItems(which) {
     if (previousSearchTermsIndex) {
       if (document.getElementById("search-item-"+previousSearchTermsIndex)) {
         document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
+        document.getElementById("search-item-header-"+previousSearchTermsIndex).classList.remove('search-item-header-active')
+        document.getElementById("category-arrow-"+previousSearchTermsIndex).classList.remove('rotate')
         previousSearchTermsIndex = null
       }
     }
@@ -1284,10 +1286,12 @@ function openSearchItems(which) {
       //   document.getElementById("search-name-popup").classList.remove('inactive')
       // }
       viewSearch(-1)
+      console.log("category-arrow-"+which)
       document.getElementById("double-search-buttons").classList.add('inactive')
       document.getElementById("single-search-button").classList.remove('inactive')
       document.getElementById("new-search").classList.remove('inactive')
       document.getElementById("search-name").classList.remove('inactive')
+      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active')
       document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
       document.getElementById("search-name").classList.remove('invalid-input')
@@ -1297,14 +1301,17 @@ function openSearchItems(which) {
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
+      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active')
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   } else if (which == 2) {
     if (document.getElementById("other-saved-searches").classList.contains('inactive')) {
       document.getElementById("other-saved-searches").classList.remove('inactive')
+      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active')
       document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
       document.getElementById("other-saved-searches").classList.add('inactive')
+      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active')
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   } else {
@@ -1313,12 +1320,17 @@ function openSearchItems(which) {
     }
     if (previousSearchTermsIndex) {
       document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
+      document.getElementById("search-item-header-"+previousSearchTermsIndex).classList.remove('search-item-header-active')
+      document.getElementById("category-arrow-"+previousSearchTermsIndex).classList.remove('rotate')
       previousSearchTermsIndex = null
     }
     if (document.getElementById("search-item-"+which).classList.contains('inactive')) {
       document.getElementById("new-search").innerHTML = ''
       document.getElementById("new-search").classList.add('inactive')
       document.getElementById("search-name").classList.add('inactive')
+      document.getElementById("category-arrow-1").classList.remove('rotate')
+      document.getElementById("search-item-header-1").classList.remove('search-item-header-active')
+      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active')
       document.getElementById("category-arrow-"+which).classList.add('rotate')
       generateSearchHTML(which)
       if (document.getElementById("search-item-"+which).classList.contains('coworker-search')) {
@@ -1336,6 +1348,7 @@ function openSearchItems(which) {
     } else {
       document.getElementById("search-item-"+which).innerHTML = ''
       document.getElementById("search-item-"+which).classList.add('inactive')
+      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active')
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   }
