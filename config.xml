@@ -125,7 +125,7 @@
         <variable name="FIREBASE_VERSION" value="15.+" />
     </plugin>
     <gap:config-file platform="android" parent="/manifest" mode="delete">
-      <uses-permission android:name="android.permission.RECORD_VIDEO" />
+      <uses-permission android:name="android.permission.RECORD_AUDIO" />
       <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     </gap:config-file>
     <engine name="android" spec="^7.1.1" />
