@@ -391,6 +391,23 @@ var searchItemSuggestions = {
     ]
   }
 }
+var analytics = {
+  tab: {
+    timeStart: 0,
+    timeEnd: 0,
+    clickCount: 0
+  },
+  search: {
+    timeStart: 0,
+    timeEnd: 0,
+    clickCount: 0
+  },
+  fbo: {
+    timeStart: 0,
+    timeEnd: 0,
+    clickCount: 0
+  },
+}
 
 function checkLoginEmail() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -797,6 +814,7 @@ function openSearchBox(which) {
       document.getElementById("category-arrow-duedate").classList.remove('rotate')
     }
   } else if (which == 1) {
+    analytics.search.timeStart = new Date()
     if (document.getElementById("search-box-naics").classList.contains('inactive')) {
       a = document.getElementsByClassName('search-box')
       for (i = 0; i < a.length; i++) {
@@ -3075,6 +3093,22 @@ function saveSearchTerms() {
             document.getElementById('search-save-popup').classList.remove('inactive')
             document.getElementById('search-save-popup-bg').classList.remove('inactive')
             document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+            analytics.search.timeEnd = new Date();
+            var tabString = ''
+            var eventData = {
+              clicks: analytics.search.clickCount,
+              time: ((analytics.search.timeEnd - analytics.search.timeStart) / 1000),
+              device: device
+            };
+            analytics.search.timeStart = new Date();
+            self.client.addEvent("New Search Creation", eventData, function(err, res) {
+              if (err) {
+                console.log("Error: " + err);
+              }
+              else {
+                console.log("Event sent.");
+              }
+            });
             resetSearchTerms()
             saving = false
           }
@@ -3106,6 +3140,22 @@ function saveSearchTerms() {
                 document.getElementById('search-save-popup').classList.remove('inactive')
                 document.getElementById('search-save-popup-bg').classList.remove('inactive')
                 document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+                analytics.search.timeEnd = new Date();
+                var tabString = ''
+                var eventData = {
+                  clicks: analytics.search.clickCount,
+                  time: ((analytics.search.timeEnd - analytics.search.timeStart) / 1000),
+                  device: device
+                };
+                analytics.search.timeStart = new Date();
+                self.client.addEvent("New Search Creation", eventData, function(err, res) {
+                  if (err) {
+                    console.log("Error: " + err);
+                  }
+                  else {
+                    console.log("Event sent.");
+                  }
+                });
                 resetSearchTerms()
                 renderSavedSearches()
                 if (!document.getElementById("new-search").classList.contains('inactive')) {
@@ -3173,6 +3223,9 @@ function toggleHamburgerMenu() {
         }
       }
       // Go up the DOM
+      if (targetElement.parentNode == document.getElementById("new-search")) {
+        analytics.search.clickCount++
+      }
       targetElement = targetElement.parentNode;
     } while (targetElement);
     // This is a click outside.
@@ -3195,6 +3248,40 @@ function toggleHamburgerMenu() {
     document.getElementById("fbo-detail-view").classList.add('inactive');
     tutorialsOpen = true
     openTutorials()
+    if (analytics.tab.timeStart == 0) {
+      analytics.tab.timeStart = new Date();
+      console.log(analytics.tab.timeStart)
+    } else {
+      analytics.tab.timeEnd = new Date();
+      var tabString = ''
+      if (activeTab == 0) {
+        tabString = 'News'
+      } else if (activeTab == 1) {
+        tabString = 'Search'
+      } else if (activeTab == 2) {
+        tabString = 'RFPs'
+      } else if (activeTab == 3) {
+        tabString = 'Pipeline'
+      } else if (activeTab == 4) {
+        tabString = 'Company Profile'
+      } else if (activeTab == 5) {
+        tabString = 'User Profile'
+      }
+      var eventData = {
+        tab: tabString,
+        time: ((analytics.tab.timeEnd - analytics.tab.timeStart) / 1000),
+        device: device
+      };
+      analytics.tab.timeStart = new Date();
+      self.client.addEvent("Tab Usage", eventData, function(err, res) {
+        if (err) {
+          console.log("Error: " + err);
+        }
+        else {
+          console.log("Event sent.");
+        }
+      });
+    }
     if (num == 0) {
       document.getElementById("news-block").classList.remove('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -3356,6 +3443,7 @@ function toggleHamburgerMenu() {
       }
     }
     closeSidebar()
+
   }
 
   function getToday() {
@@ -6667,6 +6755,13 @@ function toggleHamburgerMenu() {
         document.getElementById("login-register").classList.remove('inactive');
       }
       this.bindEvents();
+      this.client = new Keen({
+        projectId: '5c5201c7c9e77c0001edb8cc',
+        readKey: '5E68E6FCDDF8227E7F3F47A7F53FB98C17C9721678EB55F1ED00B94C29AF600F272D14F97C79EB5FDD837E4068888807AE38FD80420239CEB95ABC52555AA5CDCEAA22FC07B8268D9D6E02FFD7A9295D269ACAEE475A3A4DDA587B0836BEAD01',
+        writeKey: '4FFBE9F457824B5D43E951608DFAF2449A110AD2C47164126EC5A6A0F39AEE2CFE13DD365190985DB255BCD4739F6B4DC677E16C7101261CF77E4F07A1535BBAA4FBFFF30F7958DEDFC63ECE42D0C7E6FBAE3D8EBA42203CD0AEA6A703E491A6'
+      });
+      self = this;
+
       // window.plugins.uniqueDeviceID.get(success, fail);
       // function success(uuid) {
       //   console.log('ID IS THIS: ' + uuid);
