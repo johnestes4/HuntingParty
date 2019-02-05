@@ -405,9 +405,11 @@ var analytics = {
   fbo: {
     timeStart: 0,
     timeEnd: 0,
-    clickCount: 0
+    clickCount: 0,
+    vote: null
   },
 }
+var fboOpen = false
 
 function checkLoginEmail() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -3215,6 +3217,10 @@ function toggleHamburgerMenu() {
     let targetElement = evt.target; // clicked element
     var profilePopupOpen = !profilePopup.classList.contains('inactive')
     var profileInside = false
+    analytics.tab.clickCount++
+    if (fboOpen) {
+      analytics.fbo.clickCount++
+    }
     do {
       if (profilePopupOpen) {
         if (targetElement == profilePopup || targetElement == profilePopupButton) {
@@ -3251,7 +3257,7 @@ function toggleHamburgerMenu() {
     if (analytics.tab.timeStart == 0) {
       analytics.tab.timeStart = new Date();
       console.log(analytics.tab.timeStart)
-    } else {
+    } else if (num !== activeTab) {
       analytics.tab.timeEnd = new Date();
       var tabString = ''
       if (activeTab == 0) {
@@ -3269,10 +3275,12 @@ function toggleHamburgerMenu() {
       }
       var eventData = {
         tab: tabString,
+        clickCount: analytics.tab.clickCount,
         time: ((analytics.tab.timeEnd - analytics.tab.timeStart) / 1000),
         device: device
       };
       analytics.tab.timeStart = new Date();
+      analytics.tab.clickCount = 0
       self.client.addEvent("Tab Usage", eventData, function(err, res) {
         if (err) {
           console.log("Error: " + err);
@@ -3282,6 +3290,27 @@ function toggleHamburgerMenu() {
         }
       });
     }
+    if (fboOpen) {
+      analytics.fbo.timeEnd = new Date();
+      var eventData = {
+        clickCount: analytics.fbo.clickCount,
+        time: ((analytics.fbo.timeEnd - analytics.fbo.timeStart) / 1000),
+        vote: analytics.fbo.vote,
+        device: device
+      };
+      analytics.fbo.timeStart = 0;
+      analytics.fbo.clickCount = 0
+      analytics.fbo.vote = null
+      self.client.addEvent("FBO Usage", eventData, function(err, res) {
+        if (err) {
+          console.log("Error: " + err);
+        }
+        else {
+          console.log("Event sent.");
+        }
+      });
+    }
+    fboOpen = false
     if (num == 0) {
       document.getElementById("news-block").classList.remove('inactive')
       document.getElementById("search-view").classList.add('inactive')
@@ -4433,6 +4462,8 @@ function toggleHamburgerMenu() {
     console.log('Loading FBO Details')
     console.log(num)
     fboIndex = num
+    fboOpen = true
+    analytics.fbo.timeStart = new Date();
     setActiveFbo(num, tab)
     document.getElementById("news-block").classList.add('inactive');
     document.getElementById("fbo-view").classList.add('inactive');
@@ -5582,6 +5613,11 @@ function toggleHamburgerMenu() {
   function vote(index, yes) {
     if (!saving) {
       saving = true
+      if (yes) {
+        analytics.fbo.vote = 'Voted Yes'
+      } else {
+        analytics.fbo.vote = 'Voted No'
+      }
       var fbo = fbos[index]
       if (activeTab == 2) {
         fbo = fbosIn[index]
@@ -6061,6 +6097,13 @@ function toggleHamburgerMenu() {
                                   points: 0
                                 })
                                 tosRead = 0
+                                var newsString = ''
+                                console.log(fbo)
+                                var newsItem = {
+                                  type: 'user',
+                                  body: currentUser.firstName + ' ' + currentUser.lastName + ' joined Hunting Party'
+                                }
+                                generateNewsItem(newsItem)
                               }
                               var xhttpHPD = new XMLHttpRequest();
                               xhttpHPD.onreadystatechange = function() {
@@ -6196,6 +6239,8 @@ function toggleHamburgerMenu() {
           if (huntingPartyData.news[i].type) {
             if (huntingPartyData.news[i].type == 'vote') {
               img = 'contact'
+            } else if (huntingPartyData.news[i].type == 'user') {
+              img = 'profile'
             }
           }
 
