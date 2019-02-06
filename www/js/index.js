@@ -3459,6 +3459,7 @@ function toggleHamburgerMenu() {
         document.getElementById("user-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+currentUser.avatar+'" alt="">'
       }
       document.getElementById("user-info").innerHTML = '<p class="company-info-text">'+currentUser.firstName+' '+currentUser.lastName+'</p>'+
+      '<p>'+currentUser.companyUserProxies[0].position+'</p>'+
       '<p>'+currentUser.username+'</p>'
     }
     activeTab = num
