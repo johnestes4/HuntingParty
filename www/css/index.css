@@ -721,19 +721,9 @@ h1, .instructions{
 }
 
 #news-items {
-  height: 100%;
-  width: 100%;
-  background: #fafafa;
-  overflow-y: auto;
-  color: black;
-  font-size: 1em;
-}
-
-#news-items {
-  height: 100%;
+  height: calc(100% - 4vh);
   width: 100%;
   overflow-y: auto;
-
   border-top: 2px solid rgba(255, 255, 255, .1);
   border-bottom: 2px solid rgba(255, 255, 255, .1);
 }
@@ -743,8 +733,6 @@ h1, .instructions{
   .news-header h6{
     color: rgb(255,198,0);
   }
-
-
 }
 
 .news-block-header{
@@ -754,9 +742,9 @@ h1, .instructions{
   /* color: white; */
   background-color: #bebebe;
   line-height: 4vh;
-  font-size: 14px;
+  font-size: 18px;
 
-  padding-top: 2px;
+  padding: none;
   width: 100%;
   text-align: center;
   float: left;
