@@ -410,6 +410,7 @@ var analytics = {
   },
 }
 var fboOpen = false
+var analyticsOn = false
 
 function checkLoginEmail() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -3103,14 +3104,16 @@ function saveSearchTerms() {
               device: device
             };
             analytics.search.timeStart = new Date();
-            self.client.addEvent("New Search Creation", eventData, function(err, res) {
-              if (err) {
-                console.log("Error: " + err);
-              }
-              else {
-                console.log("Event sent.");
-              }
-            });
+            if (analyticsOn) {
+              self.client.addEvent("New Search Creation", eventData, function(err, res) {
+                if (err) {
+                  console.log("Error: " + err);
+                }
+                else {
+                  console.log("Event sent.");
+                }
+              });
+            }
             resetSearchTerms()
             saving = false
           }
@@ -3150,14 +3153,16 @@ function saveSearchTerms() {
                   device: device
                 };
                 analytics.search.timeStart = new Date();
-                self.client.addEvent("New Search Creation", eventData, function(err, res) {
-                  if (err) {
-                    console.log("Error: " + err);
-                  }
-                  else {
-                    console.log("Event sent.");
-                  }
-                });
+                if (analyticsOn) {
+                  self.client.addEvent("New Search Creation", eventData, function(err, res) {
+                    if (err) {
+                      console.log("Error: " + err);
+                    }
+                    else {
+                      console.log("Event sent.");
+                    }
+                  });
+                }
                 resetSearchTerms()
                 renderSavedSearches()
                 if (!document.getElementById("new-search").classList.contains('inactive')) {
@@ -3281,14 +3286,16 @@ function toggleHamburgerMenu() {
       };
       analytics.tab.timeStart = new Date();
       analytics.tab.clickCount = 0
-      self.client.addEvent("Tab Usage", eventData, function(err, res) {
-        if (err) {
-          console.log("Error: " + err);
-        }
-        else {
-          console.log("Event sent.");
-        }
-      });
+      if (analyticsOn) {
+        self.client.addEvent("Tab Usage", eventData, function(err, res) {
+          if (err) {
+            console.log("Error: " + err);
+          }
+          else {
+            console.log("Event sent.");
+          }
+        });
+      }
     }
     if (fboOpen) {
       analytics.fbo.timeEnd = new Date();
@@ -3301,14 +3308,17 @@ function toggleHamburgerMenu() {
       analytics.fbo.timeStart = 0;
       analytics.fbo.clickCount = 0
       analytics.fbo.vote = null
-      self.client.addEvent("FBO Usage", eventData, function(err, res) {
-        if (err) {
-          console.log("Error: " + err);
-        }
-        else {
-          console.log("Event sent.");
-        }
-      });
+      if (analyticsOn) {
+        self.client.addEvent("FBO Usage", eventData, function(err, res) {
+          if (err) {
+            console.log("Error: " + err);
+          }
+          else {
+            console.log("Event sent.");
+          }
+        });
+      }
+
     }
     fboOpen = false
     if (num == 0) {
@@ -6099,7 +6109,6 @@ function toggleHamburgerMenu() {
                                 })
                                 tosRead = 0
                                 var newsString = ''
-                                console.log(fbo)
                                 var newsItem = {
                                   type: 'user',
                                   body: currentUser.firstName + ' ' + currentUser.lastName + ' joined Hunting Party'
@@ -6801,11 +6810,18 @@ function toggleHamburgerMenu() {
         document.getElementById("login-register").classList.remove('inactive');
       }
       this.bindEvents();
-      this.client = new Keen({
-        projectId: '5c5201c7c9e77c0001edb8cc',
-        readKey: '5E68E6FCDDF8227E7F3F47A7F53FB98C17C9721678EB55F1ED00B94C29AF600F272D14F97C79EB5FDD837E4068888807AE38FD80420239CEB95ABC52555AA5CDCEAA22FC07B8268D9D6E02FFD7A9295D269ACAEE475A3A4DDA587B0836BEAD01',
-        writeKey: '4FFBE9F457824B5D43E951608DFAF2449A110AD2C47164126EC5A6A0F39AEE2CFE13DD365190985DB255BCD4739F6B4DC677E16C7101261CF77E4F07A1535BBAA4FBFFF30F7958DEDFC63ECE42D0C7E6FBAE3D8EBA42203CD0AEA6A703E491A6'
-      });
+      if (typeof Keen === 'undefined') {
+        console.log('Analytics Disabled')
+        analyticsOn = false
+      } else {
+        console.log('Analytics Enabled')
+        analyticsOn = true
+        this.client = new Keen({
+          projectId: '5c5201c7c9e77c0001edb8cc',
+          readKey: '5E68E6FCDDF8227E7F3F47A7F53FB98C17C9721678EB55F1ED00B94C29AF600F272D14F97C79EB5FDD837E4068888807AE38FD80420239CEB95ABC52555AA5CDCEAA22FC07B8268D9D6E02FFD7A9295D269ACAEE475A3A4DDA587B0836BEAD01',
+          writeKey: '4FFBE9F457824B5D43E951608DFAF2449A110AD2C47164126EC5A6A0F39AEE2CFE13DD365190985DB255BCD4739F6B4DC677E16C7101261CF77E4F07A1535BBAA4FBFFF30F7958DEDFC63ECE42D0C7E6FBAE3D8EBA42203CD0AEA6A703E491A6'
+        });
+      }
       self = this;
 
       // window.plugins.uniqueDeviceID.get(success, fail);

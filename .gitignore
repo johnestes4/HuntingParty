@@ -4,3 +4,11 @@ node_modules/
 .vscode
 platforms/
 2018-09-10-10-19-38.zip
+private_key.key
+ios_distribution.pem
+ios_distribution.p12
+ios_distribution.cer
+ios_development.pem
+ios_development.p12
+4S.mobileprovision
+ios_development.cer
