@@ -6074,9 +6074,11 @@ function toggleHamburgerMenu() {
                               if (huntingPartyData.users[i].tosRead) {
                                 tosRead = huntingPartyData.users[i].tosRead
                               }
-                              if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                                doTheUpdateAnyway = true
-                                huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                              if (localStorage.getItem('registrationId')) {
+                                if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId'))) {
+                                  doTheUpdateAnyway = true
+                                  huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                                }
                               }
                               if (device !== undefined) {
                                 if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
