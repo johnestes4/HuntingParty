@@ -6160,6 +6160,9 @@ function toggleHamburgerMenu() {
                           //
                         }
                       }
+                      if (!yourSearches) {
+                        yourSearches = []
+                      }
                       if (yourSearches.length > 0) {
                         var proxyRequest = {
                           startIndex: 0,
