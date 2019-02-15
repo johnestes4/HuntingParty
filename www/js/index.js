@@ -4809,9 +4809,9 @@ function toggleHamburgerMenu() {
       }
     }
     var regId = ''
-    if (localStorage.getItem('registrationId')) {
-      regId = localStorage.getItem('registrationId')
-    }
+    // if (localStorage.getItem('registrationId')) {
+    //   regId = localStorage.getItem('registrationId')
+    // }
     var request = {
       userId: currentUser._id,
       companyId: companyToJoin._id,
@@ -6002,10 +6002,10 @@ function toggleHamburgerMenu() {
                         tosRead: 0,
                         points: 0
                       })
-                      if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                        doTheUpdateAnyway = true
-                        huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
-                      }
+                      // if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                      //   doTheUpdateAnyway = true
+                      //   huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
+                      // }
                       if (device !== undefined) {
                         if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
                           doTheUpdateAnyway = true
@@ -6074,12 +6074,12 @@ function toggleHamburgerMenu() {
                               if (huntingPartyData.users[i].tosRead) {
                                 tosRead = huntingPartyData.users[i].tosRead
                               }
-                              if (localStorage.getItem('registrationId')) {
-                                if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId'))) {
-                                  doTheUpdateAnyway = true
-                                  huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
-                                }
-                              }
+                              // if (localStorage.getItem('registrationId')) {
+                              //   if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId'))) {
+                              //     doTheUpdateAnyway = true
+                              //     huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                              //   }
+                              // }
                               if (device !== undefined) {
                                 if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
                                   doTheUpdateAnyway = true
@@ -6097,9 +6097,9 @@ function toggleHamburgerMenu() {
                                 if (device) {
                                   deviceId = device.uuid
                                 }
-                                if (localStorage.getItem('registrationId')) {
-                                  regId = localStorage.getItem('registrationId')
-                                }
+                                // if (localStorage.getItem('registrationId')) {
+                                //   regId = localStorage.getItem('registrationId')
+                                // }
                                 huntingPartyData.users.push({
                                   userId: currentUser._id,
                                   name: currentUser.firstName + ' ' + currentUser.lastName,
@@ -6861,13 +6861,13 @@ function toggleHamburgerMenu() {
       });
 
       app.push.on('registration', function(data) {
-        console.log("registration event: " + data.registrationId);
-        var oldRegId = localStorage.getItem('registrationId');
-        if (oldRegId !== data.registrationId) {
-          // Save new registration ID
-          localStorage.setItem('registrationId', data.registrationId);
-          // Post registrationId to your app server as the value has changed
-        }
+        // console.log("registration event: " + data.registrationId);
+        // var oldRegId = localStorage.getItem('registrationId');
+        // if (oldRegId !== data.registrationId) {
+        //   // Save new registration ID
+        //   localStorage.setItem('registrationId', data.registrationId);
+        //   // Post registrationId to your app server as the value has changed
+        // }
       });
 
       app.push.on('error', function(e) {
