@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.efassembly.huntingparty" version="1.0.8" versionCode="10008" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget id="com.efassembly.huntingparty" version="1.0.9" versionCode="10009" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Hunting Party</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        Find and vote on FedBizOpps opportunities with your coworkers.
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="john.estes@4s-llc.com" href="https://4s-llc.com">
+        4S
     </author>
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />
