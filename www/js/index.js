@@ -6169,7 +6169,7 @@ function toggleHamburgerMenu() {
                           which: 2,
                           searches: yourSearches
                         }
-                        xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/filtered/multi/", true);
+                        xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
                         xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
                         xhttp3b.send(JSON.stringify(proxyRequest));
                       } else {
