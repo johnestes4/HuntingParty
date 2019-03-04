@@ -467,7 +467,7 @@ function login() {
                   // console.log(currentUser)
                 }
               };
-              xhttp3.open("GET", apiUrl+"/profiles/" + res.id, true);
+              xhttp3.open("GET", apiUrl+"/profiles/userInfo/" + res.id, true);
               xhttp3.setRequestHeader("Content-type", "application/json");
               xhttp3.send();
             } else if (xhttp2.readyState == 4 && xhttp2.status == 400) {
@@ -6205,7 +6205,7 @@ function toggleHamburgerMenu() {
         }
       }
     };
-    xhttp.open("GET", apiUrl+"/profiles/" + id, true);
+    xhttp.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
     xhttp.send();
   }
 
