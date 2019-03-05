@@ -1,26 +1,26 @@
-var apiUrl = 'https://efassembly.com:4432';
-// var apiUrl = 'http://18.218.170.246:4200';
-// var apiUrl = 'http://localhost:4200';
+let apiUrl = 'https://efassembly.com:4432';
+// let apiUrl = 'http://18.218.170.246:4200';
+// let apiUrl = 'http://localhost:4200';
 
-var saving = false;
-var activeTab = 0;
-var company = null;
-var huntingPartyData = null;
-var device;
-var fbos = [];
-var fboIndex = 0;
-var promiseFinished = false;
-var emailNotFound = false;
-var loggedIn = false;
-var currentUser = null;
-var localStorage = window.localStorage;
-var profileDropdownOpen = false;
-var voteDropdownOpen = -1;
-var hamburgerMenuOpen = false;
-var hamburgerOpening = false;
-var adCounter = 0;
-var emailValidated = false;
-var agencyLogos = [
+let saving = false;
+let activeTab = 0;
+let company = null;
+let huntingPartyData = null;
+let device;
+let fbos = [];
+let fboIndex = 0;
+let promiseFinished = false;
+let emailNotFound = false;
+let loggedIn = false;
+let currentUser = null;
+let localStorage = window.localStorage;
+let profileDropdownOpen = false;
+let voteDropdownOpen = -1;
+let hamburgerMenuOpen = false;
+let hamburgerOpening = false;
+let adCounter = 0;
+let emailValidated = false;
+let agencyLogos = [
   {
     "agency": "Department of the Air Force",
     "img": "af.png"
@@ -138,9 +138,9 @@ var agencyLogos = [
     "img": "doa.png"
   }
 ];
-var fboVote = [];
-var peopleToRefer = [];
-var tabIds = [
+let fboVote = [];
+let peopleToRefer = [];
+let tabIds = [
   {
     id: 0,
     allowed: [1,2]
@@ -154,7 +154,7 @@ var tabIds = [
     allowed: [4]
   }
 ];
-var searchTerms = {
+let searchTerms = {
   type: [
     {
       name: 'All',
@@ -243,7 +243,7 @@ var searchTerms = {
   ],
   keyword: '',
 };
-var emptySearchTerms = {
+let emptySearchTerms = {
   type: [
     {
       name: 'All',
@@ -333,19 +333,19 @@ var emptySearchTerms = {
   keyword: '',
   keywordWhich: 0
 };
-var yesRefer = [];
-var noRefer = [];
-var referRefer = [];
-var tosRead = 0;
-var tutorialsOpen = false;
-var allCompanies;
-var companyToJoin;
-var yourSearches = [];
-var fbosIn = [];
-var fboPipeline = [];
-var fbosInMax = 0;
-var fboPipelineMax = 0;
-var searchItemSuggestions = {
+let yesRefer = [];
+let noRefer = [];
+let referRefer = [];
+let tosRead = 0;
+let tutorialsOpen = false;
+let allCompanies;
+let companyToJoin;
+let yourSearches = [];
+let fbosIn = [];
+let fboPipeline = [];
+let fbosInMax = 0;
+let fboPipelineMax = 0;
+let searchItemSuggestions = {
   naics: {
     it: [
       '541511',
@@ -382,7 +382,7 @@ var searchItemSuggestions = {
     ]
   }
 };
-var analytics = {
+let analytics = {
   tab: {
     timeStart: 0,
     timeEnd: 0,
@@ -400,24 +400,24 @@ var analytics = {
     vote: null
   },
 };
-var fboOpen = false;
-var analyticsOn = false;
-var previousSearchTermsIndex = null;
-var activeSearchIndex;
-var activeSearch = null;
-var emptySearchName = false;
-var searchFilterName = null;
-var fboClickOpen = false;
-var fboHighlightOpen;
-var fboHighlightClose;
-var activeFboDesc;
-var highlightOn = false;
-var grayOn = false;
-var referEmailValid = false;
-var activeFbo;
-var fbosInUnread = 0;
-var pipelineUnread = 0;
-var loadInProgress = false;
+let fboOpen = false;
+let analyticsOn = false;
+let previousSearchTermsIndex = null;
+let activeSearchIndex;
+let activeSearch = null;
+let emptySearchName = false;
+let searchFilterName = null;
+let fboClickOpen = false;
+let fboHighlightOpen;
+let fboHighlightClose;
+let activeFboDesc;
+let highlightOn = false;
+let grayOn = false;
+let referEmailValid = false;
+let activeFbo;
+let fbosInUnread = 0;
+let pipelineUnread = 0;
+let loadInProgress = false;
 
 function checkLoginEmail() {
   var username = document.getElementById("email").value.toLowerCase()
