@@ -4,18 +4,13 @@ var apiUrl = 'https://efassembly.com:4432'
 
 var saving = false
 var activeTab = 0
-var dataExpanded = 0
 var company = null
 var huntingPartyData = null
 var device
 var fbos = []
-var incomingFbos = []
-var pipelineFbos = []
 var fboIndex = 0
 var promiseFinished = false
-var highestDataNumber = 4
 var emailNotFound = false
-var passwordWrong = false
 var loggedIn = false
 var currentUser = null
 var localStorage = window.localStorage
@@ -143,7 +138,6 @@ var agencyLogos = [
     "img": "doa.png"
   }
 ]
-var searchTerms = []
 var fboVote = []
 var peopleToRefer = []
 var tabIds = [
@@ -339,12 +333,9 @@ var emptySearchTerms = {
   keyword: '',
   keywordWhich: 0
 }
-var emptySearchTerms2 = null
 var yesRefer = []
 var noRefer = []
 var referRefer = []
-var naics = []
-var psc = []
 var tosRead = 0
 var tutorialsOpen = false
 var allCompanies
@@ -423,8 +414,6 @@ var activeFboDesc
 var highlightOn = false
 var grayOn = false
 var referEmailValid = false
-var yesEmailValid = false
-var noEmailValid = false
 var activeFbo
 var fbosInUnread = 0
 var pipelineUnread = 0
