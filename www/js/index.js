@@ -411,6 +411,24 @@ var analytics = {
 }
 var fboOpen = false
 var analyticsOn = false
+var previousSearchTermsIndex = null
+var activeSearchIndex
+var activeSearch = null
+var emptySearchName = false
+var searchFilterName = null
+var fboClickOpen = false
+var fboHighlightOpen
+var fboHighlightClose
+var activeFboDesc
+var highlightOn = false
+var grayOn = false
+var referEmailValid = false
+var yesEmailValid = false
+var noEmailValid = false
+var activeFbo
+var fbosInUnread = 0
+var pipelineUnread = 0
+var loadInProgress = false
 
 function checkLoginEmail() {
   var username = document.getElementById("email").value.toLowerCase()
@@ -538,8 +556,6 @@ function openProfileDropdown() {
   // document.getElementById("sidebar").classList.remove('inactive')
   // profileDropdownOpen = true
 }
-
-var activeSearchIndex
 
 function checkChecked() {
   var numberChecked = 0
@@ -909,6 +925,7 @@ function openSearchBox(which) {
     }
   }
 }
+
 function renderSavedSearches() {
   var html = ''
   // '<option disabled selected value> -- select an option -- </option>'
@@ -1033,7 +1050,6 @@ function renderSavedSearches() {
     document.getElementById("other-saved-search-view").innerHTML = html
   }
 }
-
 
 function generateSearchHTML(where) {
   var inputHtml = '<div class="search-item-filters">'+
@@ -1282,7 +1298,6 @@ function sendEmail(mailInfo) {
   xhttp.send(JSON.stringify(mailInfo));
 }
 
-var previousSearchTermsIndex = null
 function openSearchItems(which) {
   if (which == 0) {
     if (document.getElementById("saved-searches").classList.contains('inactive')) {
@@ -1374,8 +1389,6 @@ function openSearchItems(which) {
     }
   }
 }
-
-var activeSearch = null
 
 function recheckFilterOpportunities() {
   console.log('checking again')
@@ -2355,6 +2368,7 @@ function calculatePscSearch(pscIndex) {
     document.getElementById('psc-product-arrow-'+pscIndex).innerHTML = '▲'
   }
 }
+
 function calculatePscSearch2(pscIndex) {
   if (!document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.contains('inactive')) {
     document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.add('inactive')
@@ -3034,7 +3048,6 @@ function validSearchName(name) {
   return true
 }
 
-var emptySearchName = false
 function checkSearchName(elem) {
   if (emptySearchName) {
     if (document.getElementById("search-name").value.length > 0) {
@@ -3194,8 +3207,6 @@ function saveSearchTerms() {
   }
 }
 
-
-
 function toggleHamburgerMenu() {
   if (hamburgerMenuOpen) {
     document.getElementById("hamburger-menu").classList.add('hamburger-out');
@@ -3214,7 +3225,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  document.addEventListener("click", (evt) => {
+document.addEventListener("click", (evt) => {
     const profilePopup = document.getElementById("bottombar-popup");
     const profilePopupButton = document.getElementById("bottombar-img-profile");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
@@ -3246,15 +3257,15 @@ function toggleHamburgerMenu() {
 
   });
 
-  function openBottombarPopup() {
-    if (document.getElementById("bottombar-popup").classList.contains('inactive')) {
-      document.getElementById("bottombar-popup").classList.remove('inactive')
-    } else {
-      document.getElementById("bottombar-popup").classList.add('inactive')
-    }
+function openBottombarPopup() {
+  if (document.getElementById("bottombar-popup").classList.contains('inactive')) {
+    document.getElementById("bottombar-popup").classList.remove('inactive')
+  } else {
+    document.getElementById("bottombar-popup").classList.add('inactive')
   }
+}
 
-  function switchTab(num) {
+function switchTab(num) {
     document.getElementById("fbo-list-view").classList.remove('inactive');
     document.getElementById("fbo-detail-view").classList.add('inactive');
     tutorialsOpen = true
@@ -3486,7 +3497,7 @@ function toggleHamburgerMenu() {
 
   }
 
-  function getToday() {
+function getToday() {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
@@ -3500,27 +3511,32 @@ function toggleHamburgerMenu() {
     today = yyyy+'/'+mm+'/'+dd;
     return today
   }
-  function generateOptions(){
+
+function generateOptions(){
     renderSavedSearches()
     renderSortOptions()
     // parseProxy()
   }
-  function generateFbos(){
+
+function generateFbos(){
     sortFboRenders()
     renderFbos()
   }
-  function runFilters(elem){
+
+function runFilters(elem){
     filterOpportunitiesBySearch(elem)
     renderFbos()
   }
-  function runSort(fboProxy, elem){
+
+function runSort(fboProxy, elem){
     var selected = elem.value
     // console.log("Current Val:", selected, typeof selected)
     sortFboRenders(fboProxy, parseInt(selected))
     // renderFbos(fboProxy)
     renderFbos()
   }
-  function renderSortOptions(){
+
+function renderSortOptions(){
     var sortID = document.getElementById("sort-select")
     var sortOptions = [
       {
@@ -3560,7 +3576,8 @@ function toggleHamburgerMenu() {
       sortID.add(option)
     });
   }
-  function sortFboRenders(fboProxy, renderOption){
+
+function sortFboRenders(fboProxy, renderOption){
     const BY_EARLIEST_DUE = 0 //Also most recent expired for pipeline
     const BY_LATEST_DUE = 1 //Includes data with no deadline at top; Also oldest expired for pipeline
     const BY_DATE_POSTED = 2 //Most recent date to oldest; Inactive
@@ -3798,14 +3815,12 @@ function toggleHamburgerMenu() {
     }
   }
 
-  var searchFilterName = null
+//Sorts thru all existing data and organizes them
+function parseFbos(){
 
-  //Sorts thru all existing data and organizes them
-  function parseFbos(){
+}
 
-  }
-
-  function renderFbos() {
+function renderFbos() {
     var fboHtml = ''
     var pipelineHtml = ''
     fboVote = []
@@ -4073,7 +4088,7 @@ function toggleHamburgerMenu() {
 
   }
 
-  function addPoints(points) {
+function addPoints(points) {
     var user = null
     for (i = 0; i < huntingPartyData.users.length; i++) {
       if (huntingPartyData.users[i].userId == currentUser._id) {
@@ -4114,7 +4129,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function parseThroughFboDesc(desc) {
+function parseThroughFboDesc(desc) {
     var separators = [' ', '\n'];
     var outputArray = desc.split(new RegExp(separators.join('|'), 'g'));
     var outputArray2 = []
@@ -4183,7 +4198,7 @@ function toggleHamburgerMenu() {
     return outputArray2
   }
 
-  function openCompanyDetail(which) {
+function openCompanyDetail(which) {
     if (document.getElementById("company-detail-middle-"+which).classList.contains('inactive')) {
       document.getElementById("company-detail-middle-"+which).classList.remove('inactive')
       document.getElementById("company-detail-middle-item-arrow-"+which).classList.add('rotate')
@@ -4193,7 +4208,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function toggleDomainsEditable() {
+function toggleDomainsEditable() {
     var a = document.getElementsByClassName('company-domain-2')
     var newValue = true
     if (a[0].disabled) {
@@ -4221,7 +4236,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function saveEmailDomains() {
+function saveEmailDomains() {
     var a = document.getElementsByClassName('company-domain-2')
     company.emailDomains = []
     for (i = 0; i < a.length; i++) {
@@ -4243,8 +4258,7 @@ function toggleHamburgerMenu() {
     xhttp.send(JSON.stringify(company));
   }
 
-
-  function openFboDetail(which) {
+function openFboDetail(which) {
     if (document.getElementById("fbo-detail-middle-"+which).classList.contains('inactive')) {
       document.getElementById("fbo-detail-middle-"+which).classList.remove('inactive')
       document.getElementById("fbo-detail-middle-item-arrow-"+which).classList.add('rotate')
@@ -4270,15 +4284,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  var fboClickOpen = false
-  var fboHighlightOpen
-  var fboHighlightClose
-  var activeFboDesc
-
-  var highlightOn = false
-  var grayOn = false
-
-  function turnOnHighlight(gray) {
+function turnOnHighlight(gray) {
     if (!gray) {
       if (!highlightOn) {
         highlightOn = true
@@ -4316,203 +4322,203 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function fboDescClick(index, text, elem) {
-    if (grayOn || highlightOn) {
-      var elemString = elem.toString()
-      if (!fboClickOpen) {
+function fboDescClick(index, text, elem) {
+  if (grayOn || highlightOn) {
+    var elemString = elem.toString()
+    if (!fboClickOpen) {
+      fboHighlightOpen = index
+      var fbo
+      if (activeTab == 2) {
+        fbo = fbosIn[fboIndex]
+      } else if (activeTab == 3) {
+        fbo = fboPipeline[fboIndex]
+      }
+      elem.classList.add('fbo-desc-word-start')
+      if (highlightOn) {
+        elem.classList.add('highlighted')
+      } else if (grayOn) {
+        elem.classList.add('grayed')
+      }
+      fboClickOpen = true
+    } else {
+      if (index < fboHighlightOpen) {
+        fboHighlightClose = fboHighlightOpen
         fboHighlightOpen = index
-        var fbo
-        if (activeTab == 2) {
-          fbo = fbosIn[fboIndex]
-        } else if (activeTab == 3) {
-          fbo = fboPipeline[fboIndex]
-        }
-        elem.classList.add('fbo-desc-word-start')
-        if (highlightOn) {
-          elem.classList.add('highlighted')
-        } else if (grayOn) {
-          elem.classList.add('grayed')
-        }
-        fboClickOpen = true
       } else {
-        if (index < fboHighlightOpen) {
-          fboHighlightClose = fboHighlightOpen
-          fboHighlightOpen = index
-        } else {
-          fboHighlightClose = index
-        }
-        var fbo
-        if (activeTab == 2) {
-          fbo = fbosIn[fboIndex]
-        } else if (activeTab == 3) {
-          fbo = fboPipeline[fboIndex]
-        } else {
-          console.log('tab is messed up - its ' + activeTab)
-        }
-        if (highlightOn) {
-          for (i = fboHighlightOpen; i <= fboHighlightClose; i++) {
-            if (activeFboDesc[i].slice(0,50) == '<span class="fbo-desc-word" onclick="fboDescClick(' || activeFboDesc[i].slice(0,21) == '<span class="grayed">') {
-              if (activeFboDesc[i].slice(0,21) == '<span class="grayed">') {
-                var endPoint = activeFboDesc[i].length - 7
-                activeFboDesc[i] = activeFboDesc[i].slice(21, endPoint)
-              }
-              activeFboDesc[i] = '<span class="highlighted">' + activeFboDesc[i] + '</span>'
-            }
-          }
-        } else if (grayOn) {
-          for (i = fboHighlightOpen; i <= fboHighlightClose; i++) {
-            if (activeFboDesc[i].slice(0,50) == '<span class="fbo-desc-word" onclick="fboDescClick(' || activeFboDesc[i].slice(0,26) == '<span class="highlighted">') {
-              if (activeFboDesc[i].slice(0,26) == '<span class="highlighted">') {
-                var endPoint = activeFboDesc[i].length - 7
-                activeFboDesc[i] = activeFboDesc[i].slice(26, endPoint)
-              }
-              activeFboDesc[i] = '<span class="grayed">' + activeFboDesc[i] + '</span>'
-            }
-          }
-          // activeFboDesc[fboHighlightOpen] = '<span class="grayed">' + activeFboDesc[fboHighlightOpen]
-        }
-        // activeFboDesc[fboHighlightClose] = activeFboDesc[fboHighlightClose] + '</span>'
-        var fboDescHTML = ''
-        for (i = 0; i < activeFboDesc.length; i++) {
-          fboDescHTML = fboDescHTML + activeFboDesc[i]
-        }
-        fbo.fboDesc = activeFboDesc
-        document.getElementById("highlight-tutorial").classList.add('inactive')
-        document.getElementById("abstract-text").innerHTML = fboDescHTML;
-        document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
-        document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
-        highlightOn = false
-        grayOn = false
-        fboClickOpen = false
-        fboHighlightOpen = null
-        fboHighlightClose = null
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-            console.log('saved the proxy')
-            fbo = JSON.parse(xhttp.responseText)
-            console.log(fbo)
-          }
-        };
-        var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
-        xhttp.open("PUT", url, true);
-        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-        xhttp.send(JSON.stringify(fbo));
+        fboHighlightClose = index
       }
-      // elem.classList.add('bold')
-      console.log(elem)
+      var fbo
+      if (activeTab == 2) {
+        fbo = fbosIn[fboIndex]
+      } else if (activeTab == 3) {
+        fbo = fboPipeline[fboIndex]
+      } else {
+        console.log('tab is messed up - its ' + activeTab)
+      }
+      if (highlightOn) {
+        for (i = fboHighlightOpen; i <= fboHighlightClose; i++) {
+          if (activeFboDesc[i].slice(0,50) == '<span class="fbo-desc-word" onclick="fboDescClick(' || activeFboDesc[i].slice(0,21) == '<span class="grayed">') {
+            if (activeFboDesc[i].slice(0,21) == '<span class="grayed">') {
+              var endPoint = activeFboDesc[i].length - 7
+              activeFboDesc[i] = activeFboDesc[i].slice(21, endPoint)
+            }
+            activeFboDesc[i] = '<span class="highlighted">' + activeFboDesc[i] + '</span>'
+          }
+        }
+      } else if (grayOn) {
+        for (i = fboHighlightOpen; i <= fboHighlightClose; i++) {
+          if (activeFboDesc[i].slice(0,50) == '<span class="fbo-desc-word" onclick="fboDescClick(' || activeFboDesc[i].slice(0,26) == '<span class="highlighted">') {
+            if (activeFboDesc[i].slice(0,26) == '<span class="highlighted">') {
+              var endPoint = activeFboDesc[i].length - 7
+              activeFboDesc[i] = activeFboDesc[i].slice(26, endPoint)
+            }
+            activeFboDesc[i] = '<span class="grayed">' + activeFboDesc[i] + '</span>'
+          }
+        }
+        // activeFboDesc[fboHighlightOpen] = '<span class="grayed">' + activeFboDesc[fboHighlightOpen]
+      }
+      // activeFboDesc[fboHighlightClose] = activeFboDesc[fboHighlightClose] + '</span>'
+      var fboDescHTML = ''
+      for (i = 0; i < activeFboDesc.length; i++) {
+        fboDescHTML = fboDescHTML + activeFboDesc[i]
+      }
+      fbo.fboDesc = activeFboDesc
+      document.getElementById("highlight-tutorial").classList.add('inactive')
+      document.getElementById("abstract-text").innerHTML = fboDescHTML;
+      document.getElementById("highlight-button-1").classList.remove('highlight-button-active')
+      document.getElementById("highlight-button-2").classList.remove('highlight-button-active')
+      highlightOn = false
+      grayOn = false
+      fboClickOpen = false
+      fboHighlightOpen = null
+      fboHighlightClose = null
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('saved the proxy')
+          fbo = JSON.parse(xhttp.responseText)
+          console.log(fbo)
+        }
+      };
+      var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
+      xhttp.open("PUT", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(fbo));
+    }
+    // elem.classList.add('bold')
+    console.log(elem)
+  }
+}
+
+function showVotes(index) {
+  voteDropdownOpen = index
+  var a = document.getElementsByClassName('fbo-item-points-dropdown')
+  for (i = 0; i < a.length; i++) {
+    if (i == index) {
+      a[i].classList.remove('inactive');
+    } else {
+      a[i].classList.add('inactive');
     }
   }
+}
 
-  function showVotes(index) {
-    voteDropdownOpen = index
-    var a = document.getElementsByClassName('fbo-item-points-dropdown')
-    for (i = 0; i < a.length; i++) {
-      if (i == index) {
-        a[i].classList.remove('inactive');
-      } else {
-        a[i].classList.add('inactive');
-      }
-    }
+function addYesRefer() {
+  yesRefer.push(document.getElementById("yes-refer-input").value)
+  var html = ''
+  for (i = 0; i < yesRefer.length; i++) {
+    html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(0, '+i+')"><img src="./img/close.png" alt=""></span>'+yesRefer[i]+'</div>'
   }
+  document.getElementById("yes-popup-refer-list").innerHTML = html
+  document.getElementById("yes-refer-input").value = ''
+}
 
-  function addYesRefer() {
-    yesRefer.push(document.getElementById("yes-refer-input").value)
-    var html = ''
+function addNoRefer() {
+  noRefer.push(document.getElementById("no-refer-input").value)
+  console.log(noRefer)
+  var html = ''
+  for (i = 0; i < noRefer.length; i++) {
+    html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(1, '+i+')"><img src="./img/close.png" alt=""></span>'+noRefer[i]+'</div>'
+  }
+  document.getElementById("no-popup-refer-list").innerHTML = html
+  document.getElementById("no-refer-input").value = ''
+}
+
+function addReferRefer() {
+  referRefer.push(document.getElementById("refer-input").value)
+  var html = ''
+  for (i = 0; i < referRefer.length; i++) {
+    html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(2, '+i+')"><img src="./img/close.png" alt=""></span>'+referRefer[i]+'</div>'
+  }
+  document.getElementById("refer-refer-list").innerHTML = html
+  document.getElementById("refer-input").value = ''
+}
+
+function deleteReferItem(which, i) {
+  var html = ''
+  if (which == 0) {
+    yesRefer.splice(i,1)
     for (i = 0; i < yesRefer.length; i++) {
       html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(0, '+i+')"><img src="./img/close.png" alt=""></span>'+yesRefer[i]+'</div>'
     }
     document.getElementById("yes-popup-refer-list").innerHTML = html
-    document.getElementById("yes-refer-input").value = ''
-  }
-  function addNoRefer() {
-    noRefer.push(document.getElementById("no-refer-input").value)
-    console.log(noRefer)
-    var html = ''
+  } else if (which == 1) {
+    noRefer.splice(i,1)
     for (i = 0; i < noRefer.length; i++) {
       html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(1, '+i+')"><img src="./img/close.png" alt=""></span>'+noRefer[i]+'</div>'
     }
     document.getElementById("no-popup-refer-list").innerHTML = html
-    document.getElementById("no-refer-input").value = ''
-  }
-
-  function addReferRefer() {
-    referRefer.push(document.getElementById("refer-input").value)
-    var html = ''
+  } else if (which == 2) {
+    referRefer.splice(i,1)
     for (i = 0; i < referRefer.length; i++) {
       html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(2, '+i+')"><img src="./img/close.png" alt=""></span>'+referRefer[i]+'</div>'
     }
     document.getElementById("refer-refer-list").innerHTML = html
-    document.getElementById("refer-input").value = ''
   }
+}
 
-  function deleteReferItem(which, i) {
-    var html = ''
-    if (which == 0) {
-      yesRefer.splice(i,1)
-      for (i = 0; i < yesRefer.length; i++) {
-        html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(0, '+i+')"><img src="./img/close.png" alt=""></span>'+yesRefer[i]+'</div>'
-      }
-      document.getElementById("yes-popup-refer-list").innerHTML = html
-    } else if (which == 1) {
-      noRefer.splice(i,1)
-      for (i = 0; i < noRefer.length; i++) {
-        html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(1, '+i+')"><img src="./img/close.png" alt=""></span>'+noRefer[i]+'</div>'
-      }
-      document.getElementById("no-popup-refer-list").innerHTML = html
-    } else if (which == 2) {
-      referRefer.splice(i,1)
-      for (i = 0; i < referRefer.length; i++) {
-        html = html + '<div class="refer-item"><span class="refer-item-close" onclick="deleteReferItem(2, '+i+')"><img src="./img/close.png" alt=""></span>'+referRefer[i]+'</div>'
-      }
-      document.getElementById("refer-refer-list").innerHTML = html
-    }
-  }
+function goToFbo(num, tab) {
+  console.log('Loading FBO Details')
+  console.log(num)
+  fboIndex = num
+  fboOpen = true
+  analytics.fbo.timeStart = new Date();
+  setActiveFbo(num, tab)
+  document.getElementById("news-block").classList.add('inactive');
+  document.getElementById("fbo-view").classList.add('inactive');
+  document.getElementById("search-view").classList.add('inactive');
+  document.getElementById("pipeline-view").classList.add('inactive');
+  document.getElementById("fbo-detail-view").classList.remove('inactive');
+}
 
-  function goToFbo(num, tab) {
-    console.log('Loading FBO Details')
-    console.log(num)
-    fboIndex = num
-    fboOpen = true
-    analytics.fbo.timeStart = new Date();
-    setActiveFbo(num, tab)
-    document.getElementById("news-block").classList.add('inactive');
-    document.getElementById("fbo-view").classList.add('inactive');
-    document.getElementById("search-view").classList.add('inactive');
-    document.getElementById("pipeline-view").classList.add('inactive');
-    document.getElementById("fbo-detail-view").classList.remove('inactive');
-  }
-
-  function checkEmail() {
-    var email = document.getElementById("email-register").value
-    if (invalidEmail(email)) {
-      document.getElementById("email-register").classList.add('invalid-input')
-      document.getElementById("register-alert-3").innerHTML = 'Invalid email'
-      emailValidated = false
-    } else {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          var res = JSON.parse(xhttp.responseText);
-          if (res.found) {
-            document.getElementById("email-register").classList.add('invalid-input')
-            document.getElementById("register-alert-3").innerHTML = 'Email already in use'
-            emailValidated = false
-          } else {
-            document.getElementById("email-register").classList.remove('invalid-input')
-            document.getElementById("register-alert-3").innerHTML = ''
-            emailValidated = true
-          }
+function checkEmail() {
+  var email = document.getElementById("email-register").value
+  if (invalidEmail(email)) {
+    document.getElementById("email-register").classList.add('invalid-input')
+    document.getElementById("register-alert-3").innerHTML = 'Invalid email'
+    emailValidated = false
+  } else {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var res = JSON.parse(xhttp.responseText);
+        if (res.found) {
+          document.getElementById("email-register").classList.add('invalid-input')
+          document.getElementById("register-alert-3").innerHTML = 'Email already in use'
+          emailValidated = false
+        } else {
+          document.getElementById("email-register").classList.remove('invalid-input')
+          document.getElementById("register-alert-3").innerHTML = ''
+          emailValidated = true
         }
       }
-      xhttp.open("get", apiUrl+'/profiles/email/' + email, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send();
     }
+    xhttp.open("get", apiUrl+'/profiles/email/' + email, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send();
   }
+}
 
-  var referEmailValid = false
-  function checkReferEmail() {
+function checkReferEmail() {
     var email = document.getElementById("refer-input").value
     if (email.length < 1) {
       document.getElementById("refer-input-button").classList.add('inactive')
@@ -4532,8 +4538,8 @@ function toggleHamburgerMenu() {
       }
     }
   }
-  var yesEmailValid = false
-  function checkYesEmail() {
+
+function checkYesEmail() {
     var email = document.getElementById("yes-refer-input").value
     if (email.length < 1) {
       document.getElementById("yes-refer-input-button").classList.add('inactive')
@@ -4553,643 +4559,644 @@ function toggleHamburgerMenu() {
       }
     }
   }
-  var noEmailValid = false
-  function checkNoEmail() {
-    var email = document.getElementById("no-refer-input").value
-    if (email.length < 1) {
+
+function checkNoEmail() {
+  var email = document.getElementById("no-refer-input").value
+  if (email.length < 1) {
+    document.getElementById("no-refer-input-button").classList.add('inactive')
+    document.getElementById("no-refer-input-button-inactive").classList.remove('inactive')
+    referEmailValid = false
+  } else {
+    if (invalidEmail(email)) {
+      document.getElementById("no-refer-input").classList.add('invalid-input')
       document.getElementById("no-refer-input-button").classList.add('inactive')
       document.getElementById("no-refer-input-button-inactive").classList.remove('inactive')
       referEmailValid = false
     } else {
-      if (invalidEmail(email)) {
-        document.getElementById("no-refer-input").classList.add('invalid-input')
-        document.getElementById("no-refer-input-button").classList.add('inactive')
-        document.getElementById("no-refer-input-button-inactive").classList.remove('inactive')
-        referEmailValid = false
-      } else {
-        document.getElementById("no-refer-input").classList.remove('invalid-input')
-        document.getElementById("no-refer-input-button").classList.remove('inactive')
-        document.getElementById("no-refer-input-button-inactive").classList.add('inactive')
-        referEmailValid = true
+      document.getElementById("no-refer-input").classList.remove('invalid-input')
+      document.getElementById("no-refer-input-button").classList.remove('inactive')
+      document.getElementById("no-refer-input-button-inactive").classList.add('inactive')
+      referEmailValid = true
+    }
+  }
+}
+
+function checkPasswords() {
+  var password1 = document.getElementById("password-register").value
+  var password2 = document.getElementById("password2").value
+  if (password1.length < 6) {
+    document.getElementById("password-register").classList.add('invalid-input')
+    document.getElementById("register-alert-4").innerHTML = 'Password must be at least 6 characters'
+  } else {
+    document.getElementById("password-register").classList.remove('invalid-input')
+    document.getElementById("register-alert-4").innerHTML = ''
+  }
+  if (password1.length >= 6 && password1 !== password2) {
+    document.getElementById("password2").classList.add('invalid-input')
+    document.getElementById("register-alert-5").innerHTML = 'Passwords must match'
+  } else if (password1.length >= 6 && password1 == password2) {
+    document.getElementById("password-register").classList.remove('invalid-input')
+    document.getElementById("password2").classList.remove('invalid-input')
+    document.getElementById("register-alert-4").innerHTML = ''
+    document.getElementById("register-alert-5").innerHTML = ''
+  }
+}
+
+function invalidEmail(email) {
+  if (email) {
+    return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
+  }
+}
+
+function goToRegister() {
+  document.getElementById("register-view").classList.remove('inactive')
+  document.getElementById("loading").classList.add('inactive')
+  document.getElementById("login-view").classList.add('inactive')
+}
+
+function goToLogin() {
+  document.getElementById("register-view").classList.add('inactive')
+  document.getElementById("login-view").classList.remove('inactive')
+  document.getElementById("company-create-view").classList.add('inactive')
+  document.getElementById("company-confirm-view").classList.add('inactive')
+  document.getElementById("company-search-view").classList.remove('inactive')
+  if (currentUser) {
+    logOut()
+  }
+}
+
+function goToNewCompany() {
+  document.getElementById("company-new-view").classList.remove('inactive')
+  document.getElementById("company-search-view").classList.add('inactive')
+}
+
+function goToCompanySearch() {
+  document.getElementById("company-search-view").classList.remove('inactive')
+  document.getElementById("company-domain-view").classList.add('inactive')
+}
+
+function goToCompanyCreate() {
+  document.getElementById("login-register").classList.remove('inactive')
+  document.getElementById("register-view").classList.add('inactive')
+  document.getElementById("main-view").classList.add('inactive')
+  document.getElementById("login-view").classList.add('inactive')
+  document.getElementById("loading").classList.add('inactive')
+  document.getElementById("company-create-view").classList.remove('inactive')
+  var xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      allCompanies = JSON.parse(xhttp.responseText);
+      var userDomain
+      for (i = 0; i < currentUser.username.length; i++) {
+        if (currentUser.username[i] == '@') {
+          userDomain = currentUser.username.slice(i+1)
+          break
+        }
       }
-    }
-  }
-
-  function checkPasswords() {
-    var password1 = document.getElementById("password-register").value
-    var password2 = document.getElementById("password2").value
-    if (password1.length < 6) {
-      document.getElementById("password-register").classList.add('invalid-input')
-      document.getElementById("register-alert-4").innerHTML = 'Password must be at least 6 characters'
-    } else {
-      document.getElementById("password-register").classList.remove('invalid-input')
-      document.getElementById("register-alert-4").innerHTML = ''
-    }
-    if (password1.length >= 6 && password1 !== password2) {
-      document.getElementById("password2").classList.add('invalid-input')
-      document.getElementById("register-alert-5").innerHTML = 'Passwords must match'
-    } else if (password1.length >= 6 && password1 == password2) {
-      document.getElementById("password-register").classList.remove('invalid-input')
-      document.getElementById("password2").classList.remove('invalid-input')
-      document.getElementById("register-alert-4").innerHTML = ''
-      document.getElementById("register-alert-5").innerHTML = ''
-    }
-  }
-
-  function invalidEmail(email) {
-    if (email) {
-      return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
-    }
-  }
-
-  function goToRegister() {
-    document.getElementById("register-view").classList.remove('inactive')
-    document.getElementById("loading").classList.add('inactive')
-    document.getElementById("login-view").classList.add('inactive')
-  }
-  function goToLogin() {
-    document.getElementById("register-view").classList.add('inactive')
-    document.getElementById("login-view").classList.remove('inactive')
-    document.getElementById("company-create-view").classList.add('inactive')
-    document.getElementById("company-confirm-view").classList.add('inactive')
-    document.getElementById("company-search-view").classList.remove('inactive')
-    if (currentUser) {
-      logOut()
-    }
-  }
-  function goToNewCompany() {
-    document.getElementById("company-new-view").classList.remove('inactive')
-    document.getElementById("company-search-view").classList.add('inactive')
-  }
-  function goToCompanySearch() {
-    document.getElementById("company-search-view").classList.remove('inactive')
-    document.getElementById("company-domain-view").classList.add('inactive')
-  }
-  function goToCompanyCreate() {
-    document.getElementById("login-register").classList.remove('inactive')
-    document.getElementById("register-view").classList.add('inactive')
-    document.getElementById("main-view").classList.add('inactive')
-    document.getElementById("login-view").classList.add('inactive')
-    document.getElementById("loading").classList.add('inactive')
-    document.getElementById("company-create-view").classList.remove('inactive')
-    var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        allCompanies = JSON.parse(xhttp.responseText);
-        var userDomain
-        for (i = 0; i < currentUser.username.length; i++) {
-          if (currentUser.username[i] == '@') {
-            userDomain = currentUser.username.slice(i+1)
-            break
-          }
-        }
-        allCompanies.sort(function(a,b) {
-          var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
-          if (nameA < nameB) //sort string ascending
-          return -1
-          if (nameA > nameB)
-          return 1
-          return 0 //default return value (no sorting)
-        })
-        var domainMatchingCompanies = []
-        if (userDomain) {
-          for (i = 0; i < allCompanies.length; i++) {
-            if (allCompanies[i].emailDomains) {
-              if (allCompanies[i].emailDomains.length > 0) {
-                console.log(allCompanies[i])
-              }
-              if (allCompanies[i].emailDomains.includes(userDomain)) {
-                domainMatchingCompanies.push({
-                  company: allCompanies[i],
-                  index: i
-                })
-              }
+      allCompanies.sort(function(a,b) {
+        var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+        return -1
+        if (nameA > nameB)
+        return 1
+        return 0 //default return value (no sorting)
+      })
+      var domainMatchingCompanies = []
+      if (userDomain) {
+        for (i = 0; i < allCompanies.length; i++) {
+          if (allCompanies[i].emailDomains) {
+            if (allCompanies[i].emailDomains.length > 0) {
+              console.log(allCompanies[i])
+            }
+            if (allCompanies[i].emailDomains.includes(userDomain)) {
+              domainMatchingCompanies.push({
+                company: allCompanies[i],
+                index: i
+              })
             }
           }
         }
-        if (domainMatchingCompanies.length > 0) {
-          console.log(domainMatchingCompanies)
-          document.getElementById("company-search-view").classList.add('inactive')
-          document.getElementById("company-domain-view").classList.remove('inactive')
-          if (domainMatchingCompanies.length == 1) {
-            if (domainMatchingCompanies[0].company.avatar) {
-              document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+domainMatchingCompanies[0].company.avatar+'" alt=""></div>'
-            } else {
-              document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
-              '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
-              '</div>'
-            }
-            document.getElementById("company-domain-company-name").innerHTML = domainMatchingCompanies[0].company.name
-            document.getElementById("company-domain-button-company-name").innerHTML = domainMatchingCompanies[0].company.name
-            companyToJoin = domainMatchingCompanies[0].company
+      }
+      if (domainMatchingCompanies.length > 0) {
+        console.log(domainMatchingCompanies)
+        document.getElementById("company-search-view").classList.add('inactive')
+        document.getElementById("company-domain-view").classList.remove('inactive')
+        if (domainMatchingCompanies.length == 1) {
+          if (domainMatchingCompanies[0].company.avatar) {
+            document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+domainMatchingCompanies[0].company.avatar+'" alt=""></div>'
           } else {
             document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
             '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
             '</div>'
-            var companyListHTML = ''
-            for (i = 0; i < domainMatchingCompanies.length; i++) {
-              companyListHTML = companyListHTML + '<div id="company-join-item-'+domainMatchingCompanies[i].index+'" class="company-join-item" onclick="pickCompanyFromList('+domainMatchingCompanies[i].index+')">'+
-              '<div class="" style="width: 80px; height: 60px; float: left; position: relative;">'+
-              '<img src="'+domainMatchingCompanies[i].company.avatar+'" alt="">'+
-              '</div>'+
-              '<p>'+domainMatchingCompanies[i].company.name+'</p>'+
-              '</div>'
-            }
-            document.getElementById("company-domain-single").classList.add('inactive')
-            document.getElementById("company-domain-multiple").classList.remove('inactive')
-            document.getElementById("company-join-list").innerHTML = companyListHTML
           }
+          document.getElementById("company-domain-company-name").innerHTML = domainMatchingCompanies[0].company.name
+          document.getElementById("company-domain-button-company-name").innerHTML = domainMatchingCompanies[0].company.name
+          companyToJoin = domainMatchingCompanies[0].company
+        } else {
+          document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
+          '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
+          '</div>'
+          var companyListHTML = ''
+          for (i = 0; i < domainMatchingCompanies.length; i++) {
+            companyListHTML = companyListHTML + '<div id="company-join-item-'+domainMatchingCompanies[i].index+'" class="company-join-item" onclick="pickCompanyFromList('+domainMatchingCompanies[i].index+')">'+
+            '<div class="" style="width: 80px; height: 60px; float: left; position: relative;">'+
+            '<img src="'+domainMatchingCompanies[i].company.avatar+'" alt="">'+
+            '</div>'+
+            '<p>'+domainMatchingCompanies[i].company.name+'</p>'+
+            '</div>'
+          }
+          document.getElementById("company-domain-single").classList.add('inactive')
+          document.getElementById("company-domain-multiple").classList.remove('inactive')
+          document.getElementById("company-join-list").innerHTML = companyListHTML
         }
       }
     }
-    xhttp.open("GET", apiUrl+'/company/light', true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send();
   }
+  xhttp.open("GET", apiUrl+'/company/light', true);
+  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttp.send();
+}
 
-  function pickCompanyFromList(index) {
-    if (allCompanies[index]) {
-      companyToJoin = allCompanies[index]
-      console.log(companyToJoin)
-      if (companyToJoin.avatar) {
-        document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt=""></div>'
-      } else {
-        document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
-        '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
-        '</div>'
-      }
-      document.getElementById("company-domain-multiple-company-name").innerHTML = companyToJoin.name
-      var a = document.getElementsByClassName('company-join-item')
-      console.log(a)
-      for (i = 0; i < a.length; i++) {
-        a[i].classList.remove('company-join-item-active')
-      }
-      document.getElementById("company-join-item-"+index).classList.add('company-join-item-active')
-      document.getElementById("company-domain-button-company-name-2").innerHTML = companyToJoin.name
-    }
-  }
-
-  function joinCompany() {
-    if (companyToJoin) {
-      console.log('joining...')
-      var currentDate = (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
-      var request = {
-        "userProfile": currentUser._id,
-        "company": companyToJoin.id,
-        "startDate": currentDate,
-        "endDate": currentDate,
-        "stillAffiliated": true
-      }
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('joined')
-          getTheData()
-        }
-      }
-      xhttp.open("POST", apiUrl+'/companyuserproxy/add/', true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
-      xhttp.setRequestHeader('id',currentUser._id);
-      xhttp.send(JSON.stringify(request));
-    }
-  }
-
-  function companySearch() {
-    var searchTerm = document.getElementById("company-search").value.toLowerCase()
-    var html = ''
-    for (i = 0; i < allCompanies.length; i++) {
-      if (searchTerm.length > 1 && allCompanies[i].name.toLowerCase().includes(searchTerm)) {
-        html = html + '<div class="company-search-item" onclick="pickCompanyToJoin('+i+')">'+allCompanies[i].name+'</div>'
-      }
-    }
-    document.getElementById("company-search-dropdown").innerHTML = html
-    if (html.length < 1) {
-      document.getElementById("company-search-dropdown").classList.add('inactive')
-    } else {
-      document.getElementById("company-search-dropdown").classList.remove('inactive')
-    }
-  }
-
-  function pickCompanyToJoin(index) {
-    document.getElementById("loading-overlay").classList.remove('inactive')
-    document.getElementById("loading-overlay-text").innerHTML = 'Loading your company...'
-
+function pickCompanyFromList(index) {
+  if (allCompanies[index]) {
     companyToJoin = allCompanies[index]
-    var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        companyToJoin = JSON.parse(xhttp.responseText);
-        console.log(companyToJoin)
-        document.getElementById("company-confirm-view").classList.remove('inactive')
-        document.getElementById("company-search-view").classList.add('inactive')
-        document.getElementById("company-confirm-img-wrapper").innerHTML = '<img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt="">'
-        document.getElementById("company-confirm-desc").innerHTML = '<h4>'+companyToJoin.name+'</h4>'+
-        '<p>'+companyToJoin.address+'</p>'+
-        '<p>'+companyToJoin.email+'</p>'+
-        '<h5>Do you want to request to join?</h5>'+
-        "<p>If you choose JOIN, we'll send a join request to "+companyToJoin.name+". If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>"
-        document.getElementById("loading-overlay").classList.add('inactive')
-        document.getElementById("loading-overlay-text").innerHTML = ''
-
-      }
+    console.log(companyToJoin)
+    if (companyToJoin.avatar) {
+      document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt=""></div>'
+    } else {
+      document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="" style="position: relative; width: 100%; float: left; height: 30vh;">'+
+      '<img class="login-logo icon" src="./img/huntingpartylogo.png" alt="">'+
+      '</div>'
     }
-    xhttp.open("GET", apiUrl+'/company/' + companyToJoin.id, true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send();
+    document.getElementById("company-domain-multiple-company-name").innerHTML = companyToJoin.name
+    var a = document.getElementsByClassName('company-join-item')
+    console.log(a)
+    for (i = 0; i < a.length; i++) {
+      a[i].classList.remove('company-join-item-active')
+    }
+    document.getElementById("company-join-item-"+index).classList.add('company-join-item-active')
+    document.getElementById("company-domain-button-company-name-2").innerHTML = companyToJoin.name
   }
+}
 
-  function sendCompanyRequest() {
-    var platform = ''
-    if (device) {
-      if (device.platform.toLowerCase() === 'android') {
-        platform = 'android'
-      } else if (device.platform.toLowerCase() === 'ios') {
-        platform = 'ios'
-      }
-    }
-    var regId = ''
-    // if (localStorage.getItem('registrationId')) {
-    //   regId = localStorage.getItem('registrationId')
-    // }
+function joinCompany() {
+  if (companyToJoin) {
+    console.log('joining...')
+    var currentDate = (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
     var request = {
-      userId: currentUser._id,
-      companyId: companyToJoin._id,
-      platform: platform,
-      registrationId: regId
+      "userProfile": currentUser._id,
+      "company": companyToJoin.id,
+      "startDate": currentDate,
+      "endDate": currentDate,
+      "stillAffiliated": true
     }
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
-        console.log(JSON.parse(xhttp.responseText))
-        console.log('did it i think')
-        document.getElementById("company-confirm-view").classList.add('inactive')
-        document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
+        console.log('joined')
+        getTheData()
       }
     }
-    xhttp.open("POST", apiUrl+'/messages/huntingpartyrequest/', true);
+    xhttp.open("POST", apiUrl+'/companyuserproxy/add/', true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
+    xhttp.setRequestHeader('id',currentUser._id);
     xhttp.send(JSON.stringify(request));
   }
+}
 
-  function leaveCompanyConfirm() {
-    document.getElementById("company-search").value = ''
-    companySearch()
-    document.getElementById("company-confirm-view").classList.add('inactive')
-    document.getElementById("company-search-view").classList.remove('inactive')
-    companyToJoin = null
-  }
-
-  function onPhoneChange(event) {
-    // remove all mask characters (keep only numeric)
-    var newVal = document.getElementById("new-company-phone").value.replace(/\D/g, '');
-    // special handling of backspace necessary otherwise
-    // deleting of non-numeric characters is not recognized
-    // this laves room for improvement for example if you delete in the
-    // middle of the string
-    var keynum
-    if(window.event) { // IE
-      keynum = event.keyCode;
-    } else if(event.which){ // Netscape/Firefox/Opera
-      keynum = event.which;
-    }
-    if (keynum == 8) {
-      newVal = newVal.substring(0, newVal.length);
-    }
-
-    // don't show braces for empty value
-    if (newVal.length == 0) {
-      newVal = '';
-    } else if (newVal.length < 3) {
-      newVal = newVal
-    }
-    // don't show braces for empty groups at the end
-    else if (newVal.length == 3) {
-      newVal = newVal.replace(/^(\d{0,3})/, '($1)');
-    } else if (newVal.length <= 6) {
-      newVal = newVal.replace(/^(\d{0,3})(\d{0,3})/, '($1)-$2');
-    }  else {
-      if (newVal.length > 10){
-        newVal = newVal.substring(0,10)
-      }
-      newVal = newVal.replace(/^(\d{0,3})(\d{0,3})(.*)/, '($1)-$2-$3');
-    }
-    // set the new value
-    document.getElementById("new-company-phone").value = newVal
-  }
-
-  function register() {
-    var firstName = document.getElementById("first-name").value
-    var lastName = document.getElementById("last-name").value
-    var email = document.getElementById("email-register").value
-    var password1 = document.getElementById("password-register").value
-    var password2 = document.getElementById("password2").value
-
-    if (password1.length >= 6 && password1 == password2 && emailValidated) {
-      var newUser = {
-        username: email,
-        firstName: firstName,
-        lastName: lastName,
-        password: password1,
-        huntingparty: true
-      }
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          document.getElementById("email").value = email
-          document.getElementById("password").value = password1
-          console.log('registered')
-          login()
-        } else {
-          console.log(JSON.parse(xhttp.responseText))
-        }
-      }
-      xhttp.open("POST", apiUrl+'/register/', true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(newUser));
-    } else {
-      checkEmail()
-      checkPasswords()
+function companySearch() {
+  var searchTerm = document.getElementById("company-search").value.toLowerCase()
+  var html = ''
+  for (i = 0; i < allCompanies.length; i++) {
+    if (searchTerm.length > 1 && allCompanies[i].name.toLowerCase().includes(searchTerm)) {
+      html = html + '<div class="company-search-item" onclick="pickCompanyToJoin('+i+')">'+allCompanies[i].name+'</div>'
     }
   }
-
-  function companyCreateNext() {
-    document.getElementById("company-new-1").classList.add('inactive')
-    document.getElementById("company-new-2").classList.remove('inactive')
+  document.getElementById("company-search-dropdown").innerHTML = html
+  if (html.length < 1) {
+    document.getElementById("company-search-dropdown").classList.add('inactive')
+  } else {
+    document.getElementById("company-search-dropdown").classList.remove('inactive')
   }
+}
 
-  function createCompany() {
-    if (
-      document.getElementById("new-company-name").value.length > 0 &&
-      document.getElementById("new-company-email").value.length > 0 &&
-      document.getElementById("new-company-phone").value.length == 14
-      // document.getElementById("new-company-address").value.length > 0 &&
-      // document.getElementById("new-company-city").value.length > 0 &&
-      // document.getElementById("new-company-state").value.length > 0 &&
-      // document.getElementById("new-company-zip").value.length > 0
-    ) {
-      var domainNames = []
-      var a = document.getElementsByClassName('company-domain')
-      for (i = 0; i < a.length; i++) {
-        if (a[i].value.length > 0 && (/^[^\s@]+\.[^\s@]+$/.test(a[i].value))) {
-          domainNames.push(a[i].value)
-        }
-      }
-      var newCompany = {
-        name: document.getElementById("new-company-name").value,
-        email: document.getElementById("new-company-email").value,
-        avatar: '',
-        contactNumber: document.getElementById("new-company-phone").value,
-        emailDomains: domainNames
-        // address: document.getElementById("new-company-address").value,
-        // city: document.getElementById("new-company-city").value,
-        // state: document.getElementById("new-company-state").value,
-        // zip:  document.getElementById("new-company-zip").value
-      }
+function pickCompanyToJoin(index) {
+  document.getElementById("loading-overlay").classList.remove('inactive')
+  document.getElementById("loading-overlay-text").innerHTML = 'Loading your company...'
 
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          var company2 = JSON.parse(xhttp.responseText);
-          var xhttp2 = new XMLHttpRequest();
-          xhttp2.onload = function() {
-            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-              var role = JSON.parse(xhttp2.responseText);
-              var currentDate = (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
-              var request = {
-                "userProfile": currentUser._id,
-                "company": company2._id,
-                "startDate": currentDate,
-                "endDate": currentDate,
-                "stillAffiliated": true,
-                "role": role._id
-              }
-              var xhttp3 = new XMLHttpRequest();
-              xhttp3.onload = function() {
-                if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-                  getTheData()
-                }
-              }
-              xhttp3.open("POST", apiUrl+'/companyuserproxy/add/', true);
-              xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
-              xhttp3.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
-              xhttp3.setRequestHeader('id',currentUser._id);
-              xhttp3.send(JSON.stringify(request));
-            }
-          }
-          xhttp2.open("GET", apiUrl+'/role/title/admin', true);
-          xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-          xhttp2.send();
-        }
-      }
-      xhttp.open("POST", apiUrl+'/company/add/', true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
-      xhttp.send(JSON.stringify(newCompany));
-    } else {
-      console.log(document.getElementById("new-company-phone").value.length)
-      console.log('nah')
-    }
+  companyToJoin = allCompanies[index]
+  var xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      companyToJoin = JSON.parse(xhttp.responseText);
+      console.log(companyToJoin)
+      document.getElementById("company-confirm-view").classList.remove('inactive')
+      document.getElementById("company-search-view").classList.add('inactive')
+      document.getElementById("company-confirm-img-wrapper").innerHTML = '<img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt="">'
+      document.getElementById("company-confirm-desc").innerHTML = '<h4>'+companyToJoin.name+'</h4>'+
+      '<p>'+companyToJoin.address+'</p>'+
+      '<p>'+companyToJoin.email+'</p>'+
+      '<h5>Do you want to request to join?</h5>'+
+      "<p>If you choose JOIN, we'll send a join request to "+companyToJoin.name+". If they accept, we'll notify you, and you'll then have full access to their Hunting Party.</p>"
+      document.getElementById("loading-overlay").classList.add('inactive')
+      document.getElementById("loading-overlay-text").innerHTML = ''
 
-  }
-
-
-  function getTime() {
-    var i = new Date()
-    document.getElementById("test-button").innerHTML = i.getTime()
-  }
-
-  function switchFboTab(elem, num) {
-    var a = document.getElementsByClassName('buttonbar-tab')
-    for (i = 0; i < a.length; i++) {
-      a[i].classList.remove('buttonbar-tab-active');
-    }
-    var b = document.getElementsByClassName('lower')
-    for (i = 0; i < b.length; i++) {
-      b[i].classList.remove('inactive');
-    }
-    for (i = 0; i < 3; i++) {
-      if (i !== num) {
-        document.getElementById("lower-" + (i+1).toString()).classList.add('inactive')
-      }
-    }
-    for (i = 1; i <=3; i++) {
-      if (!tabIds[num].allowed.includes(i)) {
-        document.getElementById("data-box-" + i.toString()).classList.add('data-box-inactive');
-        document.getElementById("arrow-" + i.toString()).innerHTML = "▼";
-        document.getElementById("databar-" + i.toString()).classList.remove('databar-active');
-      }
-    }
-    elem.classList.add('buttonbar-tab-active');
-  }
-
-  function expandAbstract() {
-    if (document.getElementById("fbo-detail-top").classList.contains('fbo-detail-top-larger')) {
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("abstract-box").classList.remove('abstract-box-larger')
-      document.getElementById("fbo-detail-middle").classList.remove('inactive')
-    } else {
-      document.getElementById("fbo-detail-top").classList.add('fbo-detail-top-larger')
-      document.getElementById("abstract-box").classList.add('abstract-box-larger')
-      document.getElementById("fbo-detail-middle").classList.add('inactive')
     }
   }
+  xhttp.open("GET", apiUrl+'/company/' + companyToJoin.id, true);
+  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttp.send();
+}
 
-  function addInterestedVendor() {
-    var fbo = fbosIn[fboIndex]
-    if (activeTab == 2) {
-      fbo = fbosIn[fboIndex]
-    } else if (activeTab == 3) {
-      fbo = fboPipeline[fboIndex]
-    }
-    if (!fbo.fbo.interestedVendors) {
-      fbo.fbo.interestedVendors = []
-    }
-    var companyThere = false
-    for (i = 0; i < fbo.fbo.interestedVendors.length; i++) {
-      if (fbo.fbo.interestedVendors[i].id == company._id) {
-        companyThere = true
-        break
-      }
-    }
-    if (!companyThere) {
-      fbo.fbo.interestedVendors.push({
-        name: company.name,
-        id: company._id
-      })
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('done???')
-          var newFbo = JSON.parse(xhttp.responseText)
-          fbo.fbo = newFbo
-          var partiesHtml = ''
-          var companyAlreadyInterested = false
-          document.getElementById("interested-vendors").innerHTML = ''
-          if (fbo.fbo.interestedVendors.length < 1) {
-            partiesHtml = '<div class="interested-vendor">'+
-            'No interested vendors yet'+
-            '</div>'
-          } else {
-            for (i = 0; i < fbo.fbo.interestedVendors.length; i++) {
-              if (fbo.fbo.interestedVendors[i].id == company._id) {
-                companyAlreadyInterested = true
-              }
-              partiesHtml = partiesHtml + '<div class="interested-vendor">'+
-              fbo.fbo.interestedVendors[i].name+
-              '</div>'
-            }
-          }
-          document.getElementById("interested-vendors").innerHTML = partiesHtml
-          if (companyAlreadyInterested) {
-            document.getElementById("interested-vendor-button").classList.add('inactive')
-          }
-          if (document.getElementById("fbo-detail-middle-4").classList.contains('inactive')) {
-            openFboDetail(4)
-          }
-        }
-      };
-      var url = apiUrl+"/fbo/" + fbo.fbo._id;
-      xhttp.open("PUT", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
-      xhttp.send(JSON.stringify(fbo.fbo));
+function sendCompanyRequest() {
+  var platform = ''
+  if (device) {
+    if (device.platform.toLowerCase() === 'android') {
+      platform = 'android'
+    } else if (device.platform.toLowerCase() === 'ios') {
+      platform = 'ios'
     }
   }
+  var regId = ''
+  // if (localStorage.getItem('registrationId')) {
+  //   regId = localStorage.getItem('registrationId')
+  // }
+  var request = {
+    userId: currentUser._id,
+    companyId: companyToJoin._id,
+    platform: platform,
+    registrationId: regId
+  }
+  var xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      console.log(JSON.parse(xhttp.responseText))
+      console.log('did it i think')
+      document.getElementById("company-confirm-view").classList.add('inactive')
+      document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
+    }
+  }
+  xhttp.open("POST", apiUrl+'/messages/huntingpartyrequest/', true);
+  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttp.send(JSON.stringify(request));
+}
 
-  var activeFbo
-  function setActiveFbo(index, tab) {
-    yesRefer = []
-    noRefer = []
-    referRefer = []
-    var proxy
-    var a = document.getElementsByClassName('fbo-detail-middle-expanded')
-    for (i = 0; i < a.length; i++) {
-      if (!a[i].classList.contains('inactive')) {
-        // console.log(a[i].id.slice(a[i].id.length-1))
-        // console.log(i)
-        openFboDetail(i)
-      }
+function leaveCompanyConfirm() {
+  document.getElementById("company-search").value = ''
+  companySearch()
+  document.getElementById("company-confirm-view").classList.add('inactive')
+  document.getElementById("company-search-view").classList.remove('inactive')
+  companyToJoin = null
+}
+
+function onPhoneChange(event) {
+  // remove all mask characters (keep only numeric)
+  var newVal = document.getElementById("new-company-phone").value.replace(/\D/g, '');
+  // special handling of backspace necessary otherwise
+  // deleting of non-numeric characters is not recognized
+  // this laves room for improvement for example if you delete in the
+  // middle of the string
+  var keynum
+  if(window.event) { // IE
+    keynum = event.keyCode;
+  } else if(event.which){ // Netscape/Firefox/Opera
+    keynum = event.which;
+  }
+  if (keynum == 8) {
+    newVal = newVal.substring(0, newVal.length);
+  }
+
+  // don't show braces for empty value
+  if (newVal.length == 0) {
+    newVal = '';
+  } else if (newVal.length < 3) {
+    newVal = newVal
+  }
+  // don't show braces for empty groups at the end
+  else if (newVal.length == 3) {
+    newVal = newVal.replace(/^(\d{0,3})/, '($1)');
+  } else if (newVal.length <= 6) {
+    newVal = newVal.replace(/^(\d{0,3})(\d{0,3})/, '($1)-$2');
+  }  else {
+    if (newVal.length > 10){
+      newVal = newVal.substring(0,10)
     }
-    if (tab == 0) {
-      proxy = fbosIn[index]
-      document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(2)"><p>‹</p></div>'
-      // document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
-      document.getElementById("fbo-details-comments").classList.add('inactive')
-    } else if (tab == 1) {
-      proxy = fboPipeline[index]
-      document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(3)"><p>‹</p></div>'
-      document.getElementById("fbo-details-comments").classList.remove('inactive')
+    newVal = newVal.replace(/^(\d{0,3})(\d{0,3})(.*)/, '($1)-$2-$3');
+  }
+  // set the new value
+  document.getElementById("new-company-phone").value = newVal
+}
+
+function register() {
+  var firstName = document.getElementById("first-name").value
+  var lastName = document.getElementById("last-name").value
+  var email = document.getElementById("email-register").value
+  var password1 = document.getElementById("password-register").value
+  var password2 = document.getElementById("password2").value
+
+  if (password1.length >= 6 && password1 == password2 && emailValidated) {
+    var newUser = {
+      username: email,
+      firstName: firstName,
+      lastName: lastName,
+      password: password1,
+      huntingparty: true
     }
-    if (proxy.fbo) {
-      if (!proxy.fbo.interestedVendors || proxy.fbo.interestedVendors == undefined) {
-        proxy.fbo.interestedVendors = []
-      }
-      var partiesHtml = ''
-      var companyAlreadyInterested = false
-      document.getElementById("interested-vendors").innerHTML = ''
-      if (proxy.fbo.interestedVendors.length < 1) {
-        partiesHtml = '<div class="interested-vendor">'+
-        'No interested vendors yet'+
-        '</div>'
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        document.getElementById("email").value = email
+        document.getElementById("password").value = password1
+        console.log('registered')
+        login()
       } else {
-        for (i = 0; i < proxy.fbo.interestedVendors.length; i++) {
-          if (proxy.fbo.interestedVendors[i].id == company._id) {
-            companyAlreadyInterested = true
+        console.log(JSON.parse(xhttp.responseText))
+      }
+    }
+    xhttp.open("POST", apiUrl+'/register/', true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(newUser));
+  } else {
+    checkEmail()
+    checkPasswords()
+  }
+}
+
+function companyCreateNext() {
+  document.getElementById("company-new-1").classList.add('inactive')
+  document.getElementById("company-new-2").classList.remove('inactive')
+}
+
+function createCompany() {
+  if (
+    document.getElementById("new-company-name").value.length > 0 &&
+    document.getElementById("new-company-email").value.length > 0 &&
+    document.getElementById("new-company-phone").value.length == 14
+    // document.getElementById("new-company-address").value.length > 0 &&
+    // document.getElementById("new-company-city").value.length > 0 &&
+    // document.getElementById("new-company-state").value.length > 0 &&
+    // document.getElementById("new-company-zip").value.length > 0
+  ) {
+    var domainNames = []
+    var a = document.getElementsByClassName('company-domain')
+    for (i = 0; i < a.length; i++) {
+      if (a[i].value.length > 0 && (/^[^\s@]+\.[^\s@]+$/.test(a[i].value))) {
+        domainNames.push(a[i].value)
+      }
+    }
+    var newCompany = {
+      name: document.getElementById("new-company-name").value,
+      email: document.getElementById("new-company-email").value,
+      avatar: '',
+      contactNumber: document.getElementById("new-company-phone").value,
+      emailDomains: domainNames
+      // address: document.getElementById("new-company-address").value,
+      // city: document.getElementById("new-company-city").value,
+      // state: document.getElementById("new-company-state").value,
+      // zip:  document.getElementById("new-company-zip").value
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var company2 = JSON.parse(xhttp.responseText);
+        var xhttp2 = new XMLHttpRequest();
+        xhttp2.onload = function() {
+          if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+            var role = JSON.parse(xhttp2.responseText);
+            var currentDate = (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
+            var request = {
+              "userProfile": currentUser._id,
+              "company": company2._id,
+              "startDate": currentDate,
+              "endDate": currentDate,
+              "stillAffiliated": true,
+              "role": role._id
+            }
+            var xhttp3 = new XMLHttpRequest();
+            xhttp3.onload = function() {
+              if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                getTheData()
+              }
+            }
+            xhttp3.open("POST", apiUrl+'/companyuserproxy/add/', true);
+            xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xhttp3.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
+            xhttp3.setRequestHeader('id',currentUser._id);
+            xhttp3.send(JSON.stringify(request));
           }
-          partiesHtml = partiesHtml + '<div class="interested-vendor">'+
-          proxy.fbo.interestedVendors[i].name+
+        }
+        xhttp2.open("GET", apiUrl+'/role/title/admin', true);
+        xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp2.send();
+      }
+    }
+    xhttp.open("POST", apiUrl+'/company/add/', true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
+    xhttp.send(JSON.stringify(newCompany));
+  } else {
+    console.log(document.getElementById("new-company-phone").value.length)
+    console.log('nah')
+  }
+
+}
+
+function getTime() {
+  var i = new Date()
+  document.getElementById("test-button").innerHTML = i.getTime()
+}
+
+function switchFboTab(elem, num) {
+  var a = document.getElementsByClassName('buttonbar-tab')
+  for (i = 0; i < a.length; i++) {
+    a[i].classList.remove('buttonbar-tab-active');
+  }
+  var b = document.getElementsByClassName('lower')
+  for (i = 0; i < b.length; i++) {
+    b[i].classList.remove('inactive');
+  }
+  for (i = 0; i < 3; i++) {
+    if (i !== num) {
+      document.getElementById("lower-" + (i+1).toString()).classList.add('inactive')
+    }
+  }
+  for (i = 1; i <=3; i++) {
+    if (!tabIds[num].allowed.includes(i)) {
+      document.getElementById("data-box-" + i.toString()).classList.add('data-box-inactive');
+      document.getElementById("arrow-" + i.toString()).innerHTML = "▼";
+      document.getElementById("databar-" + i.toString()).classList.remove('databar-active');
+    }
+  }
+  elem.classList.add('buttonbar-tab-active');
+}
+
+function expandAbstract() {
+  if (document.getElementById("fbo-detail-top").classList.contains('fbo-detail-top-larger')) {
+    document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+    document.getElementById("abstract-box").classList.remove('abstract-box-larger')
+    document.getElementById("fbo-detail-middle").classList.remove('inactive')
+  } else {
+    document.getElementById("fbo-detail-top").classList.add('fbo-detail-top-larger')
+    document.getElementById("abstract-box").classList.add('abstract-box-larger')
+    document.getElementById("fbo-detail-middle").classList.add('inactive')
+  }
+}
+
+function addInterestedVendor() {
+  var fbo = fbosIn[fboIndex]
+  if (activeTab == 2) {
+    fbo = fbosIn[fboIndex]
+  } else if (activeTab == 3) {
+    fbo = fboPipeline[fboIndex]
+  }
+  if (!fbo.fbo.interestedVendors) {
+    fbo.fbo.interestedVendors = []
+  }
+  var companyThere = false
+  for (i = 0; i < fbo.fbo.interestedVendors.length; i++) {
+    if (fbo.fbo.interestedVendors[i].id == company._id) {
+      companyThere = true
+      break
+    }
+  }
+  if (!companyThere) {
+    fbo.fbo.interestedVendors.push({
+      name: company.name,
+      id: company._id
+    })
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        console.log('done???')
+        var newFbo = JSON.parse(xhttp.responseText)
+        fbo.fbo = newFbo
+        var partiesHtml = ''
+        var companyAlreadyInterested = false
+        document.getElementById("interested-vendors").innerHTML = ''
+        if (fbo.fbo.interestedVendors.length < 1) {
+          partiesHtml = '<div class="interested-vendor">'+
+          'No interested vendors yet'+
           '</div>'
+        } else {
+          for (i = 0; i < fbo.fbo.interestedVendors.length; i++) {
+            if (fbo.fbo.interestedVendors[i].id == company._id) {
+              companyAlreadyInterested = true
+            }
+            partiesHtml = partiesHtml + '<div class="interested-vendor">'+
+            fbo.fbo.interestedVendors[i].name+
+            '</div>'
+          }
+        }
+        document.getElementById("interested-vendors").innerHTML = partiesHtml
+        if (companyAlreadyInterested) {
+          document.getElementById("interested-vendor-button").classList.add('inactive')
+        }
+        if (document.getElementById("fbo-detail-middle-4").classList.contains('inactive')) {
+          openFboDetail(4)
         }
       }
-      document.getElementById("interested-vendors").innerHTML = partiesHtml
-      if (companyAlreadyInterested) {
-        document.getElementById("interested-vendor-button").classList.add('inactive')
-      } else {
-        document.getElementById("interested-vendor-button").classList.remove('inactive')
+    };
+    var url = apiUrl+"/fbo/" + fbo.fbo._id;
+    xhttp.open("PUT", url, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
+    xhttp.send(JSON.stringify(fbo.fbo));
+  }
+}
+
+function setActiveFbo(index, tab) {
+  yesRefer = []
+  noRefer = []
+  referRefer = []
+  var proxy
+  var a = document.getElementsByClassName('fbo-detail-middle-expanded')
+  for (i = 0; i < a.length; i++) {
+    if (!a[i].classList.contains('inactive')) {
+      // console.log(a[i].id.slice(a[i].id.length-1))
+      // console.log(i)
+      openFboDetail(i)
+    }
+  }
+  if (tab == 0) {
+    proxy = fbosIn[index]
+    document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(2)"><p>‹</p></div>'
+    // document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
+    document.getElementById("fbo-details-comments").classList.add('inactive')
+  } else if (tab == 1) {
+    proxy = fboPipeline[index]
+    document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(3)"><p>‹</p></div>'
+    document.getElementById("fbo-details-comments").classList.remove('inactive')
+  }
+  if (proxy.fbo) {
+    if (!proxy.fbo.interestedVendors || proxy.fbo.interestedVendors == undefined) {
+      proxy.fbo.interestedVendors = []
+    }
+    var partiesHtml = ''
+    var companyAlreadyInterested = false
+    document.getElementById("interested-vendors").innerHTML = ''
+    if (proxy.fbo.interestedVendors.length < 1) {
+      partiesHtml = '<div class="interested-vendor">'+
+      'No interested vendors yet'+
+      '</div>'
+    } else {
+      for (i = 0; i < proxy.fbo.interestedVendors.length; i++) {
+        if (proxy.fbo.interestedVendors[i].id == company._id) {
+          companyAlreadyInterested = true
+        }
+        partiesHtml = partiesHtml + '<div class="interested-vendor">'+
+        proxy.fbo.interestedVendors[i].name+
+        '</div>'
       }
-      var dueDateHtml = 'No Due Date'
-      if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
-        dueDateHtml = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-      } else {
-        dueDateHtml = '<span style="font-size: 12px">No Due Date</span>'
-      }
-      var naicsHtml = ''
-      if (proxy.fbo.naics) {
-        var naicsToCheck = proxy.fbo.naics
-        var naicsDesc = ''
-        if (searchTerms.naics) {
-          console.log(naicsToCheck.slice(naicsToCheck.length-1))
-          for (let i of searchTerms.naics) {
-            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i.code) {
-              naicsDesc = i.name
-            } else if (i.code == naicsToCheck) {
-              naicsDesc = i.name
-            } else if (i.subcategories) {
-              for (let i2 of i.subcategories) {
-                if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i2.code) {
-                  naicsDesc = i2.name
-                } else if (i2.code == naicsToCheck) {
-                  naicsDesc = i2.name
-                } else if (i2.subcategories) {
-                  for (let i3 of i2.subcategories) {
-                    if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i3.code) {
-                      naicsDesc = i3.name
-                    } else if (i3.code == naicsToCheck) {
-                      naicsDesc = i3.name
-                    } else if (i3.subcategories) {
-                      for (let i4 of i3.subcategories) {
-                        if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i4.code) {
-                          naicsDesc = i4.name
-                        } else if (i4.code == naicsToCheck) {
-                          naicsDesc = i4.name
-                        } else if (i4.subcategories) {
-                          for (let i5 of i4.subcategories) {
-                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i5.code) {
-                              naicsDesc = i5.name
-                            } else if (i5.code == naicsToCheck) {
-                              naicsDesc = i5.name
-                            }
+    }
+    document.getElementById("interested-vendors").innerHTML = partiesHtml
+    if (companyAlreadyInterested) {
+      document.getElementById("interested-vendor-button").classList.add('inactive')
+    } else {
+      document.getElementById("interested-vendor-button").classList.remove('inactive')
+    }
+    var dueDateHtml = 'No Due Date'
+    if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
+      dueDateHtml = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+    } else {
+      dueDateHtml = '<span style="font-size: 12px">No Due Date</span>'
+    }
+    var naicsHtml = ''
+    if (proxy.fbo.naics) {
+      var naicsToCheck = proxy.fbo.naics
+      var naicsDesc = ''
+      if (searchTerms.naics) {
+        console.log(naicsToCheck.slice(naicsToCheck.length-1))
+        for (let i of searchTerms.naics) {
+          if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i.code) {
+            naicsDesc = i.name
+          } else if (i.code == naicsToCheck) {
+            naicsDesc = i.name
+          } else if (i.subcategories) {
+            for (let i2 of i.subcategories) {
+              if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i2.code) {
+                naicsDesc = i2.name
+              } else if (i2.code == naicsToCheck) {
+                naicsDesc = i2.name
+              } else if (i2.subcategories) {
+                for (let i3 of i2.subcategories) {
+                  if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i3.code) {
+                    naicsDesc = i3.name
+                  } else if (i3.code == naicsToCheck) {
+                    naicsDesc = i3.name
+                  } else if (i3.subcategories) {
+                    for (let i4 of i3.subcategories) {
+                      if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i4.code) {
+                        naicsDesc = i4.name
+                      } else if (i4.code == naicsToCheck) {
+                        naicsDesc = i4.name
+                      } else if (i4.subcategories) {
+                        for (let i5 of i4.subcategories) {
+                          if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i5.code) {
+                            naicsDesc = i5.name
+                          } else if (i5.code == naicsToCheck) {
+                            naicsDesc = i5.name
                           }
                         }
                       }
@@ -5200,279 +5207,226 @@ function toggleHamburgerMenu() {
             }
           }
         }
-        naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
-        proxy.fbo.naics + ' ' + naicsDesc
       }
-      var psc = proxy.fbo.classCod
-      var pscFound = false
-      for (i = 0; i < searchTerms.psc.products.length; i++) {
-        for (i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
-          if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) == proxy.fbo.classCod) {
-            psc = searchTerms.psc.products[i].psc[i2].name
-            pscFound = true
-            break
-          }
-        }
-        if (pscFound) {
+      naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
+      proxy.fbo.naics + ' ' + naicsDesc
+    }
+    var psc = proxy.fbo.classCod
+    var pscFound = false
+    for (i = 0; i < searchTerms.psc.products.length; i++) {
+      for (i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
+        if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) == proxy.fbo.classCod) {
+          psc = searchTerms.psc.products[i].psc[i2].name
+          pscFound = true
           break
         }
       }
-      if (!pscFound) {
-        for (i = 0; i < searchTerms.psc.services.length; i++) {
-          if (searchTerms.psc.services[i].name.slice(0,1) == proxy.fbo.classCod) {
-            psc = searchTerms.psc.services[i].name
-            pscFound = true
-            break
-          }
-        }
+      if (pscFound) {
+        break
       }
-      // document.getElementById("fbo-details-input").value = ''
-      var dataText = '<p><span style="font-weight: bold">Item: </span>'+
-      proxy.fbo.type +
-      '<p><span style="font-weight: bold">Solicitation Number: </span>'+
-      proxy.fbo.solnbr +
-      '</p><p><span style="font-weight: bold">Agency: </span>'+
-      proxy.fbo.agency+
-      '</p><p><span style="font-weight: bold">PSC: </span>'+
-      psc+
-      naicsHtml+
-      '</p><p><span style="font-weight: bold">Office: </span>'+
-      proxy.fbo.office+
-      '</p><p><span style="font-weight: bold">Location: </span>'+
-      proxy.fbo.offAdd+', '
-      '</p><p><span style="font-weight: bold">Setaside: </span>'+
-      proxy.fbo.setaside+
-      '</p><p><span style="font-weight: bold">Due Date: </span>'+
-      dueDateHtml+
-      '</p><p><span style="font-weight: bold">Contact: </span>'+
-      proxy.fbo.contact+
-      '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
-      if (proxy.fbo.subject.length < 98) {
-        document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+proxy.fbo.subject+'</p>';
-      } else {
-        document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2" style="font-size: 14px; line-height: 13px!important;">'+proxy.fbo.subject+'</p>';
-      }
-      var fboDescHTML = ''
-      var outputArray2 = proxy.fboDesc
-      activeFboDesc = outputArray2
-      for (i = 0; i < outputArray2.length; i++) {
-        if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
-          var proxyCopy = outputArray2[i]
-          // if (i == 0) {
-          //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
-          // } else {
-          // }
-          outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
-        }
-        fboDescHTML = fboDescHTML + outputArray2[i]
-      }
-      document.getElementById("abstract-text").innerHTML = fboDescHTML;
-      document.getElementById("data-text").innerHTML = dataText;
-      var dueDate = ''
-      if (proxy.fbo.respDate) {
-        var today = getToday()
-        var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-        var date2 = new Date(today);
-        var date1 = new Date(due);
-        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-        var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        if (timeToDue >= 365) {
-          dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
-        } else if (timeToDue >= 60) {
-          dueDate = "<p>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
-        } else if (timeToDue >= 14) {
-          dueDate = "<p>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
-        } else {
-          dueDate = "<p>Due: "+timeToDue+" Days</p>"
-        }
-        // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
-        document.getElementById("fbo-details-date").innerHTML = due
-      } else {
-        dueDate = "<span style='font-size: 10px'>No Due Date</span>"
-        document.getElementById("fbo-details-date").innerHTML = dueDate
-      }
-      // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
-      document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
-      document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
-
-      activeFbo = proxy
-      fboIndex = index
-      if (!proxy.viewed) {
-        proxy.viewed = []
-      }
-      if (!proxy.viewed.includes(currentUser._id)) {
-        proxy.viewed.push(currentUser._id)
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-            console.log('marked as read')
-            checkProxiesViewed()
-          }
-        };
-        var url = apiUrl+"/fbocompanyproxy/" + proxy._id;
-        xhttp.open("PUT", url, true);
-        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-        xhttp.send(JSON.stringify(proxy));
-      }
-      renderChart()
-      updateComments(proxy)
-      checkVote(proxy, index)
-    } else {
-      console.log('ERROR: no fbo on proxy')
-      console.log(proxy)
     }
-  }
-
-  var fbosInUnread = 0
-  var pipelineUnread = 0
-
-  function checkProxiesViewed() {
-    fbosInUnread = 0
-    pipelineUnread = 0
-    for (i = 0; i < fbosIn.length; i++) {
-      if (fbosIn[i].viewed) {
-        if (!fbosIn[i].viewed.includes(currentUser._id)) {
-          fbosInUnread++
+    if (!pscFound) {
+      for (i = 0; i < searchTerms.psc.services.length; i++) {
+        if (searchTerms.psc.services[i].name.slice(0,1) == proxy.fbo.classCod) {
+          psc = searchTerms.psc.services[i].name
+          pscFound = true
+          break
         }
+      }
+    }
+    // document.getElementById("fbo-details-input").value = ''
+    var dataText = '<p><span style="font-weight: bold">Item: </span>'+
+    proxy.fbo.type +
+    '<p><span style="font-weight: bold">Solicitation Number: </span>'+
+    proxy.fbo.solnbr +
+    '</p><p><span style="font-weight: bold">Agency: </span>'+
+    proxy.fbo.agency+
+    '</p><p><span style="font-weight: bold">PSC: </span>'+
+    psc+
+    naicsHtml+
+    '</p><p><span style="font-weight: bold">Office: </span>'+
+    proxy.fbo.office+
+    '</p><p><span style="font-weight: bold">Location: </span>'+
+    proxy.fbo.offAdd+', '
+    '</p><p><span style="font-weight: bold">Setaside: </span>'+
+    proxy.fbo.setaside+
+    '</p><p><span style="font-weight: bold">Due Date: </span>'+
+    dueDateHtml+
+    '</p><p><span style="font-weight: bold">Contact: </span>'+
+    proxy.fbo.contact+
+    '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
+    if (proxy.fbo.subject.length < 98) {
+      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+proxy.fbo.subject+'</p>';
+    } else {
+      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2" style="font-size: 14px; line-height: 13px!important;">'+proxy.fbo.subject+'</p>';
+    }
+    var fboDescHTML = ''
+    var outputArray2 = proxy.fboDesc
+    activeFboDesc = outputArray2
+    for (i = 0; i < outputArray2.length; i++) {
+      if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
+        var proxyCopy = outputArray2[i]
+        // if (i == 0) {
+        //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
+        // } else {
+        // }
+        outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
+      }
+      fboDescHTML = fboDescHTML + outputArray2[i]
+    }
+    document.getElementById("abstract-text").innerHTML = fboDescHTML;
+    document.getElementById("data-text").innerHTML = dataText;
+    var dueDate = ''
+    if (proxy.fbo.respDate) {
+      var today = getToday()
+      var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+      var date2 = new Date(today);
+      var date1 = new Date(due);
+      var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      if (timeToDue >= 365) {
+        dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
+      } else if (timeToDue >= 60) {
+        dueDate = "<p>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
+      } else if (timeToDue >= 14) {
+        dueDate = "<p>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
       } else {
+        dueDate = "<p>Due: "+timeToDue+" Days</p>"
+      }
+      // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
+      document.getElementById("fbo-details-date").innerHTML = due
+    } else {
+      dueDate = "<span style='font-size: 10px'>No Due Date</span>"
+      document.getElementById("fbo-details-date").innerHTML = dueDate
+    }
+    // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
+    document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
+    document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
+
+    activeFbo = proxy
+    fboIndex = index
+    if (!proxy.viewed) {
+      proxy.viewed = []
+    }
+    if (!proxy.viewed.includes(currentUser._id)) {
+      proxy.viewed.push(currentUser._id)
+      var xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          console.log('marked as read')
+          checkProxiesViewed()
+        }
+      };
+      var url = apiUrl+"/fbocompanyproxy/" + proxy._id;
+      xhttp.open("PUT", url, true);
+      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhttp.send(JSON.stringify(proxy));
+    }
+    renderChart()
+    updateComments(proxy)
+    checkVote(proxy, index)
+  } else {
+    console.log('ERROR: no fbo on proxy')
+    console.log(proxy)
+  }
+}
+
+function checkProxiesViewed() {
+  fbosInUnread = 0
+  pipelineUnread = 0
+  for (i = 0; i < fbosIn.length; i++) {
+    if (fbosIn[i].viewed) {
+      if (!fbosIn[i].viewed.includes(currentUser._id)) {
         fbosInUnread++
       }
+    } else {
+      fbosInUnread++
     }
-    for (i = 0; i < fboPipeline.length; i++) {
-      if (fboPipeline[i].viewed) {
-        if (!fboPipeline[i].viewed.includes(currentUser._id)) {
-          pipelineUnread++
-        }
-      } else {
+  }
+  for (i = 0; i < fboPipeline.length; i++) {
+    if (fboPipeline[i].viewed) {
+      if (!fboPipeline[i].viewed.includes(currentUser._id)) {
         pipelineUnread++
       }
-    }
-    document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread
-    document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread
-
-  }
-
-  function switchFboDetailTab(which) {
-    if (which == 0) {
-      document.getElementById("fbo-detail-topbar-arrow-left").classList.remove('inactive');
-      document.getElementById("fbo-detail-info").classList.remove('inactive');
-      document.getElementById("fbo-detail-topbar-arrow-right").classList.add('inactive');
-      document.getElementById("fbo-detail-data").classList.add('inactive');
-      document.getElementById("fbo-detail-topbar-left").classList.add('topbar-half-active');
-      document.getElementById("fbo-detail-topbar-right").classList.remove('topbar-half-active');
-    } else if (which == 1) {
-      document.getElementById("fbo-detail-topbar-arrow-left").classList.add('inactive');
-      document.getElementById("fbo-detail-info").classList.add('inactive');
-      document.getElementById("fbo-detail-topbar-arrow-right").classList.remove('inactive');
-      document.getElementById("fbo-detail-data").classList.remove('inactive');
-      document.getElementById("fbo-detail-topbar-left").classList.remove('topbar-half-active');
-      document.getElementById("fbo-detail-topbar-right").classList.add('topbar-half-active');
+    } else {
+      pipelineUnread++
     }
   }
+  document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread
+  document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread
 
-  function checkVote(proxy, index) {
-    for (i = 0; i < proxy.voteYes.length; i++) {
-      if (proxy.voteYes[i].id == currentUser._id) {
-        fboVote[index] = 2
+}
+
+function switchFboDetailTab(which) {
+  if (which == 0) {
+    document.getElementById("fbo-detail-topbar-arrow-left").classList.remove('inactive');
+    document.getElementById("fbo-detail-info").classList.remove('inactive');
+    document.getElementById("fbo-detail-topbar-arrow-right").classList.add('inactive');
+    document.getElementById("fbo-detail-data").classList.add('inactive');
+    document.getElementById("fbo-detail-topbar-left").classList.add('topbar-half-active');
+    document.getElementById("fbo-detail-topbar-right").classList.remove('topbar-half-active');
+  } else if (which == 1) {
+    document.getElementById("fbo-detail-topbar-arrow-left").classList.add('inactive');
+    document.getElementById("fbo-detail-info").classList.add('inactive');
+    document.getElementById("fbo-detail-topbar-arrow-right").classList.remove('inactive');
+    document.getElementById("fbo-detail-data").classList.remove('inactive');
+    document.getElementById("fbo-detail-topbar-left").classList.remove('topbar-half-active');
+    document.getElementById("fbo-detail-topbar-right").classList.add('topbar-half-active');
+  }
+}
+
+function checkVote(proxy, index) {
+  for (i = 0; i < proxy.voteYes.length; i++) {
+    if (proxy.voteYes[i].id == currentUser._id) {
+      fboVote[index] = 2
+      break;
+    }
+  }
+  if (fboVote[index] !== 2) {
+    for (i = 0; i < proxy.voteNo.length; i++) {
+      if (proxy.voteNo[i].id == currentUser._id) {
+        fboVote[index] = 1
         break;
       }
     }
-    if (fboVote[index] !== 2) {
-      for (i = 0; i < proxy.voteNo.length; i++) {
-        if (proxy.voteNo[i].id == currentUser._id) {
-          fboVote[index] = 1
-          break;
-        }
-      }
-    }
-    if (fboVote[index] == 1) {
-    } else if (fboVote[index] == 2) {
-    } else {
-    }
   }
-
-  function closePopups(moveOn) {
-    document.getElementById("fbo-popups").classList.add('inactive');
-    var a = document.getElementsByClassName('vote-popup')
-    for (i = 0; i < a.length; i++) {
-      a[i].classList.add('inactive');
-    }
-    renderFbos()
-    peopleToRefer = []
-    if (moveOn) {
-      fboIndex = fboIndex+1
-      goToFbo(fboIndex,0)
-    }
-    // switchTab(tab)
+  if (fboVote[index] == 1) {
+  } else if (fboVote[index] == 2) {
+  } else {
   }
+}
 
-  function openPopups(which) {
-    if (which == 0) {
-      var alreadyVoted = false
-      var fbo = fbosIn[fboIndex]
-      if (activeTab == 2) {
-        fbo = fbosIn[fboIndex]
-      } else if (activeTab == 3) {
-        fbo = fboPipeline[fboIndex]
+function closePopups(moveOn) {
+  document.getElementById("fbo-popups").classList.add('inactive');
+  var a = document.getElementsByClassName('vote-popup')
+  for (i = 0; i < a.length; i++) {
+    a[i].classList.add('inactive');
+  }
+  renderFbos()
+  peopleToRefer = []
+  if (moveOn) {
+    fboIndex = fboIndex+1
+    goToFbo(fboIndex,0)
+  }
+  // switchTab(tab)
+}
+
+function openPopups(which) {
+  if (which == 0) {
+    var alreadyVoted = false
+    var fbo = fbosIn[fboIndex]
+    if (activeTab == 2) {
+      fbo = fbosIn[fboIndex]
+    } else if (activeTab == 3) {
+      fbo = fboPipeline[fboIndex]
+    }
+    for (var i = 0; i < fbo.voteYes.length; i++) {
+      if (fbo.voteYes[i].id == currentUser._id) {
+        alreadyVoted = true
+        break
       }
-      for (var i = 0; i < fbo.voteYes.length; i++) {
-        if (fbo.voteYes[i].id == currentUser._id) {
-          alreadyVoted = true
-          break
-        }
-      }
-      if (!alreadyVoted) {
-        document.getElementById("fbo-popups").classList.remove('inactive');
-        var usersList = []
-        for (i = 0; i < huntingPartyData.users.length; i++) {
-          if (huntingPartyData.users[i].userId !== currentUser._id) {
-            usersList.push(huntingPartyData.users[i])
-          }
-        }
-        var a = document.getElementsByClassName('yes-popup')
-        for (i = 0; i < a.length; i++) {
-          a[i].classList.remove('inactive');
-        }
-        var usersHtml = ''
-        for (i = 0; i < usersList.length; i++) {
-          usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
-          if (i < usersList.length-1) {
-            // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
-          }
-        }
-        document.getElementById("yes-popup-users-list").innerHTML = usersHtml
-        document.getElementById("refer-users-list").innerHTML = ''
-      }
-    } else if (which == 1) {
-      var alreadyVoted = false
-      var fbo = fbosIn[fboIndex]
-      if (activeTab == 2) {
-        fbo = fbosIn[fboIndex]
-      } else if (activeTab == 3) {
-        fbo = fboPipeline[fboIndex]
-      }
-      for (var i = 0; i < fbo.voteNo.length; i++) {
-        if (fbo.voteNo[i].id == currentUser._id) {
-          alreadyVoted = true
-          break
-        }
-      }
-      if (!alreadyVoted) {
-        document.getElementById("fbo-popups").classList.remove('inactive');
-        var usersList = []
-        for (i = 0; i < huntingPartyData.users.length; i++) {
-          if (huntingPartyData.users[i].userId !== currentUser._id) {
-            usersList.push(huntingPartyData.users[i])
-          }
-        }
-        var a = document.getElementsByClassName('no-popup')
-        for (i = 0; i < a.length; i++) {
-          a[i].classList.remove('inactive');
-        }
-        document.getElementById("yes-popup-users-list").innerHTML = ''
-        document.getElementById("refer-users-list").innerHTML = ''
-      }
-    } else if (which == 2) {
+    }
+    if (!alreadyVoted) {
       document.getElementById("fbo-popups").classList.remove('inactive');
       var usersList = []
       for (i = 0; i < huntingPartyData.users.length; i++) {
@@ -5480,672 +5434,712 @@ function toggleHamburgerMenu() {
           usersList.push(huntingPartyData.users[i])
         }
       }
+      var a = document.getElementsByClassName('yes-popup')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.remove('inactive');
+      }
       var usersHtml = ''
       for (i = 0; i < usersList.length; i++) {
         usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
         if (i < usersList.length-1) {
-          usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+          // usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
         }
       }
-      document.getElementById("refer-users-list").innerHTML = usersHtml
-      document.getElementById("yes-popup-users-list").innerHTML = ''
+      document.getElementById("yes-popup-users-list").innerHTML = usersHtml
+      document.getElementById("refer-users-list").innerHTML = ''
     }
-    var a = document.getElementsByClassName('refer-checkbox')
-    for (i = 0; i < a.length; i++) {
-      calculateRefers(i, true)
-    }
-  }
-
-  function checkReferItem(i, popup) {
-    if (popup) {
-      if (document.getElementById("refer-checkbox-"+i+"").checked) {
-        document.getElementById("refer-checkbox-"+i+"").checked = false
-      } else {
-        document.getElementById("refer-checkbox-"+i+"").checked = true
-      }
-      calculateRefers(i, true)
-    } else {
-      if (document.getElementById("refer-checkbox-"+i+"b").checked) {
-        document.getElementById("refer-checkbox-"+i+"b").checked = false
-      } else {
-        document.getElementById("refer-checkbox-"+i+"b").checked = true
-      }
-      calculateRefers(i, false)
-    }
-  }
-
-  function calculateRefers(index, popup) {
-    console.log(index)
-    if (popup) {
-      if (document.getElementById("refer-checkbox-"+index).checked == true) {
-        peopleToRefer.push(huntingPartyData.users[index])
-      } else {
-        for (i = 0; i < peopleToRefer.length; i++) {
-          if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
-            peopleToRefer.splice(i,1)
-            break;
-          }
-        }
-        console.log('it should be gone now')
-        console.log(peopleToRefer)
-      }
-    } else {
-      if (document.getElementById("refer-checkbox-"+index+"b").checked == true) {
-        peopleToRefer.push(huntingPartyData.users[index])
-      } else {
-        for (i = 0; i < peopleToRefer.length; i++) {
-          if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
-            peopleToRefer.splice(i,1)
-            break;
-          }
-        }
-        console.log('it should be gone now')
-        console.log(peopleToRefer)
-      }
-    }
-  }
-
-  function sendReferNotifications(sendingFromReferTab) {
-    console.log('doing the notification guy')
+  } else if (which == 1) {
+    var alreadyVoted = false
     var fbo = fbosIn[fboIndex]
     if (activeTab == 2) {
       fbo = fbosIn[fboIndex]
     } else if (activeTab == 3) {
       fbo = fboPipeline[fboIndex]
     }
-    var deviceIds = []
-    for (i = 0; i < peopleToRefer.length; i++) {
-      if (peopleToRefer[i].regId) {
-        deviceIds.push(peopleToRefer[i].regId)
+    for (var i = 0; i < fbo.voteNo.length; i++) {
+      if (fbo.voteNo[i].id == currentUser._id) {
+        alreadyVoted = true
+        break
       }
     }
-    var notification = {
-      title: currentUser.firstName + ' Has A Referral For You',
-      body: 'Open your Hunting Party to see it',
-      platform: 'android',
-      deviceIds: deviceIds
-    }
-    console.log(fbo)
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        console.log('it sent i think')
-        peopleToRefer = []
-      }
-    }
-    xhttp.open("POST", apiUrl+"/huntingpartydata/notification/", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(notification));
-    for (i = 0; i < yesRefer.length; i++) {
-      var mail = {
-        senderEmail: 'huntingparty@efassembly.com',
-        recipientEmail: yesRefer[i],
-        subject: 'Hunting Party Referral',
-        contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
-        contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
-      };
-      sendEmail(mail)
-    }
-    for (i = 0; i < noRefer.length; i++) {
-      var mail = {
-        senderEmail: 'huntingparty@efassembly.com',
-        recipientEmail: noRefer[i],
-        subject: 'Hunting Party Referral',
-        contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
-        contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
-      };
-      sendEmail(mail)
-    }
-    for (i = 0; i < referRefer.length; i++) {
-      var mail = {
-        senderEmail: 'huntingparty@efassembly.com',
-        recipientEmail: referRefer[i],
-        subject: 'Hunting Party Referral',
-        contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
-        contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
-      };
-      sendEmail(mail)
-    }
-    if (sendingFromReferTab) {
-      openReferPopup()
-      document.getElementById("refer-refer-list").innerHTML = ''
-      openFboDetail(5)
-    }
-  }
-
-  function openReferPopup() {
-    document.getElementById("refer-popup").classList.remove('inactive');
-  }
-
-  function closeReferPopup() {
-    document.getElementById("refer-popup").classList.add('inactive');
-  }
-
-  function vote(index, yes) {
-    if (!saving) {
-      saving = true
-      if (yes) {
-        analytics.fbo.vote = 'Voted Yes'
-      } else {
-        analytics.fbo.vote = 'Voted No'
-      }
-      var fbo = fbos[index]
-      if (activeTab == 2) {
-        fbo = fbosIn[index]
-      } else if (activeTab == 3) {
-        fbo = fboPipeline[index]
-      }
-      var vote = {
-        id: currentUser._id,
-        name: currentUser.firstName + ' ' + currentUser.lastName,
-        avatar: currentUser.avatar,
-        position: '',
-        comment: '',
-        date: ''
-      }
-      var now = new Date()
-      now = now.getTime()
-      vote.date = now
-      for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
-        if (currentUser.companyUserProxies[i].company) {
-          if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
-            vote.position = currentUser.companyUserProxies[i].position
-            break
-          }
+    if (!alreadyVoted) {
+      document.getElementById("fbo-popups").classList.remove('inactive');
+      var usersList = []
+      for (i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].userId !== currentUser._id) {
+          usersList.push(huntingPartyData.users[i])
         }
       }
-      var voteChanged = false
-      // fbo.voteNo = []
-      // fbo.voteYes = []
-
-      if (yes) {
-        for (var i = 0; i < fbo.voteNo.length; i++) {
-          if (fbo.voteNo[i].id == currentUser._id) {
-            fbo.voteNo.splice(i,1)
-            break
-          }
-        }
-        voteChanged = true
-        vote.comment = document.getElementById("fbo-details-input").value
-        fbo.voteYes.push(vote)
-      } else if (!yes) {
-        for (var i = 0; i < fbo.voteYes.length; i++) {
-          if (fbo.voteYes[i].id == currentUser._id) {
-            fbo.voteYes.splice(i,1)
-            break
-          }
-        }
-        voteChanged = true
-        vote.comment = document.getElementById("fbo-details-input").value
-        fbo.voteNo.push(vote)
+      var a = document.getElementsByClassName('no-popup')
+      for (i = 0; i < a.length; i++) {
+        a[i].classList.remove('inactive');
       }
-      console.log(vote)
-      var fboSubject = fbo.fbo.subject
-      var req = {};
-      req['voteYes'] = fbo.voteYes;
-      req['voteNo'] = fbo.voteNo;
-      var fboId = fbo._id
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('it voted')
-          fbo = JSON.parse(xhttp.responseText)
-          checkVote(fbo)
-          if (peopleToRefer.length + yesRefer.length + noRefer.length > 0) {
-            sendReferNotifications(false)
-          }
-          var newsString = ''
-          console.log(fbo)
-          if (yes) {
-            newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted YES on ' + fboSubject
-          } else {
-            newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted NO on ' + fboSubject
-          }
-          var newsItem = {
-            type: 'vote',
-            body: newsString
-          }
-          document.getElementById("fbo-details-input").value = ''
-          document.getElementById("fbo-details-likes").innerHTML = fbo.voteYes.length
-          document.getElementById("fbo-details-dislikes").innerHTML = fbo.voteNo.length
-          generateNewsItem(newsItem)
-          saving = false
-          if (adCounter >= 3) {
-            showAd()
-          } else {
-            adCounter++
-            closePopups(true)
-            closePopups(false)
-            renderFbos()
-            switchTab(activeTab)
-          }
-          addPoints(50)
-          yesRefer = []
-          noRefer = []
-          referRefer = []
-        }
-      };
-      var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
-      xhttp.open("PUT", url, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(req));
+      document.getElementById("yes-popup-users-list").innerHTML = ''
+      document.getElementById("refer-users-list").innerHTML = ''
     }
-  }
-
-  function showAd() {
+  } else if (which == 2) {
     document.getElementById("fbo-popups").classList.remove('inactive');
-    document.getElementById("error-popup").classList.remove('inactive');
-    document.getElementById("error-popup").innerHTML = '<div style="width: 98%; height: 98%; margin-left: 1%; position: relative;"><button class="popup-close" type="button" name="button" onclick="closeAd()">X</button><img class="ad-img" src="./img/ads/Neostek design 2.png" alt=""></img></div>'
-  }
-
-  function closeAd() {
-    document.getElementById("fbo-popups").classList.add('inactive');
-    document.getElementById("error-popup").classList.add('inactive');
-    document.getElementById("error-popup").innerHTML = ''
-    adCounter = 0;
-    closePopups(true)
-  }
-
-  function updateComments(fbo) {
-    var xhttp2 = new XMLHttpRequest();
-    xhttp2.onreadystatechange = function() {
-      if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-        // Typical action to be performed when the document is ready:
-        var newFbo = JSON.parse(xhttp2.responseText)
-        console.log(newFbo)
-        fbo.voteYes = newFbo.voteYes
-        fbo.voteNo = newFbo.voteNo
-        var chatString = ''
-        var allComments = []
-        for (i = 0; i < newFbo.voteYes.length; i++) {
-          var vote = newFbo.voteYes[i]
-          vote.vote = 'yes'
-          allComments.push(vote)
-        }
-        for (i = 0; i < newFbo.voteNo.length; i++) {
-          var vote = newFbo.voteNo[i]
-          vote.vote = 'no'
-          allComments.push(vote)
-        }
-        for (i = 0; i < newFbo.comments.length; i++) {
-          var vote = newFbo.comments[i]
-          allComments.push(vote)
-        }
-        allComments.sort(function(vote1, vote2){
-          return vote1.date - vote2.date
-        });
-        for (i = 0; i < allComments.length; i++) {
-          var vote = allComments[i]
-          var voteString = 'No Text '
-          if (vote.comment) {
-            voteString = vote.comment
-          }
-          var avatar = './img/user.png'
-          if (vote.avatar) {
-            avatar = vote.avatar
-            if (avatar.slice(0,13) == '../../assets/') {
-              avatar = './' + avatar.slice(13)
-            }
-          }
-          var imgString = ''
-          if (vote.vote == 'yes') {
-            imgString = '<img class="icon" src="./img/like-light.png" alt="">'
-          } else if (vote.vote == 'no') {
-            imgString = '<img class="icon" src="./img/dislike-light.png" alt="">'
-          }
-          if (vote.id == currentUser._id) {
-            var newString = '<div class="comment" style="padding-top: 8px;">'+
-            '<div class="comment-right">'+
-            '<div class="comment-bubble-yours">'+
-            // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
-            // '<div class="comment-title" style="margin: none!important">'+
-            //   '<p class="comment-name">'+vote.name+'</p>'+
-            //   '<p class="comment-time">99 mins</p>'+
-            // '</div>'+
-            '<p class="comment-text">'+imgString+voteString+'</p>'+
-            '</div>'+
-            '</div>'+
-            '<div class="comment-left">'+
-            '<div class="comment-avatar-padding">'+
-            '</div>'+
-            '<div class="comment-avatar">'+
-            '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
-            '</div>'+
-            '</div>'+
-            '</div>'
-
-            chatString = chatString + newString
-          } else {
-            var newString = '<div class="comment">'+
-            '<div class="comment-left">'+
-            '<div class="comment-avatar-padding">'+
-            '</div>'+
-            '<div class="comment-avatar">'+
-            '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
-            '</div>'+
-            '</div>'+
-            '<div class="comment-right">'+
-            '<div class="comment-bubble">'+
-            // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
-            // '<div class="comment-title" style="margin: none!important">'+
-            '<p class="comment-name">'+vote.name+'</p>'+
-            //   '<p class="comment-time">99 mins</p>'+
-            // '</div>'+
-            '<p class="comment-text">'+imgString+voteString+'</p>'+
-            '</div>'+
-            '</div>'+
-            '</div>'
-
-            chatString = chatString + newString
-          }
-        }
-        if (allComments.length < 1) {
-          var newString = '<div class="comment">'+
-          '<div class="comment-left">'+
-          '</div>'+
-          '<div class="comment-right">'+
-          '<div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">'+
-          '<div class="comment-text" style="padding: none!important">No Comments Yet</div>'+
-          '</div>'+
-          '</div>'+
-          '</div>'
-          chatString = chatString + newString
-        }
-        document.getElementById("fbo-details-comments").innerHTML = ''
-        document.getElementById("fbo-details-comments").innerHTML = chatString;
-        console.log('comments updated')
+    var usersList = []
+    for (i = 0; i < huntingPartyData.users.length; i++) {
+      if (huntingPartyData.users[i].userId !== currentUser._id) {
+        usersList.push(huntingPartyData.users[i])
       }
+    }
+    var usersHtml = ''
+    for (i = 0; i < usersList.length; i++) {
+      usersHtml = usersHtml + '<div class="refer-item"><input id="refer-checkbox-'+i+'" style="z-index: 2;" class="refer-checkbox" type="checkbox" name="" value="" onclick="calculateRefers('+i+', true)" checked><div style="width: 100%; height: 100%;" onclick="checkReferItem('+i+', true)">'+usersList[i].name+'</div></div>'
+      if (i < usersList.length-1) {
+        usersHtml = usersHtml + '<div style="width: 100%; height: 1px; background: 1px solid rgba(0,0,0,0.75);"></div>'
+      }
+    }
+    document.getElementById("refer-users-list").innerHTML = usersHtml
+    document.getElementById("yes-popup-users-list").innerHTML = ''
+  }
+  var a = document.getElementsByClassName('refer-checkbox')
+  for (i = 0; i < a.length; i++) {
+    calculateRefers(i, true)
+  }
+}
+
+function checkReferItem(i, popup) {
+  if (popup) {
+    if (document.getElementById("refer-checkbox-"+i+"").checked) {
+      document.getElementById("refer-checkbox-"+i+"").checked = false
+    } else {
+      document.getElementById("refer-checkbox-"+i+"").checked = true
+    }
+    calculateRefers(i, true)
+  } else {
+    if (document.getElementById("refer-checkbox-"+i+"b").checked) {
+      document.getElementById("refer-checkbox-"+i+"b").checked = false
+    } else {
+      document.getElementById("refer-checkbox-"+i+"b").checked = true
+    }
+    calculateRefers(i, false)
+  }
+}
+
+function calculateRefers(index, popup) {
+  console.log(index)
+  if (popup) {
+    if (document.getElementById("refer-checkbox-"+index).checked == true) {
+      peopleToRefer.push(huntingPartyData.users[index])
+    } else {
+      for (i = 0; i < peopleToRefer.length; i++) {
+        if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
+          peopleToRefer.splice(i,1)
+          break;
+        }
+      }
+      console.log('it should be gone now')
+      console.log(peopleToRefer)
+    }
+  } else {
+    if (document.getElementById("refer-checkbox-"+index+"b").checked == true) {
+      peopleToRefer.push(huntingPartyData.users[index])
+    } else {
+      for (i = 0; i < peopleToRefer.length; i++) {
+        if (huntingPartyData.users[index].name == peopleToRefer[i].name) {
+          peopleToRefer.splice(i,1)
+          break;
+        }
+      }
+      console.log('it should be gone now')
+      console.log(peopleToRefer)
+    }
+  }
+}
+
+function sendReferNotifications(sendingFromReferTab) {
+  console.log('doing the notification guy')
+  var fbo = fbosIn[fboIndex]
+  if (activeTab == 2) {
+    fbo = fbosIn[fboIndex]
+  } else if (activeTab == 3) {
+    fbo = fboPipeline[fboIndex]
+  }
+  var deviceIds = []
+  for (i = 0; i < peopleToRefer.length; i++) {
+    if (peopleToRefer[i].regId) {
+      deviceIds.push(peopleToRefer[i].regId)
+    }
+  }
+  var notification = {
+    title: currentUser.firstName + ' Has A Referral For You',
+    body: 'Open your Hunting Party to see it',
+    platform: 'android',
+    deviceIds: deviceIds
+  }
+  console.log(fbo)
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      console.log('it sent i think')
+      peopleToRefer = []
+    }
+  }
+  xhttp.open("POST", apiUrl+"/huntingpartydata/notification/", true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(JSON.stringify(notification));
+  for (i = 0; i < yesRefer.length; i++) {
+    var mail = {
+      senderEmail: 'huntingparty@efassembly.com',
+      recipientEmail: yesRefer[i],
+      subject: 'Hunting Party Referral',
+      contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
+      contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
     };
-    xhttp2.open("GET", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
-    xhttp2.setRequestHeader("Content-type", "application/json");
-    xhttp2.send();
+    sendEmail(mail)
   }
+  for (i = 0; i < noRefer.length; i++) {
+    var mail = {
+      senderEmail: 'huntingparty@efassembly.com',
+      recipientEmail: noRefer[i],
+      subject: 'Hunting Party Referral',
+      contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
+      contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
+    };
+    sendEmail(mail)
+  }
+  for (i = 0; i < referRefer.length; i++) {
+    var mail = {
+      senderEmail: 'huntingparty@efassembly.com',
+      recipientEmail: referRefer[i],
+      subject: 'Hunting Party Referral',
+      contactMessage: 'Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '. Check out your pipeline in Hunting Party to see more!',
+      contactHTML: '<p>Hi - your coworker ' + currentUser.firstName + ' ' + currentUser.lastName + ' wants to let you know about the RFP opportunity ' + fbo.fbo.subject + '.</p><br><p>Here\'s some information about it: </p><br>'+fbo.fbo.desc+'<br><p>Check out your pipeline in Hunting Party to see more!</p>'
+    };
+    sendEmail(mail)
+  }
+  if (sendingFromReferTab) {
+    openReferPopup()
+    document.getElementById("refer-refer-list").innerHTML = ''
+    openFboDetail(5)
+  }
+}
 
-  function sendComment() {
-    var comment = document.getElementById("new-comment-input").value
-    if (comment.length > 0) {
-      var vote = {
-        id: currentUser._id,
-        name: currentUser.firstName + ' ' + currentUser.lastName,
-        avatar: currentUser.avatar,
-        position: '',
-        comment: comment,
-        date: ''
-      }
-      var fbo = fbosIn[fboIndex]
-      if (activeTab == 2) {
-        fbo = fbosIn[fboIndex]
-      } else if (activeTab == 3) {
-        fbo = fboPipeline[fboIndex]
-      }
-      var now = new Date()
-      now = now.getTime()
-      vote.date = now
-      for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
+function openReferPopup() {
+  document.getElementById("refer-popup").classList.remove('inactive');
+}
+
+function closeReferPopup() {
+  document.getElementById("refer-popup").classList.add('inactive');
+}
+
+function vote(index, yes) {
+  if (!saving) {
+    saving = true
+    if (yes) {
+      analytics.fbo.vote = 'Voted Yes'
+    } else {
+      analytics.fbo.vote = 'Voted No'
+    }
+    var fbo = fbos[index]
+    if (activeTab == 2) {
+      fbo = fbosIn[index]
+    } else if (activeTab == 3) {
+      fbo = fboPipeline[index]
+    }
+    var vote = {
+      id: currentUser._id,
+      name: currentUser.firstName + ' ' + currentUser.lastName,
+      avatar: currentUser.avatar,
+      position: '',
+      comment: '',
+      date: ''
+    }
+    var now = new Date()
+    now = now.getTime()
+    vote.date = now
+    for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
+      if (currentUser.companyUserProxies[i].company) {
         if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
           vote.position = currentUser.companyUserProxies[i].position
           break
         }
       }
-      fbo.comments.push(vote)
-      var xhttp3 = new XMLHttpRequest();
-      xhttp3.onload = function() {
-        if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-          // Typical action to be performed when the document is ready:
-          var newFbo = JSON.parse(xhttp3.responseText)
-          console.log(newFbo.comments)
-          console.log('sent the comment i think')
-          if (activeTab == 2) {
-            fbosIn[fboIndex] = newFbo
-          } else if (activeTab == 3) {
-            fboPipeline[fboIndex] = newFbo
-          }
-          updateComments(fbo)
-          document.getElementById("new-comment-input").value = ''
-        } else {
-          console.log('it didnt send i dont know why')
-        }
-      };
-
-      var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
-
-      xhttp3.open("PUT", url, true);
-      xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
-      var savedId = fbo._id
-      var toSend = fbo
-      delete toSend['_id'];
-      console.log(toSend)
-      xhttp3.send(JSON.stringify(toSend));
-      toSend['_id'] = savedId
     }
-  }
+    var voteChanged = false
+    // fbo.voteNo = []
+    // fbo.voteYes = []
 
-  function expandData(num) {
-    var a = document.getElementsByClassName('data-box')
-    for (i = 0; i < a.length; i++) {
-      if (i == num-1) {
-        a[i].classList.remove('inactive');
-      } else {
-        a[i].classList.add('inactive');
+    if (yes) {
+      for (var i = 0; i < fbo.voteNo.length; i++) {
+        if (fbo.voteNo[i].id == currentUser._id) {
+          fbo.voteNo.splice(i,1)
+          break
+        }
+      }
+      voteChanged = true
+      vote.comment = document.getElementById("fbo-details-input").value
+      fbo.voteYes.push(vote)
+    } else if (!yes) {
+      for (var i = 0; i < fbo.voteYes.length; i++) {
+        if (fbo.voteYes[i].id == currentUser._id) {
+          fbo.voteYes.splice(i,1)
+          break
+        }
+      }
+      voteChanged = true
+      vote.comment = document.getElementById("fbo-details-input").value
+      fbo.voteNo.push(vote)
+    }
+    console.log(vote)
+    var fboSubject = fbo.fbo.subject
+    var req = {};
+    req['voteYes'] = fbo.voteYes;
+    req['voteNo'] = fbo.voteNo;
+    var fboId = fbo._id
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        console.log('it voted')
+        fbo = JSON.parse(xhttp.responseText)
+        checkVote(fbo)
+        if (peopleToRefer.length + yesRefer.length + noRefer.length > 0) {
+          sendReferNotifications(false)
+        }
+        var newsString = ''
+        console.log(fbo)
+        if (yes) {
+          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted YES on ' + fboSubject
+        } else {
+          newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted NO on ' + fboSubject
+        }
+        var newsItem = {
+          type: 'vote',
+          body: newsString
+        }
+        document.getElementById("fbo-details-input").value = ''
+        document.getElementById("fbo-details-likes").innerHTML = fbo.voteYes.length
+        document.getElementById("fbo-details-dislikes").innerHTML = fbo.voteNo.length
+        generateNewsItem(newsItem)
+        saving = false
+        if (adCounter >= 3) {
+          showAd()
+        } else {
+          adCounter++
+          closePopups(true)
+          closePopups(false)
+          renderFbos()
+          switchTab(activeTab)
+        }
+        addPoints(50)
+        yesRefer = []
+        noRefer = []
+        referRefer = []
+      }
+    };
+    var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
+    xhttp.open("PUT", url, true);
+    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhttp.send(JSON.stringify(req));
+  }
+}
+
+function showAd() {
+  document.getElementById("fbo-popups").classList.remove('inactive');
+  document.getElementById("error-popup").classList.remove('inactive');
+  document.getElementById("error-popup").innerHTML = '<div style="width: 98%; height: 98%; margin-left: 1%; position: relative;"><button class="popup-close" type="button" name="button" onclick="closeAd()">X</button><img class="ad-img" src="./img/ads/Neostek design 2.png" alt=""></img></div>'
+}
+
+function closeAd() {
+  document.getElementById("fbo-popups").classList.add('inactive');
+  document.getElementById("error-popup").classList.add('inactive');
+  document.getElementById("error-popup").innerHTML = ''
+  adCounter = 0;
+  closePopups(true)
+}
+
+function updateComments(fbo) {
+  var xhttp2 = new XMLHttpRequest();
+  xhttp2.onreadystatechange = function() {
+    if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+      // Typical action to be performed when the document is ready:
+      var newFbo = JSON.parse(xhttp2.responseText)
+      console.log(newFbo)
+      fbo.voteYes = newFbo.voteYes
+      fbo.voteNo = newFbo.voteNo
+      var chatString = ''
+      var allComments = []
+      for (i = 0; i < newFbo.voteYes.length; i++) {
+        var vote = newFbo.voteYes[i]
+        vote.vote = 'yes'
+        allComments.push(vote)
+      }
+      for (i = 0; i < newFbo.voteNo.length; i++) {
+        var vote = newFbo.voteNo[i]
+        vote.vote = 'no'
+        allComments.push(vote)
+      }
+      for (i = 0; i < newFbo.comments.length; i++) {
+        var vote = newFbo.comments[i]
+        allComments.push(vote)
+      }
+      allComments.sort(function(vote1, vote2){
+        return vote1.date - vote2.date
+      });
+      for (i = 0; i < allComments.length; i++) {
+        var vote = allComments[i]
+        var voteString = 'No Text '
+        if (vote.comment) {
+          voteString = vote.comment
+        }
+        var avatar = './img/user.png'
+        if (vote.avatar) {
+          avatar = vote.avatar
+          if (avatar.slice(0,13) == '../../assets/') {
+            avatar = './' + avatar.slice(13)
+          }
+        }
+        var imgString = ''
+        if (vote.vote == 'yes') {
+          imgString = '<img class="icon" src="./img/like-light.png" alt="">'
+        } else if (vote.vote == 'no') {
+          imgString = '<img class="icon" src="./img/dislike-light.png" alt="">'
+        }
+        if (vote.id == currentUser._id) {
+          var newString = '<div class="comment" style="padding-top: 8px;">'+
+          '<div class="comment-right">'+
+          '<div class="comment-bubble-yours">'+
+          // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
+          // '<div class="comment-title" style="margin: none!important">'+
+          //   '<p class="comment-name">'+vote.name+'</p>'+
+          //   '<p class="comment-time">99 mins</p>'+
+          // '</div>'+
+          '<p class="comment-text">'+imgString+voteString+'</p>'+
+          '</div>'+
+          '</div>'+
+          '<div class="comment-left">'+
+          '<div class="comment-avatar-padding">'+
+          '</div>'+
+          '<div class="comment-avatar">'+
+          '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
+          '</div>'+
+          '</div>'+
+          '</div>'
+
+          chatString = chatString + newString
+        } else {
+          var newString = '<div class="comment">'+
+          '<div class="comment-left">'+
+          '<div class="comment-avatar-padding">'+
+          '</div>'+
+          '<div class="comment-avatar">'+
+          '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
+          '</div>'+
+          '</div>'+
+          '<div class="comment-right">'+
+          '<div class="comment-bubble">'+
+          // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
+          // '<div class="comment-title" style="margin: none!important">'+
+          '<p class="comment-name">'+vote.name+'</p>'+
+          //   '<p class="comment-time">99 mins</p>'+
+          // '</div>'+
+          '<p class="comment-text">'+imgString+voteString+'</p>'+
+          '</div>'+
+          '</div>'+
+          '</div>'
+
+          chatString = chatString + newString
+        }
+      }
+      if (allComments.length < 1) {
+        var newString = '<div class="comment">'+
+        '<div class="comment-left">'+
+        '</div>'+
+        '<div class="comment-right">'+
+        '<div class="" style="width: 100%; float: left; margin: 0px!important; padding: 0px!important">'+
+        '<div class="comment-text" style="padding: none!important">No Comments Yet</div>'+
+        '</div>'+
+        '</div>'+
+        '</div>'
+        chatString = chatString + newString
+      }
+      document.getElementById("fbo-details-comments").innerHTML = ''
+      document.getElementById("fbo-details-comments").innerHTML = chatString;
+      console.log('comments updated')
+    }
+  };
+  xhttp2.open("GET", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
+  xhttp2.setRequestHeader("Content-type", "application/json");
+  xhttp2.send();
+}
+
+function sendComment() {
+  var comment = document.getElementById("new-comment-input").value
+  if (comment.length > 0) {
+    var vote = {
+      id: currentUser._id,
+      name: currentUser.firstName + ' ' + currentUser.lastName,
+      avatar: currentUser.avatar,
+      position: '',
+      comment: comment,
+      date: ''
+    }
+    var fbo = fbosIn[fboIndex]
+    if (activeTab == 2) {
+      fbo = fbosIn[fboIndex]
+    } else if (activeTab == 3) {
+      fbo = fboPipeline[fboIndex]
+    }
+    var now = new Date()
+    now = now.getTime()
+    vote.date = now
+    for (var i = 0; i < currentUser.companyUserProxies.length; i++) {
+      if (currentUser.companyUserProxies[i].company._id == fbo.company._id) {
+        vote.position = currentUser.companyUserProxies[i].position
+        break
       }
     }
-    document.getElementById("databar-active").classList.remove('inactive');
-    var titles = [
-      'ABSTRACT',
-      'DATA',
-      'COMMENTS'
-    ]
-    document.getElementById("databar-title").innerHTML = titles[num-1]
-    toggleHamburgerMenu()
-  }
-
-  function getTheData() {
-    if (localStorage.getItem('uid')) {
-      var id = localStorage.getItem('uid')
-    } else if (currentUser) {
-      var id = currentUser._id
-    }
-    document.getElementById("loading-details").innerHTML = 'Getting full user data...'
-    var xhttp = new XMLHttpRequest();
-    // xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
+    fbo.comments.push(vote)
+    var xhttp3 = new XMLHttpRequest();
+    xhttp3.onload = function() {
+      if (xhttp3.readyState == 4 && xhttp3.status == 200) {
         // Typical action to be performed when the document is ready:
-        currentUser = JSON.parse(xhttp.responseText);
-        // document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
-        var avatar = currentUser.avatar
-        if (avatar == '../../assets/img/user.png') {
-          avatar = './img/user.png'
+        var newFbo = JSON.parse(xhttp3.responseText)
+        console.log(newFbo.comments)
+        console.log('sent the comment i think')
+        if (activeTab == 2) {
+          fbosIn[fboIndex] = newFbo
+        } else if (activeTab == 3) {
+          fboPipeline[fboIndex] = newFbo
         }
-        document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
-        document.getElementById("loading-details").innerHTML = 'Getting full company data...'
-        var xhttp2 = new XMLHttpRequest();
-        // xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp2.onreadystatechange = function() {
-          if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-            // Typical action to be performed when the document is ready:
-            company = JSON.parse(xhttp2.responseText);
-            // var xobj = new XMLHttpRequest();
-            // xobj.overrideMimeType("application/json");
-            // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file
-            // xobj.onreadystatechange = function () {
-            // if (xobj.readyState == 4 && xobj.status == "200") {
-            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            // agencyLogos = JSON.parse(xobj.responseText);
-            var xhttp3 = new XMLHttpRequest();
-            // xhttp3.setRequestHeader("Content-type", "application/json");
-            document.getElementById("loading-details").innerHTML = 'Getting full search terms...'
-            xhttp3.onreadystatechange = function() {
-              if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-                searchTerms = JSON.parse(xhttp3.responseText);
-                emptySearchTerms = JSON.parse(xhttp3.responseText);
-                var xhttp4 = new XMLHttpRequest();
-                // xhttp4.setRequestHeader("Content-type", "application/json");
-                document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
-                xhttp4.onreadystatechange = function() {
-                  if (xhttp4.readyState == 4 && xhttp4.status == 200) {
-                    if (xhttp4.responseText === 'false') {
-                      document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
-                      console.log('did the right one')
-                      huntingPartyData = {
-                        companyId: company._id,
-                        users: [],
-                        searches: []
-                      }
+        updateComments(fbo)
+        document.getElementById("new-comment-input").value = ''
+      } else {
+        console.log('it didnt send i dont know why')
+      }
+    };
 
-                      huntingPartyData.users.push({
-                        userId: currentUser._id,
-                        name: currentUser.firstName + ' ' + currentUser.lastName,
-                        email: currentUser.username,
-                        deviceId: null,
-                        regId: null,
-                        tosRead: 0,
-                        points: 0
-                      })
-                      // if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                      //   doTheUpdateAnyway = true
-                      //   huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
-                      // }
-                      if (device !== undefined) {
-                        if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
-                          doTheUpdateAnyway = true
-                          huntingPartyData.users[0].deviceId = device.uuid
-                        }
+    var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
+
+    xhttp3.open("PUT", url, true);
+    xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
+    var savedId = fbo._id
+    var toSend = fbo
+    delete toSend['_id'];
+    console.log(toSend)
+    xhttp3.send(JSON.stringify(toSend));
+    toSend['_id'] = savedId
+  }
+}
+
+function expandData(num) {
+  var a = document.getElementsByClassName('data-box')
+  for (i = 0; i < a.length; i++) {
+    if (i == num-1) {
+      a[i].classList.remove('inactive');
+    } else {
+      a[i].classList.add('inactive');
+    }
+  }
+  document.getElementById("databar-active").classList.remove('inactive');
+  var titles = [
+    'ABSTRACT',
+    'DATA',
+    'COMMENTS'
+  ]
+  document.getElementById("databar-title").innerHTML = titles[num-1]
+  toggleHamburgerMenu()
+}
+
+function getTheData() {
+  if (localStorage.getItem('uid')) {
+    var id = localStorage.getItem('uid')
+  } else if (currentUser) {
+    var id = currentUser._id
+  }
+  document.getElementById("loading-details").innerHTML = 'Getting full user data...'
+  var xhttp = new XMLHttpRequest();
+  // xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      // Typical action to be performed when the document is ready:
+      currentUser = JSON.parse(xhttp.responseText);
+      // document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
+      var avatar = currentUser.avatar
+      if (avatar == '../../assets/img/user.png') {
+        avatar = './img/user.png'
+      }
+      document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
+      document.getElementById("loading-details").innerHTML = 'Getting full company data...'
+      var xhttp2 = new XMLHttpRequest();
+      // xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp2.onreadystatechange = function() {
+        if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+          // Typical action to be performed when the document is ready:
+          company = JSON.parse(xhttp2.responseText);
+          // var xobj = new XMLHttpRequest();
+          // xobj.overrideMimeType("application/json");
+          // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file
+          // xobj.onreadystatechange = function () {
+          // if (xobj.readyState == 4 && xobj.status == "200") {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          // agencyLogos = JSON.parse(xobj.responseText);
+          var xhttp3 = new XMLHttpRequest();
+          // xhttp3.setRequestHeader("Content-type", "application/json");
+          document.getElementById("loading-details").innerHTML = 'Getting full search terms...'
+          xhttp3.onreadystatechange = function() {
+            if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+              searchTerms = JSON.parse(xhttp3.responseText);
+              emptySearchTerms = JSON.parse(xhttp3.responseText);
+              var xhttp4 = new XMLHttpRequest();
+              // xhttp4.setRequestHeader("Content-type", "application/json");
+              document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
+              xhttp4.onreadystatechange = function() {
+                if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+                  if (xhttp4.responseText === 'false') {
+                    document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
+                    console.log('did the right one')
+                    huntingPartyData = {
+                      companyId: company._id,
+                      users: [],
+                      searches: []
+                    }
+
+                    huntingPartyData.users.push({
+                      userId: currentUser._id,
+                      name: currentUser.firstName + ' ' + currentUser.lastName,
+                      email: currentUser.username,
+                      deviceId: null,
+                      regId: null,
+                      tosRead: 0,
+                      points: 0
+                    })
+                    // if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
+                    //   doTheUpdateAnyway = true
+                    //   huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
+                    // }
+                    if (device !== undefined) {
+                      if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
+                        doTheUpdateAnyway = true
+                        huntingPartyData.users[0].deviceId = device.uuid
                       }
-                      var xhttpNewHPD = new XMLHttpRequest();
-                      xhttpNewHPD.onload = function() {
-                        if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
-                          document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
-                          huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
-                          console.log('CREATED')
-                          document.getElementById("loading").classList.add('inactive');
-                          document.getElementById("tos-popup").classList.remove('inactive');
-                        }
-                      };
-                      var url = apiUrl+"/huntingpartydata/add";
-                      xhttpNewHPD.open("POST", url, true);
-                      xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                      xhttpNewHPD.send(JSON.stringify(huntingPartyData));
-                    } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
-                      document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
-                      huntingPartyData = JSON.parse(xhttp4.responseText);
-                      var yourSearches = []
-                      for (i = 0; i < huntingPartyData.users.length; i++) {
-                        if (huntingPartyData.users[i].userId == currentUser._id) {
-                          yourSearches = huntingPartyData.users[i].searches
-                          break
-                        }
+                    }
+                    var xhttpNewHPD = new XMLHttpRequest();
+                    xhttpNewHPD.onload = function() {
+                      if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
+                        document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
+                        huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
+                        console.log('CREATED')
+                        document.getElementById("loading").classList.add('inactive');
+                        document.getElementById("tos-popup").classList.remove('inactive');
                       }
-                      document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...'
-                      var xhttp3b = new XMLHttpRequest();
-                      xhttp3b.onreadystatechange = function() {
-                        if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
-                          console.log('got the thing')
-                          proxiesRes = JSON.parse(xhttp3b.responseText);
-                          console.log(proxiesRes)
-                          fbosIn = proxiesRes.fbosIn
-                          fboPipeline = proxiesRes.fboPipeline
-                          fbosInMax = proxiesRes.fbosInMax
-                          fboPipelineMax = proxiesRes.fboPipelineMax
-                          checkProxiesViewed()
-                          if (!fbosIn) {
-                            fbosIn = []
-                          } else if (!fboPipeline) {
-                            fboPipeline = []
+                    };
+                    var url = apiUrl+"/huntingpartydata/add";
+                    xhttpNewHPD.open("POST", url, true);
+                    xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                    xhttpNewHPD.send(JSON.stringify(huntingPartyData));
+                  } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
+                    document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
+                    huntingPartyData = JSON.parse(xhttp4.responseText);
+                    var yourSearches = []
+                    for (i = 0; i < huntingPartyData.users.length; i++) {
+                      if (huntingPartyData.users[i].userId == currentUser._id) {
+                        yourSearches = huntingPartyData.users[i].searches
+                        break
+                      }
+                    }
+                    document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...'
+                    var xhttp3b = new XMLHttpRequest();
+                    xhttp3b.onreadystatechange = function() {
+                      if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
+                        console.log('got the thing')
+                        proxiesRes = JSON.parse(xhttp3b.responseText);
+                        console.log(proxiesRes)
+                        fbosIn = proxiesRes.fbosIn
+                        fboPipeline = proxiesRes.fboPipeline
+                        fbosInMax = proxiesRes.fbosInMax
+                        fboPipelineMax = proxiesRes.fboPipelineMax
+                        checkProxiesViewed()
+                        if (!fbosIn) {
+                          fbosIn = []
+                        } else if (!fboPipeline) {
+                          fboPipeline = []
+                        }
+                        //
+                        var userInList = false
+                        if (!huntingPartyData.users) {
+                          huntingPartyData.users = []
+                        }
+                        var doTheUpdateAnyway = false
+                        for (i = 0; i < huntingPartyData.users.length; i++) {
+                          if (huntingPartyData.users[i].points == undefined) {
+                            huntingPartyData.users[i].points = 0
+                            console.log('no points!');
+                            doTheUpdateAnyway = true
                           }
-                          //
-                          var userInList = false
-                          if (!huntingPartyData.users) {
-                            huntingPartyData.users = []
-                          }
-                          var doTheUpdateAnyway = false
-                          for (i = 0; i < huntingPartyData.users.length; i++) {
-                            if (huntingPartyData.users[i].points == undefined) {
-                              huntingPartyData.users[i].points = 0
-                              console.log('no points!');
-                              doTheUpdateAnyway = true
+                          if (huntingPartyData.users[i].userId == currentUser._id) {
+                            userInList = true
+                            if (huntingPartyData.users[i].points !== undefined) {
+                              console.log('YOUR POINTS: ' + huntingPartyData.users[i].points)
+                              document.getElementById("sidebar-points-text").innerHTML = huntingPartyData.users[i].points + ' Points'
                             }
-                            if (huntingPartyData.users[i].userId == currentUser._id) {
-                              userInList = true
-                              if (huntingPartyData.users[i].points !== undefined) {
-                                console.log('YOUR POINTS: ' + huntingPartyData.users[i].points)
-                                document.getElementById("sidebar-points-text").innerHTML = huntingPartyData.users[i].points + ' Points'
+                            if (huntingPartyData.users[i].tosRead) {
+                              tosRead = huntingPartyData.users[i].tosRead
+                            }
+                            // if (localStorage.getItem('registrationId')) {
+                            //   if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId'))) {
+                            //     doTheUpdateAnyway = true
+                            //     huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
+                            //   }
+                            // }
+                            if (device !== undefined) {
+                              if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                                doTheUpdateAnyway = true
+                                huntingPartyData.users[i].deviceId = device.uuid
                               }
-                              if (huntingPartyData.users[i].tosRead) {
-                                tosRead = huntingPartyData.users[i].tosRead
+                            }
+                          }
+                        }
+                        if (device !== undefined || !userInList || doTheUpdateAnyway) {
+                          if (!userInList || doTheUpdateAnyway) {
+                            if (!userInList) {
+                              console.log('not in the list')
+                              var deviceId = ''
+                              var regId = ''
+                              if (device) {
+                                deviceId = device.uuid
                               }
                               // if (localStorage.getItem('registrationId')) {
-                              //   if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId'))) {
-                              //     doTheUpdateAnyway = true
-                              //     huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
-                              //   }
+                              //   regId = localStorage.getItem('registrationId')
                               // }
-                              if (device !== undefined) {
-                                if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
-                                  doTheUpdateAnyway = true
-                                  huntingPartyData.users[i].deviceId = device.uuid
+                              huntingPartyData.users.push({
+                                userId: currentUser._id,
+                                name: currentUser.firstName + ' ' + currentUser.lastName,
+                                email: currentUser.username,
+                                deviceId: deviceId,
+                                regId: regId,
+                                tosRead: 0,
+                                points: 0
+                              })
+                              tosRead = 0
+                              var newsString = ''
+                              var newsItem = {
+                                type: 'user',
+                                body: currentUser.firstName + ' ' + currentUser.lastName + ' joined Hunting Party'
+                              }
+                              generateNewsItem(newsItem)
+                            }
+                            var xhttpHPD = new XMLHttpRequest();
+                            xhttpHPD.onreadystatechange = function() {
+                              if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+                                huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                                if (tosRead < 1) {
+                                  document.getElementById("loading").classList.add('inactive');
+                                  document.getElementById("tos-popup").classList.remove('inactive');
+                                  // document.getElementById("login-register").classList.remove('inactive');
+                                } else {
+                                  console.log('updated HPD')
+                                  document.getElementById("loading-details").innerHTML = 'Done'
+                                  startMainApp()
                                 }
                               }
                             }
-                          }
-                          if (device !== undefined || !userInList || doTheUpdateAnyway) {
-                            if (!userInList || doTheUpdateAnyway) {
-                              if (!userInList) {
-                                console.log('not in the list')
-                                var deviceId = ''
-                                var regId = ''
-                                if (device) {
-                                  deviceId = device.uuid
-                                }
-                                // if (localStorage.getItem('registrationId')) {
-                                //   regId = localStorage.getItem('registrationId')
-                                // }
-                                huntingPartyData.users.push({
-                                  userId: currentUser._id,
-                                  name: currentUser.firstName + ' ' + currentUser.lastName,
-                                  email: currentUser.username,
-                                  deviceId: deviceId,
-                                  regId: regId,
-                                  tosRead: 0,
-                                  points: 0
-                                })
-                                tosRead = 0
-                                var newsString = ''
-                                var newsItem = {
-                                  type: 'user',
-                                  body: currentUser.firstName + ' ' + currentUser.lastName + ' joined Hunting Party'
-                                }
-                                generateNewsItem(newsItem)
-                              }
-                              var xhttpHPD = new XMLHttpRequest();
-                              xhttpHPD.onreadystatechange = function() {
-                                if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                                  huntingPartyData = JSON.parse(xhttpHPD.responseText);
-                                  if (tosRead < 1) {
-                                    document.getElementById("loading").classList.add('inactive');
-                                    document.getElementById("tos-popup").classList.remove('inactive');
-                                    // document.getElementById("login-register").classList.remove('inactive');
-                                  } else {
-                                    console.log('updated HPD')
-                                    document.getElementById("loading-details").innerHTML = 'Done'
-                                    startMainApp()
-                                  }
-                                }
-                              }
-                              xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
-                              xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                              xhttpHPD.send(JSON.stringify(huntingPartyData));
-                            } else {
-                              if (tosRead < 1) {
-                                document.getElementById("loading").classList.add('inactive');
-                                document.getElementById("tos-popup").classList.remove('inactive');
-                                // document.getElementById("login-register").classList.remove('inactive');
-                              } else {
-                                document.getElementById("loading-details").innerHTML = 'Done'
-                                console.log('starting app')
-                                startMainApp()
-                              }
-                            }
+                            xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
+                            xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+                            xhttpHPD.send(JSON.stringify(huntingPartyData));
                           } else {
                             if (tosRead < 1) {
                               document.getElementById("loading").classList.add('inactive');
@@ -6157,653 +6151,664 @@ function toggleHamburgerMenu() {
                               startMainApp()
                             }
                           }
-                          //
+                        } else {
+                          if (tosRead < 1) {
+                            document.getElementById("loading").classList.add('inactive');
+                            document.getElementById("tos-popup").classList.remove('inactive');
+                            // document.getElementById("login-register").classList.remove('inactive');
+                          } else {
+                            document.getElementById("loading-details").innerHTML = 'Done'
+                            console.log('starting app')
+                            startMainApp()
+                          }
                         }
+                        //
                       }
-                      if (!yourSearches) {
-                        yourSearches = []
+                    }
+                    if (!yourSearches) {
+                      yourSearches = []
+                    }
+                    if (yourSearches.length > 0) {
+                      var proxyRequest = {
+                        startIndex: 0,
+                        which: 2,
+                        searches: yourSearches
                       }
-                      if (yourSearches.length > 0) {
-                        var proxyRequest = {
-                          startIndex: 0,
-                          which: 2,
-                          searches: yourSearches
-                        }
-                        xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
-                        xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
-                        xhttp3b.send(JSON.stringify(proxyRequest));
-                      } else {
-                        var proxyRequest = {
-                          startIndex: 0,
-                          which: 2
-                        }
-                        xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
-                        xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
-                        xhttp3b.send(JSON.stringify(proxyRequest));
+                      xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
+                      xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
+                      xhttp3b.send(JSON.stringify(proxyRequest));
+                    } else {
+                      var proxyRequest = {
+                        startIndex: 0,
+                        which: 2
                       }
+                      xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+                      xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
+                      xhttp3b.send(JSON.stringify(proxyRequest));
                     }
                   }
                 }
-                xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
-                xhttp4.send();
               }
+              xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
+              xhttp4.send();
             }
-            xhttp3.open("GET", apiUrl+"/fbo/getsearchterms/", true);
-            xhttp3.send();
-            //   }
-            // };
-            // xobj.send(null);
           }
-        };
-        if (currentUser.companyUserProxies.length > 0) {
-          var companyId = currentUser.companyUserProxies[0].company._id
-          xhttp2.open("GET", apiUrl+"/company/" + companyId + "/light/", true);
-          xhttp2.send();
-        } else {
-          goToCompanyCreate()
-          // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something for this"
+          xhttp3.open("GET", apiUrl+"/fbo/getsearchterms/", true);
+          xhttp3.send();
+          //   }
+          // };
+          // xobj.send(null);
         }
-      }
-    };
-    xhttp.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
-    xhttp.send();
-  }
-
-  function acceptTOS() {
-    for (i = 0; i < huntingPartyData.users.length; i++) {
-      if (huntingPartyData.users[i].userId == currentUser._id) {
-        console.log('setting tos read')
-        huntingPartyData.users[i].tosRead = 1
+      };
+      if (currentUser.companyUserProxies.length > 0) {
+        var companyId = currentUser.companyUserProxies[0].company._id
+        xhttp2.open("GET", apiUrl+"/company/" + companyId + "/light/", true);
+        xhttp2.send();
+      } else {
+        goToCompanyCreate()
+        // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something for this"
       }
     }
-    tosRead = 1
-    var xhttpHPD = new XMLHttpRequest();
-    xhttpHPD.onreadystatechange = function() {
-      if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-        huntingPartyData = JSON.parse(xhttpHPD.responseText);
-        startMainApp()
-      }
-    }
-    xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
-    xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttpHPD.send(JSON.stringify(huntingPartyData));
-  }
+  };
+  xhttp.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
+  xhttp.send();
+}
 
-  function generateNewsItem(newsItem) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var res = JSON.parse(xhttp.responseText)
-        huntingPartyData.news = res.news;
-        renderNews()
-      }
-    }
-    xhttp.open("PUT", apiUrl+"/huntingpartydata/news/" + huntingPartyData._id, true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send(JSON.stringify(newsItem));
-  }
-
-  function renderNews() {
-    if (huntingPartyData) {
-      var newsHtml = ''
-      for (i = huntingPartyData.news.length-1; i >=0; i--) {
-        if (!huntingPartyData.news[i].body.includes('undefined')){
-          var img = 'profile'
-          // console.log(huntingPartyData.news[i])
-          // console.log(huntingPartyData.news[i].body)
-          if (huntingPartyData.news[i].type) {
-            if (huntingPartyData.news[i].type == 'vote') {
-              img = 'contact'
-            } else if (huntingPartyData.news[i].type == 'user') {
-              img = 'profile'
-            }
-          }
-
-          //Might not be the cleanest solution but it works dangit
-          var fboI = -1
-          for (f = 0; f < fboPipeline.length; f++) {
-            if (huntingPartyData.news[i].body.includes(fboPipeline[f].fbo.subject)){
-              // console.log(
-              //   "The Fbo Subject: " + fboPipeline[f].fbo.subject
-              //   + " is included in "+ huntingPartyData.news[i].body)
-              fboI = f
-              // console.log("F: " +f+ ", FboI: " + fboI)
-            }
-          }
-          if (fboI == -1){
-            // console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
-            newsHtml = newsHtml + '<div class="news-item">'
-          }
-          else{
-            newsHtml = newsHtml + '<div class="news-item" onclick="goToFbo('+ fboI +', 1)">'
-          }
-          newsHtml += '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
-          '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
-          '</div>'+
-          '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
-          '</div>'
-        }
-      }
-      document.getElementById("news-items").innerHTML = newsHtml
+function acceptTOS() {
+  for (i = 0; i < huntingPartyData.users.length; i++) {
+    if (huntingPartyData.users[i].userId == currentUser._id) {
+      console.log('setting tos read')
+      huntingPartyData.users[i].tosRead = 1
     }
   }
+  tosRead = 1
+  var xhttpHPD = new XMLHttpRequest();
+  xhttpHPD.onreadystatechange = function() {
+    if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
+      huntingPartyData = JSON.parse(xhttpHPD.responseText);
+      startMainApp()
+    }
+  }
+  xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
+  xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttpHPD.send(JSON.stringify(huntingPartyData));
+}
 
-  function startMainApp() {
-    console.log(fbosIn)
-    console.log(fboPipeline)
-    if (fbosIn.length + fboPipeline.length > 0) {
-      // setActiveFbo(fboIndex)
-      generateSearchHTML(1)
-      renderSearch()
-      generateOptions()
-      sortFboRenders(fbosIn, 0)
-      renderFbos()
+function generateNewsItem(newsItem) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      var res = JSON.parse(xhttp.responseText)
+      huntingPartyData.news = res.news;
       renderNews()
-      var promiseFinished = true
-      console.log('asd')
-      document.getElementById("tos-popup").classList.add('inactive');
-      document.getElementById("loading").classList.add('inactive');
-      document.getElementById("main-view").classList.remove('inactive');
-      document.getElementById("news-block").classList.remove('inactive');
-      document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("search-view").classList.add('inactive');
-      document.getElementById("login-register").classList.add('inactive');
+    }
+  }
+  xhttp.open("PUT", apiUrl+"/huntingpartydata/news/" + huntingPartyData._id, true);
+  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttp.send(JSON.stringify(newsItem));
+}
+
+function renderNews() {
+  if (huntingPartyData) {
+    var newsHtml = ''
+    for (i = huntingPartyData.news.length-1; i >=0; i--) {
+      if (!huntingPartyData.news[i].body.includes('undefined')){
+        var img = 'profile'
+        // console.log(huntingPartyData.news[i])
+        // console.log(huntingPartyData.news[i].body)
+        if (huntingPartyData.news[i].type) {
+          if (huntingPartyData.news[i].type == 'vote') {
+            img = 'contact'
+          } else if (huntingPartyData.news[i].type == 'user') {
+            img = 'profile'
+          }
+        }
+
+        //Might not be the cleanest solution but it works dangit
+        var fboI = -1
+        for (f = 0; f < fboPipeline.length; f++) {
+          if (huntingPartyData.news[i].body.includes(fboPipeline[f].fbo.subject)){
+            // console.log(
+            //   "The Fbo Subject: " + fboPipeline[f].fbo.subject
+            //   + " is included in "+ huntingPartyData.news[i].body)
+            fboI = f
+            // console.log("F: " +f+ ", FboI: " + fboI)
+          }
+        }
+        if (fboI == -1){
+          // console.log("Pipeline FBO for '"+ huntingPartyData.news[i].body +"'was not found.")
+          newsHtml = newsHtml + '<div class="news-item">'
+        }
+        else{
+          newsHtml = newsHtml + '<div class="news-item" onclick="goToFbo('+ fboI +', 1)">'
+        }
+        newsHtml += '<div class="" style="width: 15%; height: 4vh; float: left; position: relative;">'+
+        '<img class="iconbar-img" src="./img/'+img+'.png" alt="">'+
+        '</div>'+
+        '<p class="news-text">'+huntingPartyData.news[i].body+'</p>'+
+        '</div>'
+      }
+    }
+    document.getElementById("news-items").innerHTML = newsHtml
+  }
+}
+
+function startMainApp() {
+  console.log(fbosIn)
+  console.log(fboPipeline)
+  if (fbosIn.length + fboPipeline.length > 0) {
+    // setActiveFbo(fboIndex)
+    generateSearchHTML(1)
+    renderSearch()
+    generateOptions()
+    sortFboRenders(fbosIn, 0)
+    renderFbos()
+    renderNews()
+    var promiseFinished = true
+    console.log('asd')
+    document.getElementById("tos-popup").classList.add('inactive');
+    document.getElementById("loading").classList.add('inactive');
+    document.getElementById("main-view").classList.remove('inactive');
+    document.getElementById("news-block").classList.remove('inactive');
+    document.getElementById("fbo-view").classList.add('inactive');
+    document.getElementById("search-view").classList.add('inactive');
+    document.getElementById("login-register").classList.add('inactive');
+  } else {
+    generateSearchHTML(1)
+    renderSearch()
+    generateOptions()
+    // renderFbos()
+    renderNews()
+    document.getElementById("loading").classList.add('inactive');
+    document.getElementById("tos-popup").classList.add('inactive');
+    document.getElementById("main-view").classList.remove('inactive');
+    document.getElementById("news-block").classList.remove('inactive');
+    document.getElementById("fbo-view").classList.add('inactive');
+    document.getElementById("search-view").classList.add('inactive');
+    document.getElementById("login-register").classList.add('inactive');
+    document.getElementById("fbo-popups").classList.remove('inactive');
+    document.getElementById("error-popup").classList.remove('inactive');
+    document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br>"
+    // document.getElementById("iconbar-3").classList.add('inactive');
+    // document.getElementById("iconbar-4").classList.add('inactive');
+    // document.getElementById("iconbar-5").classList.add('inactive');
+  }
+  // showAd()
+  // TAB SWITCH HERE
+  switchTab(2)
+  openSearchItems(0)
+  // openSearchItems(3)
+  // goToFbo(0,0);
+  // openFboDetail(5)
+  // viewSearch(0)
+  // openPopups(1)
+  // goToCompanyCreate()
+  // expandData(2)
+}
+
+function handleEnterLogin(e) {
+  var keycode = (e.keyCode ? e.keyCode : e.which);
+  if (keycode == '13') {
+    login()
+  }
+}
+
+function switchKeywordSearch(which) {
+  if (which == 0) {
+    document.getElementById("search-box-keyword-left").classList.add('search-box-keyword-active');
+    document.getElementById("search-box-keyword-right").classList.remove('search-box-keyword-active');
+    searchTerms.keywordWhich = 0
+  } else if (which == 1) {
+    document.getElementById("search-box-keyword-left").classList.remove('search-box-keyword-active');
+    document.getElementById("search-box-keyword-right").classList.add('search-box-keyword-active');
+    searchTerms.keywordWhich = 1
+  }
+}
+
+function handleExternalURLs() {
+  // Handle click events for all external URLs
+  if (device.platform.toUpperCase() === 'ANDROID') {
+    $(document).on('click', 'a[href^="http"]', function (e) {
+      var url = $(this).attr('href');
+      // navigator.app.loadUrl(url, { openExternal: true });
+      window.open(url, '_system');
+      e.preventDefault();
+    });
+  }
+  else if (device.platform.toUpperCase() === 'IOS') {
+    $(document).on('click', 'a[href^="http"]', function (e) {
+      var url = $(this).attr('href');
+      window.open(url, '_system');
+      e.preventDefault();
+    });
+  }
+  else {
+    // Leave standard behaviour
+  }
+}
+
+function renderChart() {
+  var chart1 = document.getElementById("chart1").getContext('2d');
+  var chart2 = document.getElementById("chart2").getContext('2d');
+  var chart3 = document.getElementById("chart3").getContext('2d');
+  var proxy
+  var noFbo = false
+  if (activeTab == 0) {
+    if (fboPipeline[fboIndex]) {
+      proxy = fboPipeline[fboIndex]
     } else {
-      generateSearchHTML(1)
-      renderSearch()
-      generateOptions()
-      // renderFbos()
-      renderNews()
-      document.getElementById("loading").classList.add('inactive');
-      document.getElementById("tos-popup").classList.add('inactive');
-      document.getElementById("main-view").classList.remove('inactive');
-      document.getElementById("news-block").classList.remove('inactive');
-      document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("search-view").classList.add('inactive');
-      document.getElementById("login-register").classList.add('inactive');
-      document.getElementById("fbo-popups").classList.remove('inactive');
-      document.getElementById("error-popup").classList.remove('inactive');
-      document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br>"
-      // document.getElementById("iconbar-3").classList.add('inactive');
-      // document.getElementById("iconbar-4").classList.add('inactive');
-      // document.getElementById("iconbar-5").classList.add('inactive');
+      noFbo = true
     }
-    // showAd()
-    // TAB SWITCH HERE
-    switchTab(2)
-    openSearchItems(0)
-    // openSearchItems(3)
-    // goToFbo(0,0);
-    // openFboDetail(5)
-    // viewSearch(0)
-    // openPopups(1)
-    // goToCompanyCreate()
-    // expandData(2)
-  }
-
-  function handleEnterLogin(e) {
-    var keycode = (e.keyCode ? e.keyCode : e.which);
-    if (keycode == '13') {
-      login()
+  } else if (activeTab == 2) {
+    if (fbosIn[fboIndex]) {
+      proxy = fbosIn[fboIndex]
+    } else {
+      noFbo = true
+    }
+  } else if (activeTab == 3) {
+    if (fboPipeline[fboIndex]) {
+      proxy = fboPipeline[fboIndex]
+    } else {
+      noFbo = true
     }
   }
-
-  function switchKeywordSearch(which) {
-    if (which == 0) {
-      document.getElementById("search-box-keyword-left").classList.add('search-box-keyword-active');
-      document.getElementById("search-box-keyword-right").classList.remove('search-box-keyword-active');
-      searchTerms.keywordWhich = 0
-    } else if (which == 1) {
-      document.getElementById("search-box-keyword-left").classList.remove('search-box-keyword-active');
-      document.getElementById("search-box-keyword-right").classList.add('search-box-keyword-active');
-      searchTerms.keywordWhich = 1
-    }
-  }
-
-  function handleExternalURLs() {
-    // Handle click events for all external URLs
-    if (device.platform.toUpperCase() === 'ANDROID') {
-      $(document).on('click', 'a[href^="http"]', function (e) {
-        var url = $(this).attr('href');
-        // navigator.app.loadUrl(url, { openExternal: true });
-        window.open(url, '_system');
-        e.preventDefault();
-      });
-    }
-    else if (device.platform.toUpperCase() === 'IOS') {
-      $(document).on('click', 'a[href^="http"]', function (e) {
-        var url = $(this).attr('href');
-        window.open(url, '_system');
-        e.preventDefault();
-      });
-    }
-    else {
-      // Leave standard behaviour
-    }
-  }
-
-  function renderChart() {
-    var chart1 = document.getElementById("chart1").getContext('2d');
-    var chart2 = document.getElementById("chart2").getContext('2d');
-    var chart3 = document.getElementById("chart3").getContext('2d');
-    var proxy
-    var noFbo = false
-    if (activeTab == 0) {
-      if (fboPipeline[fboIndex]) {
-        proxy = fboPipeline[fboIndex]
-      } else {
-        noFbo = true
-      }
-    } else if (activeTab == 2) {
-      if (fbosIn[fboIndex]) {
-        proxy = fbosIn[fboIndex]
-      } else {
-        noFbo = true
-      }
-    } else if (activeTab == 3) {
-      if (fboPipeline[fboIndex]) {
-        proxy = fboPipeline[fboIndex]
-      } else {
-        noFbo = true
-      }
-    }
-    if (!noFbo) {
-      var currentFbo = proxy.fbo
-      console.log(currentFbo)
-      var nameFilters = [
-        {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
-        {fbo: 'Department of the Army', agency: false, fpds: 'DEPT OF THE ARMY'},
-        {fbo: 'Department of the Navy', agency: false, fpds: 'DEPT OF THE NAVY'},
-        {fbo: 'Department of the Air Force', agency: false, fpds: 'DEPT OF THE AIR FORCE'},
-        {fbo: 'Department of the Interior', agency: true, fpds: 'DEPARTMENT OF THE INTERIOR (DOI)'},
-        {fbo: 'Department of Agriculture', agency: true, fpds: 'DEPARTMENT OF AGRICULTURE (USDA)'},
-        {fbo: 'Defense Logistics Agency', agency: false, fpds: 'DEFENSE LOGISTICS AGENCY'},
-        {fbo: 'Department of Veterans Affairs', agency: true, fpds: 'DEPARTMENT OF VETERANS AFFAIRS (VA)'},
-        {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'}
-      ]
-      if (!currentFbo.chartData) {
-        console.log('no chart data')
-        var query = ''
-        for (i = 0; i < nameFilters.length; i++) {
-          if (currentFbo.agency.toLowerCase() == nameFilters[i].fbo.toLowerCase()) {
-            if (nameFilters[i].agency) {
-              query = {naics_code: parseInt(currentFbo.naics), agency_name: nameFilters[i].fpds, modification_number: '0'}
-            } else {
-              query = {naics_code: parseInt(currentFbo.naics), subagency_name: nameFilters[i].fpds, modification_number: '0'}
-            }
-            break
+  if (!noFbo) {
+    var currentFbo = proxy.fbo
+    console.log(currentFbo)
+    var nameFilters = [
+      {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
+      {fbo: 'Department of the Army', agency: false, fpds: 'DEPT OF THE ARMY'},
+      {fbo: 'Department of the Navy', agency: false, fpds: 'DEPT OF THE NAVY'},
+      {fbo: 'Department of the Air Force', agency: false, fpds: 'DEPT OF THE AIR FORCE'},
+      {fbo: 'Department of the Interior', agency: true, fpds: 'DEPARTMENT OF THE INTERIOR (DOI)'},
+      {fbo: 'Department of Agriculture', agency: true, fpds: 'DEPARTMENT OF AGRICULTURE (USDA)'},
+      {fbo: 'Defense Logistics Agency', agency: false, fpds: 'DEFENSE LOGISTICS AGENCY'},
+      {fbo: 'Department of Veterans Affairs', agency: true, fpds: 'DEPARTMENT OF VETERANS AFFAIRS (VA)'},
+      {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'}
+    ]
+    if (!currentFbo.chartData) {
+      console.log('no chart data')
+      var query = ''
+      for (i = 0; i < nameFilters.length; i++) {
+        if (currentFbo.agency.toLowerCase() == nameFilters[i].fbo.toLowerCase()) {
+          if (nameFilters[i].agency) {
+            query = {naics_code: parseInt(currentFbo.naics), agency_name: nameFilters[i].fpds, modification_number: '0'}
+          } else {
+            query = {naics_code: parseInt(currentFbo.naics), subagency_name: nameFilters[i].fpds, modification_number: '0'}
           }
+          break
         }
-        if (query.length < 1) {
-          query = {naics_code: parseInt(currentFbo.naics), agency_name: currentFbo.agency.toUpperCase(), modification_number: '0'}
-        }
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-            var queryResults = JSON.parse(xhttp.responseText);
-            if (queryResults.length < 1) {
-              console.log('no results found')
-            } else {
-              if (queryResults.length > 1000) {
-                queryResults = queryResults.slice(0,1000)
-              }
-              console.log(queryResults)
+      }
+      if (query.length < 1) {
+        query = {naics_code: parseInt(currentFbo.naics), agency_name: currentFbo.agency.toUpperCase(), modification_number: '0'}
+      }
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          var queryResults = JSON.parse(xhttp.responseText);
+          if (queryResults.length < 1) {
+            console.log('no results found')
+          } else {
+            if (queryResults.length > 1000) {
+              queryResults = queryResults.slice(0,1000)
             }
-            var prices = [
-              0,
-              0,
-              0,
-              0,
-              0
-            ]
-            for (i = 0; i < queryResults.length; i++) {
-              var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
-              if (bigPrice > 0 && bigPrice < 100000) {
-                prices[0]++
-              } else if (bigPrice >= 100000 && bigPrice < 250000) {
-                prices[1]++
-              } else if (bigPrice >= 250000 && bigPrice < 1000000) {
-                prices[2]++
-              } else if (bigPrice >= 1000000 && bigPrice < 5000000) {
-                prices[3]++
-              } else if (bigPrice >= 5000000) {
-                prices[4]++
-              }
+            console.log(queryResults)
+          }
+          var prices = [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+          for (i = 0; i < queryResults.length; i++) {
+            var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
+            if (bigPrice > 0 && bigPrice < 100000) {
+              prices[0]++
+            } else if (bigPrice >= 100000 && bigPrice < 250000) {
+              prices[1]++
+            } else if (bigPrice >= 250000 && bigPrice < 1000000) {
+              prices[2]++
+            } else if (bigPrice >= 1000000 && bigPrice < 5000000) {
+              prices[3]++
+            } else if (bigPrice >= 5000000) {
+              prices[4]++
             }
-            // console.log('heres the prices')
-            // console.log(prices)
-            Chart.defaults.global.defaultFontColor = 'rgba(96,97,97,1)';
-            var myChart1 = new Chart(chart1, {
-              type: 'bar',
-              data: {
-                labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
-                datasets: [{
-                  label: 'Prices',
-                  data: prices,
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
-                  ],
-                  borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
-                  ],
-                  borderWidth: 1
-                }]
-              },
-              options: {
-                legend: {
-                  display: false,
-                },
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      beginAtZero:true
-                    },
-                    scaleLabel: {
-                      display: true,
-                      labelString: '# Of FPDS'
-                    }
-                  }],
-                  xAxes: [{
-                    scaleLabel: {
-                      display: true,
-                      labelString: 'Values'
-                    }
-                  }]
-                }
-              }
-            });
-            var offers = [
-              0,
-              0,
-              0,
-              0
-            ]
-            for (i = 0; i < queryResults.length; i++) {
-              if (queryResults[i].number_of_offers_received == 1) {
-                offers[0]++
-              } else if (queryResults[i].number_of_offers_received >= 2 && queryResults[i].number_of_offers_received <= 3) {
-                offers[1]++
-              } else if (queryResults[i].number_of_offers_received >= 4 && queryResults[i].number_of_offers_received <= 5) {
-                offers[2]++
-              } else if (queryResults[i].number_of_offers_received >= 6) {
-                offers[3]++
-              }
-            }
-            var myChart2 = new Chart(chart2, {
-              type: 'bar',
-              data: {
+          }
+          // console.log('heres the prices')
+          // console.log(prices)
+          Chart.defaults.global.defaultFontColor = 'rgba(96,97,97,1)';
+          var myChart1 = new Chart(chart1, {
+            type: 'bar',
+            data: {
+              labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
+              datasets: [{
                 label: 'Prices',
-                labels: ["1", "2-3", "4-5", "6+"],
-                datasets: [{
-                  data: offers,
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
-                  ],
-                  borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
-                  ],
-                  borderWidth: 1
-                }]
+                data: prices,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              legend: {
+                display: false,
               },
-              options: {
-                legend: {
-                  display: false,
-                },
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      beginAtZero:true
-                    },
-                    scaleLabel: {
-                      display: true,
-                      labelString: '# Of FPDS'
-                    }
-                  }],
-                  xAxes: [{
-                    scaleLabel: {
-                      display: true,
-                      labelString: 'Offers Received'
-                    }
-                  }]
-                }
-              }
-            });
-            var scatterData = []
-            var colors = []
-            for (i = 0; i < queryResults.length; i++) {
-              var awardSize = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
-              scatterData.push({x: awardSize, y: queryResults[i].number_of_offers_received})
-              if (queryResults[i].type_of_set_aside !== 'N/A') {
-                colors.push('rgba(255,50,50,0.4)')
-              } else {
-                colors.push('rgba(50,50,255,0.4)')
-
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero:true
+                  },
+                  scaleLabel: {
+                    display: true,
+                    labelString: '# Of FPDS'
+                  }
+                }],
+                xAxes: [{
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Values'
+                  }
+                }]
               }
             }
-
-            var myChart3 = new Chart(chart3, {
-              type: 'scatter',
-              data: {
-                datasets: [{
-                  label: 'Scatter Dataset',
-                  data: scatterData,
-                  backgroundColor: colors
-                }]
+          });
+          var offers = [
+            0,
+            0,
+            0,
+            0
+          ]
+          for (i = 0; i < queryResults.length; i++) {
+            if (queryResults[i].number_of_offers_received == 1) {
+              offers[0]++
+            } else if (queryResults[i].number_of_offers_received >= 2 && queryResults[i].number_of_offers_received <= 3) {
+              offers[1]++
+            } else if (queryResults[i].number_of_offers_received >= 4 && queryResults[i].number_of_offers_received <= 5) {
+              offers[2]++
+            } else if (queryResults[i].number_of_offers_received >= 6) {
+              offers[3]++
+            }
+          }
+          var myChart2 = new Chart(chart2, {
+            type: 'bar',
+            data: {
+              label: 'Prices',
+              labels: ["1", "2-3", "4-5", "6+"],
+              datasets: [{
+                data: offers,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              legend: {
+                display: false,
               },
-              options: {
-                legend: {
-                  display: false,
-                },
-                scales: {
-                  yAxes: [{
-                    scaleLabel: {
-                      display: true,
-                      labelString: 'Offers Received'
-                    }
-                  }],
-                  xAxes: [{
-                    type: 'linear',
-                    position: 'bottom',
-                    ticks: {
-                      callback: function(value) {
-                        if (value.toString().length == 9) {
-                          return value.toString().substr(0, 3) + 'm'; //truncate
-                        } else if (value.toString().length == 8) {
-                          return value.toString().substr(0, 2) + 'm'; //truncate
-                        } else if (value.toString().length == 7) {
-                          return value.toString().substr(0, 1) + 'm'; //truncate
-                        } else if (value.toString().length == 6) {
-                          return value.toString().substr(0, 3) + 'k'; //truncate
-                        } else if (value.toString().length == 5) {
-                          return value.toString().substr(0, 2) + 'k'; //truncate
-                        } else if (value.toString().length == 4) {
-                          return value.toString().substr(0, 1) + 'k'; //truncate
-                        } else {
-                          return value
-                        }
-                      },
-                    },
-                    scaleLabel: {
-                      display: true,
-                      labelString: 'Values'
-                    }
-                  }]
-                }
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero:true
+                  },
+                  scaleLabel: {
+                    display: true,
+                    labelString: '# Of FPDS'
+                  }
+                }],
+                xAxes: [{
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Offers Received'
+                  }
+                }]
               }
-            });
+            }
+          });
+          var scatterData = []
+          var colors = []
+          for (i = 0; i < queryResults.length; i++) {
+            var awardSize = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
+            scatterData.push({x: awardSize, y: queryResults[i].number_of_offers_received})
+            if (queryResults[i].type_of_set_aside !== 'N/A') {
+              colors.push('rgba(255,50,50,0.4)')
+            } else {
+              colors.push('rgba(50,50,255,0.4)')
+
+            }
+          }
+
+          var myChart3 = new Chart(chart3, {
+            type: 'scatter',
+            data: {
+              datasets: [{
+                label: 'Scatter Dataset',
+                data: scatterData,
+                backgroundColor: colors
+              }]
+            },
+            options: {
+              legend: {
+                display: false,
+              },
+              scales: {
+                yAxes: [{
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Offers Received'
+                  }
+                }],
+                xAxes: [{
+                  type: 'linear',
+                  position: 'bottom',
+                  ticks: {
+                    callback: function(value) {
+                      if (value.toString().length == 9) {
+                        return value.toString().substr(0, 3) + 'm'; //truncate
+                      } else if (value.toString().length == 8) {
+                        return value.toString().substr(0, 2) + 'm'; //truncate
+                      } else if (value.toString().length == 7) {
+                        return value.toString().substr(0, 1) + 'm'; //truncate
+                      } else if (value.toString().length == 6) {
+                        return value.toString().substr(0, 3) + 'k'; //truncate
+                      } else if (value.toString().length == 5) {
+                        return value.toString().substr(0, 2) + 'k'; //truncate
+                      } else if (value.toString().length == 4) {
+                        return value.toString().substr(0, 1) + 'k'; //truncate
+                      } else {
+                        return value
+                      }
+                    },
+                  },
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Values'
+                  }
+                }]
+              }
+            }
+          });
+        }
+      }
+      xhttp.open("POST", apiUrl+"/fpds/query/", true);
+      xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.send(JSON.stringify(query));
+    } else {
+      var myChart1 = new Chart(chart1, {
+        type: 'bar',
+        data: {
+          labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
+          datasets: [{
+            label: 'Prices',
+            data: currentFbo.chartData.prices,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          legend: {
+            display: false,
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero:true
+              },
+              scaleLabel: {
+                display: true,
+                labelString: '# Of FPDS'
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Values'
+              }
+            }]
           }
         }
-        xhttp.open("POST", apiUrl+"/fpds/query/", true);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify(query));
-      } else {
-        var myChart1 = new Chart(chart1, {
-          type: 'bar',
-          data: {
-            labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
-            datasets: [{
-              label: 'Prices',
-              data: currentFbo.chartData.prices,
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)'
-              ],
-              borderWidth: 1
-            }]
+      });
+      var myChart2 = new Chart(chart2, {
+        type: 'bar',
+        data: {
+          label: 'Prices',
+          labels: ["1", "2-3", "4-5", "6+"],
+          datasets: [{
+            data: currentFbo.chartData.offers,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          legend: {
+            display: false,
           },
-          options: {
-            legend: {
-              display: false,
-            },
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero:true
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: '# Of FPDS'
-                }
-              }],
-              xAxes: [{
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Values'
-                }
-              }]
-            }
-          }
-        });
-        var myChart2 = new Chart(chart2, {
-          type: 'bar',
-          data: {
-            label: 'Prices',
-            labels: ["1", "2-3", "4-5", "6+"],
-            datasets: [{
-              data: currentFbo.chartData.offers,
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)'
-              ],
-              borderWidth: 1
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero:true
+              },
+              scaleLabel: {
+                display: true,
+                labelString: '# Of FPDS'
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Offers Received'
+              }
             }]
-          },
-          options: {
-            legend: {
-              display: false,
-            },
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero:true
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: '# Of FPDS'
-                }
-              }],
-              xAxes: [{
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Offers Received'
-                }
-              }]
-            }
           }
-        });
-        var myChart3 = new Chart(chart3, {
-          type: 'scatter',
-          data: {
-            datasets: [{
-              label: 'Scatter Dataset',
-              data: currentFbo.chartData.scatterData,
-              backgroundColor: currentFbo.chartData.colors
+        }
+      });
+      var myChart3 = new Chart(chart3, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Scatter Dataset',
+            data: currentFbo.chartData.scatterData,
+            backgroundColor: currentFbo.chartData.colors
+          }]
+        },
+        options: {
+          legend: {
+            display: false,
+          },
+          scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Offers Received'
+              }
+            }],
+            xAxes: [{
+              type: 'linear',
+              position: 'bottom',
+              ticks: {
+                callback: function(value) {
+                  if (value.toString().length == 9) {
+                    return value.toString().substr(0, 3) + 'm'; //truncate
+                  } else if (value.toString().length == 8) {
+                    return value.toString().substr(0, 2) + 'm'; //truncate
+                  } else if (value.toString().length == 7) {
+                    return value.toString().substr(0, 1) + 'm'; //truncate
+                  } else if (value.toString().length == 6) {
+                    return value.toString().substr(0, 3) + 'k'; //truncate
+                  } else if (value.toString().length == 5) {
+                    return value.toString().substr(0, 2) + 'k'; //truncate
+                  } else if (value.toString().length == 4) {
+                    return value.toString().substr(0, 1) + 'k'; //truncate
+                  } else {
+                    return value
+                  }
+                },
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Values'
+              }
             }]
-          },
-          options: {
-            legend: {
-              display: false,
-            },
-            scales: {
-              yAxes: [{
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Offers Received'
-                }
-              }],
-              xAxes: [{
-                type: 'linear',
-                position: 'bottom',
-                ticks: {
-                  callback: function(value) {
-                    if (value.toString().length == 9) {
-                      return value.toString().substr(0, 3) + 'm'; //truncate
-                    } else if (value.toString().length == 8) {
-                      return value.toString().substr(0, 2) + 'm'; //truncate
-                    } else if (value.toString().length == 7) {
-                      return value.toString().substr(0, 1) + 'm'; //truncate
-                    } else if (value.toString().length == 6) {
-                      return value.toString().substr(0, 3) + 'k'; //truncate
-                    } else if (value.toString().length == 5) {
-                      return value.toString().substr(0, 2) + 'k'; //truncate
-                    } else if (value.toString().length == 4) {
-                      return value.toString().substr(0, 1) + 'k'; //truncate
-                    } else {
-                      return value
-                    }
-                  },
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Values'
-                }
-              }]
-            }
           }
-        });
-        document.getElementById("chart1").classList.add('inactive');
-        document.getElementById("chart2").classList.add('inactive');
-        document.getElementById("chart3").classList.add('inactive');
-        document.getElementById("chart1").classList.remove('inactive');
-        document.getElementById("chart2").classList.remove('inactive');
-        document.getElementById("chart3").classList.remove('inactive');
-      }
+        }
+      });
+      document.getElementById("chart1").classList.add('inactive');
+      document.getElementById("chart2").classList.add('inactive');
+      document.getElementById("chart3").classList.add('inactive');
+      document.getElementById("chart1").classList.remove('inactive');
+      document.getElementById("chart2").classList.remove('inactive');
+      document.getElementById("chart3").classList.remove('inactive');
     }
   }
+}
 
-  var app = {
+var app = {
     // Application Constructor
     initialize: function() {
       if (localStorage.getItem('uid')) {
@@ -6908,25 +6913,27 @@ function toggleHamburgerMenu() {
       }
     }
   };
-  function openSidebar() {
-    console.log('its doing it')
-    document.getElementById("sidebar").classList.remove('inactive')
-    document.getElementById("sidebar").classList.remove('sidebar-out')
-    document.getElementById("sidebar").classList.add('sidebar-in')
-    profileDropdownOpen = true
-  }
-  function closeSidebar(){
-    document.getElementById("sidebar").classList.add('sidebar-out');
-    document.getElementById("sidebar").classList.remove('sidebar-in')
-    profileDropdownOpen = false
-  }
 
-  $(document).ready(function(){
+function openSidebar() {
+  console.log('its doing it')
+  document.getElementById("sidebar").classList.remove('inactive')
+  document.getElementById("sidebar").classList.remove('sidebar-out')
+  document.getElementById("sidebar").classList.add('sidebar-in')
+  profileDropdownOpen = true
+}
+
+function closeSidebar(){
+  document.getElementById("sidebar").classList.add('sidebar-out');
+  document.getElementById("sidebar").classList.remove('sidebar-in')
+  profileDropdownOpen = false
+}
+
+$(document).ready(function(){
     $('#fbo-scroll-box').bind('scroll',fboScroll);
     $('#pipeline-view').bind('scroll',pipelineScroll);
   });
-  var loadInProgress = false
-  function fboScroll(e) {
+
+function fboScroll(e) {
     var elem = $(e.currentTarget);
     if (elem[0].scrollHeight - elem.scrollTop() <= elem.outerHeight() + 900)
     {
@@ -6938,7 +6945,8 @@ function toggleHamburgerMenu() {
       }
     }
   }
-  function pipelineScroll(e) {
+
+function pipelineScroll(e) {
     // console.log('scrolling')
     var elem = $(e.currentTarget);
     if (elem[0].scrollHeight - elem.scrollTop() <= elem.outerHeight() + 900)
@@ -6952,7 +6960,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-  function getMoreProxies() {
+function getMoreProxies() {
     console.log('getting more')
     loadInProgress = true
     document.getElementById("fbo-item-load-buffer").classList.remove('inactive');
@@ -7018,9 +7026,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-
-
-  function getMorePipelineProxies() {
+function getMorePipelineProxies() {
     console.log('getting more')
     loadInProgress = true
     document.getElementById("pipeline-item-load-buffer").classList.remove('inactive');
@@ -7045,7 +7051,7 @@ function toggleHamburgerMenu() {
     xhttp3b.send(JSON.stringify(proxyRequest));
   }
 
-  function openResetPassword() {
+function openResetPassword() {
     document.getElementById("reset-password-popup").classList.remove('inactive');
     document.getElementById("reset-password-input").value = '';
     document.getElementById("reset-password-box-1").classList.remove('inactive');
@@ -7054,91 +7060,94 @@ function toggleHamburgerMenu() {
     document.getElementById("reset-password-button-inactive").classList.remove('inactive');
     document.getElementById("reset-password-button-2").classList.add('inactive');
   }
-  function closeResetPassword() {
-    document.getElementById("reset-password-popup").classList.add('inactive');
-    document.getElementById("reset-password-input").value = '';
-    document.getElementById("reset-password-box-1").classList.remove('inactive');
-    document.getElementById("reset-password-box-2").classList.add('inactive');
-    document.getElementById("reset-password-button").classList.add('inactive');
-    document.getElementById("reset-password-button-inactive").classList.remove('inactive');
-    document.getElementById("reset-password-button-2").classList.add('inactive');
-  }
-  function checkResetPasswordEmail() {
-    var email = document.getElementById("reset-password-input").value
-    if (!invalidEmail(email)) {
-      document.getElementById("reset-password-button").classList.remove('inactive');
-      document.getElementById("reset-password-button-inactive").classList.add('inactive');
-    }
-  }
-  function checkDomainEmail(elem) {
-    var email = elem.value
-    if (email.length > 0 && !(/^[^\s@]+\.[^\s@]+$/.test(email))) {
-      elem.classList.add('invalid-input')
-    } else if (email.length == 0) {
-      elem.classList.remove('invalid-input')
-    }
-  }
-  function checkDomainEmail2(elem) {
-    var email = elem.value
-    if (email.length > 0 && !(/^[^\s@]+\.[^\s@]+$/.test(email))) {
-    } else if (email.length > 0) {
-      elem.classList.remove('invalid-input')
-    }
-  }
 
-  function resetPassword() {
-    var email = document.getElementById("reset-password-input").value.toLowerCase()
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var resUser = JSON.parse(xhttp.responseText);
-        if (resUser.found == false) {
-          document.getElementById("reset-password-error-text").innerHTML = 'Account not found'
-        } else {
-          document.getElementById("reset-password-error-text").innerHTML = ''
-          var time = new Date();
-          var expTime = '' + ((time.getTime() / 1000) + 60 * 60 * 24 );
-          var resetHash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-          var token = {
-            userId: resUser.id,
-            userEmail: email,
-            expTime: expTime,
-            hash: resetHash,
-            reset: true
-          };
-          var xhttp2 = new XMLHttpRequest();
-          xhttp2.onreadystatechange = function() {
-            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-              var resCreateToken = JSON.parse(xhttp2.responseText);
-              var resetLink = 'https://efassembly.com/password-reset/' + resetHash;
-              // var resetLink = "http://localhost:4200/password-reset/" + resetHash
-              var mail = ({
-                senderEmail: 'huntingparty@efassembly.com',
-                recipientEmail: email,
-                subject: 'Your Password Reset',
-                contactMessage: 'We recently received a password reset request for your Hunting Party profile. If you requested this reset, copy and paste the link below into your browser: \n \n ' + resetLink + ' \n \n and we\'ll take you to Assembly to assign a new one. If not, you can ignore this message.',
-                contactHTML: '<p>We recently received a password reset request for your Hunting Party profile. If you requested this reset, <a href="' + resetLink + '">click here to assign a new password</a> using Assembly. If not, you can ignore this message.</p>'
-              });
-              sendEmail(mail)
-              document.getElementById("reset-password-box-1").classList.add('inactive');
-              document.getElementById("reset-password-box-2").classList.remove('inactive');
-              document.getElementById("reset-password-button").classList.add('inactive');
-              document.getElementById("reset-password-button-inactive").classList.add('inactive');
-              document.getElementById("reset-password-button-2").classList.remove('inactive');
-              document.getElementById("reset-password-input").value = '';
-            }
+function closeResetPassword() {
+  document.getElementById("reset-password-popup").classList.add('inactive');
+  document.getElementById("reset-password-input").value = '';
+  document.getElementById("reset-password-box-1").classList.remove('inactive');
+  document.getElementById("reset-password-box-2").classList.add('inactive');
+  document.getElementById("reset-password-button").classList.add('inactive');
+  document.getElementById("reset-password-button-inactive").classList.remove('inactive');
+  document.getElementById("reset-password-button-2").classList.add('inactive');
+}
+
+function checkResetPasswordEmail() {
+  var email = document.getElementById("reset-password-input").value
+  if (!invalidEmail(email)) {
+    document.getElementById("reset-password-button").classList.remove('inactive');
+    document.getElementById("reset-password-button-inactive").classList.add('inactive');
+  }
+}
+
+function checkDomainEmail(elem) {
+  var email = elem.value
+  if (email.length > 0 && !(/^[^\s@]+\.[^\s@]+$/.test(email))) {
+    elem.classList.add('invalid-input')
+  } else if (email.length == 0) {
+    elem.classList.remove('invalid-input')
+  }
+}
+
+function checkDomainEmail2(elem) {
+  var email = elem.value
+  if (email.length > 0 && !(/^[^\s@]+\.[^\s@]+$/.test(email))) {
+  } else if (email.length > 0) {
+    elem.classList.remove('invalid-input')
+  }
+}
+
+function resetPassword() {
+  var email = document.getElementById("reset-password-input").value.toLowerCase()
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      var resUser = JSON.parse(xhttp.responseText);
+      if (resUser.found == false) {
+        document.getElementById("reset-password-error-text").innerHTML = 'Account not found'
+      } else {
+        document.getElementById("reset-password-error-text").innerHTML = ''
+        var time = new Date();
+        var expTime = '' + ((time.getTime() / 1000) + 60 * 60 * 24 );
+        var resetHash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        var token = {
+          userId: resUser.id,
+          userEmail: email,
+          expTime: expTime,
+          hash: resetHash,
+          reset: true
+        };
+        var xhttp2 = new XMLHttpRequest();
+        xhttp2.onreadystatechange = function() {
+          if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+            var resCreateToken = JSON.parse(xhttp2.responseText);
+            var resetLink = 'https://efassembly.com/password-reset/' + resetHash;
+            // var resetLink = "http://localhost:4200/password-reset/" + resetHash
+            var mail = ({
+              senderEmail: 'huntingparty@efassembly.com',
+              recipientEmail: email,
+              subject: 'Your Password Reset',
+              contactMessage: 'We recently received a password reset request for your Hunting Party profile. If you requested this reset, copy and paste the link below into your browser: \n \n ' + resetLink + ' \n \n and we\'ll take you to Assembly to assign a new one. If not, you can ignore this message.',
+              contactHTML: '<p>We recently received a password reset request for your Hunting Party profile. If you requested this reset, <a href="' + resetLink + '">click here to assign a new password</a> using Assembly. If not, you can ignore this message.</p>'
+            });
+            sendEmail(mail)
+            document.getElementById("reset-password-box-1").classList.add('inactive');
+            document.getElementById("reset-password-box-2").classList.remove('inactive');
+            document.getElementById("reset-password-button").classList.add('inactive');
+            document.getElementById("reset-password-button-inactive").classList.add('inactive');
+            document.getElementById("reset-password-button-2").classList.remove('inactive');
+            document.getElementById("reset-password-input").value = '';
           }
-          xhttp2.open("POST", apiUrl+"/tokens/add/", true);
-          xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-          xhttp2.send(JSON.stringify(token));
         }
+        xhttp2.open("POST", apiUrl+"/tokens/add/", true);
+        xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttp2.send(JSON.stringify(token));
       }
-    };
-    xhttp.open("GET", apiUrl+"/profiles/email/" + email, true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send();
-  }
-
+    }
+  };
+  xhttp.open("GET", apiUrl+"/profiles/email/" + email, true);
+  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xhttp.send();
+}
 
   $(function() {
     $("#sidebar-detector").swipe( {
