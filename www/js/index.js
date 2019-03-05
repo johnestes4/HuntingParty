@@ -1,25 +1,25 @@
-var apiUrl = 'https://efassembly.com:4432'
-// var apiUrl = 'http://18.218.170.246:4200'
-// var apiUrl = 'http://localhost:4200'
+var apiUrl = 'https://efassembly.com:4432';
+// var apiUrl = 'http://18.218.170.246:4200';
+// var apiUrl = 'http://localhost:4200';
 
-var saving = false
-var activeTab = 0
-var company = null
-var huntingPartyData = null
-var device
-var fbos = []
-var fboIndex = 0
-var promiseFinished = false
-var emailNotFound = false
-var loggedIn = false
-var currentUser = null
-var localStorage = window.localStorage
-var profileDropdownOpen = false
-var voteDropdownOpen = -1
-var hamburgerMenuOpen = false
-var hamburgerOpening = false
-var adCounter = 0
-var emailValidated = false
+var saving = false;
+var activeTab = 0;
+var company = null;
+var huntingPartyData = null;
+var device;
+var fbos = [];
+var fboIndex = 0;
+var promiseFinished = false;
+var emailNotFound = false;
+var loggedIn = false;
+var currentUser = null;
+var localStorage = window.localStorage;
+var profileDropdownOpen = false;
+var voteDropdownOpen = -1;
+var hamburgerMenuOpen = false;
+var hamburgerOpening = false;
+var adCounter = 0;
+var emailValidated = false;
 var agencyLogos = [
   {
     "agency": "Department of the Air Force",
@@ -137,9 +137,9 @@ var agencyLogos = [
     "agency": "Department of Agriculture",
     "img": "doa.png"
   }
-]
-var fboVote = []
-var peopleToRefer = []
+];
+var fboVote = [];
+var peopleToRefer = [];
 var tabIds = [
   {
     id: 0,
@@ -153,7 +153,7 @@ var tabIds = [
     id: 2,
     allowed: [4]
   }
-]
+];
 var searchTerms = {
   type: [
     {
@@ -242,7 +242,7 @@ var searchTerms = {
     }
   ],
   keyword: '',
-}
+};
 var emptySearchTerms = {
   type: [
     {
@@ -332,19 +332,19 @@ var emptySearchTerms = {
   ],
   keyword: '',
   keywordWhich: 0
-}
-var yesRefer = []
-var noRefer = []
-var referRefer = []
-var tosRead = 0
-var tutorialsOpen = false
-var allCompanies
-var companyToJoin
-var yourSearches = []
-var fbosIn = []
-var fboPipeline = []
-var fbosInMax = 0
-var fboPipelineMax = 0
+};
+var yesRefer = [];
+var noRefer = [];
+var referRefer = [];
+var tosRead = 0;
+var tutorialsOpen = false;
+var allCompanies;
+var companyToJoin;
+var yourSearches = [];
+var fbosIn = [];
+var fboPipeline = [];
+var fbosInMax = 0;
+var fboPipelineMax = 0;
 var searchItemSuggestions = {
   naics: {
     it: [
@@ -381,7 +381,7 @@ var searchItemSuggestions = {
       'U Education & training services'
     ]
   }
-}
+};
 var analytics = {
   tab: {
     timeStart: 0,
@@ -399,25 +399,25 @@ var analytics = {
     clickCount: 0,
     vote: null
   },
-}
-var fboOpen = false
-var analyticsOn = false
-var previousSearchTermsIndex = null
-var activeSearchIndex
-var activeSearch = null
-var emptySearchName = false
-var searchFilterName = null
-var fboClickOpen = false
-var fboHighlightOpen
-var fboHighlightClose
-var activeFboDesc
-var highlightOn = false
-var grayOn = false
-var referEmailValid = false
-var activeFbo
-var fbosInUnread = 0
-var pipelineUnread = 0
-var loadInProgress = false
+};
+var fboOpen = false;
+var analyticsOn = false;
+var previousSearchTermsIndex = null;
+var activeSearchIndex;
+var activeSearch = null;
+var emptySearchName = false;
+var searchFilterName = null;
+var fboClickOpen = false;
+var fboHighlightOpen;
+var fboHighlightClose;
+var activeFboDesc;
+var highlightOn = false;
+var grayOn = false;
+var referEmailValid = false;
+var activeFbo;
+var fbosInUnread = 0;
+var pipelineUnread = 0;
+var loadInProgress = false;
 
 function checkLoginEmail() {
   var username = document.getElementById("email").value.toLowerCase()
