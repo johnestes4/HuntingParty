@@ -1128,6 +1128,498 @@ function switchTab(num) {
 
 }
 
+function renderFbos() {
+    var fboHtml = ''
+    var pipelineHtml = ''
+    fboVote = []
+    // console.log(company.fboProxies[0])
+    var updateNeeded
+    var toDeleteIds = []
+    var logCount = 0
+    var noProxies = 0
+    function parseProxy(proxy, index) {
+        var dueDate = ''
+        var due = '<span style="font-size: 10px">No Due Date</span>'
+        // console.log(proxy.fbo)
+        if (!proxy.fbo) {
+            noProxies++
+        } else {
+            if (proxy.fbo.respDate) {
+                var todayarray = [], duearray = []
+                var today = getToday()
+                today = today.slice(5,7)+"/"+today.slice(8,10)+"/"+today.slice(2,4)
+                todayarray = [today.slice(0,2), today.slice(3,5), today.slice(6,8)]
+
+                due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
+                duearray = [due.slice(0,2), due.slice(3,5), due.slice(6,8)]
+
+                var date2 = new Date(today);
+                var date1 = new Date(due);
+                var expired = false
+
+                // if (duearray[2] < todayarray[2]) {
+                //   expired = true
+                // }
+                // else if (duearray[2] > todayarray[2]){
+                //   expired = false
+                // }
+                // else{
+                //   if(duearray[0] < todayarray[0]){
+                //     expired = true
+                //   }
+                //   else if (duearray[0] > todayarray[0]){
+                //     expired = false
+                //   }
+                //   else{
+                //     if (duearray[1] < todayarray[1]){
+                //       expired = true
+                //     }
+                //     else{
+                //       expired = false
+                //     }
+                //   }
+                // }
+
+                var timeDiff = (date1.getTime() - date2.getTime());
+                var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                if (timeToDue >= 365) {
+                    dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 365).toString()+" Years</p>"
+                } else if (timeToDue >= 60) {
+                    dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
+                } else if (timeToDue >= 14) {
+                    dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+                } else {
+                    dueDate = "<p style='font-weight: bold;'>Due: "+timeToDue+" Days</p>"
+                }
+                // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
+            } else {
+                dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
+            }
+            // var voteHtml = ''
+            // var comments = ''
+            // var voteScore = proxy.voteYes.length - proxy.voteNo.length
+            // if (voteScore < 0) {
+            //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
+            // } else if (voteScore > 0) {
+            //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
+            // } else if (voteScore == 0 && ((proxy.voteYes.length + proxy.voteNo.length) > 0)) {
+            //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: black;">+'+voteScore+'</p></div>'
+            // } else {
+            //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
+            // }
+            // voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
+            // for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+            //   var vote = proxy.voteYes[i2]
+            //   var voteString = ''
+            //   if (vote.comment) {
+            //     voteString = ' - "'+vote.comment+'"'
+            //   }
+            //   comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+            //   voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
+            // }
+            // for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
+            //   var vote = proxy.voteNo[i2]
+            //   var voteString = ''
+            //   if (vote.comment) {
+            //     voteString = ' - "'+vote.comment+'"'
+            //   }
+            //   comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
+            //   voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
+            // }
+            // if (comments.length < 1) {
+            //   comments = '<p style="color: gray;">Comments</p>'
+            // }
+            // voteHtml = voteHtml + '</div>'
+            var vote = null
+            for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
+                if (proxy.voteYes[i2].id == currentUser._id) {
+                    vote = 2
+                    break;
+                }
+            }
+            if (vote !== 2) {
+                for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
+                    if (proxy.voteNo[i2].id == currentUser._id) {
+                        vote = 1
+                        break;
+                    }
+                }
+            }
+            var imgString = ''
+            if (!proxy.fbo.agency) {
+                proxy.fbo.agency = 'No Agency Provided'
+            }
+            for (i2 = 0; i2 < agencyLogos.length; i2++) {
+                if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
+                    imgString = 'img/agencies/'+agencyLogos[i2].img
+                    break;
+                }
+            }
+            var originHtml = ''
+            if (proxy.originSearch) {
+                originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
+            }
+            var commentsCount = proxy.voteYes.length + proxy.voteNo.length
+            var votesYesCount = proxy.voteYes.length
+            var votesNoCount = proxy.voteNo.length
+            // if (searchFilterName && activeTab == 2 && proxy.originSearch !== searchFilterName) {
+            //   expired = true
+            // }
+            if (proxy.voteYes.length < 1 && vote !== 1) {
+                // if (timeToDue < -14) {
+                //   expired = true
+                //   updateNeeded = true
+                // }
+                if (!expired) {
+                    fboHtml = fboHtml + '<div class="fbo-item-wrapper">'+
+                        '<div class="fbo-item-wrapper-inner">'+
+                        '<div class="fbo-item">'+
+                        // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
+                        '<div class="fbo-item-avatar" onclick="goToFbo(' + index + ', 0)">'+
+                        '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
+                        '</div>'+
+                        '<div class="fbo-item-body">'+
+                        '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
+                        '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+                        '</div>'+
+                        '<div class="fbo-item-icons">'+
+                        '<div class="fbo-item-icon-item" onclick="goToFbo(' + index + ', 0)"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
+                        '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;" onclick="vote('+index+', true)"><img class="fbo-item-icon-img fbo-item-icon-img-vote" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
+                        '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;" onclick="vote('+index+', false)"><img class="fbo-item-icon-img fbo-item-icon-img-vote" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
+                        '<div class="fbo-item-icon-date" onclick="goToFbo(' + index + ', 0)"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'
+                }
+            } else if (proxy.voteYes.length > 0 && vote !== 1) {
+                // if (timeToDue < -60) {
+                //   expired = true
+                //   updateNeeded = true
+                // }
+                pipelineHtml = pipelineHtml +
+                    '<div class="fbo-item-wrapper">'+
+                    '<div class="fbo-item-wrapper-inner">'+
+                    '<div class="fbo-item">'+
+                    // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
+                    '<div class="fbo-item-avatar" onclick="goToFbo(' + index + ', 1)">'+
+                    '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
+                    '</div>'+
+                    '<div class="fbo-item-body">'+
+                    '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
+                    '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
+                    '</div>'+
+                    '<div class="fbo-item-icons">'+
+                    '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
+                    '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
+                    '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
+                    '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'
+            }
+            // if (expired) {
+            //   toDeleteIds.push(company.fboProxies[i]._id)
+            //   company.fboProxies.splice(i,1)
+            //   i = i - 1
+            // }
+        }
+    }
+    // sortFboRenders(fbosIn, 0)
+    for (var i = 0; i < fbosIn.length; i++) {
+        if (fbosIn[i].voteYes.length > 0) {
+            fboPipeline.push(fbosIn[i])
+            fbosIn.splice(i,1)
+            i = i - 1
+        } else {
+            parseProxy(fbosIn[i], i)
+        }
+    }
+    // sortFboRenders(fboPipeline, 1)
+    console.log(fboPipeline)
+    for (var i = 0; i < fboPipeline.length; i++) {
+        parseProxy(fboPipeline[i], i)
+    }
+    console.log(noProxies + ' busted proxies')
+    var fboHTMLContent = document.getElementById("fbo-items")
+    var pipelineHTMLContent = document.getElementById("pipeline-items")
+    if (fbosIn.length < 1) {
+        fboHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
+            '<div class="fbo-item-wrapper-inner">'+
+            '<div class="fbo-item">'+
+            '<div class="fbo-item-body">'+
+            '<div class="fbo-item-title">'+
+            '<p class="fbo-item-title-text">No Matching FBOs</p>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'
+    } else {
+        fboHTMLContent.innerHTML = fboHtml;
+    }
+    if (fboPipeline.length < 1) {
+        pipelineHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
+            '<div class="fbo-item-wrapper-inner">'+
+            '<div class="fbo-item">'+
+            '<div class="fbo-item-body">'+
+            '<div class="fbo-item-title">'+
+            '<p class="fbo-item-title-text">No Items In Pipeline</p>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'
+    } else {
+        pipelineHTMLContent.innerHTML = pipelineHtml;
+    }
+    // for (i = 0; i < company.fboProxies.length; i++) {
+    //   checkVote(company.fboProxies[i], i)
+    // }
+
+}
+
+function sortFboRenders(fboProxy, renderOption){
+    const BY_EARLIEST_DUE = 0; //Also most recent expired for pipeline
+    const BY_LATEST_DUE = 1; //Includes data with no deadline at top; Also oldest expired for pipeline
+    const BY_DATE_POSTED = 2; //Most recent date to oldest; Inactive
+    const BY_ALPHA_ASC = 3; //Alphanumeric Order (1 - Z)
+    const BY_ALPHA_DEC = 4; //Reverse Alphanumeric
+    const BY_AGENCY_ASC = 5; //Sorts by Agency (Second criteria is duedate)
+    const BY_AGENCY_DEC = 6; //Reverse agency (duedate still in order)
+    const DEFAULT = 99; //Unknown Criteria; Kept Just in case
+
+    // console.log("Current Option:", renderOption)
+    // renderOption = BY_EARLIEST_DUE
+    switch(renderOption){
+        case BY_EARLIEST_DUE: //By Earliest Due
+            fboProxy.sort(function(p1, p2){
+                //[mm,dd,yy]
+                let due1, due2;
+                let duenum1 = 0;
+                let duenum2 = 0;
+                if (p1.fbo.respDate){
+                    mm = p1.fbo.respDate.slice(0,2);
+                    dd = p1.fbo.respDate.slice(2,4);
+                    yy = p1.fbo.respDate.slice(4,6);
+                    due1 = [parseInt(mm), parseInt(dd), parseInt(yy)];
+                    duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+                }
+                else{due1 = "No Date", duenum1 = 99999}
+                if (p2.fbo.respDate){
+                    mm = p2.fbo.respDate.slice(0,2);
+                    dd = p2.fbo.respDate.slice(2,4);
+                    yy = p2.fbo.respDate.slice(4,6);
+                    due2 = [parseInt(mm), parseInt(dd), parseInt(yy)];
+                    duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+                }
+                else{due2 = "No Date", duenum2 = 99999}
+                // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
+                return duenum1 - duenum2
+            });
+            break;
+        case BY_LATEST_DUE:
+            fboProxy.sort(function(p1, p2){
+                //[mm,dd,yy]
+                let due1, due2;
+                let duenum1 = 0;
+                let duenum2 = 0;
+                if (p1.fbo.respDate){
+                    mm = p1.fbo.respDate.slice(0,2);
+                    dd = p1.fbo.respDate.slice(2,4);
+                    yy = p1.fbo.respDate.slice(4,6);
+                    due1 = [parseInt(mm), parseInt(dd), parseInt(yy)];
+                    duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+                }
+                else{due1 = "No Date", duenum1 = 99999}
+                if (p2.fbo.respDate){
+                    mm = p2.fbo.respDate.slice(0,2);
+                    dd = p2.fbo.respDate.slice(2,4);
+                    yy = p2.fbo.respDate.slice(4,6);
+                    due2 = [parseInt(mm), parseInt(dd), parseInt(yy)];
+                    duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+                }
+                else{due2 = "No Date", duenum2 = 99999}
+                // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
+                return duenum1 - duenum2
+            });
+            fboProxy.reverse()
+            break;
+        // case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
+        case BY_ALPHA_ASC:
+            fboProxy.sort(function(p1, p2){
+
+                let prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase();
+                prox1bool = isNaN(parseInt(prox1.slice(0,2)));
+                prox2bool = isNaN(parseInt(prox2.slice(0,2)));
+
+                if (!prox1bool && !prox2bool){ // If both are numbers
+                    prox1num = parseInt(prox1.slice(0,2));
+                    prox2num = parseInt(prox2.slice(0,2));
+
+                    if (prox1num > prox2num){
+                        return 1
+                    }
+                    else if (prox2num < prox1num){
+                        return -1
+                    }
+                }
+                else if (prox1bool && !prox2bool){ //if proxy 2 is number
+                    return 1
+                }
+                else if (!prox1bool && prox2bool){ //if prox 1 is number
+                    return -1
+                }
+                return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
+            });
+            break;
+        case BY_ALPHA_DEC:
+            fboProxy.sort(function(p1, p2){
+                var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
+                prox1bool = isNaN(parseInt(prox1.slice(0,2)))
+                prox2bool = isNaN(parseInt(prox2.slice(0,2)))
+
+                if (!prox1bool && !prox2bool){ // If both are numbers
+                    prox1num = parseInt(prox1.slice(0,2))
+                    prox2num = parseInt(prox2.slice(0,2))
+
+                    if (prox1num > prox2num){
+                        return 1
+                    }
+                    else if (prox2num < prox1num){
+                        return -1
+                    }
+                }
+                else if (prox1bool && !prox2bool){ //if proxy 2 is number
+                    return 1
+                }
+                else if (!prox1bool && prox2bool){ //if prox 1 is number
+                    return -1
+                }
+                return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
+            });
+            fboProxy.reverse();
+            break;
+        case BY_AGENCY_ASC:
+            fboProxy.sort(function(p1, p2){
+                prox1 = p1.fbo.agency
+                prox2 = p2.fbo.agency
+
+                if (prox1.localeCompare(prox2) == 0){
+                    var due1, due2
+                    var duenum1 = 0
+                    var duenum2 = 0
+                    if (p1.fbo.respDate){
+                        mm = p1.fbo.respDate.slice(0,2)
+                        dd = p1.fbo.respDate.slice(2,4)
+                        yy = p1.fbo.respDate.slice(4,6)
+                        due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+                        duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+                    }
+                    else{due1 = "No Date", duenum1 = 99999}
+                    if (p2.fbo.respDate){
+                        mm = p2.fbo.respDate.slice(0,2)
+                        dd = p2.fbo.respDate.slice(2,4)
+                        yy = p2.fbo.respDate.slice(4,6)
+                        due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+                        duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+                    }
+                    else{due2 = "No Date", duenum2 = 99999}
+                    return duenum1 - duenum2
+                }
+                else{
+                    return prox1.localeCompare(prox2)
+                }
+            });
+            break;
+        case BY_AGENCY_DEC:
+            fboProxy.sort(function(p1, p2){
+                prox1 = p1.fbo.agency
+                prox2 = p2.fbo.agency
+
+                if (prox1.localeCompare(prox2) == 0){
+                    var due1, due2
+                    var duenum1 = 0
+                    var duenum2 = 0
+                    if (p1.fbo.respDate){
+                        mm = p1.fbo.respDate.slice(0,2)
+                        dd = p1.fbo.respDate.slice(2,4)
+                        yy = p1.fbo.respDate.slice(4,6)
+                        due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+                        duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
+                    }
+                    else{due1 = "No Date", duenum1 = 99999}
+                    if (p2.fbo.respDate){
+                        mm = p2.fbo.respDate.slice(0,2)
+                        dd = p2.fbo.respDate.slice(2,4)
+                        yy = p2.fbo.respDate.slice(4,6)
+                        due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+                        duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
+                    }
+                    else{due2 = "No Date", duenum2 = 99999}
+                    return duenum2 - duenum1
+                }
+                else{
+                    return prox1.localeCompare(prox2)
+                }
+            });
+
+            fboProxy.reverse()
+            break;
+        default:
+            fboProxy.sort(function(proxy1, proxy2){
+                var p1num = 0
+                for (i = 0; i < proxy1.voteYes.length; i++) {
+                    var proxy = proxy1.voteYes[i]
+                    if(proxy.date) {
+                        if (proxy.date * 10 > p1num) {
+                            p1num = proxy.date * 10
+                        }
+                    }
+                }
+                for (i = 0; i < proxy1.voteNo.length; i++) {
+                    var proxy = proxy1.voteNo[i]
+                    if(proxy.date) {
+                        if (proxy.date * 10 > p1num) {
+                            p1num = proxy.date * 10
+                        }
+                    }
+                }
+                var p2num = 0
+                for (i = 0; i < proxy2.voteYes.length; i++) {
+                    var proxy = proxy2.voteYes[i]
+                    if(proxy.date) {
+                        if (proxy.date * 10 > p2num) {
+                            p2num = proxy.date * 10
+                        }
+                    }
+                }
+                for (i = 0; i < proxy2.voteNo.length; i++) {
+                    var proxy = proxy2.voteNo[i]
+                    if(proxy.date) {
+                        if (proxy.date * 10 > p2num) {
+                            p2num = proxy.date
+                        }
+                    }
+                }
+                if (p1num == 0 && ((proxy1.voteYes.length + proxy1.voteNo.length) > 0)) {
+                    p1num = proxy1.voteYes.length + proxy1.voteNo.length
+                } else if (p1num == 0 && proxy1.date) {
+                    p1num = proxy1.date
+                }
+                if (p2num == 0 && ((proxy2.voteYes.length + proxy2.voteNo.length) > 0)) {
+                    p2num = proxy2.voteYes.length + proxy2.voteNo.length
+                } else if (p2num == 0 && proxy2.date){
+                    p2num = proxy2.date
+                }
+                return p2num - p1num
+            });
+    }
+}
+
 function checkLoginEmail() {
   let username = document.getElementById("email").value.toLowerCase();
   if (username.length < 1 || !invalidEmail(username)) {
@@ -3880,498 +4372,6 @@ function renderSortOptions(){
       option.value = item.value;
       sortID.add(option)
     });
-  }
-
-function sortFboRenders(fboProxy, renderOption){
-    const BY_EARLIEST_DUE = 0; //Also most recent expired for pipeline
-    const BY_LATEST_DUE = 1; //Includes data with no deadline at top; Also oldest expired for pipeline
-    const BY_DATE_POSTED = 2; //Most recent date to oldest; Inactive
-    const BY_ALPHA_ASC = 3; //Alphanumeric Order (1 - Z)
-    const BY_ALPHA_DEC = 4; //Reverse Alphanumeric
-    const BY_AGENCY_ASC = 5; //Sorts by Agency (Second criteria is duedate)
-    const BY_AGENCY_DEC = 6; //Reverse agency (duedate still in order)
-    const DEFAULT = 99; //Unknown Criteria; Kept Just in case
-
-    // console.log("Current Option:", renderOption)
-    // renderOption = BY_EARLIEST_DUE
-    switch(renderOption){
-      case BY_EARLIEST_DUE: //By Earliest Due
-      fboProxy.sort(function(p1, p2){
-        //[mm,dd,yy]
-        let due1, due2;
-        let duenum1 = 0;
-        let duenum2 = 0;
-        if (p1.fbo.respDate){
-          mm = p1.fbo.respDate.slice(0,2);
-          dd = p1.fbo.respDate.slice(2,4);
-          yy = p1.fbo.respDate.slice(4,6);
-          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)];
-          duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
-        }
-        else{due1 = "No Date", duenum1 = 99999}
-        if (p2.fbo.respDate){
-          mm = p2.fbo.respDate.slice(0,2);
-          dd = p2.fbo.respDate.slice(2,4);
-          yy = p2.fbo.respDate.slice(4,6);
-          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)];
-          duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
-        }
-        else{due2 = "No Date", duenum2 = 99999}
-        // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
-        return duenum1 - duenum2
-      });
-      break;
-      case BY_LATEST_DUE:
-      fboProxy.sort(function(p1, p2){
-        //[mm,dd,yy]
-        let due1, due2;
-        let duenum1 = 0;
-        let duenum2 = 0;
-        if (p1.fbo.respDate){
-          mm = p1.fbo.respDate.slice(0,2);
-          dd = p1.fbo.respDate.slice(2,4);
-          yy = p1.fbo.respDate.slice(4,6);
-          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)];
-          duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
-        }
-        else{due1 = "No Date", duenum1 = 99999}
-        if (p2.fbo.respDate){
-          mm = p2.fbo.respDate.slice(0,2);
-          dd = p2.fbo.respDate.slice(2,4);
-          yy = p2.fbo.respDate.slice(4,6);
-          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)];
-          duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
-        }
-        else{due2 = "No Date", duenum2 = 99999}
-        // console.log("Proxy 1:", duenum1, "\nProxy 2:",duenum2,"Sum:", duenum1 - duenum2)
-        return duenum1 - duenum2
-      });
-      fboProxy.reverse()
-      break;
-      // case BY_DATE_POSTED: //On Hold until I figure out how to set this one up
-      case BY_ALPHA_ASC:
-      fboProxy.sort(function(p1, p2){
-
-        let prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase();
-        prox1bool = isNaN(parseInt(prox1.slice(0,2)));
-        prox2bool = isNaN(parseInt(prox2.slice(0,2)));
-
-        if (!prox1bool && !prox2bool){ // If both are numbers
-          prox1num = parseInt(prox1.slice(0,2));
-          prox2num = parseInt(prox2.slice(0,2));
-
-          if (prox1num > prox2num){
-            return 1
-          }
-          else if (prox2num < prox1num){
-            return -1
-          }
-        }
-        else if (prox1bool && !prox2bool){ //if proxy 2 is number
-          return 1
-        }
-        else if (!prox1bool && prox2bool){ //if prox 1 is number
-          return -1
-        }
-        return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
-      });
-      break;
-      case BY_ALPHA_DEC:
-      fboProxy.sort(function(p1, p2){
-        var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
-        prox1bool = isNaN(parseInt(prox1.slice(0,2)))
-        prox2bool = isNaN(parseInt(prox2.slice(0,2)))
-
-        if (!prox1bool && !prox2bool){ // If both are numbers
-          prox1num = parseInt(prox1.slice(0,2))
-          prox2num = parseInt(prox2.slice(0,2))
-
-          if (prox1num > prox2num){
-            return 1
-          }
-          else if (prox2num < prox1num){
-            return -1
-          }
-        }
-        else if (prox1bool && !prox2bool){ //if proxy 2 is number
-          return 1
-        }
-        else if (!prox1bool && prox2bool){ //if prox 1 is number
-          return -1
-        }
-        return prox1.localeCompare(prox2) //If neither are numbers or first 2 numbers are identical
-      });
-      fboProxy.reverse();
-      break;
-      case BY_AGENCY_ASC:
-      fboProxy.sort(function(p1, p2){
-        prox1 = p1.fbo.agency
-        prox2 = p2.fbo.agency
-
-        if (prox1.localeCompare(prox2) == 0){
-          var due1, due2
-          var duenum1 = 0
-          var duenum2 = 0
-          if (p1.fbo.respDate){
-            mm = p1.fbo.respDate.slice(0,2)
-            dd = p1.fbo.respDate.slice(2,4)
-            yy = p1.fbo.respDate.slice(4,6)
-            due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-            duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
-          }
-          else{due1 = "No Date", duenum1 = 99999}
-          if (p2.fbo.respDate){
-            mm = p2.fbo.respDate.slice(0,2)
-            dd = p2.fbo.respDate.slice(2,4)
-            yy = p2.fbo.respDate.slice(4,6)
-            due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-            duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
-          }
-          else{due2 = "No Date", duenum2 = 99999}
-          return duenum1 - duenum2
-        }
-        else{
-          return prox1.localeCompare(prox2)
-        }
-      });
-      break;
-      case BY_AGENCY_DEC:
-      fboProxy.sort(function(p1, p2){
-        prox1 = p1.fbo.agency
-        prox2 = p2.fbo.agency
-
-        if (prox1.localeCompare(prox2) == 0){
-          var due1, due2
-          var duenum1 = 0
-          var duenum2 = 0
-          if (p1.fbo.respDate){
-            mm = p1.fbo.respDate.slice(0,2)
-            dd = p1.fbo.respDate.slice(2,4)
-            yy = p1.fbo.respDate.slice(4,6)
-            due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-            duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
-          }
-          else{due1 = "No Date", duenum1 = 99999}
-          if (p2.fbo.respDate){
-            mm = p2.fbo.respDate.slice(0,2)
-            dd = p2.fbo.respDate.slice(2,4)
-            yy = p2.fbo.respDate.slice(4,6)
-            due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
-            duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
-          }
-          else{due2 = "No Date", duenum2 = 99999}
-          return duenum2 - duenum1
-        }
-        else{
-          return prox1.localeCompare(prox2)
-        }
-      });
-
-      fboProxy.reverse()
-      break;
-      default:
-      fboProxy.sort(function(proxy1, proxy2){
-        var p1num = 0
-        for (i = 0; i < proxy1.voteYes.length; i++) {
-          var proxy = proxy1.voteYes[i]
-          if(proxy.date) {
-            if (proxy.date * 10 > p1num) {
-              p1num = proxy.date * 10
-            }
-          }
-        }
-        for (i = 0; i < proxy1.voteNo.length; i++) {
-          var proxy = proxy1.voteNo[i]
-          if(proxy.date) {
-            if (proxy.date * 10 > p1num) {
-              p1num = proxy.date * 10
-            }
-          }
-        }
-        var p2num = 0
-        for (i = 0; i < proxy2.voteYes.length; i++) {
-          var proxy = proxy2.voteYes[i]
-          if(proxy.date) {
-            if (proxy.date * 10 > p2num) {
-              p2num = proxy.date * 10
-            }
-          }
-        }
-        for (i = 0; i < proxy2.voteNo.length; i++) {
-          var proxy = proxy2.voteNo[i]
-          if(proxy.date) {
-            if (proxy.date * 10 > p2num) {
-              p2num = proxy.date
-            }
-          }
-        }
-        if (p1num == 0 && ((proxy1.voteYes.length + proxy1.voteNo.length) > 0)) {
-          p1num = proxy1.voteYes.length + proxy1.voteNo.length
-        } else if (p1num == 0 && proxy1.date) {
-          p1num = proxy1.date
-        }
-        if (p2num == 0 && ((proxy2.voteYes.length + proxy2.voteNo.length) > 0)) {
-          p2num = proxy2.voteYes.length + proxy2.voteNo.length
-        } else if (p2num == 0 && proxy2.date){
-          p2num = proxy2.date
-        }
-        return p2num - p1num
-      });
-    }
-  }
-
-function renderFbos() {
-    var fboHtml = ''
-    var pipelineHtml = ''
-    fboVote = []
-    // console.log(company.fboProxies[0])
-    var updateNeeded
-    var toDeleteIds = []
-    var logCount = 0
-    var noProxies = 0
-    function parseProxy(proxy, index) {
-      var dueDate = ''
-      var due = '<span style="font-size: 10px">No Due Date</span>'
-      // console.log(proxy.fbo)
-      if (!proxy.fbo) {
-        noProxies++
-      } else {
-        if (proxy.fbo.respDate) {
-          var todayarray = [], duearray = []
-          var today = getToday()
-          today = today.slice(5,7)+"/"+today.slice(8,10)+"/"+today.slice(2,4)
-          todayarray = [today.slice(0,2), today.slice(3,5), today.slice(6,8)]
-
-          due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-          duearray = [due.slice(0,2), due.slice(3,5), due.slice(6,8)]
-
-          var date2 = new Date(today);
-          var date1 = new Date(due);
-          var expired = false
-
-          // if (duearray[2] < todayarray[2]) {
-          //   expired = true
-          // }
-          // else if (duearray[2] > todayarray[2]){
-          //   expired = false
-          // }
-          // else{
-          //   if(duearray[0] < todayarray[0]){
-          //     expired = true
-          //   }
-          //   else if (duearray[0] > todayarray[0]){
-          //     expired = false
-          //   }
-          //   else{
-          //     if (duearray[1] < todayarray[1]){
-          //       expired = true
-          //     }
-          //     else{
-          //       expired = false
-          //     }
-          //   }
-          // }
-
-          var timeDiff = (date1.getTime() - date2.getTime());
-          var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
-          if (timeToDue >= 365) {
-            dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 365).toString()+" Years</p>"
-          } else if (timeToDue >= 60) {
-            dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
-          } else if (timeToDue >= 14) {
-            dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
-          } else {
-            dueDate = "<p style='font-weight: bold;'>Due: "+timeToDue+" Days</p>"
-          }
-          // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
-        } else {
-          dueDate = "<p style='font-weight: bold;'>No Due Date</p>"
-        }
-        // var voteHtml = ''
-        // var comments = ''
-        // var voteScore = proxy.voteYes.length - proxy.voteNo.length
-        // if (voteScore < 0) {
-        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: red;">'+voteScore+'</p></div>'
-        // } else if (voteScore > 0) {
-        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
-        // } else if (voteScore == 0 && ((proxy.voteYes.length + proxy.voteNo.length) > 0)) {
-        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points" onclick="showVotes('+i+')"><p style="color: black;">+'+voteScore+'</p></div>'
-        // } else {
-        //   voteHtml = '<div id="vote-circle-'+i+'" class="fbo-item-points inactive" onclick="showVotes('+i+')"><p style="color: green;">+'+voteScore+'</p></div>'
-        // }
-        // voteHtml = voteHtml + '<div id="vote-circle-dropdown-'+i+'" class="fbo-item-points-dropdown inactive">'
-        // for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
-        //   var vote = proxy.voteYes[i2]
-        //   var voteString = ''
-        //   if (vote.comment) {
-        //     voteString = ' - "'+vote.comment+'"'
-        //   }
-        //   comments = comments + '<p class="comment yes-comment"><img class="comment-icon" src="./img/thumbsup.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
-        //   voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: green;">' + proxy.voteYes[i2].name + ': Yes</div>'
-        // }
-        // for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
-        //   var vote = proxy.voteNo[i2]
-        //   var voteString = ''
-        //   if (vote.comment) {
-        //     voteString = ' - "'+vote.comment+'"'
-        //   }
-        //   comments = comments + '<p class="comment no-comment"><img class="comment-icon" src="./img/thumbsdown.png" alt=""><span style="font-weight: bold;">' + vote.name + '</span>' + voteString + '</p>'
-        //   voteHtml = voteHtml + '<div class="fbo-item-points-dropdown-item" style="color: red;">' + proxy.voteNo[i2].name + '</div>'
-        // }
-        // if (comments.length < 1) {
-        //   comments = '<p style="color: gray;">Comments</p>'
-        // }
-        // voteHtml = voteHtml + '</div>'
-        var vote = null
-        for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
-          if (proxy.voteYes[i2].id == currentUser._id) {
-            vote = 2
-            break;
-          }
-        }
-        if (vote !== 2) {
-          for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
-            if (proxy.voteNo[i2].id == currentUser._id) {
-              vote = 1
-              break;
-            }
-          }
-        }
-        var imgString = ''
-        if (!proxy.fbo.agency) {
-          proxy.fbo.agency = 'No Agency Provided'
-        }
-        for (i2 = 0; i2 < agencyLogos.length; i2++) {
-          if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
-            imgString = 'img/agencies/'+agencyLogos[i2].img
-            break;
-          }
-        }
-        var originHtml = ''
-        if (proxy.originSearch) {
-          originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
-        }
-        var commentsCount = proxy.voteYes.length + proxy.voteNo.length
-        var votesYesCount = proxy.voteYes.length
-        var votesNoCount = proxy.voteNo.length
-        // if (searchFilterName && activeTab == 2 && proxy.originSearch !== searchFilterName) {
-        //   expired = true
-        // }
-        if (proxy.voteYes.length < 1 && vote !== 1) {
-          // if (timeToDue < -14) {
-          //   expired = true
-          //   updateNeeded = true
-          // }
-          if (!expired) {
-            fboHtml = fboHtml + '<div class="fbo-item-wrapper">'+
-            '<div class="fbo-item-wrapper-inner">'+
-            '<div class="fbo-item">'+
-            // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
-            '<div class="fbo-item-avatar" onclick="goToFbo(' + index + ', 0)">'+
-            '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
-            '</div>'+
-            '<div class="fbo-item-body">'+
-            '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 0)">'+
-            '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-            '</div>'+
-            '<div class="fbo-item-icons">'+
-            '<div class="fbo-item-icon-item" onclick="goToFbo(' + index + ', 0)"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;" onclick="vote('+index+', true)"><img class="fbo-item-icon-img fbo-item-icon-img-vote" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
-            '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;" onclick="vote('+index+', false)"><img class="fbo-item-icon-img fbo-item-icon-img-vote" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-            '<div class="fbo-item-icon-date" onclick="goToFbo(' + index + ', 0)"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
-            '</div>'+
-            '</div>'+
-            '</div>'+
-            '</div>'+
-            '</div>'
-          }
-        } else if (proxy.voteYes.length > 0 && vote !== 1) {
-          // if (timeToDue < -60) {
-          //   expired = true
-          //   updateNeeded = true
-          // }
-          pipelineHtml = pipelineHtml +
-          '<div class="fbo-item-wrapper">'+
-          '<div class="fbo-item-wrapper-inner">'+
-          '<div class="fbo-item">'+
-          // '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'+
-          '<div class="fbo-item-avatar" onclick="goToFbo(' + index + ', 1)">'+
-          '<img class="fbo-item-avatar-img" src="'+imgString+'" alt="">'+
-          '</div>'+
-          '<div class="fbo-item-body">'+
-          '<div class="fbo-item-title" onclick="goToFbo(' + index + ', 1)">'+
-          '<p class="fbo-item-title-text">'+proxy.fbo.subject+'</p>'+
-          '</div>'+
-          '<div class="fbo-item-icons">'+
-          '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 40px;"><img class="fbo-item-icon-img" src="./img/comment.png" alt="">'+commentsCount+'</div></div>'+
-          '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsup.png" alt="">'+votesYesCount+'</div></div>'+
-          '<div class="fbo-item-icon-item"><div class="fbo-item-icon-item-inner" style="width: 36px;"><img class="fbo-item-icon-img" src="./img/thumbsdown.png" alt="">'+votesNoCount+'</div></div>'+
-          '<div class="fbo-item-icon-date"><div class="fbo-item-icon-item-inner" style="width: 80px;"><img class="fbo-item-icon-img" src="./img/calendar.png" alt="">'+due+'</div></div>'+
-          '</div>'+
-          '</div>'+
-          '</div>'+
-          '</div>'+
-          '</div>'
-        }
-        // if (expired) {
-        //   toDeleteIds.push(company.fboProxies[i]._id)
-        //   company.fboProxies.splice(i,1)
-        //   i = i - 1
-        // }
-      }
-    }
-    // sortFboRenders(fbosIn, 0)
-    for (var i = 0; i < fbosIn.length; i++) {
-      if (fbosIn[i].voteYes.length > 0) {
-        fboPipeline.push(fbosIn[i])
-        fbosIn.splice(i,1)
-        i = i - 1
-      } else {
-        parseProxy(fbosIn[i], i)
-      }
-    }
-    // sortFboRenders(fboPipeline, 1)
-    console.log(fboPipeline)
-    for (var i = 0; i < fboPipeline.length; i++) {
-      parseProxy(fboPipeline[i], i)
-    }
-    console.log(noProxies + ' busted proxies')
-    var fboHTMLContent = document.getElementById("fbo-items")
-    var pipelineHTMLContent = document.getElementById("pipeline-items")
-    if (fbosIn.length < 1) {
-      fboHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
-      '<div class="fbo-item-wrapper-inner">'+
-      '<div class="fbo-item">'+
-      '<div class="fbo-item-body">'+
-      '<div class="fbo-item-title">'+
-      '<p class="fbo-item-title-text">No Matching FBOs</p>'+
-      '</div>'+
-      '</div>'+
-      '</div>'+
-      '</div>'+
-      '</div>'
-    } else {
-      fboHTMLContent.innerHTML = fboHtml;
-    }
-    if (fboPipeline.length < 1) {
-      pipelineHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
-      '<div class="fbo-item-wrapper-inner">'+
-      '<div class="fbo-item">'+
-      '<div class="fbo-item-body">'+
-      '<div class="fbo-item-title">'+
-      '<p class="fbo-item-title-text">No Items In Pipeline</p>'+
-      '</div>'+
-      '</div>'+
-      '</div>'+
-      '</div>'+
-      '</div>'
-    } else {
-      pipelineHTMLContent.innerHTML = pipelineHtml;
-    }
-    // for (i = 0; i < company.fboProxies.length; i++) {
-    //   checkVote(company.fboProxies[i], i)
-    // }
-
   }
 
 function addPoints(points) {
