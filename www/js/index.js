@@ -608,10 +608,11 @@ function logOut() {
 }
 
 function getTheData() {
+    let userId;
     if (localStorage.getItem('uid')) {
-        let id = localStorage.getItem('uid')
+        userId = localStorage.getItem('uid')
     } else if (currentUser) {
-        let id = currentUser._id
+        userId = currentUser._id
     }
     document.getElementById("loading-details").innerHTML = 'Getting full user data...';
     let xHttpGetTheDataUserInfo = new XMLHttpRequest();
@@ -839,7 +840,7 @@ function getTheData() {
             }
         }
     };
-    xHttpGetTheDataUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
+    xHttpGetTheDataUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + userId, true);
     xHttpGetTheDataUserInfo.send();
 }
 
