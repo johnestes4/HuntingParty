@@ -432,11 +432,11 @@ let app = {
         }
         this.bindEvents();
         if (typeof Keen === 'undefined') {
-            console.log('Analytics Disabled')
+            console.log('Analytics Disabled');
             analyticsOn = false
         } else {
-            console.log('Analytics Enabled')
-            analyticsOn = true
+            console.log('Analytics Enabled');
+            analyticsOn = true;
             this.client = new Keen({
                 projectId: '5c5201c7c9e77c0001edb8cc',
                 readKey: '5E68E6FCDDF8227E7F3F47A7F53FB98C17C9721678EB55F1ED00B94C29AF600F272D14F97C79EB5FDD837E4068888807AE38FD80420239CEB95ABC52555AA5CDCEAA22FC07B8268D9D6E02FFD7A9295D269ACAEE475A3A4DDA587B0836BEAD01',
@@ -510,12 +510,12 @@ let app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        let parentElement = document.getElementById(id);
         if (!parentElement) {
             console.log("BUG: " + id + " isn't working with received event, i don't know why")
         } else {
-            var listeningElement = parentElement.querySelector('.listening');
-            var receivedElement = parentElement.querySelector('.received');
+            let listeningElement = parentElement.querySelector('.listening');
+            let receivedElement = parentElement.querySelector('.received');
 
             listeningElement.setAttribute('style', 'display:none;');
             receivedElement.setAttribute('style', 'display:block;');
@@ -1129,33 +1129,33 @@ function switchTab(num) {
 }
 
 function renderFbos() {
-    var fboHtml = ''
-    var pipelineHtml = ''
-    fboVote = []
+    let fboHtml = '';
+    let pipelineHtml = '';
+    fboVote = [];
     // console.log(company.fboProxies[0])
-    var updateNeeded
-    var toDeleteIds = []
-    var logCount = 0
-    var noProxies = 0
+    let updateNeeded;
+    let toDeleteIds = [];
+    let logCount = 0;
+    let noProxies = 0;
     function parseProxy(proxy, index) {
-        var dueDate = ''
-        var due = '<span style="font-size: 10px">No Due Date</span>'
+        let dueDate = '';
+        let due = '<span style="font-size: 10px">No Due Date</span>';
         // console.log(proxy.fbo)
         if (!proxy.fbo) {
             noProxies++
         } else {
             if (proxy.fbo.respDate) {
-                var todayarray = [], duearray = []
-                var today = getToday()
-                today = today.slice(5,7)+"/"+today.slice(8,10)+"/"+today.slice(2,4)
-                todayarray = [today.slice(0,2), today.slice(3,5), today.slice(6,8)]
+                let todayarray = [], duearray = [];
+                let today = getToday();
+                today = today.slice(5,7)+"/"+today.slice(8,10)+"/"+today.slice(2,4);
+                todayarray = [today.slice(0,2), today.slice(3,5), today.slice(6,8)];
 
-                due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-                duearray = [due.slice(0,2), due.slice(3,5), due.slice(6,8)]
+                due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6);
+                duearray = [due.slice(0,2), due.slice(3,5), due.slice(6,8)];
 
-                var date2 = new Date(today);
-                var date1 = new Date(due);
-                var expired = false
+                let date2 = new Date(today);
+                let date1 = new Date(due);
+                let expired = false;
 
                 // if (duearray[2] < todayarray[2]) {
                 //   expired = true
@@ -1180,8 +1180,8 @@ function renderFbos() {
                 //   }
                 // }
 
-                var timeDiff = (date1.getTime() - date2.getTime());
-                var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                let timeDiff = (date1.getTime() - date2.getTime());
+                let timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
                 if (timeToDue >= 365) {
                     dueDate = "<p style='font-weight: bold;'>Due: "+Math.round(timeToDue / 365).toString()+" Years</p>"
                 } else if (timeToDue >= 60) {
@@ -1230,38 +1230,38 @@ function renderFbos() {
             //   comments = '<p style="color: gray;">Comments</p>'
             // }
             // voteHtml = voteHtml + '</div>'
-            var vote = null
+            let vote = null;
             for (i2 = 0; i2 < proxy.voteYes.length; i2++) {
-                if (proxy.voteYes[i2].id == currentUser._id) {
-                    vote = 2
+                if (proxy.voteYes[i2].id === currentUser._id) {
+                    vote = 2;
                     break;
                 }
             }
             if (vote !== 2) {
                 for (i2 = 0; i2 < proxy.voteNo.length; i2++) {
-                    if (proxy.voteNo[i2].id == currentUser._id) {
-                        vote = 1
+                    if (proxy.voteNo[i2].id === currentUser._id) {
+                        vote = 1;
                         break;
                     }
                 }
             }
-            var imgString = ''
+            let imgString = '';
             if (!proxy.fbo.agency) {
                 proxy.fbo.agency = 'No Agency Provided'
             }
-            for (i2 = 0; i2 < agencyLogos.length; i2++) {
-                if (proxy.fbo.agency.toLowerCase() == agencyLogos[i2].agency.toLowerCase()) {
-                    imgString = 'img/agencies/'+agencyLogos[i2].img
+            for (let i2 = 0; i2 < agencyLogos.length; i2++) {
+                if (proxy.fbo.agency.toLowerCase() === agencyLogos[i2].agency.toLowerCase()) {
+                    imgString = 'img/agencies/'+agencyLogos[i2].img;
                     break;
                 }
             }
-            var originHtml = ''
+            let originHtml = '';
             if (proxy.originSearch) {
                 originHtml = '<div class="fbo-item-origin">'+proxy.originSearch+'</div>'
             }
-            var commentsCount = proxy.voteYes.length + proxy.voteNo.length
-            var votesYesCount = proxy.voteYes.length
-            var votesNoCount = proxy.voteNo.length
+            let commentsCount = proxy.voteYes.length + proxy.voteNo.length;
+            let votesYesCount = proxy.voteYes.length;
+            let votesNoCount = proxy.voteNo.length;
             // if (searchFilterName && activeTab == 2 && proxy.originSearch !== searchFilterName) {
             //   expired = true
             // }
@@ -1329,23 +1329,23 @@ function renderFbos() {
         }
     }
     // sortFboRenders(fbosIn, 0)
-    for (var i = 0; i < fbosIn.length; i++) {
+    for (let i = 0; i < fbosIn.length; i++) {
         if (fbosIn[i].voteYes.length > 0) {
-            fboPipeline.push(fbosIn[i])
-            fbosIn.splice(i,1)
+            fboPipeline.push(fbosIn[i]);
+            fbosIn.splice(i,1);
             i = i - 1
         } else {
             parseProxy(fbosIn[i], i)
         }
     }
     // sortFboRenders(fboPipeline, 1)
-    console.log(fboPipeline)
-    for (var i = 0; i < fboPipeline.length; i++) {
+    console.log(fboPipeline);
+    for (let i = 0; i < fboPipeline.length; i++) {
         parseProxy(fboPipeline[i], i)
     }
-    console.log(noProxies + ' busted proxies')
-    var fboHTMLContent = document.getElementById("fbo-items")
-    var pipelineHTMLContent = document.getElementById("pipeline-items")
+    console.log(noProxies + ' busted proxies');
+    let fboHTMLContent = document.getElementById("fbo-items");
+    let pipelineHTMLContent = document.getElementById("pipeline-items");
     if (fbosIn.length < 1) {
         fboHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
             '<div class="fbo-item-wrapper-inner">'+
