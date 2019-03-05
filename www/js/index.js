@@ -807,7 +807,7 @@ function getTheData() {
                                                 startIndex: 0,
                                                 which: 2,
                                                 searches: yourSearches
-                                            }
+                                            };
                                             xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
                                             xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
                                             xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
@@ -815,7 +815,7 @@ function getTheData() {
                                             let proxyRequest = {
                                                 startIndex: 0,
                                                 which: 2
-                                            }
+                                            };
                                             xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
                                             xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
                                             xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
