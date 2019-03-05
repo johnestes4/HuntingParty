@@ -504,7 +504,7 @@ let app = {
             window.device = { platform: 'Browser' };
         }
 
-        window.open = cordova.InAppBrowser.open
+        window.open = cordova.InAppBrowser.open;
         handleExternalURLs();
     },
 
@@ -609,9 +609,9 @@ function logOut() {
 
 function getTheData() {
     if (localStorage.getItem('uid')) {
-        var id = localStorage.getItem('uid')
+        let id = localStorage.getItem('uid')
     } else if (currentUser) {
-        var id = currentUser._id
+        let id = currentUser._id
     }
     document.getElementById("loading-details").innerHTML = 'Getting full user data...';
     let xHttpGetTheDataUserInfo = new XMLHttpRequest();
@@ -659,11 +659,11 @@ function getTheData() {
                                         });
                                         if (device !== undefined) {
                                             if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
-                                                doTheUpdateAnyway = true
+                                                doTheUpdateAnyway = true;
                                                 huntingPartyData.users[0].deviceId = device.uuid
                                             }
                                         }
-                                        var xHttpHuntingPartyDataAddNew = new XMLHttpRequest();
+                                        let xHttpHuntingPartyDataAddNew = new XMLHttpRequest();
                                         xHttpHuntingPartyDataAddNew.onload = function() {
                                             if (xHttpHuntingPartyDataAddNew.readyState === 4 && xHttpHuntingPartyDataAddNew.status === 200) {
                                                 document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...';
@@ -759,15 +759,15 @@ function getTheData() {
                                                         }
                                                         let xHttpHuntingPartyDataPut = new XMLHttpRequest();
                                                         xHttpHuntingPartyDataPut.onreadystatechange = function() {
-                                                            if (xHttpHuntingPartyDataPut.readyState == 4 && xHttpHuntingPartyDataPut.status == 200) {
+                                                            if (xHttpHuntingPartyDataPut.readyState === 4 && xHttpHuntingPartyDataPut.status === 200) {
                                                                 huntingPartyData = JSON.parse(xHttpHuntingPartyDataPut.responseText);
                                                                 if (tosRead < 1) {
                                                                     document.getElementById("loading").classList.add('inactive');
                                                                     document.getElementById("tos-popup").classList.remove('inactive');
                                                                     // document.getElementById("login-register").classList.remove('inactive');
                                                                 } else {
-                                                                    console.log('updated HPD')
-                                                                    document.getElementById("loading-details").innerHTML = 'Done'
+                                                                    console.log('updated HPD');
+                                                                    document.getElementById("loading-details").innerHTML = 'Done';
                                                                     startMainApp()
                                                                 }
                                                             }
@@ -802,7 +802,7 @@ function getTheData() {
                                             yourSearches = []
                                         }
                                         if (yourSearches.length > 0) {
-                                            var proxyRequest = {
+                                            let proxyRequest = {
                                                 startIndex: 0,
                                                 which: 2,
                                                 searches: yourSearches
@@ -811,7 +811,7 @@ function getTheData() {
                                             xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
                                             xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
                                         } else {
-                                            var proxyRequest = {
+                                            let proxyRequest = {
                                                 startIndex: 0,
                                                 which: 2
                                             }
@@ -825,7 +825,7 @@ function getTheData() {
                             xHttpHuntingPartyDataCompany.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
                             xHttpHuntingPartyDataCompany.send();
                         }
-                    }
+                    };
                     xHttpGetSearchTerms.open("GET", apiUrl+"/fbo/getsearchterms/", true);
                     xHttpGetSearchTerms.send();
                 }
@@ -844,18 +844,18 @@ function getTheData() {
 }
 
 function startMainApp() {
-    console.log(fbosIn)
-    console.log(fboPipeline)
+    console.log(fbosIn);
+    console.log(fboPipeline);
     if (fbosIn.length + fboPipeline.length > 0) {
         // setActiveFbo(fboIndex)
-        generateSearchHTML(1)
-        renderSearch()
-        generateOptions()
-        sortFboRenders(fbosIn, 0)
-        renderFbos()
-        renderNews()
-        var promiseFinished = true
-        console.log('asd')
+        generateSearchHTML(1);
+        renderSearch();
+        generateOptions();
+        sortFboRenders(fbosIn, 0);
+        renderFbos();
+        renderNews();
+        var promiseFinished = true;
+        console.log('asd');
         document.getElementById("tos-popup").classList.add('inactive');
         document.getElementById("loading").classList.add('inactive');
         document.getElementById("main-view").classList.remove('inactive');
@@ -864,11 +864,11 @@ function startMainApp() {
         document.getElementById("search-view").classList.add('inactive');
         document.getElementById("login-register").classList.add('inactive');
     } else {
-        generateSearchHTML(1)
-        renderSearch()
-        generateOptions()
-        // renderFbos()
-        renderNews()
+        generateSearchHTML(1);
+        renderSearch();
+        generateOptions();
+        // renderFbos();
+        renderNews();
         document.getElementById("loading").classList.add('inactive');
         document.getElementById("tos-popup").classList.add('inactive');
         document.getElementById("main-view").classList.remove('inactive');
@@ -885,7 +885,7 @@ function startMainApp() {
     }
     // showAd()
     // TAB SWITCH HERE
-    switchTab(2)
+    switchTab(2);
     openSearchItems(0)
     // openSearchItems(3)
     // goToFbo(0,0);
