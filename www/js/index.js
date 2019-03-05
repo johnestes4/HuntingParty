@@ -540,23 +540,6 @@ function logOut() {
   location.reload();
 }
 
-function hello() {
-  document.getElementById("text").innerHTML = "CLICKED";
-  console.log('hello')
-  navigator.notification.alert(
-    'You got a notification!',  // message
-    null,         // callback
-    'Congratulations',            // title
-    'I did it'                  // buttonName
-  );
-}
-
-function openProfileDropdown() {
-  // document.getElementById("profile-sidebar").classList.add('slide-to-right');
-  // document.getElementById("sidebar").classList.remove('inactive')
-  // profileDropdownOpen = true
-}
-
 function checkChecked() {
   var numberChecked = 0
   var checkedName = ''
@@ -3814,11 +3797,6 @@ function sortFboRenders(fboProxy, renderOption){
       });
     }
   }
-
-//Sorts thru all existing data and organizes them
-function parseFbos(){
-
-}
 
 function renderFbos() {
     var fboHtml = ''
