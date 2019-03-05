@@ -2450,23 +2450,23 @@ function openTutorials() {
 }
 
 function calculateSearch(elem) {
-  var anyFalse = false
+  let anyFalse = false;
   if (elem.classList.contains('checkbox-type')) {
     if (elem.value == searchTerms.type[0].name) {
-      for (i = 0; i < searchTerms.type.length; i++) {
+      for (let i = 0; i < searchTerms.type.length; i++) {
         searchTerms.type[i].value = elem.checked
       }
-      var a = document.getElementsByClassName('checkbox-type')
+      let a = document.getElementsByClassName('checkbox-type');
       for (i2 = 0; i2 < a.length; i2++) {
         a[i2].checked = elem.checked
       }
     } else {
       for (i = 0; i < searchTerms.type.length; i++) {
         if (searchTerms.type[i].name == elem.value) {
-          searchTerms.type[i].value = elem.checked
+          searchTerms.type[i].value = elem.checked;
           if (!elem.checked) {
-            searchTerms.type[0].value = false
-            var a = document.getElementsByClassName('checkbox-type')
+            searchTerms.type[0].value = false;
+            let a = document.getElementsByClassName('checkbox-type');
             a[0].checked = false
           }
           break;
@@ -2474,21 +2474,21 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-duedate')) {
-    if (elem.value == searchTerms.dueDate[0].name) {
-      for (i = 0; i < searchTerms.dueDate.length; i++) {
+    if (elem.value === searchTerms.dueDate[0].name) {
+      for (let i = 0; i < searchTerms.dueDate.length; i++) {
         searchTerms.dueDate[i].value = elem.checked
       }
-      var a = document.getElementsByClassName('checkbox-duedate')
+      let a = document.getElementsByClassName('checkbox-duedate');
       for (i2 = 0; i2 < a.length; i2++) {
         a[i2].checked = elem.checked
       }
     } else {
-      for (i = 0; i < searchTerms.dueDate.length; i++) {
-        if (searchTerms.dueDate[i].name == elem.value) {
+      for (let i = 0; i < searchTerms.dueDate.length; i++) {
+        if (searchTerms.dueDate[i].name === elem.value) {
           searchTerms.dueDate[i].value = elem.checked
           if (!elem.checked) {
-            searchTerms.dueDate[0].value = false
-            var a = document.getElementsByClassName('checkbox-duedate')
+            searchTerms.dueDate[0].value = false;
+            let a = document.getElementsByClassName('checkbox-duedate');
             a[0].checked = false
           }
           break;
@@ -2496,28 +2496,28 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-naics')) {
-    if (elem.value == searchTerms.naics[0].code) {
-      for (i = 0; i < searchTerms.naics.length; i++) {
+    if (elem.value === searchTerms.naics[0].code) {
+      for (let i = 0; i < searchTerms.naics.length; i++) {
         searchTerms.naics[i].value = elem.checked
       }
-      var a = document.getElementsByClassName('checkbox-naics')
-      for (i2 = 0; i2 < a.length; i2++) {
+      let a = document.getElementsByClassName('checkbox-naics');
+      for (let i2 = 0; i2 < a.length; i2++) {
         a[i2].checked = elem.checked
       }
     } else {
-      for (i = 0; i < searchTerms.naics.length; i++) {
-        if (searchTerms.naics[i].code == elem.value) {
-          searchTerms.naics[i].value = elem.checked
+      for (let i = 0; i < searchTerms.naics.length; i++) {
+        if (searchTerms.naics[i].code === elem.value) {
+          searchTerms.naics[i].value = elem.checked;
           if (!elem.checked) {
-            searchTerms.naics[0].value = false
-            var a = document.getElementsByClassName('checkbox-naics')
+            searchTerms.naics[0].value = false;
+            let a = document.getElementsByClassName('checkbox-naics');
             a[0].checked = false
           }
           break;
-        } else if (elem.value.slice(0,searchTerms.naics[i].code.length) == searchTerms.naics[i].code) {
+        } else if (elem.value.slice(0,searchTerms.naics[i].code.length) === searchTerms.naics[i].code) {
           if (searchTerms.naics[i].subcategories) {
             // LEVEL 1 OF SUBCATEGORIES
-            for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+            for (let i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
 
             }
             //
@@ -2526,11 +2526,11 @@ function calculateSearch(elem) {
       }
     }
   } else if (elem.classList.contains('checkbox-subnaics')) {
-    for (i = 0; i < searchTerms.naics.length; i++) {
+    for (let i = 0; i < searchTerms.naics.length; i++) {
       if (searchTerms.naics[i].subcategories) {
-        for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-          if (searchTerms.naics[i].subcategories[i2].code == elem.value) {
-            searchTerms.naics[i].subcategories[i2].value = elem.checked
+        for (let i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+          if (searchTerms.naics[i].subcategories[i2].code === elem.value) {
+            searchTerms.naics[i].subcategories[i2].value = elem.checked;
             if (!elem.checked) {
               if (searchItemSuggestions.naics.it.includes(elem.value)) {
                 document.getElementById("search-item-suggestion-0").checked = false
@@ -2539,16 +2539,16 @@ function calculateSearch(elem) {
                 document.getElementById("search-item-suggestion-1").checked = false
               }
               searchTerms.naics[0].value = false
-              var a = document.getElementsByClassName('checkbox-naics')
+              let a = document.getElementsByClassName('checkbox-naics');
               a[0].checked = false
             }
             break;
-          } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].code.length) == searchTerms.naics[i].subcategories[i2].code) {
+          } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].code.length) === searchTerms.naics[i].subcategories[i2].code) {
             if (searchTerms.naics[i].subcategories[i2].subcategories) {
               // LEVEL 2 OF SUBCATEGORIES
               for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code == elem.value) {
-                  searchTerms.naics[i].subcategories[i2].subcategories[i3].value = elem.checked
+                if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code === elem.value) {
+                  searchTerms.naics[i].subcategories[i2].subcategories[i3].value = elem.checked;
                   if (!elem.checked) {
                     if (searchItemSuggestions.naics.it.includes(elem.value)) {
                       document.getElementById("search-item-suggestion-0").checked = false
@@ -2557,15 +2557,15 @@ function calculateSearch(elem) {
                       document.getElementById("search-item-suggestion-1").checked = false
                     }
                     searchTerms.naics[0].value = false
-                    var a = document.getElementsByClassName('checkbox-naics')
+                    let a = document.getElementsByClassName('checkbox-naics');
                     a[0].checked = false
                   }
                   break;
-                } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].code) {
+                } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].code.length) === searchTerms.naics[i].subcategories[i2].subcategories[i3].code) {
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
                     // LEVEL 3 OF SUBCATEGORIES
-                    for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code == elem.value) {
+                    for (let i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code === elem.value) {
                         searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].value = elem.checked
                         if (!elem.checked) {
                           if (searchItemSuggestions.naics.it.includes(elem.value)) {
@@ -2575,16 +2575,16 @@ function calculateSearch(elem) {
                             document.getElementById("search-item-suggestion-1").checked = false
                           }
                           searchTerms.naics[0].value = false
-                          var a = document.getElementsByClassName('checkbox-naics')
+                          let a = document.getElementsByClassName('checkbox-naics');
                           a[0].checked = false
                         }
                         break;
-                      } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.length) == searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code) {
+                      } else if (elem.value.slice(0,searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.length) === searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code) {
                         if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
                           // LEVEL 4 OF SUBCATEGORIES
-                          for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                            if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == elem.value) {
-                              searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = elem.checked
+                          for (let i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                            if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code === elem.value) {
+                              searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = elem.checked;
                               if (!elem.checked) {
                                 if (searchItemSuggestions.naics.it.includes(elem.value)) {
                                   document.getElementById("search-item-suggestion-0").checked = false
@@ -2593,7 +2593,7 @@ function calculateSearch(elem) {
                                   document.getElementById("search-item-suggestion-1").checked = false
                                 }
                                 searchTerms.naics[0].value = false
-                                var a = document.getElementsByClassName('checkbox-naics')
+                                let a = document.getElementsByClassName('checkbox-naics');
                                 a[0].checked = false
                               }
                               break;
@@ -2801,21 +2801,21 @@ function calculateSearch(elem) {
 }
 
 function calculateSuggestion(which) {
-  var toRun = []
-  if (which == 0) {
-    var a = document.getElementsByClassName('checkbox-subnaics')
-    for (i = 0; i < a.length; i++) {
+  let toRun = [];
+  if (which === 0) {
+    let a = document.getElementsByClassName('checkbox-subnaics');
+    for (let i = 0; i < a.length; i++) {
       if (searchItemSuggestions.naics.it.includes(a[i].value)) {
         toRun.push(a[i])
       }
     }
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-0").checked
+    for (let i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-0").checked;
       if (toRun[i].classList.contains('checkbox-subnaics')) {
-        for (i2 = 0; i2 < searchTerms.naics.length; i2++) {
+        for (let i2 = 0; i2 < searchTerms.naics.length; i2++) {
           if (searchTerms.naics[i2].subcategories) {
-            for (i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
-              if (searchTerms.naics[i2].subcategories[i3].code == toRun[i].value) {
+            for (let i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
+              if (searchTerms.naics[i2].subcategories[i3].code === toRun[i].value) {
                 if (toRun[i].checked) {
                   if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                     calculateNaicsSearch(i2)
@@ -2827,8 +2827,8 @@ function calculateSuggestion(which) {
                 }
                 searchTerms.naics[i2].subcategories[i3].value = toRun[i].checked
               } else if (searchTerms.naics[i2].subcategories[i3].subcategories) {
-                for (i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
-                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code == toRun[i].value) {
+                for (let i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
+                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code === toRun[i].value) {
                     if (toRun[i].checked) {
                       if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                         calculateNaicsSearch(''+i2)
@@ -2846,8 +2846,8 @@ function calculateSuggestion(which) {
                     }
                     searchTerms.naics[i2].subcategories[i3].subcategories[i4].value = toRun[i].checked
                   } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories) {
-                    for (i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == toRun[i].value) {
+                    for (let i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code === toRun[i].value) {
                         if (toRun[i].checked) {
                           if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                             calculateNaicsSearch(''+i2)
@@ -2871,8 +2871,8 @@ function calculateSuggestion(which) {
                         }
                         searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = toRun[i].checked
                       } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories) {
-                        for (i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
-                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code == toRun[i].value) {
+                        for (let i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
+                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code === toRun[i].value) {
                             if (toRun[i].checked) {
                               if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                                 calculateNaicsSearch(''+i2)
@@ -2915,26 +2915,26 @@ function calculateSuggestion(which) {
     }
     checkChecked()
   } else if (which == 1) {
-    var a = document.getElementsByClassName('checkbox-subnaics')
-    for (i = 0; i < a.length; i++) {
+    let a = document.getElementsByClassName('checkbox-subnaics');
+    for (let i = 0; i < a.length; i++) {
       if (searchItemSuggestions.naics.professional.includes(a[i].value)) {
         toRun.push(a[i])
       }
     }
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-1").checked
+    for (let i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-1").checked;
       if (toRun[i].classList.contains('checkbox-subnaics')) {
-        for (i2 = 0; i2 < searchTerms.naics.length; i2++) {
+        for (let i2 = 0; i2 < searchTerms.naics.length; i2++) {
           if (searchTerms.naics[i2].subcategories) {
-            for (i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
-              if (searchTerms.naics[i2].subcategories[i3].code == toRun[i].value) {
+            for (let i3 = 0; i3 < searchTerms.naics[i2].subcategories.length; i3++) {
+              if (searchTerms.naics[i2].subcategories[i3].code === toRun[i].value) {
                 if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                   calculateNaicsSearch(i2)
                 }
                 searchTerms.naics[i2].subcategories[i3].value = toRun[i].checked
               } else if (searchTerms.naics[i2].subcategories[i3].subcategories) {
-                for (i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
-                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code == toRun[i].value) {
+                for (let i4 = 0; i4 < searchTerms.naics[i2].subcategories[i3].subcategories.length; i4++) {
+                  if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].code === toRun[i].value) {
                     if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                       calculateNaicsSearch(''+i2)
                     }
@@ -2943,8 +2943,8 @@ function calculateSuggestion(which) {
                     }
                     searchTerms.naics[i2].subcategories[i3].subcategories[i4].value = toRun[i].checked
                   } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories) {
-                    for (i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code == toRun[i].value) {
+                    for (let i5 = 0; i5 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                      if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].code === toRun[i].value) {
                         if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                           calculateNaicsSearch(i2)
                         }
@@ -2956,8 +2956,8 @@ function calculateSuggestion(which) {
                         }
                         searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].value = toRun[i].checked
                       } else if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories) {
-                        for (i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
-                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code == toRun[i].value) {
+                        for (let i6 = 0; i6 < searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories.length; i6++) {
+                          if (searchTerms.naics[i2].subcategories[i3].subcategories[i4].subcategories[i5].subcategories[i6].code === toRun[i].value) {
                             if (document.getElementById("naics-subcategory-box-"+i2).classList.contains('inactive')) {
                               calculateNaicsSearch(i2)
                             }
@@ -2984,30 +2984,30 @@ function calculateSuggestion(which) {
       }
     }
     checkChecked()
-  } else if (which == 2) {
-    var a = document.getElementsByClassName('checkbox-psc-service')
-    for (i = 0; i < a.length; i++) {
+  } else if (which === 2) {
+    let a = document.getElementsByClassName('checkbox-psc-service');
+    for (let i = 0; i < a.length; i++) {
       if (searchItemSuggestions.psc.it.includes(a[i].value)) {
         toRun.push(a[i])
       }
     }
-    console.log(toRun.length)
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-2").checked
+    console.log(toRun.length);
+    for (let i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-2").checked;
       if (toRun[i].classList.contains('checkbox-psc-service')) {
-        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
-          if (searchTerms.psc.services[i2].name == toRun[i].value) {
+        for (let i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
+          if (searchTerms.psc.services[i2].name === toRun[i].value) {
             searchTerms.psc.services[i2].value = toRun[i].checked
           }
         }
       } else if (toRun[i].classList.contains('checkbox-psc-product')) {
-        for (i2 = 0; i2 < searchTerms.psc.products.length; i2++) {
-          if (searchTerms.psc.products[i2].name == toRun[i].value) {
-            searchTerms.psc.products[i2].value = toRun[i].checked
+        for (let i2 = 0; i2 < searchTerms.psc.products.length; i2++) {
+          if (searchTerms.psc.products[i2].name === toRun[i].value) {
+            searchTerms.psc.products[i2].value = toRun[i].checked;
             if (searchTerms.psc.products[i2].psc) {
-              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
-                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
-                var a = document.getElementsByClassName('checkbox-subpsc')
+              for (let pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
+                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked;
+                let a = document.getElementsByClassName('checkbox-subpsc');
                 document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
               }
             }
@@ -3016,29 +3016,29 @@ function calculateSuggestion(which) {
       }
     }
     checkChecked()
-  } else if (which == 3) {
-    var a = document.getElementsByClassName('checkbox-psc-service')
-    for (i = 0; i < a.length; i++) {
+  } else if (which === 3) {
+    let a = document.getElementsByClassName('checkbox-psc-service');
+    for (let i = 0; i < a.length; i++) {
       if (searchItemSuggestions.psc.professional.includes(a[i].value)) {
         toRun.push(a[i])
       }
     }
-    for (i = 0; i < toRun.length; i++) {
-      toRun[i].checked = document.getElementById("search-item-suggestion-3").checked
+    for (let i = 0; i < toRun.length; i++) {
+      toRun[i].checked = document.getElementById("search-item-suggestion-3").checked;
       if (toRun[i].classList.contains('checkbox-psc-service')) {
-        for (i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
-          if (searchTerms.psc.services[i2].name == toRun[i].value) {
+        for (let i2 = 0; i2 < searchTerms.psc.services.length; i2++) {
+          if (searchTerms.psc.services[i2].name === toRun[i].value) {
             searchTerms.psc.services[i2].value = toRun[i].checked
           }
         }
       } else if (toRun[i].classList.contains('checkbox-psc-product')) {
-        for (i = 0; i < searchTerms.psc.products.length; i++) {
-          if (searchTerms.psc.products[i2].name == toRun[i].value) {
-            searchTerms.psc.products[i2].value = toRun[i].checked
+        for (let i = 0; i < searchTerms.psc.products.length; i++) {
+          if (searchTerms.psc.products[i2].name === toRun[i].value) {
+            searchTerms.psc.products[i2].value = toRun[i].checked;
             if (searchTerms.psc.products[i2].psc) {
-              for (pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
-                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked
-                var a = document.getElementsByClassName('checkbox-subpsc')
+              for (let pscIndex = 0; pscIndex < searchTerms.psc.products[i2].psc.length; pscIndex++) {
+                searchTerms.psc.products[i2].psc[pscIndex].value = elem.checked;
+                let a = document.getElementsByClassName('checkbox-subpsc');
                 document.getElementById('psc-product-checkbox-'+i2+'-'+pscIndex).checked = toRun[i].checked
               }
             }
@@ -3051,12 +3051,12 @@ function calculateSuggestion(which) {
 }
 
 function closeSearchPopup() {
-  document.getElementById('search-save-popup').classList.add('inactive')
+  document.getElementById('search-save-popup').classList.add('inactive');
   document.getElementById('search-save-popup-bg').classList.add('inactive')
 }
 
 function validSearchName(name) {
-  for (i = 0; i < yourSearches.length; i++) {
+  for (let i = 0; i < yourSearches.length; i++) {
     if (yourSearches[i].name) {
       if (yourSearches[i].name.toLowerCase() == name.toLowerCase()) {
         return false
@@ -3069,17 +3069,17 @@ function validSearchName(name) {
 function checkSearchName(elem) {
   if (emptySearchName) {
     if (document.getElementById("search-name").value.length > 0) {
-      document.getElementById("search-name").classList.remove('invalid-input')
-      document.getElementById("search-name-popup").classList.add('inactive')
+      document.getElementById("search-name").classList.remove('invalid-input');
+      document.getElementById("search-name-popup").classList.add('inactive');
       emptySearchName = false
     }
   } else {
     if (validSearchName(elem.value)) {
-      document.getElementById("search-name").classList.remove('invalid-input')
+      document.getElementById("search-name").classList.remove('invalid-input');
       document.getElementById("search-name-popup").classList.add('inactive')
     } else {
-      document.getElementById("search-name").classList.add('invalid-input')
-      document.getElementById("search-name-popup").innerHTML = 'Name in use'
+      document.getElementById("search-name").classList.add('invalid-input');
+      document.getElementById("search-name-popup").innerHTML = 'Name in use';
       document.getElementById("search-name-popup").classList.remove('inactive')
     }
   }
@@ -3089,47 +3089,47 @@ function saveSearchTerms() {
   if (document.getElementById("search-name").value.length > 0) {
     if (!saving && (validSearchName(document.getElementById("search-name").value) || activeSearchIndex > -1)) {
       saving = true
-      document.getElementById('search-save-loading').classList.remove('inactive')
-      document.getElementById('search-save-popup-bg').classList.remove('inactive')
+      document.getElementById('search-save-loading').classList.remove('inactive');
+      document.getElementById('search-save-popup-bg').classList.remove('inactive');
       console.log(emptySearchTerms)
-      searchTerms.keyword = document.getElementById("search-input-keyword").value
-      var terms = searchTerms
-      var creatingNew = false
+      searchTerms.keyword = document.getElementById("search-input-keyword").value;
+      let terms = searchTerms;
+      let creatingNew = false;
       if (!huntingPartyData) {
         huntingPartyData = {
           companyId: company._id,
           users: [],
           searches: []
-        }
+        };
         creatingNew = true
       }
-      terms.name = document.getElementById("search-name").value
+      terms.name = document.getElementById("search-name").value;
       if (activeSearchIndex > -1) {
         yourSearches[activeSearchIndex] = terms
       } else {
-        for (i = 0; i < huntingPartyData.users.length; i++) {
-          if (huntingPartyData.users[i].userId == currentUser._id) {
+        for (let i = 0; i < huntingPartyData.users.length; i++) {
+          if (huntingPartyData.users[i].userId === currentUser._id) {
             if (!huntingPartyData.users[i].searches) {
               huntingPartyData.users[i].searches = []
             }
-            huntingPartyData.users[i].searches.push(terms)
-            console.log(terms.name)
+            huntingPartyData.users[i].searches.push(terms);
+            console.log(terms.name);
             break;
           }
         }
       }
       if (creatingNew) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-            console.log('CREATED')
-            document.getElementById('search-save-loading').classList.add('inactive')
-            document.getElementById('search-save-popup').classList.remove('inactive')
-            document.getElementById('search-save-popup-bg').classList.remove('inactive')
-            document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+        let xHttpHuntingPartyDataAddPost = new XMLHttpRequest();
+        xHttpHuntingPartyDataAddPost.onload = function() {
+          if (xHttpHuntingPartyDataAddPost.readyState === 4 && xHttpHuntingPartyDataAddPost.status === 200) {
+            console.log('CREATED');
+            document.getElementById('search-save-loading').classList.add('inactive');
+            document.getElementById('search-save-popup').classList.remove('inactive');
+            document.getElementById('search-save-popup-bg').classList.remove('inactive');
+            document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!';
             analytics.search.timeEnd = new Date();
-            var tabString = ''
-            var eventData = {
+            let tabString = '';
+            let eventData = {
               clicks: analytics.search.clickCount,
               time: ((analytics.search.timeEnd - analytics.search.timeStart) / 1000),
               device: device
@@ -3145,39 +3145,39 @@ function saveSearchTerms() {
                 }
               });
             }
-            resetSearchTerms()
+            resetSearchTerms();
             saving = false
           }
         };
-        xhttp.open("POST", apiUrl+"/huntingpartydata/add", true);
-        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-        xhttp.send(JSON.stringify(huntingPartyData));
+        xHttpHuntingPartyDataAddPost.open("POST", apiUrl+"/huntingpartydata/add", true);
+        xHttpHuntingPartyDataAddPost.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xHttpHuntingPartyDataAddPost.send(JSON.stringify(huntingPartyData));
 
       } else {
-        var id = huntingPartyData._id
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-            huntingPartyData = JSON.parse(xhttp.responseText);
+        let id = huntingPartyData._id;
+        let xHttpHuntingPartyDataPut = new XMLHttpRequest();
+        xHttpHuntingPartyDataPut.onload = function() {
+          if (xHttpHuntingPartyDataPut.readyState === 4 && xHttpHuntingPartyDataPut.status === 200) {
+            huntingPartyData = JSON.parse(xHttpHuntingPartyDataPut.responseText);
 
-            console.log('populating search')
-            var searchTermsToSearch = {
+            console.log('populating search');
+            let searchTermsToSearch = {
               companyId: company._id,
               userId: currentUser._id,
               searchTerms: terms
-            }
-            console.log(searchTermsToSearch)
-            var xhttp2 = new XMLHttpRequest();
-            xhttp2.onload = function() {
-              if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+            };
+            console.log(searchTermsToSearch);
+            let xHttpFboCompanyProxyNewBySearch = new XMLHttpRequest();
+            xHttpFboCompanyProxyNewBySearch.onload = function() {
+              if (xHttpFboCompanyProxyNewBySearch.readyState === 4 && xHttpFboCompanyProxyNewBySearch.status === 200) {
                 console.log('thing finished')
-                document.getElementById('search-save-loading').classList.add('inactive')
-                document.getElementById('search-save-popup').classList.remove('inactive')
-                document.getElementById('search-save-popup-bg').classList.remove('inactive')
-                document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!'
+                document.getElementById('search-save-loading').classList.add('inactive');
+                document.getElementById('search-save-popup').classList.remove('inactive');
+                document.getElementById('search-save-popup-bg').classList.remove('inactive');
+                document.getElementById('search-save-popup-text').innerHTML = terms.name + ' has been saved!';
                 analytics.search.timeEnd = new Date();
-                var tabString = ''
-                var eventData = {
+                let tabString = '';
+                let eventData = {
                   clicks: analytics.search.clickCount,
                   time: ((analytics.search.timeEnd - analytics.search.timeStart) / 1000),
                   device: device
@@ -3193,33 +3193,32 @@ function saveSearchTerms() {
                     }
                   });
                 }
-                resetSearchTerms()
-                renderSavedSearches()
+                resetSearchTerms();
+                renderSavedSearches();
                 if (!document.getElementById("new-search").classList.contains('inactive')) {
                   openSearchItems(1)
                 }
                 if (document.getElementById("saved-searches").classList.contains('inactive')) {
                   openSearchItems(0)
                 }
-                switchTab(1)
+                switchTab(1);
                 saving = false
               }
             };
-            xhttp2.open("PUT", apiUrl+'/fbocompanyproxy/newbysearch', true);
-            xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-            xhttp2.send(JSON.stringify(searchTermsToSearch));
+            xHttpFboCompanyProxyNewBySearch.open("PUT", apiUrl+'/fbocompanyproxy/newbysearch', true);
+            xHttpFboCompanyProxyNewBySearch.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xHttpFboCompanyProxyNewBySearch.send(JSON.stringify(searchTermsToSearch));
           }
         };
-        var url = apiUrl+"/huntingpartydata/" + id;
-        xhttp.open("PUT", url, true);
-        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-        xhttp.send(JSON.stringify(huntingPartyData));
+        xHttpHuntingPartyDataPut.open("PUT", apiUrl+"/huntingpartydata/" + id, true);
+        xHttpHuntingPartyDataPut.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xHttpHuntingPartyDataPut.send(JSON.stringify(huntingPartyData));
       }
     }
   } else {
     emptySearchName = true
-    document.getElementById("search-name").classList.add('invalid-input')
-    document.getElementById("search-name-popup").innerHTML = 'Search must have a name'
+    document.getElementById("search-name").classList.add('invalid-input');
+    document.getElementById("search-name-popup").innerHTML = 'Search must have a name';
     document.getElementById("search-name-popup").classList.remove('inactive')
   }
 }
@@ -3227,14 +3226,14 @@ function saveSearchTerms() {
 function toggleHamburgerMenu() {
   if (hamburgerMenuOpen) {
     document.getElementById("hamburger-menu").classList.add('hamburger-out');
-    document.getElementById("hamburger-menu").classList.remove('hamburger-in')
+    document.getElementById("hamburger-menu").classList.remove('hamburger-in');
     hamburgerMenuOpen = false
   } else {
     document.getElementById("hamburger-menu").classList.add('hamburger-in');
-    document.getElementById("hamburger-menu").classList.remove('hamburger-out')
-    document.getElementById("hamburger-menu").classList.remove('inactive')
-    hamburgerOpening = true
-    hamburgerMenuOpen = true
+    document.getElementById("hamburger-menu").classList.remove('hamburger-out');
+    document.getElementById("hamburger-menu").classList.remove('inactive');
+    hamburgerOpening = true;
+    hamburgerMenuOpen = true;
     setTimeout(
       function () {
         hamburgerOpening = false
@@ -3248,21 +3247,21 @@ document.addEventListener("click", (evt) => {
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropDownOpen);
     const voteCircle = document.getElementById("vote-circle-"+voteDropDownOpen);
     let targetElement = evt.target; // clicked element
-    var profilePopupOpen = !profilePopup.classList.contains('inactive')
-    var profileInside = false
-    analytics.tab.clickCount++
+    let profilePopupOpen = !profilePopup.classList.contains('inactive');
+    let profileInside = false;
+    analytics.tab.clickCount++;
     if (fboOpen) {
       analytics.fbo.clickCount++
     }
     do {
       if (profilePopupOpen) {
-        if (targetElement == profilePopup || targetElement == profilePopupButton) {
+        if (targetElement === profilePopup || targetElement === profilePopupButton) {
           // This is a click inside. Do nothing, just return.
           profileInside = true;
         }
       }
       // Go up the DOM
-      if (targetElement.parentNode == document.getElementById("new-search")) {
+      if (targetElement.parentNode === document.getElementById("new-search")) {
         analytics.search.clickCount++
       }
       targetElement = targetElement.parentNode;
@@ -3274,7 +3273,7 @@ document.addEventListener("click", (evt) => {
 
   });
 
-function openBottombarPopup() {
+function openBottomBarPopup() {
   if (document.getElementById("bottombar-popup").classList.contains('inactive')) {
     document.getElementById("bottombar-popup").classList.remove('inactive')
   } else {
@@ -3285,35 +3284,35 @@ function openBottombarPopup() {
 function switchTab(num) {
     document.getElementById("fbo-list-view").classList.remove('inactive');
     document.getElementById("fbo-detail-view").classList.add('inactive');
-    tutorialsOpen = true
-    openTutorials()
-    if (analytics.tab.timeStart == 0) {
+    tutorialsOpen = true;
+    openTutorials();
+    if (analytics.tab.timeStart === 0) {
       analytics.tab.timeStart = new Date();
       console.log(analytics.tab.timeStart)
     } else if (num !== activeTab) {
       analytics.tab.timeEnd = new Date();
-      var tabString = ''
-      if (activeTab == 0) {
+      let tabString = '';
+      if (activeTab === 0) {
         tabString = 'News'
-      } else if (activeTab == 1) {
+      } else if (activeTab === 1) {
         tabString = 'Search'
-      } else if (activeTab == 2) {
+      } else if (activeTab === 2) {
         tabString = 'RFPs'
-      } else if (activeTab == 3) {
+      } else if (activeTab === 3) {
         tabString = 'Pipeline'
-      } else if (activeTab == 4) {
+      } else if (activeTab === 4) {
         tabString = 'Company Profile'
-      } else if (activeTab == 5) {
+      } else if (activeTab === 5) {
         tabString = 'User Profile'
       }
-      var eventData = {
+      let eventData = {
         tab: tabString,
         clickCount: analytics.tab.clickCount,
         time: ((analytics.tab.timeEnd - analytics.tab.timeStart) / 1000),
         device: device
       };
       analytics.tab.timeStart = new Date();
-      analytics.tab.clickCount = 0
+      analytics.tab.clickCount = 0;
       if (analyticsOn) {
         self.client.addEvent("Tab Usage", eventData, function(err, res) {
           if (err) {
@@ -3327,15 +3326,15 @@ function switchTab(num) {
     }
     if (fboOpen) {
       analytics.fbo.timeEnd = new Date();
-      var eventData = {
+      let eventData = {
         clickCount: analytics.fbo.clickCount,
         time: ((analytics.fbo.timeEnd - analytics.fbo.timeStart) / 1000),
         vote: analytics.fbo.vote,
         device: device
       };
       analytics.fbo.timeStart = 0;
-      analytics.fbo.clickCount = 0
-      analytics.fbo.vote = null
+      analytics.fbo.clickCount = 0;
+      analytics.fbo.vote = null;
       if (analyticsOn) {
         self.client.addEvent("FBO Usage", eventData, function(err, res) {
           if (err) {
@@ -3348,68 +3347,68 @@ function switchTab(num) {
       }
 
     }
-    fboOpen = false
-    if (num == 0) {
-      document.getElementById("news-block").classList.remove('inactive')
-      document.getElementById("search-view").classList.add('inactive')
-      document.getElementById("fbo-view").classList.add('inactive')
-      document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("company-view").classList.add('inactive')
-      document.getElementById("user-view").classList.add('inactive')
-      document.getElementById("bottombar-img-home").classList.add('icon-2-active')
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("fbo-detail-middle").classList.remove('inactive')
-      document.getElementById("bottombar-text-0").classList.add('bottombar-item-text-active')
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
-      document.getElementById("topbar-center-text").innerHTML = "To Do/News"
+    fboOpen = false;
+    if (num === 0) {
+      document.getElementById("news-block").classList.remove('inactive');
+      document.getElementById("search-view").classList.add('inactive');
+      document.getElementById("fbo-view").classList.add('inactive');
+      document.getElementById("pipeline-view").classList.add('inactive');
+      document.getElementById("company-view").classList.add('inactive');
+      document.getElementById("user-view").classList.add('inactive');
+      document.getElementById("bottombar-img-home").classList.add('icon-2-active');
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+      document.getElementById("fbo-detail-middle").classList.remove('inactive');
+      document.getElementById("bottombar-text-0").classList.add('bottombar-item-text-active');
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
+      document.getElementById("topbar-center-text").innerHTML = "To Do/News";
       document.getElementById("topbar-right").innerHTML = ''
-    } else if (num == 1) {
-      document.getElementById("news-block").classList.add('inactive')
-      document.getElementById("search-view").classList.remove('inactive')
-      document.getElementById("fbo-view").classList.add('inactive')
-      document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("company-view").classList.add('inactive')
-      document.getElementById("user-view").classList.add('inactive')
-      document.getElementById("topbar-center-text").innerHTML = "Search"
-      document.getElementById("topbar-right").innerHTML = ''
-      document.getElementById("saved-search-view").classList.remove('inactive')
-      document.getElementById("search-terms-view").classList.add('inactive')
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-search").classList.add('icon-2-active')
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-1").classList.add('bottombar-item-text-active')
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
+    } else if (num === 1) {
+      document.getElementById("news-block").classList.add('inactive');
+      document.getElementById("search-view").classList.remove('inactive');
+      document.getElementById("fbo-view").classList.add('inactive');
+      document.getElementById("pipeline-view").classList.add('inactive');
+      document.getElementById("company-view").classList.add('inactive');
+      document.getElementById("user-view").classList.add('inactive');
+      document.getElementById("topbar-center-text").innerHTML = "Search";
+      document.getElementById("topbar-right").innerHTML = '';
+      document.getElementById("saved-search-view").classList.remove('inactive');
+      document.getElementById("search-terms-view").classList.add('inactive');
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-search").classList.add('icon-2-active');
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-1").classList.add('bottombar-item-text-active');
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
       document.getElementById("fbo-detail-middle").classList.remove('inactive')
-    } else if (num == 2) {
-      document.getElementById("news-block").classList.add('inactive')
-      document.getElementById("search-view").classList.add('inactive')
-      document.getElementById("fbo-view").classList.remove('inactive')
-      document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("company-view").classList.add('inactive')
-      document.getElementById("user-view").classList.add('inactive')
-      document.getElementById("topbar-center-text").innerHTML = "Opportunities"
-      document.getElementById("topbar-right").innerHTML = ''
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-opportunities").classList.add('icon-2-active')
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-2").classList.add('bottombar-item-text-active')
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
-      document.getElementById("fbo-detail-middle").classList.remove('inactive')
+    } else if (num === 2) {
+      document.getElementById("news-block").classList.add('inactive');
+      document.getElementById("search-view").classList.add('inactive');
+      document.getElementById("fbo-view").classList.remove('inactive');
+      document.getElementById("pipeline-view").classList.add('inactive');
+      document.getElementById("company-view").classList.add('inactive');
+      document.getElementById("user-view").classList.add('inactive');
+      document.getElementById("topbar-center-text").innerHTML = "Opportunities";
+      document.getElementById("topbar-right").innerHTML = '';
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-opportunities").classList.add('icon-2-active');
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-2").classList.add('bottombar-item-text-active');
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
+      document.getElementById("fbo-detail-middle").classList.remove('inactive');
       renderFbos()
-    } else if (num == 3) {
+    } else if (num === 3) {
       document.getElementById("news-block").classList.add('inactive')
       document.getElementById("search-view").classList.add('inactive')
       document.getElementById("fbo-view").classList.add('inactive')
@@ -3429,30 +3428,30 @@ function switchTab(num) {
       document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
       document.getElementById("bottombar-text-3").classList.add('bottombar-item-text-active')
     } else if (num == 4) {
-      document.getElementById("news-block").classList.add('inactive')
-      document.getElementById("search-view").classList.add('inactive')
-      document.getElementById("fbo-view").classList.add('inactive')
-      document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("company-view").classList.remove('inactive')
-      document.getElementById("user-view").classList.add('inactive')
-      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Company</p>'
-      document.getElementById("topbar-right").innerHTML = ''
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("fbo-detail-middle").classList.remove('inactive')
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
+      document.getElementById("news-block").classList.add('inactive');
+      document.getElementById("search-view").classList.add('inactive');
+      document.getElementById("fbo-view").classList.add('inactive');
+      document.getElementById("pipeline-view").classList.add('inactive');
+      document.getElementById("company-view").classList.remove('inactive');
+      document.getElementById("user-view").classList.add('inactive');
+      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Company</p>';
+      document.getElementById("topbar-right").innerHTML = '';
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+      document.getElementById("fbo-detail-middle").classList.remove('inactive');
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
       document.getElementById("bottombar-popup").classList.add('inactive');
 
       // company stuff
       if (company.avatar) {
-        var avatar = company.avatar
-        if (avatar.slice(0,13) == '../../assets/') {
+        let avatar = company.avatar;
+        if (avatar.slice(0,13) === '../../assets/') {
           avatar = './' + avatar.slice(13)
         }
         document.getElementById("company-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+company.avatar+'" alt="">'
@@ -3460,38 +3459,38 @@ function switchTab(num) {
       document.getElementById("company-info").innerHTML = '<p class="company-info-text">'+company.name+'</p>'+
       '<p>'+company.email+'</p>'+
       '<p>'+company.contactNumber+'</p>'+
-      '<p>'+company.address+', '+company.city+' '+company.state+'</p>'
-      var a = document.getElementsByClassName('company-domain-2')
-      for (i = 0; i < a.length; i++) {
+      '<p>'+company.address+', '+company.city+' '+company.state+'</p>';
+      let a = document.getElementsByClassName('company-domain-2');
+      for (let i = 0; i < a.length; i++) {
         if (company.emailDomains[i]) {
           a[i].value = company.emailDomains[i]
         }
       }
-    } else if (num == 5) {
-      document.getElementById("news-block").classList.add('inactive')
-      document.getElementById("search-view").classList.add('inactive')
-      document.getElementById("fbo-view").classList.add('inactive')
-      document.getElementById("pipeline-view").classList.add('inactive')
-      document.getElementById("company-view").classList.add('inactive')
-      document.getElementById("user-view").classList.remove('inactive')
-      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Profile</p>'
-      document.getElementById("topbar-right").innerHTML = ''
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active')
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("fbo-detail-middle").classList.remove('inactive')
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active')
+    } else if (num === 5) {
+      document.getElementById("news-block").classList.add('inactive');
+      document.getElementById("search-view").classList.add('inactive');
+      document.getElementById("fbo-view").classList.add('inactive');
+      document.getElementById("pipeline-view").classList.add('inactive');
+      document.getElementById("company-view").classList.add('inactive');
+      document.getElementById("user-view").classList.remove('inactive');
+      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Profile</p>';
+      document.getElementById("topbar-right").innerHTML = '';
+      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+      document.getElementById("fbo-detail-middle").classList.remove('inactive');
+      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
       document.getElementById("bottombar-popup").classList.add('inactive');
 
       // company stuff
       if (currentUser.avatar) {
-        var avatar = currentUser.avatar
-        if (avatar.slice(0,13) == '../../assets/') {
+        let avatar = currentUser.avatar;
+        if (avatar.slice(0,13) === '../../assets/') {
           avatar = './' + avatar.slice(13)
         }
         document.getElementById("user-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+currentUser.avatar+'" alt="">'
@@ -3500,11 +3499,11 @@ function switchTab(num) {
       '<p>'+currentUser.companyUserProxies[0].position+'</p>'+
       '<p>'+currentUser.username+'</p>'
     }
-    activeTab = num
-    document.getElementById("topbar-left").innerHTML = ''
-    var a = document.getElementsByClassName('iconbar-icon')
+    activeTab = num;
+    document.getElementById("topbar-left").innerHTML = '';
+    var a = document.getElementsByClassName('iconbar-icon');
     for (i = 0; i < a.length; i++) {
-      if (i == num) {
+      if (i === num) {
         a[i].classList.add('iconbar-icon-active');
       } else {
         a[i].classList.remove('iconbar-icon-active');
@@ -3515,10 +3514,10 @@ function switchTab(num) {
   }
 
 function getToday() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1; //January is 0!
+    let yyyy = today.getFullYear();
     if(dd<10) {
       dd='0'+dd
     }
@@ -3530,32 +3529,32 @@ function getToday() {
   }
 
 function generateOptions(){
-    renderSavedSearches()
+    renderSavedSearches();
     renderSortOptions()
     // parseProxy()
   }
 
 function generateFbos(){
-    sortFboRenders()
+    sortFboRenders();
     renderFbos()
   }
 
 function runFilters(elem){
-    filterOpportunitiesBySearch(elem)
+    filterOpportunitiesBySearch(elem);
     renderFbos()
   }
 
 function runSort(fboProxy, elem){
-    var selected = elem.value
+    let selected = elem.value;
     // console.log("Current Val:", selected, typeof selected)
-    sortFboRenders(fboProxy, parseInt(selected))
+    sortFboRenders(fboProxy, parseInt(selected));
     // renderFbos(fboProxy)
     renderFbos()
   }
 
 function renderSortOptions(){
-    var sortID = document.getElementById("sort-select")
-    var sortOptions = [
+    let sortID = document.getElementById("sort-select");
+    let sortOptions = [
       {
         "text": "Earliest Due",
         "value": 0
@@ -3584,25 +3583,25 @@ function renderSortOptions(){
         "text": "Agency Z-A",
         "value": 6
       }
-    ]
+    ];
 
     sortOptions.forEach(function (item){
-      var option = document.createElement("option")
-      option.text = item.text
-      option.value = item.value
+      let option = document.createElement("option");
+      option.text = item.text;
+      option.value = item.value;
       sortID.add(option)
     });
   }
 
 function sortFboRenders(fboProxy, renderOption){
-    const BY_EARLIEST_DUE = 0 //Also most recent expired for pipeline
-    const BY_LATEST_DUE = 1 //Includes data with no deadline at top; Also oldest expired for pipeline
-    const BY_DATE_POSTED = 2 //Most recent date to oldest; Inactive
-    const BY_ALPHA_ASC = 3 //Alphanumeric Order (1 - Z)
-    const BY_ALPHA_DEC = 4 //Reverse Alphanumeric
-    const BY_AGENCY_ASC = 5 //Sorts by Agency (Second criteria is duedate)
-    const BY_AGENCY_DEC = 6 //Reverse agency (duedate still in order)
-    const DEFAULT = 99 //Unknown Criteria; Kept Just in case
+    const BY_EARLIEST_DUE = 0; //Also most recent expired for pipeline
+    const BY_LATEST_DUE = 1; //Includes data with no deadline at top; Also oldest expired for pipeline
+    const BY_DATE_POSTED = 2; //Most recent date to oldest; Inactive
+    const BY_ALPHA_ASC = 3; //Alphanumeric Order (1 - Z)
+    const BY_ALPHA_DEC = 4; //Reverse Alphanumeric
+    const BY_AGENCY_ASC = 5; //Sorts by Agency (Second criteria is duedate)
+    const BY_AGENCY_DEC = 6; //Reverse agency (duedate still in order)
+    const DEFAULT = 99; //Unknown Criteria; Kept Just in case
 
     // console.log("Current Option:", renderOption)
     // renderOption = BY_EARLIEST_DUE
@@ -3610,22 +3609,22 @@ function sortFboRenders(fboProxy, renderOption){
       case BY_EARLIEST_DUE: //By Earliest Due
       fboProxy.sort(function(p1, p2){
         //[mm,dd,yy]
-        var due1, due2
-        var duenum1 = 0
-        var duenum2 = 0
+        let due1, due2;
+        let duenum1 = 0;
+        let duenum2 = 0;
         if (p1.fbo.respDate){
-          mm = p1.fbo.respDate.slice(0,2)
-          dd = p1.fbo.respDate.slice(2,4)
-          yy = p1.fbo.respDate.slice(4,6)
-          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          mm = p1.fbo.respDate.slice(0,2);
+          dd = p1.fbo.respDate.slice(2,4);
+          yy = p1.fbo.respDate.slice(4,6);
+          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)];
           duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
         }
         else{due1 = "No Date", duenum1 = 99999}
         if (p2.fbo.respDate){
-          mm = p2.fbo.respDate.slice(0,2)
-          dd = p2.fbo.respDate.slice(2,4)
-          yy = p2.fbo.respDate.slice(4,6)
-          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          mm = p2.fbo.respDate.slice(0,2);
+          dd = p2.fbo.respDate.slice(2,4);
+          yy = p2.fbo.respDate.slice(4,6);
+          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)];
           duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
         }
         else{due2 = "No Date", duenum2 = 99999}
@@ -3636,22 +3635,22 @@ function sortFboRenders(fboProxy, renderOption){
       case BY_LATEST_DUE:
       fboProxy.sort(function(p1, p2){
         //[mm,dd,yy]
-        var due1, due2
-        var duenum1 = 0
-        var duenum2 = 0
+        let due1, due2;
+        let duenum1 = 0;
+        let duenum2 = 0;
         if (p1.fbo.respDate){
-          mm = p1.fbo.respDate.slice(0,2)
-          dd = p1.fbo.respDate.slice(2,4)
-          yy = p1.fbo.respDate.slice(4,6)
-          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          mm = p1.fbo.respDate.slice(0,2);
+          dd = p1.fbo.respDate.slice(2,4);
+          yy = p1.fbo.respDate.slice(4,6);
+          due1 = [parseInt(mm), parseInt(dd), parseInt(yy)];
           duenum1 = ((-1 + due1[0]) * 30) + due1[1]+ (1000 * due1[2])
         }
         else{due1 = "No Date", duenum1 = 99999}
         if (p2.fbo.respDate){
-          mm = p2.fbo.respDate.slice(0,2)
-          dd = p2.fbo.respDate.slice(2,4)
-          yy = p2.fbo.respDate.slice(4,6)
-          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)]
+          mm = p2.fbo.respDate.slice(0,2);
+          dd = p2.fbo.respDate.slice(2,4);
+          yy = p2.fbo.respDate.slice(4,6);
+          due2 = [parseInt(mm), parseInt(dd), parseInt(yy)];
           duenum2 = ((-1 + due2[0]) * 30) + due2[1] + (1000 * due2[2])
         }
         else{due2 = "No Date", duenum2 = 99999}
@@ -3664,13 +3663,13 @@ function sortFboRenders(fboProxy, renderOption){
       case BY_ALPHA_ASC:
       fboProxy.sort(function(p1, p2){
 
-        var prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase()
-        prox1bool = isNaN(parseInt(prox1.slice(0,2)))
-        prox2bool = isNaN(parseInt(prox2.slice(0,2)))
+        let prox1 = p1.fbo.subject.toUpperCase(), prox2 = p2.fbo.subject.toUpperCase();
+        prox1bool = isNaN(parseInt(prox1.slice(0,2)));
+        prox2bool = isNaN(parseInt(prox2.slice(0,2)));
 
         if (!prox1bool && !prox2bool){ // If both are numbers
-          prox1num = parseInt(prox1.slice(0,2))
-          prox2num = parseInt(prox2.slice(0,2))
+          prox1num = parseInt(prox1.slice(0,2));
+          prox2num = parseInt(prox2.slice(0,2));
 
           if (prox1num > prox2num){
             return 1
@@ -4596,12 +4595,6 @@ function checkPasswords() {
     document.getElementById("password2").classList.remove('invalid-input')
     document.getElementById("register-alert-4").innerHTML = ''
     document.getElementById("register-alert-5").innerHTML = ''
-  }
-}
-
-function invalidEmail(email) {
-  if (email) {
-    return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
   }
 }
 
@@ -6765,112 +6758,6 @@ function renderChart() {
     }
   }
 }
-
-var app = {
-    // Application Constructor
-    initialize: function() {
-      if (localStorage.getItem('uid')) {
-        getTheData()
-      } else {
-        document.getElementById("loading").classList.add('inactive');
-        document.getElementById("main-view").classList.add('inactive');
-        document.getElementById("fbo-view").classList.add('inactive');
-        document.getElementById("login-register").classList.remove('inactive');
-      }
-      this.bindEvents();
-      if (typeof Keen === 'undefined') {
-        console.log('Analytics Disabled')
-        analyticsOn = false
-      } else {
-        console.log('Analytics Enabled')
-        analyticsOn = true
-        this.client = new Keen({
-          projectId: '5c5201c7c9e77c0001edb8cc',
-          readKey: '5E68E6FCDDF8227E7F3F47A7F53FB98C17C9721678EB55F1ED00B94C29AF600F272D14F97C79EB5FDD837E4068888807AE38FD80420239CEB95ABC52555AA5CDCEAA22FC07B8268D9D6E02FFD7A9295D269ACAEE475A3A4DDA587B0836BEAD01',
-          writeKey: '4FFBE9F457824B5D43E951608DFAF2449A110AD2C47164126EC5A6A0F39AEE2CFE13DD365190985DB255BCD4739F6B4DC677E16C7101261CF77E4F07A1535BBAA4FBFFF30F7958DEDFC63ECE42D0C7E6FBAE3D8EBA42203CD0AEA6A703E491A6'
-        });
-      }
-      self = this;
-
-      // window.plugins.uniqueDeviceID.get(success, fail);
-      // function success(uuid) {
-      //   console.log('ID IS THIS: ' + uuid);
-      // };
-      // renderChart()
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-      document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-      // app.receivedEvent('deviceready');
-      app.push = PushNotification.init({
-        "android": {
-          "senderID": "416059724231"
-        },
-        "ios": {
-          "sound": true,
-          "vibration": true,
-          "badge": true
-        },
-        "windows": {}
-      });
-
-      app.push.on('registration', function(data) {
-        // console.log("registration event: " + data.registrationId);
-        // var oldRegId = localStorage.getItem('registrationId');
-        // if (oldRegId !== data.registrationId) {
-        //   // Save new registration ID
-        //   localStorage.setItem('registrationId', data.registrationId);
-        //   // Post registrationId to your app server as the value has changed
-        // }
-      });
-
-      app.push.on('error', function(e) {
-        console.log("push error = " + e.message);
-      });
-
-      app.push.on('notification', function(data) {
-        console.log('notification event');
-        navigator.notification.alert(
-          data.message,         // message
-          null,                 // callback
-          data.title,           // title
-          'Ok'                  // buttonName
-        );
-      });
-
-      if (!window.device) {
-        window.device = { platform: 'Browser' };
-      }
-
-      window.open = cordova.InAppBrowser.open
-      handleExternalURLs();
-    },
-
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-      var parentElement = document.getElementById(id);
-      if (!parentElement) {
-        console.log("BUG: " + id + " isn't working with received event, i don't know why")
-      } else {
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
-      }
-    }
-  };
 
 function openSidebar() {
   console.log('its doing it')
