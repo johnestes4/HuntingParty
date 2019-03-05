@@ -419,7 +419,7 @@ let fbosInUnread = 0;
 let pipelineUnread = 0;
 let loadInProgress = false;
 
-var app = {
+let app = {
     // Application Constructor
     initialize: function() {
         if (localStorage.getItem('uid')) {
@@ -525,6 +525,609 @@ var app = {
     }
 };
 
+function login() {
+    let username = document.getElementById("email").value.toLowerCase();
+    let password = document.getElementById("password").value;
+    if (!invalidEmail(username)) {
+        document.getElementById("login-name-popup").classList.add('inactive');
+        document.getElementById("email").classList.remove('invalid-input');
+        let xHttpProfilesEmail = new XMLHttpRequest();
+        xHttpProfilesEmail.onload = function() {
+            if (xHttpProfilesEmail.readyState === 4 && xHttpProfilesEmail.status === 200) {
+                // Typical action to be performed when the document is ready:
+                let responseProfilesEmail = JSON.parse(xHttpProfilesEmail.responseText);
+                if (responseProfilesEmail.id) {
+                    document.getElementById("loading-details").innerHTML = 'Account found, logging in...';
+                    document.getElementById("loading").classList.remove('inactive');
+                    document.getElementById("main-view").classList.add('inactive');
+                    document.getElementById("fbo-view").classList.add('inactive');
+                    document.getElementById("fbo-list-view").classList.add('inactive');
+                    document.getElementById("fbo-detail-view").classList.add('inactive');
+                    document.getElementById("login-register").classList.add('inactive');
+                    let xHttpAuthLogin = new XMLHttpRequest();
+                    xHttpAuthLogin.onreadystatechange = function() {
+                        if (xHttpAuthLogin.readyState === 4 && xHttpAuthLogin.status === 200) {
+                            document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...';
+                            let xHttpUserInfo = new XMLHttpRequest();
+                            xHttpUserInfo.onreadystatechange = function() {
+                                if (xHttpUserInfo.readyState === 4 && xHttpUserInfo.status === 200) {
+                                    document.getElementById("loading-details").innerHTML = 'Profile info found, getting the rest of the data...';
+                                    localStorage.setItem('uid', responseProfilesEmail.id);
+                                    loggedIn = true;
+                                    currentUser = JSON.parse(xHttpUserInfo.responseText);
+                                    getTheData()
+                                }
+                            };
+                            xHttpUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + responseProfilesEmail.id, true);
+                            xHttpUserInfo.setRequestHeader("Content-type", "application/json");
+                            xHttpUserInfo.send();
+                        } else if (xHttpAuthLogin.readyState === 4 && xHttpAuthLogin.status === 400) {
+                            document.getElementById("loading").classList.add('inactive');
+                            document.getElementById("main-view").classList.add('inactive');
+                            document.getElementById("fbo-view").classList.add('inactive');
+                            document.getElementById("fbo-list-view").classList.add('inactive');
+                            document.getElementById("fbo-detail-view").classList.add('inactive');
+                            document.getElementById("login-register").classList.remove('inactive');
+                            document.getElementById("login-error-text").innerHTML = 'Password/username mismatch';
+                        }
+                    };
+                    let bodyCredentials = {
+                        email: username,
+                        password: password
+                    };
+                    xHttpAuthLogin.open("POST", apiUrl+"/auth/login/" + responseProfilesEmail.id, true);
+                    xHttpAuthLogin.setRequestHeader("Content-type", "application/json");
+                    xHttpAuthLogin.send(JSON.stringify(bodyCredentials));
+                } else {
+                    emailNotFound = true;
+                    document.getElementById("login-name-popup").innerHTML = 'Account not found';
+                    document.getElementById("login-name-popup").classList.remove('inactive');
+                    document.getElementById("email").classList.add('invalid-input');
+                }
+            } else if (xHttpProfilesEmail.status !== 200) {
+                document.getElementById("loading-details").innerHTML = 'Status code ' + xHttpProfilesEmail.status + ', status ' + xHttpProfilesEmail.statusText
+            } else {
+                document.getElementById("loading-details").innerHTML = 'Ready state ' + xHttpProfilesEmail.readyState + ', status code ' + xHttpProfilesEmail.status
+            }
+        };
+        xHttpProfilesEmail.open("GET", apiUrl+"/profiles/email/" + username, true);
+        xHttpProfilesEmail.setRequestHeader("Content-type", "application/json");
+        xHttpProfilesEmail.send();
+    }
+}
+
+function logOut() {
+    localStorage.removeItem('uid');
+    currentUser = null;
+    company = null;
+    fbos = [];
+    yourSearches = [];
+    resetSearchTerms();
+    loggedIn = false;
+    location.reload();
+}
+
+function getTheData() {
+    if (localStorage.getItem('uid')) {
+        var id = localStorage.getItem('uid')
+    } else if (currentUser) {
+        var id = currentUser._id
+    }
+    document.getElementById("loading-details").innerHTML = 'Getting full user data...';
+    let xHttpGetTheDataUserInfo = new XMLHttpRequest();
+    xHttpGetTheDataUserInfo.onreadystatechange = function() {
+        if (xHttpGetTheDataUserInfo.readyState === 4 && xHttpGetTheDataUserInfo.status === 200) {
+            // Typical action to be performed when the document is ready:
+            currentUser = JSON.parse(xHttpGetTheDataUserInfo.responseText);
+            let avatar = currentUser.avatar;
+            if (avatar === '../../assets/img/user.png') {
+                avatar = './img/user.png'
+            }
+            document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
+            document.getElementById("loading-details").innerHTML = 'Getting full company data...';
+            let xHttpCompanyLight = new XMLHttpRequest();
+            xHttpCompanyLight.onreadystatechange = function() {
+                if (xHttpCompanyLight.readyState === 4 && xHttpCompanyLight.status === 200) {
+                    company = JSON.parse(xHttpCompanyLight.responseText);
+                    let xHttpGetSearchTerms = new XMLHttpRequest();
+                    document.getElementById("loading-details").innerHTML = 'Getting full search terms...';
+                    xHttpGetSearchTerms.onreadystatechange = function() {
+                        if (xHttpGetSearchTerms.readyState === 4 && xHttpGetSearchTerms.status === 200) {
+                            searchTerms = JSON.parse(xHttpGetSearchTerms.responseText);
+                            emptySearchTerms = JSON.parse(xHttpGetSearchTerms.responseText);
+                            let xHttpHuntingPartyDataCompany = new XMLHttpRequest();
+                            document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...';
+                            xHttpHuntingPartyDataCompany.onreadystatechange = function() {
+                                if (xHttpHuntingPartyDataCompany.readyState === 4 && xHttpHuntingPartyDataCompany.status === 200) {
+                                    if (xHttpHuntingPartyDataCompany.responseText === 'false') {
+                                        document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...';
+                                        console.log('did the right one');
+                                        huntingPartyData = {
+                                            companyId: company._id,
+                                            users: [],
+                                            searches: []
+                                        };
+
+                                        huntingPartyData.users.push({
+                                            userId: currentUser._id,
+                                            name: currentUser.firstName + ' ' + currentUser.lastName,
+                                            email: currentUser.username,
+                                            deviceId: null,
+                                            regId: null,
+                                            tosRead: 0,
+                                            points: 0
+                                        });
+                                        if (device !== undefined) {
+                                            if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
+                                                doTheUpdateAnyway = true
+                                                huntingPartyData.users[0].deviceId = device.uuid
+                                            }
+                                        }
+                                        var xHttpHuntingPartyDataAddNew = new XMLHttpRequest();
+                                        xHttpHuntingPartyDataAddNew.onload = function() {
+                                            if (xHttpHuntingPartyDataAddNew.readyState === 4 && xHttpHuntingPartyDataAddNew.status === 200) {
+                                                document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...';
+                                                huntingPartyData = JSON.parse(xHttpHuntingPartyDataAddNew.responseText);
+                                                console.log('CREATED');
+                                                document.getElementById("loading").classList.add('inactive');
+                                                document.getElementById("tos-popup").classList.remove('inactive');
+                                            }
+                                        };
+                                        xHttpHuntingPartyDataAddNew.open("POST", apiUrl+"/huntingpartydata/add", true);
+                                        xHttpHuntingPartyDataAddNew.setRequestHeader('Content-type','application/json; charset=utf-8');
+                                        xHttpHuntingPartyDataAddNew.send(JSON.stringify(huntingPartyData));
+                                    } else if (JSON.parse(xHttpHuntingPartyDataCompany.responseText)._id && JSON.parse(xHttpHuntingPartyDataCompany.responseText).companyId){
+                                        document.getElementById("loading-details").innerHTML = 'Got all data, finishing...';
+                                        huntingPartyData = JSON.parse(xHttpHuntingPartyDataCompany.responseText);
+                                        let yourSearches = [];
+                                        for (let i = 0; i < huntingPartyData.users.length; i++) {
+                                            if (huntingPartyData.users[i].userId === currentUser._id) {
+                                                yourSearches = huntingPartyData.users[i].searches;
+                                                break
+                                            }
+                                        }
+                                        document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...';
+                                        let xHttpCompanyFilteredList = new XMLHttpRequest();
+                                        xHttpCompanyFilteredList.onreadystatechange = function() {
+                                            if (xHttpCompanyFilteredList.readyState === 4 && xHttpCompanyFilteredList.status === 200) {
+                                                console.log('got the thing');
+                                                proxiesRes = JSON.parse(xHttpCompanyFilteredList.responseText);
+                                                console.log(proxiesRes);
+                                                fbosIn = proxiesRes.fbosIn;
+                                                fboPipeline = proxiesRes.fboPipeline;
+                                                fbosInMax = proxiesRes.fbosInMax;
+                                                fboPipelineMax = proxiesRes.fboPipelineMax;
+                                                checkProxiesViewed();
+                                                if (!fbosIn) {
+                                                    fbosIn = []
+                                                } else if (!fboPipeline) {
+                                                    fboPipeline = []
+                                                }
+                                                //
+                                                let userInList = false;
+                                                if (!huntingPartyData.users) {
+                                                    huntingPartyData.users = []
+                                                }
+                                                var doTheUpdateAnyway = false;
+                                                for (let i = 0; i < huntingPartyData.users.length; i++) {
+                                                    if (huntingPartyData.users[i].points === undefined) {
+                                                        huntingPartyData.users[i].points = 0;
+                                                        console.log('no points!');
+                                                        doTheUpdateAnyway = true
+                                                    }
+                                                    if (huntingPartyData.users[i].userId === currentUser._id) {
+                                                        userInList = true;
+                                                        if (huntingPartyData.users[i].points !== undefined) {
+                                                            console.log('YOUR POINTS: ' + huntingPartyData.users[i].points);
+                                                            document.getElementById("sidebar-points-text").innerHTML = huntingPartyData.users[i].points + ' Points'
+                                                        }
+                                                        if (huntingPartyData.users[i].tosRead) {
+                                                            tosRead = huntingPartyData.users[i].tosRead
+                                                        }
+                                                        if (device !== undefined) {
+                                                            if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
+                                                                doTheUpdateAnyway = true;
+                                                                huntingPartyData.users[i].deviceId = device.uuid
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if (device !== undefined || !userInList || doTheUpdateAnyway) {
+                                                    if (!userInList || doTheUpdateAnyway) {
+                                                        if (!userInList) {
+                                                            console.log('not in the list');
+                                                            let deviceId = '';
+                                                            let regId = '';
+                                                            if (device) {
+                                                                deviceId = device.uuid
+                                                            }
+                                                            huntingPartyData.users.push({
+                                                                userId: currentUser._id,
+                                                                name: currentUser.firstName + ' ' + currentUser.lastName,
+                                                                email: currentUser.username,
+                                                                deviceId: deviceId,
+                                                                regId: regId,
+                                                                tosRead: 0,
+                                                                points: 0
+                                                            });
+                                                            tosRead = 0;
+                                                            let newsItem = {
+                                                                type: 'user',
+                                                                body: currentUser.firstName + ' ' + currentUser.lastName + ' joined Hunting Party'
+                                                            };
+                                                            generateNewsItem(newsItem)
+                                                        }
+                                                        let xHttpHuntingPartyDataPut = new XMLHttpRequest();
+                                                        xHttpHuntingPartyDataPut.onreadystatechange = function() {
+                                                            if (xHttpHuntingPartyDataPut.readyState == 4 && xHttpHuntingPartyDataPut.status == 200) {
+                                                                huntingPartyData = JSON.parse(xHttpHuntingPartyDataPut.responseText);
+                                                                if (tosRead < 1) {
+                                                                    document.getElementById("loading").classList.add('inactive');
+                                                                    document.getElementById("tos-popup").classList.remove('inactive');
+                                                                    // document.getElementById("login-register").classList.remove('inactive');
+                                                                } else {
+                                                                    console.log('updated HPD')
+                                                                    document.getElementById("loading-details").innerHTML = 'Done'
+                                                                    startMainApp()
+                                                                }
+                                                            }
+                                                        };
+                                                        xHttpHuntingPartyDataPut.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
+                                                        xHttpHuntingPartyDataPut.setRequestHeader('Content-type','application/json; charset=utf-8');
+                                                        xHttpHuntingPartyDataPut.send(JSON.stringify(huntingPartyData));
+                                                    } else {
+                                                        if (tosRead < 1) {
+                                                            document.getElementById("loading").classList.add('inactive');
+                                                            document.getElementById("tos-popup").classList.remove('inactive');
+                                                        } else {
+                                                            document.getElementById("loading-details").innerHTML = 'Done';
+                                                            console.log('starting app');
+                                                            startMainApp()
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (tosRead < 1) {
+                                                        document.getElementById("loading").classList.add('inactive');
+                                                        document.getElementById("tos-popup").classList.remove('inactive');
+                                                        // document.getElementById("login-register").classList.remove('inactive');
+                                                    } else {
+                                                        document.getElementById("loading-details").innerHTML = 'Done';
+                                                        console.log('starting app')
+                                                        startMainApp()
+                                                    }
+                                                }
+                                            }
+                                        };
+                                        if (!yourSearches) {
+                                            yourSearches = []
+                                        }
+                                        if (yourSearches.length > 0) {
+                                            var proxyRequest = {
+                                                startIndex: 0,
+                                                which: 2,
+                                                searches: yourSearches
+                                            }
+                                            xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
+                                            xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
+                                            xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
+                                        } else {
+                                            var proxyRequest = {
+                                                startIndex: 0,
+                                                which: 2
+                                            }
+                                            xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+                                            xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
+                                            xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
+                                        }
+                                    }
+                                }
+                            };
+                            xHttpHuntingPartyDataCompany.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
+                            xHttpHuntingPartyDataCompany.send();
+                        }
+                    }
+                    xHttpGetSearchTerms.open("GET", apiUrl+"/fbo/getsearchterms/", true);
+                    xHttpGetSearchTerms.send();
+                }
+            };
+            if (currentUser.companyUserProxies.length > 0) {
+                let companyId = currentUser.companyUserProxies[0].company._id;
+                xHttpCompanyLight.open("GET", apiUrl+"/company/" + companyId + "/light/", true);
+                xHttpCompanyLight.send();
+            } else {
+                goToCompanyCreate()
+            }
+        }
+    };
+    xHttpGetTheDataUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
+    xHttpGetTheDataUserInfo.send();
+}
+
+function startMainApp() {
+    console.log(fbosIn)
+    console.log(fboPipeline)
+    if (fbosIn.length + fboPipeline.length > 0) {
+        // setActiveFbo(fboIndex)
+        generateSearchHTML(1)
+        renderSearch()
+        generateOptions()
+        sortFboRenders(fbosIn, 0)
+        renderFbos()
+        renderNews()
+        var promiseFinished = true
+        console.log('asd')
+        document.getElementById("tos-popup").classList.add('inactive');
+        document.getElementById("loading").classList.add('inactive');
+        document.getElementById("main-view").classList.remove('inactive');
+        document.getElementById("news-block").classList.remove('inactive');
+        document.getElementById("fbo-view").classList.add('inactive');
+        document.getElementById("search-view").classList.add('inactive');
+        document.getElementById("login-register").classList.add('inactive');
+    } else {
+        generateSearchHTML(1)
+        renderSearch()
+        generateOptions()
+        // renderFbos()
+        renderNews()
+        document.getElementById("loading").classList.add('inactive');
+        document.getElementById("tos-popup").classList.add('inactive');
+        document.getElementById("main-view").classList.remove('inactive');
+        document.getElementById("news-block").classList.remove('inactive');
+        document.getElementById("fbo-view").classList.add('inactive');
+        document.getElementById("search-view").classList.add('inactive');
+        document.getElementById("login-register").classList.add('inactive');
+        document.getElementById("fbo-popups").classList.remove('inactive');
+        document.getElementById("error-popup").classList.remove('inactive');
+        document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br>"
+        // document.getElementById("iconbar-3").classList.add('inactive');
+        // document.getElementById("iconbar-4").classList.add('inactive');
+        // document.getElementById("iconbar-5").classList.add('inactive');
+    }
+    // showAd()
+    // TAB SWITCH HERE
+    switchTab(2)
+    openSearchItems(0)
+    // openSearchItems(3)
+    // goToFbo(0,0);
+    // openFboDetail(5)
+    // viewSearch(0)
+    // openPopups(1)
+    // goToCompanyCreate()
+    // expandData(2)
+}
+
+function switchTab(num) {
+    document.getElementById("fbo-list-view").classList.remove('inactive');
+    document.getElementById("fbo-detail-view").classList.add('inactive');
+    tutorialsOpen = true;
+    openTutorials();
+    if (analytics.tab.timeStart === 0) {
+        analytics.tab.timeStart = new Date();
+        console.log(analytics.tab.timeStart)
+    } else if (num !== activeTab) {
+        analytics.tab.timeEnd = new Date();
+        let tabString = '';
+        if (activeTab === 0) {
+            tabString = 'News'
+        } else if (activeTab === 1) {
+            tabString = 'Search'
+        } else if (activeTab === 2) {
+            tabString = 'RFPs'
+        } else if (activeTab === 3) {
+            tabString = 'Pipeline'
+        } else if (activeTab === 4) {
+            tabString = 'Company Profile'
+        } else if (activeTab === 5) {
+            tabString = 'User Profile'
+        }
+        let eventData = {
+            tab: tabString,
+            clickCount: analytics.tab.clickCount,
+            time: ((analytics.tab.timeEnd - analytics.tab.timeStart) / 1000),
+            device: device
+        };
+        analytics.tab.timeStart = new Date();
+        analytics.tab.clickCount = 0;
+        if (analyticsOn) {
+            self.client.addEvent("Tab Usage", eventData, function(err, res) {
+                if (err) {
+                    console.log("Error: " + err);
+                }
+                else {
+                    console.log("Event sent.");
+                }
+            });
+        }
+    }
+    if (fboOpen) {
+        analytics.fbo.timeEnd = new Date();
+        let eventData = {
+            clickCount: analytics.fbo.clickCount,
+            time: ((analytics.fbo.timeEnd - analytics.fbo.timeStart) / 1000),
+            vote: analytics.fbo.vote,
+            device: device
+        };
+        analytics.fbo.timeStart = 0;
+        analytics.fbo.clickCount = 0;
+        analytics.fbo.vote = null;
+        if (analyticsOn) {
+            self.client.addEvent("FBO Usage", eventData, function(err, res) {
+                if (err) {
+                    console.log("Error: " + err);
+                }
+                else {
+                    console.log("Event sent.");
+                }
+            });
+        }
+
+    }
+    fboOpen = false;
+    if (num === 0) {
+        document.getElementById("news-block").classList.remove('inactive');
+        document.getElementById("search-view").classList.add('inactive');
+        document.getElementById("fbo-view").classList.add('inactive');
+        document.getElementById("pipeline-view").classList.add('inactive');
+        document.getElementById("company-view").classList.add('inactive');
+        document.getElementById("user-view").classList.add('inactive');
+        document.getElementById("bottombar-img-home").classList.add('icon-2-active');
+        document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+        document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+        document.getElementById("fbo-detail-middle").classList.remove('inactive');
+        document.getElementById("bottombar-text-0").classList.add('bottombar-item-text-active');
+        document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
+        document.getElementById("topbar-center-text").innerHTML = "To Do/News";
+        document.getElementById("topbar-right").innerHTML = ''
+    } else if (num === 1) {
+        document.getElementById("news-block").classList.add('inactive');
+        document.getElementById("search-view").classList.remove('inactive');
+        document.getElementById("fbo-view").classList.add('inactive');
+        document.getElementById("pipeline-view").classList.add('inactive');
+        document.getElementById("company-view").classList.add('inactive');
+        document.getElementById("user-view").classList.add('inactive');
+        document.getElementById("topbar-center-text").innerHTML = "Search";
+        document.getElementById("topbar-right").innerHTML = '';
+        document.getElementById("saved-search-view").classList.remove('inactive');
+        document.getElementById("search-terms-view").classList.add('inactive');
+        document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-search").classList.add('icon-2-active');
+        document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+        document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+        document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-1").classList.add('bottombar-item-text-active');
+        document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
+        document.getElementById("fbo-detail-middle").classList.remove('inactive')
+    } else if (num === 2) {
+        document.getElementById("news-block").classList.add('inactive');
+        document.getElementById("search-view").classList.add('inactive');
+        document.getElementById("fbo-view").classList.remove('inactive');
+        document.getElementById("pipeline-view").classList.add('inactive');
+        document.getElementById("company-view").classList.add('inactive');
+        document.getElementById("user-view").classList.add('inactive');
+        document.getElementById("topbar-center-text").innerHTML = "Opportunities";
+        document.getElementById("topbar-right").innerHTML = '';
+        document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-opportunities").classList.add('icon-2-active');
+        document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+        document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+        document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-2").classList.add('bottombar-item-text-active');
+        document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
+        document.getElementById("fbo-detail-middle").classList.remove('inactive');
+        renderFbos()
+    } else if (num === 3) {
+        document.getElementById("news-block").classList.add('inactive')
+        document.getElementById("search-view").classList.add('inactive')
+        document.getElementById("fbo-view").classList.add('inactive')
+        document.getElementById("pipeline-view").classList.remove('inactive')
+        document.getElementById("company-view").classList.add('inactive')
+        document.getElementById("user-view").classList.add('inactive')
+        document.getElementById("topbar-center-text").innerHTML = "Pipeline"
+        document.getElementById("topbar-right").innerHTML = ''
+        document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
+        document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
+        document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
+        document.getElementById("bottombar-img-pipeline").classList.add('icon-2-active')
+        document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
+        document.getElementById("fbo-detail-middle").classList.remove('inactive')
+        document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
+        document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
+        document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
+        document.getElementById("bottombar-text-3").classList.add('bottombar-item-text-active')
+    } else if (num == 4) {
+        document.getElementById("news-block").classList.add('inactive');
+        document.getElementById("search-view").classList.add('inactive');
+        document.getElementById("fbo-view").classList.add('inactive');
+        document.getElementById("pipeline-view").classList.add('inactive');
+        document.getElementById("company-view").classList.remove('inactive');
+        document.getElementById("user-view").classList.add('inactive');
+        document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Company</p>';
+        document.getElementById("topbar-right").innerHTML = '';
+        document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+        document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+        document.getElementById("fbo-detail-middle").classList.remove('inactive');
+        document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-popup").classList.add('inactive');
+
+        // company stuff
+        if (company.avatar) {
+            let avatar = company.avatar;
+            if (avatar.slice(0,13) === '../../assets/') {
+                avatar = './' + avatar.slice(13)
+            }
+            document.getElementById("company-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+company.avatar+'" alt="">'
+        }
+        document.getElementById("company-info").innerHTML = '<p class="company-info-text">'+company.name+'</p>'+
+            '<p>'+company.email+'</p>'+
+            '<p>'+company.contactNumber+'</p>'+
+            '<p>'+company.address+', '+company.city+' '+company.state+'</p>';
+        let a = document.getElementsByClassName('company-domain-2');
+        for (let i = 0; i < a.length; i++) {
+            if (company.emailDomains[i]) {
+                a[i].value = company.emailDomains[i]
+            }
+        }
+    } else if (num === 5) {
+        document.getElementById("news-block").classList.add('inactive');
+        document.getElementById("search-view").classList.add('inactive');
+        document.getElementById("fbo-view").classList.add('inactive');
+        document.getElementById("pipeline-view").classList.add('inactive');
+        document.getElementById("company-view").classList.add('inactive');
+        document.getElementById("user-view").classList.remove('inactive');
+        document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Profile</p>';
+        document.getElementById("topbar-right").innerHTML = '';
+        document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
+        document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
+        document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
+        document.getElementById("fbo-detail-middle").classList.remove('inactive');
+        document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
+        document.getElementById("bottombar-popup").classList.add('inactive');
+
+        // company stuff
+        if (currentUser.avatar) {
+            let avatar = currentUser.avatar;
+            if (avatar.slice(0,13) === '../../assets/') {
+                avatar = './' + avatar.slice(13)
+            }
+            document.getElementById("user-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+currentUser.avatar+'" alt="">'
+        }
+        document.getElementById("user-info").innerHTML = '<p class="company-info-text">'+currentUser.firstName+' '+currentUser.lastName+'</p>'+
+            '<p>'+currentUser.companyUserProxies[0].position+'</p>'+
+            '<p>'+currentUser.username+'</p>'
+    }
+    activeTab = num;
+    document.getElementById("topbar-left").innerHTML = '';
+    var a = document.getElementsByClassName('iconbar-icon');
+    for (i = 0; i < a.length; i++) {
+        if (i === num) {
+            a[i].classList.add('iconbar-icon-active');
+        } else {
+            a[i].classList.remove('iconbar-icon-active');
+        }
+    }
+    closeSidebar()
+
+}
+
 function checkLoginEmail() {
   let username = document.getElementById("email").value.toLowerCase();
   if (username.length < 1 || !invalidEmail(username)) {
@@ -549,88 +1152,6 @@ function invalidEmail(email) {
     if (email) {
         return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
     }
-}
-
-function login() {
-  let username = document.getElementById("email").value.toLowerCase();
-  let password = document.getElementById("password").value;
-  if (!invalidEmail(username)) {
-    document.getElementById("login-name-popup").classList.add('inactive');
-    document.getElementById("email").classList.remove('invalid-input');
-    let xHttpProfilesEmail = new XMLHttpRequest();
-    xHttpProfilesEmail.onload = function() {
-      if (xHttpProfilesEmail.readyState === 4 && xHttpProfilesEmail.status === 200) {
-        // Typical action to be performed when the document is ready:
-        let responseProfilesEmail = JSON.parse(xHttpProfilesEmail.responseText);
-        if (responseProfilesEmail.id) {
-          document.getElementById("loading-details").innerHTML = 'Account found, logging in...';
-          document.getElementById("loading").classList.remove('inactive');
-          document.getElementById("main-view").classList.add('inactive');
-          document.getElementById("fbo-view").classList.add('inactive');
-          document.getElementById("fbo-list-view").classList.add('inactive');
-          document.getElementById("fbo-detail-view").classList.add('inactive');
-          document.getElementById("login-register").classList.add('inactive');
-          let xHttpAuthLogin = new XMLHttpRequest();
-          xHttpAuthLogin.onreadystatechange = function() {
-            if (xHttpAuthLogin.readyState === 4 && xHttpAuthLogin.status === 200) {
-              document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...';
-              let xHttpUserInfo = new XMLHttpRequest();
-              xHttpUserInfo.onreadystatechange = function() {
-                if (xHttpUserInfo.readyState === 4 && xHttpUserInfo.status === 200) {
-                  document.getElementById("loading-details").innerHTML = 'Profile info found, getting the rest of the data...';
-                  localStorage.setItem('uid', responseProfilesEmail.id);
-                  loggedIn = true;
-                  currentUser = JSON.parse(xHttpUserInfo.responseText);
-                  getTheData()
-                }
-              };
-              xHttpUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + responseProfilesEmail.id, true);
-              xHttpUserInfo.setRequestHeader("Content-type", "application/json");
-              xHttpUserInfo.send();
-            } else if (xHttpAuthLogin.readyState === 4 && xHttpAuthLogin.status === 400) {
-              document.getElementById("loading").classList.add('inactive');
-              document.getElementById("main-view").classList.add('inactive');
-              document.getElementById("fbo-view").classList.add('inactive');
-              document.getElementById("fbo-list-view").classList.add('inactive');
-              document.getElementById("fbo-detail-view").classList.add('inactive');
-              document.getElementById("login-register").classList.remove('inactive');
-              document.getElementById("login-error-text").innerHTML = 'Password/username mismatch';
-            }
-          };
-          let bodyCredentials = {
-            email: username,
-            password: password
-          };
-          xHttpAuthLogin.open("POST", apiUrl+"/auth/login/" + responseProfilesEmail.id, true);
-          xHttpAuthLogin.setRequestHeader("Content-type", "application/json");
-          xHttpAuthLogin.send(JSON.stringify(bodyCredentials));
-        } else {
-          emailNotFound = true;
-          document.getElementById("login-name-popup").innerHTML = 'Account not found';
-          document.getElementById("login-name-popup").classList.remove('inactive');
-          document.getElementById("email").classList.add('invalid-input');
-        }
-      } else if (xHttpProfilesEmail.status !== 200) {
-        document.getElementById("loading-details").innerHTML = 'Status code ' + xHttpProfilesEmail.status + ', status ' + xHttpProfilesEmail.statusText
-      } else {
-        document.getElementById("loading-details").innerHTML = 'Ready state ' + xHttpProfilesEmail.readyState + ', status code ' + xHttpProfilesEmail.status
-      }
-    };
-    xHttpProfilesEmail.open("GET", apiUrl+"/profiles/email/" + username, true);
-    xHttpProfilesEmail.setRequestHeader("Content-type", "application/json");
-    xHttpProfilesEmail.send();
-  }
-}
-
-function logOut() {
-  localStorage.removeItem('uid');
-  currentUser = null;
-  company = null;
-  fbos = [];
-  yourSearches = [];
-  resetSearchTerms();
-  loggedIn = false;
-  location.reload();
 }
 
 function checkChecked() {
@@ -3281,238 +3802,6 @@ function openBottomBarPopup() {
   }
 }
 
-function switchTab(num) {
-    document.getElementById("fbo-list-view").classList.remove('inactive');
-    document.getElementById("fbo-detail-view").classList.add('inactive');
-    tutorialsOpen = true;
-    openTutorials();
-    if (analytics.tab.timeStart === 0) {
-      analytics.tab.timeStart = new Date();
-      console.log(analytics.tab.timeStart)
-    } else if (num !== activeTab) {
-      analytics.tab.timeEnd = new Date();
-      let tabString = '';
-      if (activeTab === 0) {
-        tabString = 'News'
-      } else if (activeTab === 1) {
-        tabString = 'Search'
-      } else if (activeTab === 2) {
-        tabString = 'RFPs'
-      } else if (activeTab === 3) {
-        tabString = 'Pipeline'
-      } else if (activeTab === 4) {
-        tabString = 'Company Profile'
-      } else if (activeTab === 5) {
-        tabString = 'User Profile'
-      }
-      let eventData = {
-        tab: tabString,
-        clickCount: analytics.tab.clickCount,
-        time: ((analytics.tab.timeEnd - analytics.tab.timeStart) / 1000),
-        device: device
-      };
-      analytics.tab.timeStart = new Date();
-      analytics.tab.clickCount = 0;
-      if (analyticsOn) {
-        self.client.addEvent("Tab Usage", eventData, function(err, res) {
-          if (err) {
-            console.log("Error: " + err);
-          }
-          else {
-            console.log("Event sent.");
-          }
-        });
-      }
-    }
-    if (fboOpen) {
-      analytics.fbo.timeEnd = new Date();
-      let eventData = {
-        clickCount: analytics.fbo.clickCount,
-        time: ((analytics.fbo.timeEnd - analytics.fbo.timeStart) / 1000),
-        vote: analytics.fbo.vote,
-        device: device
-      };
-      analytics.fbo.timeStart = 0;
-      analytics.fbo.clickCount = 0;
-      analytics.fbo.vote = null;
-      if (analyticsOn) {
-        self.client.addEvent("FBO Usage", eventData, function(err, res) {
-          if (err) {
-            console.log("Error: " + err);
-          }
-          else {
-            console.log("Event sent.");
-          }
-        });
-      }
-
-    }
-    fboOpen = false;
-    if (num === 0) {
-      document.getElementById("news-block").classList.remove('inactive');
-      document.getElementById("search-view").classList.add('inactive');
-      document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("pipeline-view").classList.add('inactive');
-      document.getElementById("company-view").classList.add('inactive');
-      document.getElementById("user-view").classList.add('inactive');
-      document.getElementById("bottombar-img-home").classList.add('icon-2-active');
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
-      document.getElementById("fbo-detail-middle").classList.remove('inactive');
-      document.getElementById("bottombar-text-0").classList.add('bottombar-item-text-active');
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
-      document.getElementById("topbar-center-text").innerHTML = "To Do/News";
-      document.getElementById("topbar-right").innerHTML = ''
-    } else if (num === 1) {
-      document.getElementById("news-block").classList.add('inactive');
-      document.getElementById("search-view").classList.remove('inactive');
-      document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("pipeline-view").classList.add('inactive');
-      document.getElementById("company-view").classList.add('inactive');
-      document.getElementById("user-view").classList.add('inactive');
-      document.getElementById("topbar-center-text").innerHTML = "Search";
-      document.getElementById("topbar-right").innerHTML = '';
-      document.getElementById("saved-search-view").classList.remove('inactive');
-      document.getElementById("search-terms-view").classList.add('inactive');
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-search").classList.add('icon-2-active');
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-1").classList.add('bottombar-item-text-active');
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
-      document.getElementById("fbo-detail-middle").classList.remove('inactive')
-    } else if (num === 2) {
-      document.getElementById("news-block").classList.add('inactive');
-      document.getElementById("search-view").classList.add('inactive');
-      document.getElementById("fbo-view").classList.remove('inactive');
-      document.getElementById("pipeline-view").classList.add('inactive');
-      document.getElementById("company-view").classList.add('inactive');
-      document.getElementById("user-view").classList.add('inactive');
-      document.getElementById("topbar-center-text").innerHTML = "Opportunities";
-      document.getElementById("topbar-right").innerHTML = '';
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-opportunities").classList.add('icon-2-active');
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-2").classList.add('bottombar-item-text-active');
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
-      document.getElementById("fbo-detail-middle").classList.remove('inactive');
-      renderFbos()
-    } else if (num === 3) {
-      document.getElementById("news-block").classList.add('inactive')
-      document.getElementById("search-view").classList.add('inactive')
-      document.getElementById("fbo-view").classList.add('inactive')
-      document.getElementById("pipeline-view").classList.remove('inactive')
-      document.getElementById("company-view").classList.add('inactive')
-      document.getElementById("user-view").classList.add('inactive')
-      document.getElementById("topbar-center-text").innerHTML = "Pipeline"
-      document.getElementById("topbar-right").innerHTML = ''
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active')
-      document.getElementById("bottombar-img-pipeline").classList.add('icon-2-active')
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger')
-      document.getElementById("fbo-detail-middle").classList.remove('inactive')
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active')
-      document.getElementById("bottombar-text-3").classList.add('bottombar-item-text-active')
-    } else if (num == 4) {
-      document.getElementById("news-block").classList.add('inactive');
-      document.getElementById("search-view").classList.add('inactive');
-      document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("pipeline-view").classList.add('inactive');
-      document.getElementById("company-view").classList.remove('inactive');
-      document.getElementById("user-view").classList.add('inactive');
-      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Company</p>';
-      document.getElementById("topbar-right").innerHTML = '';
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
-      document.getElementById("fbo-detail-middle").classList.remove('inactive');
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-popup").classList.add('inactive');
-
-      // company stuff
-      if (company.avatar) {
-        let avatar = company.avatar;
-        if (avatar.slice(0,13) === '../../assets/') {
-          avatar = './' + avatar.slice(13)
-        }
-        document.getElementById("company-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+company.avatar+'" alt="">'
-      }
-      document.getElementById("company-info").innerHTML = '<p class="company-info-text">'+company.name+'</p>'+
-      '<p>'+company.email+'</p>'+
-      '<p>'+company.contactNumber+'</p>'+
-      '<p>'+company.address+', '+company.city+' '+company.state+'</p>';
-      let a = document.getElementsByClassName('company-domain-2');
-      for (let i = 0; i < a.length; i++) {
-        if (company.emailDomains[i]) {
-          a[i].value = company.emailDomains[i]
-        }
-      }
-    } else if (num === 5) {
-      document.getElementById("news-block").classList.add('inactive');
-      document.getElementById("search-view").classList.add('inactive');
-      document.getElementById("fbo-view").classList.add('inactive');
-      document.getElementById("pipeline-view").classList.add('inactive');
-      document.getElementById("company-view").classList.add('inactive');
-      document.getElementById("user-view").classList.remove('inactive');
-      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">Your Profile</p>';
-      document.getElementById("topbar-right").innerHTML = '';
-      document.getElementById("bottombar-img-home").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-opportunities").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-search").classList.remove('icon-2-active');
-      document.getElementById("bottombar-img-pipeline").classList.remove('icon-2-active');
-      document.getElementById("fbo-detail-top").classList.remove('fbo-detail-top-larger');
-      document.getElementById("fbo-detail-middle").classList.remove('inactive');
-      document.getElementById("bottombar-text-0").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-1").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-2").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-text-3").classList.remove('bottombar-item-text-active');
-      document.getElementById("bottombar-popup").classList.add('inactive');
-
-      // company stuff
-      if (currentUser.avatar) {
-        let avatar = currentUser.avatar;
-        if (avatar.slice(0,13) === '../../assets/') {
-          avatar = './' + avatar.slice(13)
-        }
-        document.getElementById("user-info-img-wrapper").innerHTML = '<img class="company-info-img" src="'+currentUser.avatar+'" alt="">'
-      }
-      document.getElementById("user-info").innerHTML = '<p class="company-info-text">'+currentUser.firstName+' '+currentUser.lastName+'</p>'+
-      '<p>'+currentUser.companyUserProxies[0].position+'</p>'+
-      '<p>'+currentUser.username+'</p>'
-    }
-    activeTab = num;
-    document.getElementById("topbar-left").innerHTML = '';
-    var a = document.getElementsByClassName('iconbar-icon');
-    for (i = 0; i < a.length; i++) {
-      if (i === num) {
-        a[i].classList.add('iconbar-icon-active');
-      } else {
-        a[i].classList.remove('iconbar-icon-active');
-      }
-    }
-    closeSidebar()
-
-  }
-
 function getToday() {
     let today = new Date();
     let dd = today.getDate();
@@ -5386,14 +5675,14 @@ function checkVote(proxy, index) {
 
 function closePopups(moveOn) {
   document.getElementById("fbo-popups").classList.add('inactive');
-  var a = document.getElementsByClassName('vote-popup')
-  for (i = 0; i < a.length; i++) {
+  let a = document.getElementsByClassName('vote-popup');
+  for (let i = 0; i < a.length; i++) {
     a[i].classList.add('inactive');
   }
-  renderFbos()
-  peopleToRefer = []
+  renderFbos();
+  peopleToRefer = [];
   if (moveOn) {
-    fboIndex = fboIndex+1
+    fboIndex = fboIndex+1;
     goToFbo(fboIndex,0)
   }
   // switchTab(tab)
@@ -5929,242 +6218,6 @@ function expandData(num) {
   toggleHamburgerMenu()
 }
 
-function getTheData() {
-  if (localStorage.getItem('uid')) {
-    var id = localStorage.getItem('uid')
-  } else if (currentUser) {
-    var id = currentUser._id
-  }
-  document.getElementById("loading-details").innerHTML = 'Getting full user data...';
-  let xHttpGetTheDataUserInfo = new XMLHttpRequest();
-  xHttpGetTheDataUserInfo.onreadystatechange = function() {
-    if (xHttpGetTheDataUserInfo.readyState === 4 && xHttpGetTheDataUserInfo.status === 200) {
-      // Typical action to be performed when the document is ready:
-      currentUser = JSON.parse(xHttpGetTheDataUserInfo.responseText);
-      let avatar = currentUser.avatar;
-      if (avatar === '../../assets/img/user.png') {
-        avatar = './img/user.png'
-      }
-      document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
-      document.getElementById("loading-details").innerHTML = 'Getting full company data...';
-      let xHttpCompanyLight = new XMLHttpRequest();
-      xHttpCompanyLight.onreadystatechange = function() {
-        if (xHttpCompanyLight.readyState === 4 && xHttpCompanyLight.status === 200) {
-          company = JSON.parse(xHttpCompanyLight.responseText);
-          let xHttpGetSearchTerms = new XMLHttpRequest();
-          document.getElementById("loading-details").innerHTML = 'Getting full search terms...';
-          xHttpGetSearchTerms.onreadystatechange = function() {
-            if (xHttpGetSearchTerms.readyState === 4 && xHttpGetSearchTerms.status === 200) {
-              searchTerms = JSON.parse(xHttpGetSearchTerms.responseText);
-              emptySearchTerms = JSON.parse(xHttpGetSearchTerms.responseText);
-              let xHttpHuntingPartyDataCompany = new XMLHttpRequest();
-              document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...';
-              xHttpHuntingPartyDataCompany.onreadystatechange = function() {
-                if (xHttpHuntingPartyDataCompany.readyState === 4 && xHttpHuntingPartyDataCompany.status === 200) {
-                  if (xHttpHuntingPartyDataCompany.responseText === 'false') {
-                    document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...';
-                    console.log('did the right one');
-                    huntingPartyData = {
-                      companyId: company._id,
-                      users: [],
-                      searches: []
-                    };
-
-                    huntingPartyData.users.push({
-                      userId: currentUser._id,
-                      name: currentUser.firstName + ' ' + currentUser.lastName,
-                      email: currentUser.username,
-                      deviceId: null,
-                      regId: null,
-                      tosRead: 0,
-                      points: 0
-                    });
-                    if (device !== undefined) {
-                      if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
-                        doTheUpdateAnyway = true
-                        huntingPartyData.users[0].deviceId = device.uuid
-                      }
-                    }
-                    var xHttpHuntingPartyDataAddNew = new XMLHttpRequest();
-                    xHttpHuntingPartyDataAddNew.onload = function() {
-                      if (xHttpHuntingPartyDataAddNew.readyState === 4 && xHttpHuntingPartyDataAddNew.status === 200) {
-                        document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...';
-                        huntingPartyData = JSON.parse(xHttpHuntingPartyDataAddNew.responseText);
-                        console.log('CREATED');
-                        document.getElementById("loading").classList.add('inactive');
-                        document.getElementById("tos-popup").classList.remove('inactive');
-                      }
-                    };
-                    xHttpHuntingPartyDataAddNew.open("POST", apiUrl+"/huntingpartydata/add", true);
-                    xHttpHuntingPartyDataAddNew.setRequestHeader('Content-type','application/json; charset=utf-8');
-                    xHttpHuntingPartyDataAddNew.send(JSON.stringify(huntingPartyData));
-                  } else if (JSON.parse(xHttpHuntingPartyDataCompany.responseText)._id && JSON.parse(xHttpHuntingPartyDataCompany.responseText).companyId){
-                    document.getElementById("loading-details").innerHTML = 'Got all data, finishing...';
-                    huntingPartyData = JSON.parse(xHttpHuntingPartyDataCompany.responseText);
-                    let yourSearches = [];
-                    for (let i = 0; i < huntingPartyData.users.length; i++) {
-                      if (huntingPartyData.users[i].userId === currentUser._id) {
-                        yourSearches = huntingPartyData.users[i].searches;
-                        break
-                      }
-                    }
-                    document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...';
-                    let xHttpCompanyFilteredList = new XMLHttpRequest();
-                    xHttpCompanyFilteredList.onreadystatechange = function() {
-                      if (xHttpCompanyFilteredList.readyState === 4 && xHttpCompanyFilteredList.status === 200) {
-                        console.log('got the thing');
-                        proxiesRes = JSON.parse(xHttpCompanyFilteredList.responseText);
-                        console.log(proxiesRes);
-                        fbosIn = proxiesRes.fbosIn;
-                        fboPipeline = proxiesRes.fboPipeline;
-                        fbosInMax = proxiesRes.fbosInMax;
-                        fboPipelineMax = proxiesRes.fboPipelineMax;
-                        checkProxiesViewed();
-                        if (!fbosIn) {
-                          fbosIn = []
-                        } else if (!fboPipeline) {
-                          fboPipeline = []
-                        }
-                        //
-                        let userInList = false;
-                        if (!huntingPartyData.users) {
-                          huntingPartyData.users = []
-                        }
-                        var doTheUpdateAnyway = false;
-                        for (let i = 0; i < huntingPartyData.users.length; i++) {
-                          if (huntingPartyData.users[i].points === undefined) {
-                            huntingPartyData.users[i].points = 0;
-                            console.log('no points!');
-                            doTheUpdateAnyway = true
-                          }
-                          if (huntingPartyData.users[i].userId === currentUser._id) {
-                            userInList = true;
-                            if (huntingPartyData.users[i].points !== undefined) {
-                              console.log('YOUR POINTS: ' + huntingPartyData.users[i].points);
-                              document.getElementById("sidebar-points-text").innerHTML = huntingPartyData.users[i].points + ' Points'
-                            }
-                            if (huntingPartyData.users[i].tosRead) {
-                              tosRead = huntingPartyData.users[i].tosRead
-                            }
-                            if (device !== undefined) {
-                              if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
-                                doTheUpdateAnyway = true;
-                                huntingPartyData.users[i].deviceId = device.uuid
-                              }
-                            }
-                          }
-                        }
-                        if (device !== undefined || !userInList || doTheUpdateAnyway) {
-                          if (!userInList || doTheUpdateAnyway) {
-                            if (!userInList) {
-                              console.log('not in the list');
-                              let deviceId = '';
-                              let regId = '';
-                              if (device) {
-                                deviceId = device.uuid
-                              }
-                              huntingPartyData.users.push({
-                                userId: currentUser._id,
-                                name: currentUser.firstName + ' ' + currentUser.lastName,
-                                email: currentUser.username,
-                                deviceId: deviceId,
-                                regId: regId,
-                                tosRead: 0,
-                                points: 0
-                              });
-                              tosRead = 0;
-                              let newsItem = {
-                                type: 'user',
-                                body: currentUser.firstName + ' ' + currentUser.lastName + ' joined Hunting Party'
-                              };
-                              generateNewsItem(newsItem)
-                            }
-                            let xHttpHuntingPartyDataPut = new XMLHttpRequest();
-                            xHttpHuntingPartyDataPut.onreadystatechange = function() {
-                              if (xHttpHuntingPartyDataPut.readyState == 4 && xHttpHuntingPartyDataPut.status == 200) {
-                                huntingPartyData = JSON.parse(xHttpHuntingPartyDataPut.responseText);
-                                if (tosRead < 1) {
-                                  document.getElementById("loading").classList.add('inactive');
-                                  document.getElementById("tos-popup").classList.remove('inactive');
-                                  // document.getElementById("login-register").classList.remove('inactive');
-                                } else {
-                                  console.log('updated HPD')
-                                  document.getElementById("loading-details").innerHTML = 'Done'
-                                  startMainApp()
-                                }
-                              }
-                            };
-                            xHttpHuntingPartyDataPut.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
-                            xHttpHuntingPartyDataPut.setRequestHeader('Content-type','application/json; charset=utf-8');
-                            xHttpHuntingPartyDataPut.send(JSON.stringify(huntingPartyData));
-                          } else {
-                            if (tosRead < 1) {
-                              document.getElementById("loading").classList.add('inactive');
-                              document.getElementById("tos-popup").classList.remove('inactive');
-                            } else {
-                              document.getElementById("loading-details").innerHTML = 'Done';
-                              console.log('starting app');
-                              startMainApp()
-                            }
-                          }
-                        } else {
-                          if (tosRead < 1) {
-                            document.getElementById("loading").classList.add('inactive');
-                            document.getElementById("tos-popup").classList.remove('inactive');
-                            // document.getElementById("login-register").classList.remove('inactive');
-                          } else {
-                            document.getElementById("loading-details").innerHTML = 'Done';
-                            console.log('starting app')
-                            startMainApp()
-                          }
-                        }
-                      }
-                    };
-                    if (!yourSearches) {
-                      yourSearches = []
-                    }
-                    if (yourSearches.length > 0) {
-                      var proxyRequest = {
-                        startIndex: 0,
-                        which: 2,
-                        searches: yourSearches
-                      }
-                      xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
-                      xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
-                      xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
-                    } else {
-                      var proxyRequest = {
-                        startIndex: 0,
-                        which: 2
-                      }
-                      xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
-                      xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
-                      xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
-                    }
-                  }
-                }
-              };
-              xHttpHuntingPartyDataCompany.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
-              xHttpHuntingPartyDataCompany.send();
-            }
-          }
-          xHttpGetSearchTerms.open("GET", apiUrl+"/fbo/getsearchterms/", true);
-          xHttpGetSearchTerms.send();
-        }
-      };
-      if (currentUser.companyUserProxies.length > 0) {
-        let companyId = currentUser.companyUserProxies[0].company._id;
-        xHttpCompanyLight.open("GET", apiUrl+"/company/" + companyId + "/light/", true);
-        xHttpCompanyLight.send();
-      } else {
-        goToCompanyCreate()
-      }
-    }
-  };
-  xHttpGetTheDataUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
-  xHttpGetTheDataUserInfo.send();
-}
-
 function acceptTOS() {
   for (i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId == currentUser._id) {
@@ -6242,59 +6295,6 @@ function renderNews() {
     }
     document.getElementById("news-items").innerHTML = newsHtml
   }
-}
-
-function startMainApp() {
-  console.log(fbosIn)
-  console.log(fboPipeline)
-  if (fbosIn.length + fboPipeline.length > 0) {
-    // setActiveFbo(fboIndex)
-    generateSearchHTML(1)
-    renderSearch()
-    generateOptions()
-    sortFboRenders(fbosIn, 0)
-    renderFbos()
-    renderNews()
-    var promiseFinished = true
-    console.log('asd')
-    document.getElementById("tos-popup").classList.add('inactive');
-    document.getElementById("loading").classList.add('inactive');
-    document.getElementById("main-view").classList.remove('inactive');
-    document.getElementById("news-block").classList.remove('inactive');
-    document.getElementById("fbo-view").classList.add('inactive');
-    document.getElementById("search-view").classList.add('inactive');
-    document.getElementById("login-register").classList.add('inactive');
-  } else {
-    generateSearchHTML(1)
-    renderSearch()
-    generateOptions()
-    // renderFbos()
-    renderNews()
-    document.getElementById("loading").classList.add('inactive');
-    document.getElementById("tos-popup").classList.add('inactive');
-    document.getElementById("main-view").classList.remove('inactive');
-    document.getElementById("news-block").classList.remove('inactive');
-    document.getElementById("fbo-view").classList.add('inactive');
-    document.getElementById("search-view").classList.add('inactive');
-    document.getElementById("login-register").classList.add('inactive');
-    document.getElementById("fbo-popups").classList.remove('inactive');
-    document.getElementById("error-popup").classList.remove('inactive');
-    document.getElementById("error-text").innerHTML = "Your current company has no FBOs attached right now. Use SEARCH to add some search criteria, and check back tomorrow to see if any have been found! <br>"
-    // document.getElementById("iconbar-3").classList.add('inactive');
-    // document.getElementById("iconbar-4").classList.add('inactive');
-    // document.getElementById("iconbar-5").classList.add('inactive');
-  }
-  // showAd()
-  // TAB SWITCH HERE
-  switchTab(2)
-  openSearchItems(0)
-  // openSearchItems(3)
-  // goToFbo(0,0);
-  // openFboDetail(5)
-  // viewSearch(0)
-  // openPopups(1)
-  // goToCompanyCreate()
-  // expandData(2)
 }
 
 function handleEnterLogin(e) {
@@ -6942,39 +6942,39 @@ function checkDomainEmail2(elem) {
 }
 
 function resetPassword() {
-  var email = document.getElementById("reset-password-input").value.toLowerCase()
-  var xhttp = new XMLHttpRequest();
+  let email = document.getElementById("reset-password-input").value.toLowerCase();
+  let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
       var resUser = JSON.parse(xhttp.responseText);
-      if (resUser.found == false) {
+      if (resUser.found === false) {
         document.getElementById("reset-password-error-text").innerHTML = 'Account not found'
       } else {
-        document.getElementById("reset-password-error-text").innerHTML = ''
-        var time = new Date();
-        var expTime = '' + ((time.getTime() / 1000) + 60 * 60 * 24 );
-        var resetHash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        var token = {
+        document.getElementById("reset-password-error-text").innerHTML = '';
+        let time = new Date();
+        let expTime = '' + ((time.getTime() / 1000) + 60 * 60 * 24 );
+        let resetHash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        let token = {
           userId: resUser.id,
           userEmail: email,
           expTime: expTime,
           hash: resetHash,
           reset: true
         };
-        var xhttp2 = new XMLHttpRequest();
-        xhttp2.onreadystatechange = function() {
-          if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-            var resCreateToken = JSON.parse(xhttp2.responseText);
-            var resetLink = 'https://efassembly.com/password-reset/' + resetHash;
+        let xhttpProfilesEmailGet = new XMLHttpRequest();
+        xhttpProfilesEmailGet.onreadystatechange = function() {
+          if (xhttpProfilesEmailGet.readyState === 4 && xhttpProfilesEmailGet.status === 200) {
+            let resCreateToken = JSON.parse(xhttpProfilesEmailGet.responseText);
+            let resetLink = 'https://efassembly.com/password-reset/' + resetHash;
             // var resetLink = "http://localhost:4200/password-reset/" + resetHash
-            var mail = ({
+            let mail = ({
               senderEmail: 'huntingparty@efassembly.com',
               recipientEmail: email,
               subject: 'Your Password Reset',
               contactMessage: 'We recently received a password reset request for your Hunting Party profile. If you requested this reset, copy and paste the link below into your browser: \n \n ' + resetLink + ' \n \n and we\'ll take you to Assembly to assign a new one. If not, you can ignore this message.',
               contactHTML: '<p>We recently received a password reset request for your Hunting Party profile. If you requested this reset, <a href="' + resetLink + '">click here to assign a new password</a> using Assembly. If not, you can ignore this message.</p>'
             });
-            sendEmail(mail)
+            sendEmail(mail);
             document.getElementById("reset-password-box-1").classList.add('inactive');
             document.getElementById("reset-password-box-2").classList.remove('inactive');
             document.getElementById("reset-password-button").classList.add('inactive');
@@ -6982,10 +6982,10 @@ function resetPassword() {
             document.getElementById("reset-password-button-2").classList.remove('inactive');
             document.getElementById("reset-password-input").value = '';
           }
-        }
-        xhttp2.open("POST", apiUrl+"/tokens/add/", true);
-        xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-        xhttp2.send(JSON.stringify(token));
+        };
+        xhttpProfilesEmailGet.open("POST", apiUrl+"/tokens/add/", true);
+        xhttpProfilesEmailGet.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhttpProfilesEmailGet.send(JSON.stringify(token));
       }
     }
   };
@@ -6994,7 +6994,7 @@ function resetPassword() {
   xhttp.send();
 }
 
-  $(function() {
+$(function() {
     $("#sidebar-detector").swipe( {
       swipeRight:function(event, distance, duration, fingerCount, fingerData, currentDirection) {
         openSidebar()
@@ -7006,14 +7006,14 @@ function resetPassword() {
       },
     });
     function openSidebar() {
-      $("#sidebar").removeClass('inactive')
-      $("#sidebar").removeClass('sidebar-out')
-      $("#sidebar").addClass('sidebar-in')
+      $("#sidebar").removeClass('inactive');
+      $("#sidebar").removeClass('sidebar-out');
+      $("#sidebar").addClass('sidebar-in');
       profileDropDownOpen = true
     }
     function closeSidebar(){
       $("#sidebar").addClass('sidebar-out');
-      $("#sidebar").removeClass('sidebar-in')
+      $("#sidebar").removeClass('sidebar-in');
       profileDropDownOpen = false
     }
   });
