@@ -14,8 +14,8 @@ let emailNotFound = false;
 let loggedIn = false;
 let currentUser = null;
 let localStorage = window.localStorage;
-let profileDropdownOpen = false;
-let voteDropdownOpen = -1;
+let profileDropDownOpen = false;
+let voteDropDownOpen = -1;
 let hamburgerMenuOpen = false;
 let hamburgerOpening = false;
 let adCounter = 0;
@@ -420,7 +420,7 @@ let pipelineUnread = 0;
 let loadInProgress = false;
 
 function checkLoginEmail() {
-  var username = document.getElementById("email").value.toLowerCase()
+  let username = document.getElementById("email").value.toLowerCase();
   if (username.length < 1 || !invalidEmail(username)) {
     document.getElementById("login-name-popup").classList.add('inactive');
     document.getElementById("email").classList.remove('invalid-input');
@@ -428,9 +428,9 @@ function checkLoginEmail() {
 }
 
 function checkLoginEmail2() {
-  var username = document.getElementById("email").value.toLowerCase()
+  let username = document.getElementById("email").value.toLowerCase();
   if (invalidEmail(username)) {
-    document.getElementById("login-name-popup").innerHTML = 'Invalid email'
+    document.getElementById("login-name-popup").innerHTML = 'Invalid email';
     document.getElementById("login-name-popup").classList.remove('inactive');
     document.getElementById("email").classList.add('invalid-input');
   } else {
@@ -440,75 +440,73 @@ function checkLoginEmail2() {
 }
 
 function login() {
-  var username = document.getElementById("email").value.toLowerCase()
-  var password = document.getElementById("password").value
+  let username = document.getElementById("email").value.toLowerCase();
+  let password = document.getElementById("password").value;
   if (!invalidEmail(username)) {
     document.getElementById("login-name-popup").classList.add('inactive');
     document.getElementById("email").classList.remove('invalid-input');
-    var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
+    let xHttpProfilesEmail = new XMLHttpRequest();
+    xHttpProfilesEmail.onload = function() {
+      if (xHttpProfilesEmail.readyState === 4 && xHttpProfilesEmail.status === 200) {
         // Typical action to be performed when the document is ready:
-        var res = JSON.parse(xhttp.responseText)
-        if (res.id) {
-          document.getElementById("loading-details").innerHTML = 'Account found, logging in...'
+        let responseProfilesEmail = JSON.parse(xHttpProfilesEmail.responseText);
+        if (responseProfilesEmail.id) {
+          document.getElementById("loading-details").innerHTML = 'Account found, logging in...';
           document.getElementById("loading").classList.remove('inactive');
           document.getElementById("main-view").classList.add('inactive');
           document.getElementById("fbo-view").classList.add('inactive');
           document.getElementById("fbo-list-view").classList.add('inactive');
           document.getElementById("fbo-detail-view").classList.add('inactive');
           document.getElementById("login-register").classList.add('inactive');
-          var xhttp2 = new XMLHttpRequest();
-          xhttp2.onreadystatechange = function() {
-            if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-              document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...'
-              // console.log(res.id)
-              var xhttp3 = new XMLHttpRequest();
-              xhttp3.onreadystatechange = function() {
-                if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-                  document.getElementById("loading-details").innerHTML = 'Profile info found, getting the rest of the data...'
-                  localStorage.setItem('uid', res.id)
-                  loggedIn = true
-                  currentUser = JSON.parse(xhttp3.responseText)
+          let xHttpAuthLogin = new XMLHttpRequest();
+          xHttpAuthLogin.onreadystatechange = function() {
+            if (xHttpAuthLogin.readyState === 4 && xHttpAuthLogin.status === 200) {
+              document.getElementById("loading-details").innerHTML = 'Login successful, fetching profile info...';
+              let xHttpUserInfo = new XMLHttpRequest();
+              xHttpUserInfo.onreadystatechange = function() {
+                if (xHttpUserInfo.readyState === 4 && xHttpUserInfo.status === 200) {
+                  document.getElementById("loading-details").innerHTML = 'Profile info found, getting the rest of the data...';
+                  localStorage.setItem('uid', responseProfilesEmail.id);
+                  loggedIn = true;
+                  currentUser = JSON.parse(xHttpUserInfo.responseText);
                   getTheData()
-                  // console.log(currentUser)
                 }
               };
-              xhttp3.open("GET", apiUrl+"/profiles/userInfo/" + res.id, true);
-              xhttp3.setRequestHeader("Content-type", "application/json");
-              xhttp3.send();
-            } else if (xhttp2.readyState == 4 && xhttp2.status == 400) {
+              xHttpUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + responseProfilesEmail.id, true);
+              xHttpUserInfo.setRequestHeader("Content-type", "application/json");
+              xHttpUserInfo.send();
+            } else if (xHttpAuthLogin.readyState === 4 && xHttpAuthLogin.status === 400) {
               document.getElementById("loading").classList.add('inactive');
               document.getElementById("main-view").classList.add('inactive');
               document.getElementById("fbo-view").classList.add('inactive');
               document.getElementById("fbo-list-view").classList.add('inactive');
               document.getElementById("fbo-detail-view").classList.add('inactive');
               document.getElementById("login-register").classList.remove('inactive');
-              document.getElementById("login-error-text").innerHTML = 'Password/username mismatch'
+              document.getElementById("login-error-text").innerHTML = 'Password/username mismatch';
             }
           };
-          var body = {
+          let bodyCredentials = {
             email: username,
             password: password
-          }
-          xhttp2.open("POST", apiUrl+"/auth/login/" + res.id, true);
-          xhttp2.setRequestHeader("Content-type", "application/json");
-          xhttp2.send(JSON.stringify(body));
+          };
+          xHttpAuthLogin.open("POST", apiUrl+"/auth/login/" + responseProfilesEmail.id, true);
+          xHttpAuthLogin.setRequestHeader("Content-type", "application/json");
+          xHttpAuthLogin.send(JSON.stringify(bodyCredentials));
         } else {
-          emailNotFound = true
-          document.getElementById("login-name-popup").innerHTML = 'Account not found'
+          emailNotFound = true;
+          document.getElementById("login-name-popup").innerHTML = 'Account not found';
           document.getElementById("login-name-popup").classList.remove('inactive');
           document.getElementById("email").classList.add('invalid-input');
         }
-      } else if (xhttp.status !== 200) {
-        document.getElementById("loading-details").innerHTML = 'Status code ' + xhttp.status + ', status ' + xhttp.statusText
+      } else if (xHttpProfilesEmail.status !== 200) {
+        document.getElementById("loading-details").innerHTML = 'Status code ' + xHttpProfilesEmail.status + ', status ' + xHttpProfilesEmail.statusText
       } else {
-        document.getElementById("loading-details").innerHTML = 'Ready state ' + xhttp.readyState + ', status code ' + xhttp.status
+        document.getElementById("loading-details").innerHTML = 'Ready state ' + xHttpProfilesEmail.readyState + ', status code ' + xHttpProfilesEmail.status
       }
     };
-    xhttp.open("GET", apiUrl+"/profiles/email/" + username, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
+    xHttpProfilesEmail.open("GET", apiUrl+"/profiles/email/" + username, true);
+    xHttpProfilesEmail.setRequestHeader("Content-type", "application/json");
+    xHttpProfilesEmail.send();
   }
 }
 
@@ -517,143 +515,127 @@ function logOut() {
   currentUser = null;
   company = null;
   fbos = [];
-  yourSearches = []
-  resetSearchTerms()
+  yourSearches = [];
+  resetSearchTerms();
   loggedIn = false;
-  // document.getElementById("loading").classList.add('inactive');
-  // document.getElementById("main-view").classList.add('inactive');
-  // document.getElementById("fbo-view").classList.add('inactive');
-  // document.getElementById("fbo-list-view").classList.add('inactive');
-  // document.getElementById("fbo-detail-view").classList.add('inactive');
-  // document.getElementById("login-register").classList.remove('inactive');
   location.reload();
 }
 
 function checkChecked() {
-  var numberChecked = 0
-  var checkedName = ''
-  var filtersHtml = ''
-  if (searchTerms.type[0].value == true) {
-    // document.getElementById("category-right-duedate").innerHTML = "All >";
+  let numberChecked = 0;
+  let checkedName = '';
+  let filtersHtml = '';
+  if (searchTerms.type[0].value === true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Type<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   } else {
-    for (i = 1; i < searchTerms.type.length; i++) {
-      if (searchTerms.type[i].value == true) {
-        numberChecked++
-        checkedName = searchTerms.type[i].name
+    for (let i = 1; i < searchTerms.type.length; i++) {
+      if (searchTerms.type[i].value === true) {
+        numberChecked++;
+        checkedName = searchTerms.type[i].name;
       }
     }
-    // document.getElementById("category-right-duedate").innerHTML = numberChecked + " >";
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Type ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
-    numberChecked = 0
-    checkedName = ''
+    numberChecked = 0;
+    checkedName = '';
   }
-  if (searchTerms.dueDate[0].value == true) {
-    // document.getElementById("category-right-duedate").innerHTML = "All >";
+  if (searchTerms.dueDate[0].value === true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Due Date<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   } else {
-    for (i = 1; i < searchTerms.dueDate.length; i++) {
-      if (searchTerms.dueDate[i].value == true) {
-        numberChecked++
-        checkedName = searchTerms.dueDate[i].name
+    for (let i = 1; i < searchTerms.dueDate.length; i++) {
+      if (searchTerms.dueDate[i].value === true) {
+        numberChecked++;
+        checkedName = searchTerms.dueDate[i].name;
       }
     }
-    // document.getElementById("category-right-duedate").innerHTML = numberChecked + " >";
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Due Date ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
-    numberChecked = 0
-    checkedName = ''
+    numberChecked = 0;
+    checkedName = '';
   }
-  if (searchTerms.naics[0].value == true) {
+  if (searchTerms.naics[0].value === true) {
     filtersHtml = filtersHtml + '<div class="filters-item">NAICS<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("category-right-naics").innerHTML = "All >";
   } else {
     for (i = 1; i < searchTerms.naics.length; i++) {
-      if (searchTerms.naics[i].value == true) {
-        numberChecked++
-        checkedName = searchTerms.naics[i].code
+      if (searchTerms.naics[i].value === true) {
+        numberChecked++;
+        checkedName = searchTerms.naics[i].code;
       }
     }
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">NAICS ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
-    numberChecked = 0
-    checkedName = ''
+    numberChecked = 0;
+    checkedName = '';
   }
   for (i = 0; i < searchTerms.psc.products.length; i++) {
-    if (searchTerms.psc.products[i].value == true) {
-      numberChecked++
-      checkedName = searchTerms.psc.products[i].name
+    if (searchTerms.psc.products[i].value === true) {
+      numberChecked++;
+      checkedName = searchTerms.psc.products[i].name;
     }
   }
   if (numberChecked > 0) {
     filtersHtml = filtersHtml + '<div class="filters-item">Product ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   }
-  // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
-  numberChecked = 0
-  checkedName = ''
-  for (i = 0; i < searchTerms.psc.services.length; i++) {
-    if (searchTerms.psc.services[i].value == true) {
-      numberChecked++
-      checkedName = searchTerms.psc.services[i].name
+  numberChecked = 0;
+  checkedName = '';
+  for (let i = 0; i < searchTerms.psc.services.length; i++) {
+    if (searchTerms.psc.services[i].value === true) {
+      numberChecked++;
+      checkedName = searchTerms.psc.services[i].name;
     }
   }
   if (numberChecked > 0) {
     filtersHtml = filtersHtml + '<div class="filters-item">Service ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   }
-  // document.getElementById("category-right-psc").innerHTML = numberChecked + " >";
-  numberChecked = 0
-  checkedName = ''
-  if (searchTerms.agency[0].value == true) {
+  numberChecked = 0;
+  checkedName = '';
+  if (searchTerms.agency[0].value === true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Agency<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("category-right-agency").innerHTML = "All >";
   } else {
-    for (i = 1; i < searchTerms.agency.length; i++) {
-      if (searchTerms.agency[i].value == true) {
-        numberChecked++
-        checkedName = searchTerms.agency[i].name
+    for (let i = 1; i < searchTerms.agency.length; i++) {
+      if (searchTerms.agency[i].value === true) {
+        numberChecked++;
+        checkedName = searchTerms.agency[i].name;
       }
     }
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Agency ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
     // document.getElementById("category-right-agency").innerHTML = numberChecked + " >";
-    numberChecked = 0
-    checkedName = ''
+    numberChecked = 0;
+    checkedName = '';
   }
-  if (searchTerms.place[0].value == true) {
+  if (searchTerms.place[0].value === true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Location<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
   } else {
-    checkedName = ''
+    checkedName = '';
     for (i = 0; i < searchTerms.place.length; i++) {
-      if (searchTerms.place[i].value == true) {
-        numberChecked++
-        checkedName = searchTerms.place[i].name
+      if (searchTerms.place[i].value === true) {
+        numberChecked++;
+        checkedName = searchTerms.place[i].name;
       }
     }
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Location ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
   }
-  numberChecked = 0
-  if (searchTerms.setAside[0].value == true) {
+  numberChecked = 0;
+  if (searchTerms.setAside[0].value === true) {
     filtersHtml = filtersHtml + '<div class="filters-item">Set Aside<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
-    // document.getElementById("category-right-setaside").innerHTML = "All >";
   } else {
-    for (i = 1; i < searchTerms.setAside.length; i++) {
-      if (searchTerms.setAside[i].value == true) {
-        numberChecked++
+    for (let i = 1; i < searchTerms.setAside.length; i++) {
+      if (searchTerms.setAside[i].value === true) {
+        numberChecked++;
       }
     }
     if (numberChecked > 0) {
       filtersHtml = filtersHtml + '<div class="filters-item">Set Aside ('+numberChecked+')<div class="filters-item-x inactive"><img src="./img/close.png" alt=""></div></div>'
     }
-    // document.getElementById("category-right-setaside").innerHTML = numberChecked + " >";
-    numberChecked = 0
-    checkedName = ''
+    numberChecked = 0;
+    checkedName = '';
   }
   if (document.getElementById("search-item-filters-right")) {
     document.getElementById("search-item-filters-right").innerHTML = filtersHtml;
@@ -661,34 +643,34 @@ function checkChecked() {
 }
 
 function resetSearchTerms() {
-  console.log('starting')
-  searchTerms = emptySearchTerms
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-      var res = JSON.parse(xhttp.responseText);
-      emptySearchTerms = JSON.parse(xhttp.responseText);
-      console.log('done')
+  console.log('starting');
+  searchTerms = emptySearchTerms;
+  let xHttpResetSearchTerms = new XMLHttpRequest();
+  xHttpResetSearchTerms.onreadystatechange = function() {
+    if (xHttpResetSearchTerms.readyState === 4 && xHttpResetSearchTerms.status === 200) {
+      let responseSearchTerms = JSON.parse(xHttpResetSearchTerms.responseText);
+      emptySearchTerms = JSON.parse(xHttpResetSearchTerms.responseText);
+      console.log('reset search terms completed');
     }
-  }
-  xhttp.open("GET", apiUrl+"/fbo/getsearchterms/", true);
-  xhttp.send();
+  };
+  xHttpResetSearchTerms.open("GET", apiUrl+"/fbo/getsearchterms/", true);
+  xHttpResetSearchTerms.send();
 }
 
 function viewSearch(index) {
   if (index > -1) {
-    searchTerms = yourSearches[index]
+    searchTerms = yourSearches[index];
     if (!searchTerms.psc.products) {
       searchTerms.psc = emptySearchTerms.psc
     }
     if (searchTerms.place.length < 2 || !searchTerms.place[0].regions) {
       searchTerms.place = emptySearchTerms.place
     }
-    activeSearchIndex = index
+    activeSearchIndex = index;
     document.getElementById("delete-search-button").classList.remove('inactive')
   } else {
-    resetSearchTerms()
-    activeSearchIndex = -1
+    resetSearchTerms();
+    activeSearchIndex = -1;
     document.getElementById("delete-search-button").classList.add('inactive')
   }
 
@@ -791,106 +773,106 @@ function viewSearch(index) {
 function openSearchBox(which) {
   if (which == 0) {
     if (document.getElementById("search-box-time").classList.contains('inactive')) {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
-        a[i].classList.add('inactive')
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive');
       }
-      document.getElementById("search-box-time").classList.remove('inactive')
-      document.getElementById("category-arrow-duedate").classList.add('rotate')
+      document.getElementById("search-box-time").classList.remove('inactive');
+      document.getElementById("category-arrow-duedate").classList.add('rotate');
     } else {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
-        a[i].classList.add('inactive')
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
+        a[i].classList.add('inactive');
       }
       document.getElementById("category-arrow-duedate").classList.remove('rotate')
     }
-  } else if (which == 1) {
-    analytics.search.timeStart = new Date()
+  } else if (which === 1) {
+    analytics.search.timeStart = new Date();
     if (document.getElementById("search-box-naics").classList.contains('inactive')) {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
       document.getElementById("search-box-naics").classList.remove('inactive')
       document.getElementById("category-arrow-naics").classList.add('rotate')
     } else {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
       document.getElementById("category-arrow-naics").classList.remove('rotate')
     }
-  } else if (which == 2) {
+  } else if (which === 2) {
     if (document.getElementById("search-box-psc").classList.contains('inactive')) {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-box-psc").classList.remove('inactive')
+      document.getElementById("search-box-psc").classList.remove('inactive');
       document.getElementById("category-arrow-psc").classList.add('rotate')
     } else {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
       document.getElementById("category-arrow-psc").classList.remove('rotate')
     }
-  } else if (which == 3) {
+  } else if (which === 3) {
     if (document.getElementById("search-box-agency").classList.contains('inactive')) {
-      a = document.getElementsByClassName('search-box')
+      a = document.getElementsByClassName('search-box');
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-box-agency").classList.remove('inactive')
+      document.getElementById("search-box-agency").classList.remove('inactive');
       document.getElementById("category-arrow-agency").classList.add('rotate')
     } else {
-      a = document.getElementsByClassName('search-box')
+      a = document.getElementsByClassName('search-box');
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
       document.getElementById("category-arrow-agency").classList.remove('rotate')
     }
-  } else if (which == 4) {
+  } else if (which === 4) {
     if (document.getElementById("search-box-location").classList.contains('inactive')) {
-      a = document.getElementsByClassName('search-box')
+      a = document.getElementsByClassName('search-box');
       for (i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-box-location").classList.remove('inactive')
+      document.getElementById("search-box-location").classList.remove('inactive');
       document.getElementById("category-arrow-location").classList.add('rotate')
     } else {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
       document.getElementById("category-arrow-location").classList.remove('rotate')
     }
-  } else if (which == 5) {
+  } else if (which === 5) {
     if (document.getElementById("search-box-setaside").classList.contains('inactive')) {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-box-setaside").classList.remove('inactive')
+      document.getElementById("search-box-setaside").classList.remove('inactive');
       document.getElementById("category-arrow-setaside").classList.add('rotate')
     } else {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
       document.getElementById("category-arrow-setaside").classList.remove('rotate')
     }
-  } else if (which == 6) {
+  } else if (which === 6) {
     if (document.getElementById("search-box-type").classList.contains('inactive')) {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
-      document.getElementById("search-box-type").classList.remove('inactive')
+      document.getElementById("search-box-type").classList.remove('inactive');
       document.getElementById("category-arrow-type").classList.add('rotate')
     } else {
-      a = document.getElementsByClassName('search-box')
-      for (i = 0; i < a.length; i++) {
+      let a = document.getElementsByClassName('search-box');
+      for (let i = 0; i < a.length; i++) {
         a[i].classList.add('inactive')
       }
       document.getElementById("category-arrow-type").classList.remove('rotate')
@@ -899,63 +881,59 @@ function openSearchBox(which) {
 }
 
 function renderSavedSearches() {
-  var html = ''
-  // '<option disabled selected value> -- select an option -- </option>'
-  // console.log(huntingPartyData.searches)
-  // yourSearches = huntingPartyData.searches
-
-  yourSearches = []
-  var onlyYourSearches = []
-  var otherPeoplesSearches = []
-  var searchDropdownHtml = '<option value="-1">All Searches</option>'
-  var searchIndex = 0
-  var hasYours = false
-  var hasOtherOnes = false
-  for (i = 0; i < huntingPartyData.users.length; i++) {
-    if (huntingPartyData.users[i].userId == currentUser._id) {
+  let html = '';
+  yourSearches = [];
+  let onlyYourSearches = [];
+  let otherPeoplesSearches = [];
+  let searchDropdownHtml = '<option value="-1">All Searches</option>';
+  let searchIndex = 0;
+  let hasYours = false;
+  let hasOtherOnes = false;
+  for (let i = 0; i < huntingPartyData.users.length; i++) {
+    if (huntingPartyData.users[i].userId === currentUser._id) {
       if (!hasYours && huntingPartyData.users[i].searches) {
         if (huntingPartyData.users[i].searches.length > 0) {
-          searchDropdownHtml = searchDropdownHtml + '<optgroup label="Your Searches">'
+          searchDropdownHtml = searchDropdownHtml + '<optgroup label="Your Searches">';
           hasYours = true
         }
       }
       if (huntingPartyData.users[i].searches) {
-        for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
-          yourSearches.push(huntingPartyData.users[i].searches[i2])
-          onlyYourSearches.push(huntingPartyData.users[i].searches[i2])
-          searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
+        for (let i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+          yourSearches.push(huntingPartyData.users[i].searches[i2]);
+          onlyYourSearches.push(huntingPartyData.users[i].searches[i2]);
+          searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>';
           searchIndex++
         }
       }
     }
   }
   if (hasYours) {
-    searchDropdownHtml = searchDropdownHtml + '</optgroup>'
-    hasYours = true
+    searchDropdownHtml = searchDropdownHtml + '</optgroup>';
+    hasYours = true;
   }
-  for (i = 0; i < huntingPartyData.users.length; i++) {
+  for (let i = 0; i < huntingPartyData.users.length; i++) {
     if (huntingPartyData.users[i].userId !== currentUser._id) {
       if (!hasOtherOnes && huntingPartyData.users[i].searches) {
         if (huntingPartyData.users[i].searches.length > 0) {
-          searchDropdownHtml = searchDropdownHtml + '<optgroup label="Coworkers\' Searches">'
+          searchDropdownHtml = searchDropdownHtml + '<optgroup label="Coworkers\' Searches">';
           hasOtherOnes = true
         }
       }
       if (huntingPartyData.users[i].searches) {
-        for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
-          yourSearches.push(huntingPartyData.users[i].searches[i2])
-          otherPeoplesSearches.push(huntingPartyData.users[i].searches[i2])
-          searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>'
+        for (let i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+          yourSearches.push(huntingPartyData.users[i].searches[i2]);
+          otherPeoplesSearches.push(huntingPartyData.users[i].searches[i2]);
+          searchDropdownHtml = searchDropdownHtml + '<option value="'+searchIndex+'">'+huntingPartyData.users[i].searches[i2].name+'</option>';
           searchIndex++
         }
       }
     }
   }
   if (hasOtherOnes) {
-    searchDropdownHtml = searchDropdownHtml + '</optgroup>'
+    searchDropdownHtml = searchDropdownHtml + '</optgroup>';
     hasOtherOnes = true
   }
-  document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml
+  document.getElementById("opportunities-topbar-select").innerHTML = searchDropdownHtml;
   html = html + '<div class="search-item">'+
   '<div id="search-item-header-0" class="search-item-header" onclick="openSearchItems('+0+')">'+
   '<div class="category-text">'+
@@ -967,8 +945,8 @@ function renderSavedSearches() {
   '</div>'+
   '<div id="saved-searches" class="search-item-subbox inactive">'
 
-  var arrowIndex = 3
-  for (i = 0; i < onlyYourSearches.length; i++) {
+  let arrowIndex = 3;
+  for (let i = 0; i < onlyYourSearches.length; i++) {
     html = html + '<div class="search-item">'+
     '<div id="search-item-header-'+arrowIndex+'" class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
     '<div class="category-text">'+
@@ -979,16 +957,15 @@ function renderSavedSearches() {
     '</div>'+
     '</div>'+
     '<div id="search-item-'+arrowIndex+'" class="search-item-subbox inactive">'+
-    'asdasdasd'+
     '</div>'+
-    '</div>'
+    '</div>';
     arrowIndex++
   }
 
   html = html + '</div>'+
-  '</div>'
+  '</div>';
 
-  document.getElementById("saved-search-view").innerHTML = html
+  document.getElementById("saved-search-view").innerHTML = html;
   if (otherPeoplesSearches.length > 0) {
     html = '<div class="search-item">'+
     '<div id="search-item-header-'+2+'" class="search-item-header" onclick="openSearchItems('+2+')">'+
@@ -999,9 +976,9 @@ function renderSavedSearches() {
     '<p class="category-arrow" id="category-arrow-2">›</p>'+
     '</div>'+
     '</div>'+
-    '<div id="other-saved-searches" class="search-item-subbox inactive">'
+    '<div id="other-saved-searches" class="search-item-subbox inactive">';
 
-    for (i = 0; i < otherPeoplesSearches.length; i++) {
+    for (let i = 0; i < otherPeoplesSearches.length; i++) {
       html = html + '<div class="search-item">'+
       '<div id="search-item-header-'+arrowIndex+'" class="search-item-header" onclick="openSearchItems('+arrowIndex+')">'+
       '<div class="category-text">'+
@@ -1013,26 +990,26 @@ function renderSavedSearches() {
       '</div>'+
       '<div id="search-item-'+arrowIndex+'" class="search-item-subbox coworker-search inactive">'+
       '</div>'+
-      '</div>'
+      '</div>';
       arrowIndex++
     }
 
     html = html + '</div>'+
-    '</div>'
+    '</div>';
     document.getElementById("other-saved-search-view").innerHTML = html
   }
 }
 
 function generateSearchHTML(where) {
-  var inputHtml = '<div class="search-item-filters">'+
+  let inputHtml = '<div class="search-item-filters">'+
   '<div class="search-item-filters-left">'+
   '<p>Filters:</p>'+
   '</div>'+
   '<div id="search-item-filters-right">'+
   '</div>'+
-  '</div>'
+  '</div>';
 
-  html = '<div id="search-terms-items" class="">'+
+  let html = '<div id="search-terms-items" class="">'+
   inputHtml+
   '<div class="category">'+
   '<div class="category-img-box">'+
@@ -1248,9 +1225,9 @@ function generateSearchHTML(where) {
   '<div id="single-search-button" class="inactive">'+
   '<button class="save-button" type="button" name="button" onclick="saveSearchTerms()" >SAVE</button>'+
   '</div>'+
-  '</div>'
+  '</div>';
 
-  if (where == 1) {
+  if (where === 1) {
     document.getElementById("new-search").innerHTML = html
   } else {
     document.getElementById("search-item-"+where).innerHTML = html
@@ -1258,68 +1235,67 @@ function generateSearchHTML(where) {
 }
 
 function sendEmail(mailInfo) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onload = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-      console.log('email sent???????????????')
+  let xHttpSendEmail = new XMLHttpRequest();
+  xHttpSendEmail.onload = function() {
+    if (xHttpSendEmail.readyState === 4 && xHttpSendEmail.status === 200) {
+      console.log('email sent')
     }
   };
-  var url = apiUrl+"/sendMail/";
-  xhttp.open("POST", url, true);
-  xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-  xhttp.send(JSON.stringify(mailInfo));
+  xHttpSendEmail.open("POST", apiUrl+"/sendMail/", true);
+  xHttpSendEmail.setRequestHeader('Content-type','application/json; charset=utf-8');
+  xHttpSendEmail.send(JSON.stringify(mailInfo));
 }
 
 function openSearchItems(which) {
-  if (which == 0) {
+  if (which === 0) {
     if (document.getElementById("saved-searches").classList.contains('inactive')) {
-      document.getElementById("saved-searches").classList.remove('inactive')
+      document.getElementById("saved-searches").classList.remove('inactive');
       document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
-      document.getElementById("saved-searches").classList.add('inactive')
+      document.getElementById("saved-searches").classList.add('inactive');
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
-  } else if (which == 1) {
+  } else if (which === 1) {
     if (previousSearchTermsIndex) {
       if (document.getElementById("search-item-"+previousSearchTermsIndex)) {
-        document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
-        document.getElementById("search-item-header-"+previousSearchTermsIndex).classList.remove('search-item-header-active')
-        document.getElementById("category-arrow-"+previousSearchTermsIndex).classList.remove('rotate')
+        document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = '';
+        document.getElementById("search-item-header-"+previousSearchTermsIndex).classList.remove('search-item-header-active');
+        document.getElementById("category-arrow-"+previousSearchTermsIndex).classList.remove('rotate');
         previousSearchTermsIndex = null
       }
     }
     if (document.getElementById("new-search").classList.contains('inactive')) {
-      generateSearchHTML(which)
+      generateSearchHTML(which);
       // if (document.getElementById("search-name").classList.contains('invalid-input')) {
       //   document.getElementById("search-name-popup").classList.remove('inactive')
       // }
-      viewSearch(-1)
-      console.log("category-arrow-"+which)
-      document.getElementById("double-search-buttons").classList.add('inactive')
-      document.getElementById("single-search-button").classList.remove('inactive')
-      document.getElementById("new-search").classList.remove('inactive')
-      document.getElementById("search-name").classList.remove('inactive')
-      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active')
+      viewSearch(-1);
+      console.log("category-arrow-"+which);
+      document.getElementById("double-search-buttons").classList.add('inactive');
+      document.getElementById("single-search-button").classList.remove('inactive');
+      document.getElementById("new-search").classList.remove('inactive');
+      document.getElementById("search-name").classList.remove('inactive');
+      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active');
       document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
-      document.getElementById("search-name").classList.remove('invalid-input')
-      document.getElementById("search-name-popup").classList.add('inactive')
-      document.getElementById("double-search-buttons").classList.remove('inactive')
-      document.getElementById("single-search-button").classList.add('inactive')
-      document.getElementById("new-search").innerHTML = ''
-      document.getElementById("new-search").classList.add('inactive')
-      document.getElementById("search-name").classList.add('inactive')
-      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active')
+      document.getElementById("search-name").classList.remove('invalid-input');
+      document.getElementById("search-name-popup").classList.add('inactive');
+      document.getElementById("double-search-buttons").classList.remove('inactive');
+      document.getElementById("single-search-button").classList.add('inactive');
+      document.getElementById("new-search").innerHTML = '';
+      document.getElementById("new-search").classList.add('inactive');
+      document.getElementById("search-name").classList.add('inactive');
+      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active');
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
-  } else if (which == 2) {
+  } else if (which === 2) {
     if (document.getElementById("other-saved-searches").classList.contains('inactive')) {
-      document.getElementById("other-saved-searches").classList.remove('inactive')
-      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active')
+      document.getElementById("other-saved-searches").classList.remove('inactive');
+      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active');
       document.getElementById("category-arrow-"+which).classList.add('rotate')
     } else {
-      document.getElementById("other-saved-searches").classList.add('inactive')
-      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active')
+      document.getElementById("other-saved-searches").classList.add('inactive');
+      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active');
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   } else {
@@ -1327,36 +1303,36 @@ function openSearchItems(which) {
       generateSearchHTML(1)
     }
     if (previousSearchTermsIndex) {
-      document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = ''
-      document.getElementById("search-item-header-"+previousSearchTermsIndex).classList.remove('search-item-header-active')
-      document.getElementById("category-arrow-"+previousSearchTermsIndex).classList.remove('rotate')
+      document.getElementById("search-item-"+previousSearchTermsIndex).innerHTML = '';
+      document.getElementById("search-item-header-"+previousSearchTermsIndex).classList.remove('search-item-header-active');
+      document.getElementById("category-arrow-"+previousSearchTermsIndex).classList.remove('rotate');
       previousSearchTermsIndex = null
     }
     if (document.getElementById("search-item-"+which).classList.contains('inactive')) {
-      document.getElementById("new-search").innerHTML = ''
-      document.getElementById("new-search").classList.add('inactive')
-      document.getElementById("search-name").classList.add('inactive')
-      document.getElementById("category-arrow-1").classList.remove('rotate')
-      document.getElementById("search-item-header-1").classList.remove('search-item-header-active')
-      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active')
-      document.getElementById("category-arrow-"+which).classList.add('rotate')
-      generateSearchHTML(which)
+      document.getElementById("new-search").innerHTML = '';
+      document.getElementById("new-search").classList.add('inactive');
+      document.getElementById("search-name").classList.add('inactive');
+      document.getElementById("category-arrow-1").classList.remove('rotate');
+      document.getElementById("search-item-header-1").classList.remove('search-item-header-active');
+      document.getElementById("search-item-header-"+which).classList.add('search-item-header-active');
+      document.getElementById("category-arrow-"+which).classList.add('rotate');
+      generateSearchHTML(which);
       if (document.getElementById("search-item-"+which).classList.contains('coworker-search')) {
-        console.log('it does')
-        document.getElementById("double-search-buttons").classList.add('inactive')
+        console.log('it does');
+        document.getElementById("double-search-buttons").classList.add('inactive');
         document.getElementById("single-search-button").classList.add('inactive')
       } else if (document.getElementById("double-search-buttons") && document.getElementById("single-search-button")) {
-        document.getElementById("double-search-buttons").classList.remove('inactive')
+        document.getElementById("double-search-buttons").classList.remove('inactive');
         document.getElementById("single-search-button").classList.add('inactive')
       }
-      var searchIndex = which - 3
-      viewSearch(searchIndex)
-      document.getElementById("search-item-"+which).classList.remove('inactive')
+      let searchIndex = which - 3;
+      viewSearch(searchIndex);
+      document.getElementById("search-item-"+which).classList.remove('inactive');
       previousSearchTermsIndex = which
     } else {
-      document.getElementById("search-item-"+which).innerHTML = ''
-      document.getElementById("search-item-"+which).classList.add('inactive')
-      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active')
+      document.getElementById("search-item-"+which).innerHTML = '';
+      document.getElementById("search-item-"+which).classList.add('inactive');
+      document.getElementById("search-item-header-"+which).classList.remove('search-item-header-active');
       document.getElementById("category-arrow-"+which).classList.remove('rotate')
     }
   }
@@ -1364,105 +1340,105 @@ function openSearchItems(which) {
 
 function recheckFilterOpportunities() {
   console.log('checking again')
-  document.getElementById("fbo-item-initialized-button").innerHTML = 'Checking...'
-  var a = document.getElementsByClassName('opp-topbar-select')
-  for (i = 0; i < a.length; i++) {
+  document.getElementById("fbo-item-initialized-button").innerHTML = 'Checking...';
+  let a = document.getElementsByClassName('opp-topbar-select');
+  for (leti = 0; i < a.length; i++) {
     if (a[i].value == activeSearchIndex) {
-      filterOpportunitiesBySearch(a[i])
+      filterOpportunitiesBySearch(a[i]);
       break
     }
   }
 }
 
 function filterOpportunitiesBySearch(elem) {
-  var searchIndex = elem.value
+  let searchIndex = elem.value;
   if (searchIndex !== activeSearchIndex) {
     document.getElementById("fbo-item-initialized-message").classList.add('inactive')
   }
-  document.getElementById("fbo-items").innerHTML = ''
-  document.getElementById("fbo-item-load-buffer").classList.remove('inactive')
+  document.getElementById("fbo-items").innerHTML = '';
+  document.getElementById("fbo-item-load-buffer").classList.remove('inactive');
   if (searchIndex > -1) {
-    searchFilterName = yourSearches[searchIndex].name
-    activeSearch = yourSearches[searchIndex]
-    activeSearchIndex = searchIndex
-    var searchCheck = {
+    searchFilterName = yourSearches[searchIndex].name;
+    activeSearch = yourSearches[searchIndex];
+    activeSearchIndex = searchIndex;
+    let searchCheck = {
       uid: currentUser._id,
       searchTerms: activeSearch
-    }
-    document.getElementById("fbo-item-initialized-message").classList.add('inactive')
-    var proxyRequest = {
+    };
+    document.getElementById("fbo-item-initialized-message").classList.add('inactive');
+    let proxyRequest = {
       searchTerms: activeSearch,
       startIndex: 0
-    }
-    var xhttp2 = new XMLHttpRequest();
-    xhttp2.onreadystatechange = function() {
-      if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-        proxiesRes = JSON.parse(xhttp2.responseText);
-        fbosIn = proxiesRes.fbosIn
-        fbosInMax = proxiesRes.fbosInMax
-        checkProxiesViewed()
-        document.getElementById("fbo-item-load-buffer").classList.add('inactive')
-        document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
+    };
+    let xHttpCompanyFilteredPut = new XMLHttpRequest();
+    xHttpCompanyFilteredPut.onreadystatechange = function() {
+      if (xHttpCompanyFilteredPut.readyState === 4 && xHttpCompanyFilteredPut.status === 200) {
+        proxiesRes = JSON.parse(xHttpCompanyFilteredPut.responseText);
+        fbosIn = proxiesRes.fbosIn;
+        fbosInMax = proxiesRes.fbosInMax;
+        checkProxiesViewed();
+        document.getElementById("fbo-item-load-buffer").classList.add('inactive');
+        document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh';
         renderFbos()
       }
-    }
-    xhttp2.open("PUT", apiUrl+"/company/" + company._id + "/filtered/", true);
-    xhttp2.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp2.send(JSON.stringify(proxyRequest));
+    };
+    xHttpCompanyFilteredPut.open("PUT", apiUrl+"/company/" + company._id + "/filtered/", true);
+    xHttpCompanyFilteredPut.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xHttpCompanyFilteredPut.send(JSON.stringify(proxyRequest));
   } else {
-    searchFilterName = null
-    activeSearch = null
-    var proxyRequest = {
+    searchFilterName = null;
+    activeSearch = null;
+    let proxyRequest = {
       startIndex: 0,
       which: 2
-    }
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        proxiesRes = JSON.parse(xhttp.responseText);
-        fbosIn = proxiesRes.fbosIn
-        fbosInMax = proxiesRes.fbosInMax
-        checkProxiesViewed()
+    };
+    let xHttpCompanySomeFbosPut = new XMLHttpRequest();
+    xHttpCompanySomeFbosPut.onreadystatechange = function() {
+      if (xHttpCompanySomeFbosPut.readyState === 4 && xHttpCompanySomeFbosPut.status === 200) {
+        proxiesRes = JSON.parse(xHttpCompanySomeFbosPut.responseText);
+        fbosIn = proxiesRes.fbosIn;
+        fbosInMax = proxiesRes.fbosInMax;
+        checkProxiesViewed();
         if (!fbosIn) {
           fbosIn = []
         } else if (!fboPipeline) {
           fboPipeline = []
         }
-        document.getElementById("fbo-item-load-buffer").classList.add('inactive')
-        document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh'
+        document.getElementById("fbo-item-load-buffer").classList.add('inactive');
+        document.getElementById("fbo-item-initialized-button").innerHTML = 'Refresh';
         renderFbos()
       }
-    }
-    xhttp.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
-    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    xhttp.send(JSON.stringify(proxyRequest));
+    };
+    xHttpCompanySomeFbosPut.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+    xHttpCompanySomeFbosPut.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xHttpCompanySomeFbosPut.send(JSON.stringify(proxyRequest));
   }
 }
 
 function deleteSearchTerms() {
   if (!saving) {
-    saving = true
-    document.getElementById('search-save-loading').classList.remove('inactive')
-    document.getElementById('search-save-popup-bg').classList.remove('inactive')
+    saving = true;
+    document.getElementById('search-save-loading').classList.remove('inactive');
+    document.getElementById('search-save-popup-bg').classList.remove('inactive');
     if (activeSearchIndex > -1) {
-      var deletedSearch
-      var allSearches = []
-      var searchSucceeded = false
-      for (i = 0; i < huntingPartyData.users.length; i++) {
-        if (huntingPartyData.users[i].userId == currentUser._id) {
+      let deletedSearch;
+      let allSearches = [];
+      let searchSucceeded = false;
+      for (let i = 0; i < huntingPartyData.users.length; i++) {
+        if (huntingPartyData.users[i].userId === currentUser._id) {
           if (huntingPartyData.users[i].searches) {
-            deletedSearch = huntingPartyData.users[i].searches[activeSearchIndex]
-            console.log(huntingPartyData.users[i].searches[activeSearchIndex])
-            huntingPartyData.users[i].searches.splice(activeSearchIndex,1)
-            searchSucceeded = true
-            theindex = i
+            deletedSearch = huntingPartyData.users[i].searches[activeSearchIndex];
+            console.log(huntingPartyData.users[i].searches[activeSearchIndex]);
+            huntingPartyData.users[i].searches.splice(activeSearchIndex,1);
+            searchSucceeded = true;
+            theindex = i;
             break
           }
         }
       }
-      for (i = 0; i < huntingPartyData.users.length; i++) {
+      for (let i = 0; i < huntingPartyData.users.length; i++) {
         if (huntingPartyData.users[i].searches) {
-          for (i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
+          for (let i2 = 0; i2 < huntingPartyData.users[i].searches.length; i2++) {
             if (huntingPartyData.users[i].searches[i2] !== deletedSearch) {
               allSearches.push(huntingPartyData.users[i].searches[i2])
             } else {
@@ -1472,10 +1448,10 @@ function deleteSearchTerms() {
         }
       }
       if (searchSucceeded) {
-        var id = huntingPartyData._id
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
+        let id = huntingPartyData._id;
+        let xHttpHuntingPartyDataPut = new XMLHttpRequest();
+        xHttpHuntingPartyDataPut.onload = function() {
+          if (xHttpHuntingPartyDataPut.readyState == 4 && xHttpHuntingPartyDataPut.status == 200) {
             console.log('search is gone!')
             yourSearches = []
             previousSearchTermsIndex = null
@@ -1503,9 +1479,9 @@ function deleteSearchTerms() {
             saving = false
           }
         };
-        xhttp.open("PUT", apiUrl+"/huntingpartydata/" + id, true);
-        xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-        xhttp.send(JSON.stringify(huntingPartyData));
+        xHttpHuntingPartyDataPut.open("PUT", apiUrl+"/huntingpartydata/" + id, true);
+        xHttpHuntingPartyDataPut.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xHttpHuntingPartyDataPut.send(JSON.stringify(huntingPartyData));
       } else {
         console.log('it failed somehow')
       }
@@ -1514,62 +1490,62 @@ function deleteSearchTerms() {
 }
 
 function searchFilter(which) {
-  var string = document.getElementById("search-filter-" + which).value
-  var html = ''
-  if (which == 0) {
-    for (i = 0; i < searchTerms.naics.length; i++) {
-      var checkedHtml = ''
+  let searchFilterElementString = document.getElementById("search-filter-" + which).value;
+  let html = '';
+  if (which === 0) {
+    for (let i = 0; i < searchTerms.naics.length; i++) {
+      let checkedHtml = '';
       if (searchTerms.naics[i].value) {
         checkedHtml = ' checked'
       }
-      if (i == 0) {
+      if (i === 0) {
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].name+'</span>'
+        '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].name+'</span>';
         html = html + '<div class="search-box-checkbox-item">'+
         '<p style="margin: 0px;">----------</p>'+
         '</div>'
-      } else if (isNaN(string) || string.length < 1) {
-        if (searchTerms.naics[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.naics[i].value == true) {
+      } else if (isNaN(searchFilterElementString) || searchFilterElementString.length < 1) {
+        if (searchTerms.naics[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.naics[i].value === true) {
           html = html + '<div class="search-box-checkbox-item">'+
           '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch('+i+')"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div></div>'+
-          '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">'
+          '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">';
           for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-            var subcategoryHtml = ''
-            var arrowHtml = ''
+            let subcategoryHtml = '';
+            let arrowHtml = '';
             if (searchTerms.naics[i].subcategories[i2].subcategories) {
-              subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"'
+              subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"';
               arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span>'
             }
             html = html + '<div class="search-box-checkbox-item">'+
             '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
-            searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>'
+            searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>';
             if (searchTerms.naics[i].subcategories[i2].subcategories) {
-              html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">'
-              for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-                subcategoryHtml = ''
-                arrowHtml = ''
+              html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">';
+              for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+                subcategoryHtml = '';
+                arrowHtml = '';
                 if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                  subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"'
+                  subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"';
                   arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'" class="checkbox-text-arrow">▼</span>'
                 }
                 html = html + '<div class="search-box-checkbox-item">'+
                 '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
                 searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+arrowHtml+'</div>'
                 if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                  html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">'
+                  html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">';
                   for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                    subcategoryHtml = ''
-                    arrowHtml = ''
+                    subcategoryHtml = '';
+                    arrowHtml = '';
                     if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                      subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"'
+                      subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"';
                       arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="checkbox-text-arrow">▼</span>'
                     }
                     html = html + '<div class="search-box-checkbox-item">'+
                     '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
-                    searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>'
+                    searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>';
                     if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                      html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">'
-                      for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                      html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">';
+                      for (let i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
                         html = html + '<div class="search-box-checkbox-item">'+
                         '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'-'+i5+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+'" onclick="calculateSearch(this)">'+
                         '<div class="search-box-checkbox-text"> '+
@@ -1593,44 +1569,44 @@ function searchFilter(which) {
         } else {
           html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
           '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div></div>'+
-          '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">'
-          for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-            var subcategoryHtml = ''
-            var arrowHtml = ''
+          '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">';
+          for (let i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+            let  subCategoryHtml = '';
+            let arrowHtml = '';
             if (searchTerms.naics[i].subcategories[i2].subcategories) {
-              subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"'
+              subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"';
               arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span>'
             }
             html = html + '<div class="search-box-checkbox-item">'+
-            '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
-            searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>'
+            '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'> '+
+            searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>';
             if (searchTerms.naics[i].subcategories[i2].subcategories) {
-              html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">'
-              for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-                subcategoryHtml = ''
-                arrowHtml = ''
+              html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">';
+              for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+                subCategoryHtml = '';
+                arrowHtml = '';
                 if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                  subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"'
+                  subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"';
                   arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'" class="checkbox-text-arrow">▼</span>'
                 }
                 html = html + '<div class="search-box-checkbox-item">'+
-                '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
-                searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+arrowHtml+'</div>'
+                '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'> '+
+                searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+arrowHtml+'</div>';
                 if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                  html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">'
+                  html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">';
                   for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                    subcategoryHtml = ''
-                    arrowHtml = ''
+                    subCategoryHtml = '';
+                    arrowHtml = '';
                     if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                      subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"'
+                      subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"';
                       arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="checkbox-text-arrow">▼</span>'
                     }
                     html = html + '<div class="search-box-checkbox-item">'+
-                    '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
-                    searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>'
+                    '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'> '+
+                    searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>';
                     if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                      html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">'
-                      for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                      html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">';
+                      for (let i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
                         html = html + '<div class="search-box-checkbox-item">'+
                         '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'-'+i5+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+'" onclick="calculateSearch(this)">'+
                         '<div class="search-box-checkbox-text"> '+
@@ -1652,45 +1628,45 @@ function searchFilter(which) {
           }
           html = html + '</div>'
         }
-      } else if (!isNaN(string)) {
-        var inactive1 = ' inactive'
-        var inactive2 = ' inactive'
-        var inactive3 = ' inactive'
-        var inactive4 = ' inactive'
-        var inactive5 = ' inactive'
-        if (string.length > 1) {
+      } else if (!isNaN(searchFilterElementString)) {
+        let inactive1 = ' inactive';
+        let inactive2 = ' inactive';
+        let inactive3 = ' inactive';
+        let inactive4 = ' inactive';
+        let inactive5 = ' inactive';
+        if (searchFilterElementString.length > 1) {
           if (searchTerms.naics[i].subcategories) {
             for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-              if (searchTerms.naics[i].subcategories[i2].code.toString().includes(string)) {
-                inactive1 = ''
-                inactive2 = ''
+              if (searchTerms.naics[i].subcategories[i2].code.toString().includes(searchFilterElementString)) {
+                inactive1 = '';
+                inactive2 = '';
                 break
               }
               if (searchTerms.naics[i].subcategories[i2].subcategories) {
-                for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-                  if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code.toString().includes(string)) {
-                    inactive1 = ''
-                    inactive2 = ''
-                    inactive3 = ''
+                for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+                  if (searchTerms.naics[i].subcategories[i2].subcategories[i3].code.toString().includes(searchFilterElementString)) {
+                    inactive1 = '';
+                    inactive2 = '';
+                    inactive3 = '';
                     break
                   }
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                    for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.toString().includes(string)) {
-                        inactive1 = ''
-                        inactive2 = ''
-                        inactive3 = ''
-                        inactive4 = ''
+                    for (let i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                      if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.toString().includes(searchFilterElementString)) {
+                        inactive1 = '';
+                        inactive2 = '';
+                        inactive3 = '';
+                        inactive4 = '';
                         break
                       }
                       if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                        for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                          if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code.toString().includes(string)) {
-                            inactive1 = ''
-                            inactive2 = ''
-                            inactive3 = ''
-                            inactive4 = ''
-                            inactive5 = ''
+                        for (let i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
+                          if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code.toString().includes(searchFilterElementString)) {
+                            inactive1 = '';
+                            inactive2 = '';
+                            inactive3 = '';
+                            inactive4 = '';
+                            inactive5 = '';
                             break
                           }
                         }
@@ -1702,68 +1678,68 @@ function searchFilter(which) {
             }
           }
         }
-        var inactiveHtml = ' inactive'
-        if (searchTerms.naics[i].code.toString().includes(string) || string.length < 1) {
+        let inactiveHtml = ' inactive';
+        if (searchTerms.naics[i].code.toString().includes(searchFilterElementString) || searchFilterElementString.length < 1) {
           inactiveHtml = ''
         }
         html = html + '<div class="" style="width: 100%; float: left; position: relative;">'+
         '<div class="search-box-checkbox-item'+inactiveHtml+'"><input class="search-box-checkbox checkbox-naics" type="checkbox" name="" onclick="calculateSearch(this)" value="'+searchTerms.naics[i].code+'" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch('+i+')"> '+searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div></div></div>'+
-        '<div id="naics-subcategory-box-'+i+'" class="subcategory-box'+inactive2+'">'
-        for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-          var subcategoryHtml = ''
-          var arrowHtml = ''
-          var inactiveHtml = ' inactive'
-          if (string.length < 1 || searchTerms.naics[i].subcategories[i2].code.toString().includes(string)) {
+        '<div id="naics-subcategory-box-'+i+'" class="subcategory-box'+inactive2+'">';
+        for (let i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+          let subCategoryHtml = '';
+          let arrowHtml = '';
+          let inactiveHtml = ' inactive';
+          if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].code.toString().includes(searchFilterElementString)) {
             inactiveHtml = ''
           }
-          if (searchTerms.naics[i].subcategories[i2].subcategories && string.length < 1) {
-            subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"'
+          if (searchTerms.naics[i].subcategories[i2].subcategories && searchFilterElementString.length < 1) {
+            subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"';
             arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span>'
           }
-          var inactiveHtml = ' inactive'
-          if (searchTerms.naics[i].subcategories[i2].code.toString().includes(string)) {
+          let inactiveHtml = ' inactive';
+          if (searchTerms.naics[i].subcategories[i2].code.toString().includes(searchFilterElementString)) {
             inactiveHtml = ''
           }
           html = html + '<div>'+
-          '<div class="search-box-checkbox-item'+inactiveHtml+'"><input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'></div> '+
+          '<div class="search-box-checkbox-item'+inactiveHtml+'"><input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'></div> '+
           searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>'
           if (searchTerms.naics[i].subcategories[i2].subcategories) {
-            html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box'+inactive3+'">'
-            for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-              subcategoryHtml = ''
-              arrowHtml = ''
-              var inactiveHtml = ' inactive'
-              if (string.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].code.toString().includes(string)) {
+            html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box'+inactive3+'">';
+            for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
+              subCategoryHtml = '';
+              arrowHtml = '';
+              let inactiveHtml = ' inactive';
+              if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].code.toString().includes(searchFilterElementString)) {
                 inactiveHtml = ''
               }
-              if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories && string.length < 1) {
-                subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"'
+              if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories && searchFilterElementString.length < 1) {
+                subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"'
                 arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'" class="checkbox-text-arrow">▼</span>'
               }
               html = html + '<div>'+
-              '<div class="search-box-checkbox-item'+inactiveHtml+'"><input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'></div> '+
+              '<div class="search-box-checkbox-item'+inactiveHtml+'"><input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'></div> '+
               searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+arrowHtml+'</div>'
               if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box'+inactive4+'">'
-                for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                  subcategoryHtml = ''
-                  arrowHtml = ''
-                  var inactiveHtml = ' inactive'
-                  if (string.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.toString().includes(string)) {
+                html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box'+inactive4+'">';
+                for (let i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
+                  subCategoryHtml = '';
+                  arrowHtml = '';
+                  let inactiveHtml = ' inactive';
+                  if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.toString().includes(searchFilterElementString)) {
                     inactiveHtml = ''
                   }
-                  if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories && string.length < 1) {
-                    subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"'
+                  if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories && searchFilterElementString.length < 1) {
+                    subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"';
                     arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="checkbox-text-arrow">▼</span>'
                   }
                   html = html + '<div>'+
-                  '<div class="search-box-checkbox-item'+inactiveHtml+'"><input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'></div> '+
-                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>'
+                  '<div class="search-box-checkbox-item'+inactiveHtml+'"><input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'></div> '+
+                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>';
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
                     html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box'+inactive5+'">'
                     for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                      var inactiveHtml = ' inactive'
-                      if (string.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code.toString().includes(string)) {
+                      let inactiveHtml = ' inactive';
+                      if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code.toString().includes(searchFilterElementString)) {
                         inactiveHtml = ''
                       }
                       html = html + '<div>'+
@@ -1791,53 +1767,41 @@ function searchFilter(which) {
     }
     document.getElementById("search-box-naics-list").innerHTML = html
   }
-  if (which == 1) {
+  if (which === 1) {
     html = '<div class="search-box-checkbox-item">'+
     '<div class="search-box-checkbox-text" onclick="openPscCategory(0)">Products<span id="psc-product-arrow" class="checkbox-text-arrow">▼</span></div>'+
     '</div>'+
     '<div id="products-subcategory-box" class="subcategory-box">'
     for (i = 0; i < searchTerms.psc.products.length; i++) {
-      var checkedHtml = ''
+      let checkedHtml = '';
       if (searchTerms.psc.products[i].value) {
         checkedHtml = ' checked'
       }
-      var matchFound = false
-      if (searchTerms.psc.products[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.products[i].value == true) {
-        var inactiveHtml = ''
-        var arrowHtml = '<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▲</span>'
+      let matchFound = false;
+      if (searchTerms.psc.products[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.psc.products[i].value == true) {
+        let inactiveHtml = '';
+        let arrowHtml = '<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▲</span>';
         if (document.getElementById("psc-product-subcategory-box-"+i).classList.contains('inactive')) {
-          inactiveHtml = ' inactive'
+          inactiveHtml = ' inactive';
           arrowHtml = '<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
         }
         html = html + '<div class="search-box-checkbox-item">'+
         '<input id="psc-product-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-product" type="checkbox" name="" value="'+searchTerms.psc.products[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc.products[i].name+arrowHtml+'</div>'+
-        '<div id="psc-product-subcategory-box-'+i+'" class="subcategory-box'+inactiveHtml+'">'
+        '<div id="psc-product-subcategory-box-'+i+'" class="subcategory-box'+inactiveHtml+'">';
         if (searchTerms.psc.products[i].psc) {
-          for (pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
-            if (searchTerms.psc.products[i].psc[pscIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.products[i].psc[pscIndex].value == true) {
+          for (let pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
+            if (searchTerms.psc.products[i].psc[pscIndex].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.psc.products[i].psc[pscIndex].value == true) {
               html = html + '<div class="search-box-checkbox-item">'+
               '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc.products[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.products[i].psc[pscIndex].name+'</div>'+
-              '</div>'
+              '</div>';
               matchFound = true
             }
           }
         }
-        html = html + '</div>'
+        html = html + '</div>';
         matchFound = true
       } else if (searchTerms.psc.products[i].psc) {
-        // var pscHtml = ''
-        // for (pscIndex = 0; pscIndex < searchTerms.psc[i].psc.length; pscIndex++) {
-        //   if (searchTerms.psc[i].psc[pscIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc[i].psc[pscIndex].value == true) {
-        //     pscHtml = pscHtml + '<div class="search-box-checkbox-item">'+
-        //     '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
-        //     '</div>'
-        //     matchFound = true
-        //   } else {
-        //     pscHtml = pscHtml + '<div class="search-box-checkbox-item inactive">'+
-        //     '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc[i].psc[pscIndex].name+'</div>'+
-        //     '</div>'
-        //   }
-        // }
+
       }
       if (!matchFound) {
         html = html + '<div class="" style="width: 100%; float: left; display: none;">'+
@@ -1847,18 +1811,18 @@ function searchFilter(which) {
       }
       html = html + '</div>'
     }
-    html = html + '</div></div>'
+    html = html + '</div></div>';
     html = html + '<div class="search-box-checkbox-item">'+
     '<div class="search-box-checkbox-text" onclick="openPscCategory(1)">Services<span id="psc-service-arrow" class="checkbox-text-arrow">▲</span></div>'+
     '</div>'+
-    '<div id="services-subcategory-box" class="subcategory-box">'
-    for (i = 0; i < searchTerms.psc.services.length; i++) {
-      var checkedHtml = ''
+    '<div id="services-subcategory-box" class="subcategory-box">';
+    for (let i = 0; i < searchTerms.psc.services.length; i++) {
+      let checkedHtml = '';
       if (searchTerms.psc.services[i].value) {
         checkedHtml = ' checked'
       }
-      var matchFound = false
-      if (searchTerms.psc.services[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.psc.services[i].value == true) {
+      let matchFound = false;
+      if (searchTerms.psc.services[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.psc.services[i].value == true) {
         html = html + '<div class="search-box-checkbox-item">'+
         '<input id="psc-service-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
         '</div>'
@@ -1870,36 +1834,36 @@ function searchFilter(which) {
         '</div>'
       }
     }
-    html = html + '</div>'
+    html = html + '</div>';
     document.getElementById("search-box-psc-list").innerHTML = html
   }
-  if (which == 2) {
+  if (which === 2) {
     for (i = 0; i < searchTerms.agency.length; i++) {
-      var checkedHtml = ''
-      if (searchTerms.agency[i].value == true) {
+      let checkedHtml = '';
+      if (searchTerms.agency[i].value === true) {
         checkedHtml = ' checked'
       }
-      if (i == 0) {
+      if (i === 0) {
         html = html + '<div class="search-box-checkbox-item">'+
         '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text"> '+searchTerms.agency[i].name+'</div></div>'
         html = html + '<div class="search-box-checkbox-item">'+
         '<p style="margin: 0px;">----------</p>'+
         '</div>'
-      } else if (searchTerms.agency[i].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.agency[i].value == true) {
+      } else if (searchTerms.agency[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.agency[i].value === true) {
         html = html + '<div class="search-box-checkbox-item">'+
         '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</div></div>'
-        var inactiveHtml = ''
+        let inactiveHtml = '';
         if (document.getElementById("agency-subcategory-box-"+i+"").classList.contains('inactive')) {
           inactiveHtml = ' inactive'
         }
-        html = html + '<div id="agency-subcategory-box-'+i+'" class="subcategory-box '+inactiveHtml+'">'
-        for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
-          var subCheckedHTML = ''
+        html = html + '<div id="agency-subcategory-box-'+i+'" class="subcategory-box '+inactiveHtml+'">';
+        for (let subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
+          let subCheckedHTML = '';
           if (searchTerms.agency[i].subagencies[subagencyIndex].value) {
             subCheckedHTML = ' checked'
           }
-          if (searchTerms.agency[i].subagencies[subagencyIndex].name.toLowerCase().includes(string.toLowerCase()) || searchTerms.agency[i].subagencies[subagencyIndex].value == true) {
-            var inactiveHtml2 = ''
+          if (searchTerms.agency[i].subagencies[subagencyIndex].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.agency[i].subagencies[subagencyIndex].value == true) {
+            let inactiveHtml2 = '';
             if (document.getElementById('subagency-subcategory-box-'+i+'-'+subagencyIndex+'')) {
               if (document.getElementById('subagency-subcategory-box-'+i+'-'+subagencyIndex+'').classList.contains('inactive')) {
                 inactiveHtml2 = ' inactive'
@@ -1907,7 +1871,7 @@ function searchFilter(which) {
             } else {
               inactiveHtml2 = ' inactive'
             }
-            var checked = ''
+            let checked = '';
             if (searchTerms.agency[i].subagencies[subagencyIndex]) {
               checked = ' checked'
             }
@@ -1928,90 +1892,60 @@ function searchFilter(which) {
       }
     }
     document.getElementById("search-box-agency-list").innerHTML = html
-    //
-    // if (searchTerms.agency[agencyIndex].name == a[i].value) {
-    //   if (!searchTerms.agency[agencyIndex].name.toLowerCase().includes(string.toLowerCase()) || !searchTerms.agency[agencyIndex].value) {
-    //     a[i].classList.add('inactive')
-    //   } else {
-    //     a[i].classList.remove('inactive')
-    //   }
-    // } else if (searchTerms.agency[agencyIndex].subagencies) {
-    //   for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[agencyIndex].subagencies.length; subagencyIndex++) {
-    //     if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].name == a[i].value) {
-    //       if (!searchTerms.agency[agencyIndex].subagencies[subagencyIndex].name.toLowerCase().includes(string.toLowerCase()) || !searchTerms.agency[agencyIndex].subagencies[subagencyIndex].value) {
-    //         a[i].classList.add('inactive')
-    //       } else {
-    //         a[i].classList.remove('inactive')
-    //       }
-    //       break;
-    //     } else if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices) {
-    //       for (officeIndex = 0; officeIndex < searchTerms.agency[agencyIndex].subagencies[subagencyIndex].offices.length; officeIndex++) {
-    //         if (searchTerms.agency[agencyIndex].subagencies[subagencyIndex].office[officeIndex].name == a[i].value) {
-    //           if (!searchTerms.agency[agencyIndex].subagencies[subagencyIndex].office[officeIndex].name.toLowerCase().includes(string.toLowerCase()) || !searchTerms.agency[agencyIndex].subagencies[subagencyIndex].office[officeIndex].value) {
-    //             a[i].classList.add('inactive')
-    //           } else {
-    //             a[i].classList.remove('inactive')
-    //           }
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
   }
-  if (which == 3) {
-    for (i = 0; i < searchTerms.place.length; i++) {
-      var checkedHtml = ''
-      if (searchTerms.place[i].value == true) {
+  if (which === 3) {
+    for (let i = 0; i < searchTerms.place.length; i++) {
+      let checkedHtml = '';
+      if (searchTerms.place[i].value === true) {
         checkedHtml = ' checked'
       }
-      var inactiveHtml = ''
-      if (!searchTerms.place[i].name.toLowerCase().includes(string.toLowerCase()) && searchTerms.place[i].value == false) {
+      let inactiveHtml = '';
+      if (!searchTerms.place[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) && searchTerms.place[i].value === false) {
         inactiveHtml = ' inactive'
       }
-      var arrowHtml = ''
-      var onclickHtml = ''
+      let arrowHtml = '';
+      let onclickHtml = '';
       if (searchTerms.place[i].regions) {
-        arrowHtml = '<span id="place-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
+        arrowHtml = '<span id="place-arrow-'+i+'" class="checkbox-text-arrow">▼</span>';
         onclickHtml = 'onclick="calculateLocationSearch('+i+', null)"'
       }
       html = html + '<div class="search-box-checkbox-item '+inactiveHtml+'">'+
       '<input id="search-box-checkbox-'+i+'" class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
       if (searchTerms.place[i].regions) {
-        var inactiveHtml2 = ''
+        let inactiveHtml2 = '';
         if (document.getElementById("location-subcategory-box-"+i+"").classList.contains('inactive')) {
           inactiveHtml2 = ' inactive'
         }
-        html = html + '<div id="location-subcategory-box-'+i+'" class="subcategory-box '+inactiveHtml2+'">'
-        for (subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].regions.length; subcategoryIndex++) {
-          var arrowHtml = ''
-          var onclickHtml = ''
+        html = html + '<div id="location-subcategory-box-'+i+'" class="subcategory-box '+inactiveHtml2+'">';
+        for (let subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].regions.length; subcategoryIndex++) {
+          let arrowHtml = '';
+          let onclickHtml = '';
           if (searchTerms.place[i].regions[subcategoryIndex].regions) {
-            arrowHtml = '<span id="place-arrow-'+i+'-'+subcategoryIndex+'" class="checkbox-text-arrow">▼</span>'
+            arrowHtml = '<span id="place-arrow-'+i+'-'+subcategoryIndex+'" class="checkbox-text-arrow">▼</span>';
             onclickHtml = 'onclick="calculateLocationSearch('+i+', '+subcategoryIndex+')"'
           }
-          var inactiveHtml3 = ''
-          if (!searchTerms.place[i].regions[subcategoryIndex].name.toLowerCase().includes(string.toLowerCase()) && searchTerms.place[i].regions[subcategoryIndex].value == false) {
+          let inactiveHtml3 = '';
+          if (!searchTerms.place[i].regions[subcategoryIndex].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) && searchTerms.place[i].regions[subcategoryIndex].value === false) {
             inactiveHtml3 = ' inactive'
           }
-          var subCheckedHTML = ''
+          let subCheckedHTML = '';
           if (searchTerms.place[i].regions[subcategoryIndex].value) {
             subCheckedHTML = ' checked'
           }
           html = html + '<div class="search-box-checkbox-item '+inactiveHtml3+'">'+
-          '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].name+'" onclick="calculateSearch(this)" '+subCheckedHTML+'> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].regions[subcategoryIndex].name+arrowHtml+'</div>'
+          '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].name+'" onclick="calculateSearch(this)" '+subCheckedHTML+'> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].regions[subcategoryIndex].name+arrowHtml+'</div>';
           if (searchTerms.place[i].regions[subcategoryIndex].regions) {
-            var inactiveHtml4 = ''
+            let inactiveHtml4 = '';
             if (document.getElementById("location-subcategory-box-"+i+"-"+subcategoryIndex).classList.contains('inactive')) {
               inactiveHtml4 = ' inactive'
             }
-            html = html + '<div id="location-subcategory-box-'+i+'-'+subcategoryIndex+'" class="subcategory-box '+inactiveHtml4+'">'
-            for (subcategoryIndex2 = 0; subcategoryIndex2 < searchTerms.place[i].regions[subcategoryIndex].regions.length; subcategoryIndex2++) {
-              var inactiveHtml5 = ''
-              if (!searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name.toLowerCase().includes(string.toLowerCase()) && searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].value == false) {
+            html = html + '<div id="location-subcategory-box-'+i+'-'+subcategoryIndex+'" class="subcategory-box '+inactiveHtml4+'">';
+            for (let subcategoryIndex2 = 0; subcategoryIndex2 < searchTerms.place[i].regions[subcategoryIndex].regions.length; subcategoryIndex2++) {
+              let inactiveHtml5 = '';
+              if (!searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) && searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].value === false) {
                 inactiveHtml5 = ' inactive'
               }
-              var subCheckedHTML = ''
+              let subCheckedHTML = '';
               if (searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].value) {
                 subCheckedHTML = ' checked'
               }
@@ -2025,7 +1959,7 @@ function searchFilter(which) {
         }
         html = html + '</div>'
       }
-      if (i == 0) {
+      if (i === 0) {
         html = html + '<div class="search-box-checkbox-item">'+
         '<p style="margin: 0px;">----------</p>'+
         '</div>'
@@ -2037,22 +1971,22 @@ function searchFilter(which) {
 }
 
 function renderSearch() {
-  var html = ''
-  for (i = 0; i < searchTerms.dueDate.length; i++) {
+  let html = '';
+  for (let i = 0; i < searchTerms.dueDate.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
     '<input class="search-box-checkbox checkbox-duedate" type="checkbox" name="" value="'+searchTerms.dueDate[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.dueDate[i].name+'</div>'
-    if (i == 0) {
+    if (i === 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<p style="margin: 0px;">----------</p>'+
       '</div>'
     }
     html = html + '</div>'
   }
-  document.getElementById("search-box-time").innerHTML = html
-  html = ''
-  var naicsIndex = 0
+  document.getElementById("search-box-time").innerHTML = html;
+  html = '';
+  let naicsIndex = 0;
   for (i = 0; i < searchTerms.naics.length; i++) {
-    if (i == 0) {
+    if (i === 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="0" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.naics[i].name+'</div>'+
       '<div id="naics-subcategory-box-'+i+'"></div>'+
@@ -2062,45 +1996,45 @@ function renderSearch() {
     } else {
       html = html + '<div class="search-box-checkbox-item">'+
       '<input class="search-box-checkbox checkbox-naics" type="checkbox" name="" value="'+searchTerms.naics[i].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateNaicsSearch(\''+i+'\')"> '+
-      searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'
+      searchTerms.naics[i].code+' '+searchTerms.naics[i].name+'<span id="naics-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>';
       if (searchTerms.naics[i].subcategories) {
-        html = html + '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">'
-        for (i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
-          var subcategoryHtml = ''
-          var arrowHtml = ''
+        html = html + '<div id="naics-subcategory-box-'+i+'" class="subcategory-box inactive">';
+        for (let i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
+          let subCategoryHtml = '';
+          let arrowHtml = '';
           if (searchTerms.naics[i].subcategories[i2].subcategories) {
-            subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"'
+            subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"';
             arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span>'
           }
           html = html + '<div class="search-box-checkbox-item">'+
-          '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
-          searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>'
+          '<input id="checkbox-subnaics-'+i+'-'+i2+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'> '+
+          searchTerms.naics[i].subcategories[i2].code+' '+searchTerms.naics[i].subcategories[i2].name+arrowHtml+'</div>';
           if (searchTerms.naics[i].subcategories[i2].subcategories) {
-            html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">'
+            html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'" class="subcategory-box inactive">';
             for (i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
-              subcategoryHtml = ''
-              arrowHtml = ''
+              subCategoryHtml = '';
+              arrowHtml = '';
               if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"'
+                subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'\')"';
                 arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'" class="checkbox-text-arrow">▼</span>'
               }
               html = html + '<div class="search-box-checkbox-item">'+
-              '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
+              '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'> '+
               searchTerms.naics[i].subcategories[i2].subcategories[i3].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].name+arrowHtml+'</div>'
               if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories) {
-                html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">'
+                html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'" class="subcategory-box inactive">';
                 for (i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
-                  subcategoryHtml = ''
-                  arrowHtml = ''
+                  subCategoryHtml = '';
+                  arrowHtml = '';
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                    subcategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"'
+                    subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'-'+i3+'-'+i4+'\')"';
                     arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="checkbox-text-arrow">▼</span>'
                   }
                   html = html + '<div class="search-box-checkbox-item">'+
-                  '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subcategoryHtml+'> '+
-                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>'
+                  '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"'+subCategoryHtml+'> '+
+                  searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code+' '+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name+arrowHtml+'</div>';
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
-                    html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">'
+                    html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box inactive">';
                     for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
                       html = html + '<div class="search-box-checkbox-item">'+
                       '<input id="checkbox-subnaics-'+i+'-'+i2+'-'+i3+'-'+i4+'-'+i5+'" class="search-box-checkbox checkbox-subnaics" type="checkbox" name="" value="'+searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code+'" onclick="calculateSearch(this)">'+
@@ -2126,42 +2060,42 @@ function renderSearch() {
       html = html + '</div>'
     }
   }
-  document.getElementById("search-box-naics-list").innerHTML = html
+  document.getElementById("search-box-naics-list").innerHTML = html;
   html = '<div class="search-box-checkbox-item">'+
   '<div class="search-box-checkbox-text" onclick="openPscCategory(0)">Products<span id="psc-product-arrow" class="checkbox-text-arrow">▼</span></div>'+
   '</div>'+
-  '<div id="products-subcategory-box" class="subcategory-box inactive">'
-  for (i = 0; i < searchTerms.psc.products.length; i++) {
+  '<div id="products-subcategory-box" class="subcategory-box inactive">';
+  for (let i = 0; i < searchTerms.psc.products.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
     '<input id="psc-product-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-product" type="checkbox" name="" value="'+searchTerms.psc.products[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculatePscSearch('+i+')"> '+searchTerms.psc.products[i].name+'<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▼</span></div>'+
-    '<div id="psc-product-subcategory-box-'+i+'" class="subcategory-box inactive">'
+    '<div id="psc-product-subcategory-box-'+i+'" class="subcategory-box inactive">';
     if (searchTerms.psc.products[i].psc) {
-      for (pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
+      for (let pscIndex = 0; pscIndex < searchTerms.psc.products[i].psc.length; pscIndex++) {
         html = html + '<div class="search-box-checkbox-item">'+
         '<input id="psc-product-checkbox-'+i+'-'+pscIndex+'" class="search-box-checkbox checkbox-subpsc" type="checkbox" name="" value="'+searchTerms.psc.products[i].psc[pscIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.products[i].psc[pscIndex].name+'</div>'+
         '</div>'
       }
     }
-    html = html + '</div>'
+    html = html + '</div>';
     html = html + '</div>'
   }
-  html = html + '</div>'
+  html = html + '</div>';
   html = html + '<div class="search-box-checkbox-item">'+
   '<div class="search-box-checkbox-text" onclick="openPscCategory(1)">Services<span id="psc-service-arrow" class="checkbox-text-arrow">▼</span></div>'+
   '</div>'+
-  '<div id="services-subcategory-box" class="subcategory-box inactive">'
+  '<div id="services-subcategory-box" class="subcategory-box inactive">';
   for (i = 0; i < searchTerms.psc.services.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
     '<input id="psc-service-checkbox-'+i+'" class="search-box-checkbox checkbox-psc-service" type="checkbox" name="" value="'+searchTerms.psc.services[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.psc.services[i].name+'</div>'+
-    '<div id="psc-service-subcategory-box-'+i+'" class="subcategory-box inactive">'
-    html = html + '</div>'
+    '<div id="psc-service-subcategory-box-'+i+'" class="subcategory-box inactive">';
+    html = html + '</div>';
     html = html + '</div>'
   }
-  html = html + '</div>'
-  document.getElementById("search-box-psc-list").innerHTML = html
+  html = html + '</div>';
+  document.getElementById("search-box-psc-list").innerHTML = html;
   html = ''
-  for (i = 0; i < searchTerms.agency.length; i++) {
-    if (i == 0) {
+  for (let i = 0; i < searchTerms.agency.length; i++) {
+    if (i === 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.agency[i].name+'</div></div>'+
       '<div id="agency-subcategory-box-'+i+'"></div>'+
@@ -2171,14 +2105,14 @@ function renderSearch() {
     } else {
       html = html + '<div class="search-box-checkbox-item">'+
       '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" value="'+searchTerms.agency[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</div></div>'+
-      '<div id="agency-subcategory-box-'+i+'" class="subcategory-box inactive">'
+      '<div id="agency-subcategory-box-'+i+'" class="subcategory-box inactive">';
       if (searchTerms.agency[i].subagencies) {
-        for (subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
+        for (let subagencyIndex = 0; subagencyIndex < searchTerms.agency[i].subagencies.length; subagencyIndex++) {
           html = html + '<div class="search-box-checkbox-item">'+
           '<input class="search-box-checkbox checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" onclick="calculateOfficeSearch('+i+', '+subagencyIndex+')"> '+searchTerms.agency[i].subagencies[subagencyIndex].name+'</div></div>'+
-          '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box inactive">'
+          '<div id="subagency-subcategory-box-'+i+'-'+subagencyIndex+'" class="subcategory-box inactive">';
           if (searchTerms.agency[i].subagencies[subagencyIndex].offices) {
-            for (officeIndex = 0; officeIndex < searchTerms.agency[i].subagencies[subagencyIndex].offices.length; officeIndex++) {
+            for (let officeIndex = 0; officeIndex < searchTerms.agency[i].subagencies[subagencyIndex].offices.length; officeIndex++) {
               html = html + '<div class="search-box-checkbox-item">'+
               '<input class="search-box-checkbox checkbox-subagency" type="checkbox" name="" value="'+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.agency[i].subagencies[subagencyIndex].offices[officeIndex].name+'</div></div>'
             }
@@ -2189,29 +2123,29 @@ function renderSearch() {
       html = html + '</div>'
     }
   }
-  document.getElementById("search-box-agency-list").innerHTML = html
+  document.getElementById("search-box-agency-list").innerHTML = html;
   html = ''
-  for (i = 0; i < searchTerms.place.length; i++) {
-    var arrowHtml = ''
-    var onclickHtml = ''
+  for (let i = 0; i < searchTerms.place.length; i++) {
+    let arrowHtml = '';
+    let onClickHtml = '';
     if (searchTerms.place[i].regions) {
-      arrowHtml = '<span id="place-arrow-'+i+'" class="checkbox-text-arrow">▼</span>'
-      onclickHtml = 'onclick="calculateLocationSearch('+i+', null)"'
+      arrowHtml = '<span id="place-arrow-'+i+'" class="checkbox-text-arrow">▼</span>';
+      onClickHtml = 'onclick="calculateLocationSearch('+i+', null)"'
     }
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input id="search-box-checkbox-'+i+'" class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
+    '<input id="search-box-checkbox-'+i+'" class="search-box-checkbox checkbox-place" type="checkbox" name="" value="'+searchTerms.place[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onClickHtml+'> '+searchTerms.place[i].name+arrowHtml+'</div>'
     if (searchTerms.place[i].regions) {
-      html = html + '<div id="location-subcategory-box-'+i+'" class="subcategory-box inactive">'
-      for (subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].regions.length; subcategoryIndex++) {
+      html = html + '<div id="location-subcategory-box-'+i+'" class="subcategory-box inactive">';
+      for (let subcategoryIndex = 0; subcategoryIndex < searchTerms.place[i].regions.length; subcategoryIndex++) {
         if (searchTerms.place[i].regions[subcategoryIndex].regions) {
-          arrowHtml = '<span id="place-arrow-'+i+'-'+subcategoryIndex+'" class="checkbox-text-arrow">▼</span>'
-          onclickHtml = 'onclick="calculateLocationSearch('+i+', '+subcategoryIndex+')"'
+          arrowHtml = '<span id="place-arrow-'+i+'-'+subcategoryIndex+'" class="checkbox-text-arrow">▼</span>';
+          onClickHtml = 'onclick="calculateLocationSearch('+i+', '+subcategoryIndex+')"'
         }
         html = html + '<div class="search-box-checkbox-item">'+
-        '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onclickHtml+'> '+searchTerms.place[i].regions[subcategoryIndex].name+arrowHtml+'</div>'
+        '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text" '+onClickHtml+'> '+searchTerms.place[i].regions[subcategoryIndex].name+arrowHtml+'</div>'
         if (searchTerms.place[i].regions[subcategoryIndex].regions) {
-          html = html + '<div id="location-subcategory-box-'+i+'-'+subcategoryIndex+'" class="subcategory-box inactive">'
-          for (subcategoryIndex2 = 0; subcategoryIndex2 < searchTerms.place[i].regions[subcategoryIndex].regions.length; subcategoryIndex2++) {
+          html = html + '<div id="location-subcategory-box-'+i+'-'+subcategoryIndex+'" class="subcategory-box inactive">';
+          for (let subcategoryIndex2 = 0; subcategoryIndex2 < searchTerms.place[i].regions[subcategoryIndex].regions.length; subcategoryIndex2++) {
             html = html + '<div class="search-box-checkbox-item">'+
             '<input id="search-box-checkbox-'+i+'-'+subcategoryIndex+'-'+subcategoryIndex2+'" class="search-box-checkbox checkbox-subplace" type="checkbox" name="" value="'+searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.place[i].regions[subcategoryIndex].regions[subcategoryIndex2].name+'</div>'+
             '</div>'
@@ -2222,19 +2156,19 @@ function renderSearch() {
       }
       html = html + '</div>'
     }
-    if (i == 0) {
+    if (i === 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<p style="margin: 0px;">----------</p>'+
       '</div>'
     }
     html = html + '</div>'
   }
-  document.getElementById("search-box-location-list").innerHTML = html
-  html = ''
+  document.getElementById("search-box-location-list").innerHTML = html;
+  html = '';
   for (i = 0; i < searchTerms.setAside.length; i++) {
     html = html + '<div class="search-box-checkbox-item">'+
-    '<input class="search-box-checkbox checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.setAside[i].name+'</div>'
-    if (i == 0) {
+    '<input class="search-box-checkbox checkbox-setaside" type="checkbox" name="" value="'+searchTerms.setAside[i].name+'" onclick="calculateSearch(this)"> <div class="search-box-checkbox-text"> '+searchTerms.setAside[i].name+'</div>';
+    if (i === 0) {
       html = html + '<div class="search-box-checkbox-item">'+
       '<p style="margin: 0px;">----------</p>'+
       '</div>'
@@ -2246,17 +2180,17 @@ function renderSearch() {
 
 function calculateNaicsSearch(idString) {
   if (!document.getElementById('naics-subcategory-box-'+idString).classList.contains('inactive')) {
-    document.getElementById('naics-subcategory-box-'+idString).classList.add('inactive')
+    document.getElementById('naics-subcategory-box-'+idString).classList.add('inactive');
     document.getElementById('naics-arrow-'+idString).innerHTML = '▼'
   } else {
-    document.getElementById('naics-subcategory-box-'+idString).classList.remove('inactive')
+    document.getElementById('naics-subcategory-box-'+idString).classList.remove('inactive');
     document.getElementById('naics-arrow-'+idString).innerHTML = '▲'
   }
 }
 
 function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3, subIndex4, boxId, elem) {
-  var naicsItem = searchTerms.naics[naicsItemIndex]
-  var divIdNum = ''
+  let naicsItem = searchTerms.naics[naicsItemIndex];
+  let divIdNum = '';
   if (subIndex4 > -1) {
     naicsItem = searchTerms.naics[naicsItemIndex].subcategories[subIndex1].subcategories[subIndex2].subcategories[subIndex3].subcategories[subIndex4]
   } else if (subIndex3 > -1) {
@@ -2268,26 +2202,26 @@ function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3
   }
   if (!elem.classList.contains('naics-open')) {
     if (naicsItem.subcategories) {
-      var html = '<div class="naics-subcategory-box subcategory-box">'
-      for (i = 0; i < naicsItem.subcategories.length; i++) {
-        var onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', -1, -1, -1, -1, \''+divIdNum+'\', this)'
+      let html = '<div class="naics-subcategory-box subcategory-box">'
+      for (let i = 0; i < naicsItem.subcategories.length; i++) {
+        let onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', -1, -1, -1, -1, \''+divIdNum+'\', this)';
         if (subIndex4 > -1) {
-          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+subIndex3+'-'+subIndex4+'-'+i
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+subIndex3+'-'+subIndex4+'-'+i;
           onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+subIndex2+', '+subIndex3+', '+subIndex4+', \''+divIdNum+'\', this)'
         } else if (subIndex3 > -1) {
-          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+subIndex3+'-'+i
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+subIndex3+'-'+i;
           onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+subIndex2+', '+subIndex3+', '+i+', \''+divIdNum+'\', this)'
         } else if (subIndex2 > -1) {
-          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+i
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+subIndex2+'-'+i;
           onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+subIndex2+', '+i+', -1, \''+divIdNum+'\', this)'
         } else if (subIndex1 > -1) {
-          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+i
+          divIdNum = ''+naicsItemIndex+'-'+subIndex1+'-'+i;
           onclickString = 'calculateNaicsSubSearch('+naicsItemIndex+', '+subIndex1+', '+i+', -1, -1, \''+divIdNum+'\', this)'
         }
-        var arrowHtml = ''
-        var onclickHtml = ''
+        let arrowHtml = '';
+        let onclickHtml = '';
         if (naicsItem.subcategories[i].subcategories) {
-          arrowHtml = '<span id="naics-arrow-'+divIdNum+'" class="checkbox-text-arrow">▼</span>'
+          arrowHtml = '<span id="naics-arrow-'+divIdNum+'" class="checkbox-text-arrow">▼</span>';
           onclickHtml = 'onclick="'+onclickString+'"'
         }
 
@@ -2296,35 +2230,35 @@ function calculateNaicsSubSearch(naicsItemIndex, subIndex1, subIndex2, subIndex3
         '<div id="naics-subcategory-box-'+divIdNum+'"></div>'+
         '</div>'
       }
-      html = html + '</div>'
+      html = html + '</div>';
       elem.classList.add('naics-open');
-      document.getElementById('naics-arrow-'+boxId).innerHTML = '▲'
+      document.getElementById('naics-arrow-'+boxId).innerHTML = '▲';
       document.getElementById('naics-subcategory-box-'+boxId).innerHTML = html
     }
   } else {
-    document.getElementById('naics-subcategory-box-'+boxId).innerHTML = ''
-    document.getElementById('naics-arrow-'+boxId).innerHTML = '▼'
+    document.getElementById('naics-subcategory-box-'+boxId).innerHTML = '';
+    document.getElementById('naics-arrow-'+boxId).innerHTML = '▼';
     elem.classList.remove('naics-open');
   }
 }
 
 function openPscCategory(which) {
-  if (which == 0) {
+  if (which === 0) {
     if (!document.getElementById('products-subcategory-box').classList.contains('inactive')) {
-      document.getElementById('products-subcategory-box').classList.add('inactive')
+      document.getElementById('products-subcategory-box').classList.add('inactive');
       document.getElementById('psc-product-arrow').innerHTML = '▼'
 
     } else {
-      document.getElementById('products-subcategory-box').classList.remove('inactive')
+      document.getElementById('products-subcategory-box').classList.remove('inactive');
       document.getElementById('psc-product-arrow').innerHTML = '▲'
     }
-  } else if (which == 1) {
+  } else if (which === 1) {
     if (!document.getElementById('services-subcategory-box').classList.contains('inactive')) {
-      document.getElementById('services-subcategory-box').classList.add('inactive')
+      document.getElementById('services-subcategory-box').classList.add('inactive');
       document.getElementById('psc-service-arrow').innerHTML = '▼'
 
     } else {
-      document.getElementById('services-subcategory-box').classList.remove('inactive')
+      document.getElementById('services-subcategory-box').classList.remove('inactive');
       document.getElementById('psc-service-arrow').innerHTML = '▲'
     }
   }
@@ -2332,22 +2266,22 @@ function openPscCategory(which) {
 
 function calculatePscSearch(pscIndex) {
   if (!document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.contains('inactive')) {
-    document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.add('inactive')
+    document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.add('inactive');
     document.getElementById('psc-product-arrow-'+pscIndex).innerHTML = '▼'
 
   } else {
-    document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.remove('inactive')
+    document.getElementById('psc-product-subcategory-box-'+pscIndex+'').classList.remove('inactive');
     document.getElementById('psc-product-arrow-'+pscIndex).innerHTML = '▲'
   }
 }
 
 function calculatePscSearch2(pscIndex) {
   if (!document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.contains('inactive')) {
-    document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.add('inactive')
+    document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.add('inactive');
     document.getElementById('psc-service-arrow'+pscIndex).innerHTML = '▼'
 
   } else {
-    document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.remove('inactive')
+    document.getElementById('psc-service-subcategory-box-'+pscIndex+'').classList.remove('inactive');
     document.getElementById('psc-service-arrow'+pscIndex).innerHTML = '▲'
   }
 }
@@ -2360,43 +2294,43 @@ function calculateAgencySearch(agencyIndex) {
   }
 }
 
-function calculateOfficeSearch(agencyIndex, subagencyIndex) {
-  if (!document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.contains('inactive')) {
-    document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.add('inactive')
+function calculateOfficeSearch(agencyIndex, subAgencyIndex) {
+  if (!document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subAgencyIndex+'').classList.contains('inactive')) {
+    document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subAgencyIndex+'').classList.add('inactive')
   } else {
-    document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subagencyIndex+'').classList.remove('inactive')
+    document.getElementById('subagency-subcategory-box-'+agencyIndex+'-'+subAgencyIndex+'').classList.remove('inactive')
   }
 }
 
 function calculateLocationSearch(locationIndex, subLocationIndex) {
   if (subLocationIndex !== null) {
     if (!document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.contains('inactive')) {
-      document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.add('inactive')
+      document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.add('inactive');
       document.getElementById('place-arrow-'+locationIndex+'-'+subLocationIndex).innerHTML = '▼'
     } else {
-      document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.remove('inactive')
+      document.getElementById('location-subcategory-box-'+locationIndex+'-'+subLocationIndex+'').classList.remove('inactive');
       document.getElementById('place-arrow-'+locationIndex+'-'+subLocationIndex).innerHTML = '▲'
     }
   } else {
     if (!document.getElementById('location-subcategory-box-'+locationIndex+'').classList.contains('inactive')) {
-      document.getElementById('location-subcategory-box-'+locationIndex+'').classList.add('inactive')
+      document.getElementById('location-subcategory-box-'+locationIndex+'').classList.add('inactive');
       document.getElementById('place-arrow-'+locationIndex).innerHTML = '▼'
     } else {
-      document.getElementById('location-subcategory-box-'+locationIndex+'').classList.remove('inactive')
+      document.getElementById('location-subcategory-box-'+locationIndex+'').classList.remove('inactive');
       document.getElementById('place-arrow-'+locationIndex).innerHTML = '▲'
     }
   }
 }
 
 function openTutorials() {
-  var a = document.getElementsByClassName('tutorial-view')
+  let a = document.getElementsByClassName('tutorial-view');
   if (!tutorialsOpen) {
-    for (i = 0; i < a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
       a[i].classList.remove('inactive')
     }
     tutorialsOpen = true
   } else {
-    for (i = 0; i < a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
       a[i].classList.add('inactive')
     }
     tutorialsOpen = false
@@ -3103,8 +3037,7 @@ function saveSearchTerms() {
             saving = false
           }
         };
-        var url = apiUrl+"/huntingpartydata/add";
-        xhttp.open("POST", url, true);
+        xhttp.open("POST", apiUrl+"/huntingpartydata/add", true);
         xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
         xhttp.send(JSON.stringify(huntingPartyData));
 
@@ -3200,8 +3133,8 @@ function toggleHamburgerMenu() {
 document.addEventListener("click", (evt) => {
     const profilePopup = document.getElementById("bottombar-popup");
     const profilePopupButton = document.getElementById("bottombar-img-profile");
-    const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropdownOpen);
-    const voteCircle = document.getElementById("vote-circle-"+voteDropdownOpen);
+    const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropDownOpen);
+    const voteCircle = document.getElementById("vote-circle-"+voteDropDownOpen);
     let targetElement = evt.target; // clicked element
     var profilePopupOpen = !profilePopup.classList.contains('inactive')
     var profileInside = false
@@ -4005,20 +3938,6 @@ function renderFbos() {
     console.log(noProxies + ' busted proxies')
     var fboHTMLContent = document.getElementById("fbo-items")
     var pipelineHTMLContent = document.getElementById("pipeline-items")
-    // if (updateNeeded) {
-    //   for (i = 0; i < toDeleteIds.length; i++) {
-    //     var xhttp = new XMLHttpRequest();
-    //     xhttp.onload = function() {
-    //       if (xhttp.readyState == 4 && xhttp.status == 200) {
-    //         // var res = JSON.parse(xhttp.responseText);
-    //         console.log('deleted one')
-    //       }
-    //     }
-    //     xhttp.open("DELETE", apiUrl+'/fbocompanyproxy/' + toDeleteIds[i], true);
-    //     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-    //     xhttp.send();
-    //   }
-    // }
     if (fbosIn.length < 1) {
       fboHTMLContent.innerHTML = '<div class="fbo-item-wrapper">'+
       '<div class="fbo-item-wrapper-inner">'+
@@ -4367,8 +4286,7 @@ function fboDescClick(index, text, elem) {
           console.log(fbo)
         }
       };
-      var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
-      xhttp.open("PUT", url, true);
+      xhttp.open("PUT", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(fbo));
     }
@@ -4378,7 +4296,7 @@ function fboDescClick(index, text, elem) {
 }
 
 function showVotes(index) {
-  voteDropdownOpen = index
+  voteDropDownOpen = index
   var a = document.getElementsByClassName('fbo-item-points-dropdown')
   for (i = 0; i < a.length; i++) {
     if (i == index) {
@@ -5065,8 +4983,7 @@ function addInterestedVendor() {
         }
       }
     };
-    var url = apiUrl+"/fbo/" + fbo.fbo._id;
-    xhttp.open("PUT", url, true);
+    xhttp.open("PUT", apiUrl+"/fbo/" + fbo.fbo._id, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.setRequestHeader('secretcode','SECRET-FUN-TIME-LETS-DO-POSTS');
     xhttp.send(JSON.stringify(fbo.fbo));
@@ -5284,8 +5201,7 @@ function setActiveFbo(index, tab) {
           checkProxiesViewed()
         }
       };
-      var url = apiUrl+"/fbocompanyproxy/" + proxy._id;
-      xhttp.open("PUT", url, true);
+      xhttp.open("PUT", apiUrl+"/fbocompanyproxy/" + proxy._id, true);
       xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
       xhttp.send(JSON.stringify(proxy));
     }
@@ -5697,8 +5613,7 @@ function vote(index, yes) {
         referRefer = []
       }
     };
-    var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
-    xhttp.open("PUT", url, true);
+    xhttp.open("PUT", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
     xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp.send(JSON.stringify(req));
   }
@@ -5879,9 +5794,7 @@ function sendComment() {
       }
     };
 
-    var url = apiUrl+"/fbocompanyproxy/" + fbo._id;
-
-    xhttp3.open("PUT", url, true);
+    xhttp3.open("PUT", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
     xhttp3.setRequestHeader('Content-type','application/json; charset=utf-8');
     var savedId = fbo._id
     var toSend = fbo
@@ -5917,53 +5830,40 @@ function getTheData() {
   } else if (currentUser) {
     var id = currentUser._id
   }
-  document.getElementById("loading-details").innerHTML = 'Getting full user data...'
-  var xhttp = new XMLHttpRequest();
-  // xhttp.setRequestHeader("Content-type", "application/json");
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
+  document.getElementById("loading-details").innerHTML = 'Getting full user data...';
+  let xHttpGetTheDataUserInfo = new XMLHttpRequest();
+  xHttpGetTheDataUserInfo.onreadystatechange = function() {
+    if (xHttpGetTheDataUserInfo.readyState === 4 && xHttpGetTheDataUserInfo.status === 200) {
       // Typical action to be performed when the document is ready:
-      currentUser = JSON.parse(xhttp.responseText);
-      // document.getElementById("user-name").innerHTML = currentUser.firstName + ' ' + currentUser.lastName;
-      var avatar = currentUser.avatar
-      if (avatar == '../../assets/img/user.png') {
+      currentUser = JSON.parse(xHttpGetTheDataUserInfo.responseText);
+      let avatar = currentUser.avatar;
+      if (avatar === '../../assets/img/user.png') {
         avatar = './img/user.png'
       }
       document.getElementById("profile-circle-inside").innerHTML = '<img class="circle-img" src="'+avatar+'" alt="">';
-      document.getElementById("loading-details").innerHTML = 'Getting full company data...'
-      var xhttp2 = new XMLHttpRequest();
-      // xhttp.setRequestHeader("Content-type", "application/json");
-      xhttp2.onreadystatechange = function() {
-        if (xhttp2.readyState == 4 && xhttp2.status == 200) {
-          // Typical action to be performed when the document is ready:
-          company = JSON.parse(xhttp2.responseText);
-          // var xobj = new XMLHttpRequest();
-          // xobj.overrideMimeType("application/json");
-          // xobj.open('GET', 'json/agencylogos.json', true); // Replace 'my_data' with the path to your file
-          // xobj.onreadystatechange = function () {
-          // if (xobj.readyState == 4 && xobj.status == "200") {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          // agencyLogos = JSON.parse(xobj.responseText);
-          var xhttp3 = new XMLHttpRequest();
-          // xhttp3.setRequestHeader("Content-type", "application/json");
-          document.getElementById("loading-details").innerHTML = 'Getting full search terms...'
-          xhttp3.onreadystatechange = function() {
-            if (xhttp3.readyState == 4 && xhttp3.status == 200) {
-              searchTerms = JSON.parse(xhttp3.responseText);
-              emptySearchTerms = JSON.parse(xhttp3.responseText);
-              var xhttp4 = new XMLHttpRequest();
-              // xhttp4.setRequestHeader("Content-type", "application/json");
-              document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...'
-              xhttp4.onreadystatechange = function() {
-                if (xhttp4.readyState == 4 && xhttp4.status == 200) {
-                  if (xhttp4.responseText === 'false') {
-                    document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...'
-                    console.log('did the right one')
+      document.getElementById("loading-details").innerHTML = 'Getting full company data...';
+      let xHttpCompanyLight = new XMLHttpRequest();
+      xHttpCompanyLight.onreadystatechange = function() {
+        if (xHttpCompanyLight.readyState === 4 && xHttpCompanyLight.status === 200) {
+          company = JSON.parse(xHttpCompanyLight.responseText);
+          let xHttpGetSearchTerms = new XMLHttpRequest();
+          document.getElementById("loading-details").innerHTML = 'Getting full search terms...';
+          xHttpGetSearchTerms.onreadystatechange = function() {
+            if (xHttpGetSearchTerms.readyState === 4 && xHttpGetSearchTerms.status === 200) {
+              searchTerms = JSON.parse(xHttpGetSearchTerms.responseText);
+              emptySearchTerms = JSON.parse(xHttpGetSearchTerms.responseText);
+              let xHttpHuntingPartyDataCompany = new XMLHttpRequest();
+              document.getElementById("loading-details").innerHTML = 'Getting huntingpartydata...';
+              xHttpHuntingPartyDataCompany.onreadystatechange = function() {
+                if (xHttpHuntingPartyDataCompany.readyState === 4 && xHttpHuntingPartyDataCompany.status === 200) {
+                  if (xHttpHuntingPartyDataCompany.responseText === 'false') {
+                    document.getElementById("loading-details").innerHTML = 'No huntingpartydata found, creating one...';
+                    console.log('did the right one');
                     huntingPartyData = {
                       companyId: company._id,
                       users: [],
                       searches: []
-                    }
+                    };
 
                     huntingPartyData.users.push({
                       userId: currentUser._id,
@@ -5973,88 +5873,77 @@ function getTheData() {
                       regId: null,
                       tosRead: 0,
                       points: 0
-                    })
-                    // if ((!huntingPartyData.users[0].regId || huntingPartyData.users[0].regId !== localStorage.getItem('registrationId')) && localStorage.getItem('registrationId')) {
-                    //   doTheUpdateAnyway = true
-                    //   huntingPartyData.users[0].regId = localStorage.getItem('registrationId')
-                    // }
+                    });
                     if (device !== undefined) {
                       if ((!huntingPartyData.users[0].deviceId || huntingPartyData.users[0].deviceId !== device.uuid) && device.uuid) {
                         doTheUpdateAnyway = true
                         huntingPartyData.users[0].deviceId = device.uuid
                       }
                     }
-                    var xhttpNewHPD = new XMLHttpRequest();
-                    xhttpNewHPD.onload = function() {
-                      if (xhttpNewHPD.readyState == 4 && xhttpNewHPD.status == 200) {
-                        document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...'
-                        huntingPartyData = JSON.parse(xhttpNewHPD.responseText);
-                        console.log('CREATED')
+                    var xHttpHuntingPartyDataAddNew = new XMLHttpRequest();
+                    xHttpHuntingPartyDataAddNew.onload = function() {
+                      if (xHttpHuntingPartyDataAddNew.readyState === 4 && xHttpHuntingPartyDataAddNew.status === 200) {
+                        document.getElementById("loading-details").innerHTML = 'Huntingpartydata created, finishing...';
+                        huntingPartyData = JSON.parse(xHttpHuntingPartyDataAddNew.responseText);
+                        console.log('CREATED');
                         document.getElementById("loading").classList.add('inactive');
                         document.getElementById("tos-popup").classList.remove('inactive');
                       }
                     };
-                    var url = apiUrl+"/huntingpartydata/add";
-                    xhttpNewHPD.open("POST", url, true);
-                    xhttpNewHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                    xhttpNewHPD.send(JSON.stringify(huntingPartyData));
-                  } else if (JSON.parse(xhttp4.responseText)._id && JSON.parse(xhttp4.responseText).companyId){
-                    document.getElementById("loading-details").innerHTML = 'Got all data, finishing...'
-                    huntingPartyData = JSON.parse(xhttp4.responseText);
-                    var yourSearches = []
-                    for (i = 0; i < huntingPartyData.users.length; i++) {
-                      if (huntingPartyData.users[i].userId == currentUser._id) {
-                        yourSearches = huntingPartyData.users[i].searches
+                    xHttpHuntingPartyDataAddNew.open("POST", apiUrl+"/huntingpartydata/add", true);
+                    xHttpHuntingPartyDataAddNew.setRequestHeader('Content-type','application/json; charset=utf-8');
+                    xHttpHuntingPartyDataAddNew.send(JSON.stringify(huntingPartyData));
+                  } else if (JSON.parse(xHttpHuntingPartyDataCompany.responseText)._id && JSON.parse(xHttpHuntingPartyDataCompany.responseText).companyId){
+                    document.getElementById("loading-details").innerHTML = 'Got all data, finishing...';
+                    huntingPartyData = JSON.parse(xHttpHuntingPartyDataCompany.responseText);
+                    let yourSearches = [];
+                    for (let i = 0; i < huntingPartyData.users.length; i++) {
+                      if (huntingPartyData.users[i].userId === currentUser._id) {
+                        yourSearches = huntingPartyData.users[i].searches;
                         break
                       }
                     }
-                    document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...'
-                    var xhttp3b = new XMLHttpRequest();
-                    xhttp3b.onreadystatechange = function() {
-                      if (xhttp3b.readyState == 4 && xhttp3b.status == 200) {
-                        console.log('got the thing')
-                        proxiesRes = JSON.parse(xhttp3b.responseText);
-                        console.log(proxiesRes)
-                        fbosIn = proxiesRes.fbosIn
-                        fboPipeline = proxiesRes.fboPipeline
-                        fbosInMax = proxiesRes.fbosInMax
-                        fboPipelineMax = proxiesRes.fboPipelineMax
-                        checkProxiesViewed()
+                    document.getElementById("loading-details").innerHTML = 'Getting fbo proxies...';
+                    let xHttpCompanyFilteredList = new XMLHttpRequest();
+                    xHttpCompanyFilteredList.onreadystatechange = function() {
+                      if (xHttpCompanyFilteredList.readyState === 4 && xHttpCompanyFilteredList.status === 200) {
+                        console.log('got the thing');
+                        proxiesRes = JSON.parse(xHttpCompanyFilteredList.responseText);
+                        console.log(proxiesRes);
+                        fbosIn = proxiesRes.fbosIn;
+                        fboPipeline = proxiesRes.fboPipeline;
+                        fbosInMax = proxiesRes.fbosInMax;
+                        fboPipelineMax = proxiesRes.fboPipelineMax;
+                        checkProxiesViewed();
                         if (!fbosIn) {
                           fbosIn = []
                         } else if (!fboPipeline) {
                           fboPipeline = []
                         }
                         //
-                        var userInList = false
+                        let userInList = false;
                         if (!huntingPartyData.users) {
                           huntingPartyData.users = []
                         }
-                        var doTheUpdateAnyway = false
-                        for (i = 0; i < huntingPartyData.users.length; i++) {
-                          if (huntingPartyData.users[i].points == undefined) {
-                            huntingPartyData.users[i].points = 0
+                        var doTheUpdateAnyway = false;
+                        for (let i = 0; i < huntingPartyData.users.length; i++) {
+                          if (huntingPartyData.users[i].points === undefined) {
+                            huntingPartyData.users[i].points = 0;
                             console.log('no points!');
                             doTheUpdateAnyway = true
                           }
-                          if (huntingPartyData.users[i].userId == currentUser._id) {
-                            userInList = true
+                          if (huntingPartyData.users[i].userId === currentUser._id) {
+                            userInList = true;
                             if (huntingPartyData.users[i].points !== undefined) {
-                              console.log('YOUR POINTS: ' + huntingPartyData.users[i].points)
+                              console.log('YOUR POINTS: ' + huntingPartyData.users[i].points);
                               document.getElementById("sidebar-points-text").innerHTML = huntingPartyData.users[i].points + ' Points'
                             }
                             if (huntingPartyData.users[i].tosRead) {
                               tosRead = huntingPartyData.users[i].tosRead
                             }
-                            // if (localStorage.getItem('registrationId')) {
-                            //   if ((!huntingPartyData.users[i].regId || huntingPartyData.users[i].regId !== localStorage.getItem('registrationId'))) {
-                            //     doTheUpdateAnyway = true
-                            //     huntingPartyData.users[i].regId = localStorage.getItem('registrationId')
-                            //   }
-                            // }
                             if (device !== undefined) {
                               if ((!huntingPartyData.users[i].deviceId || huntingPartyData.users[i].deviceId !== device.uuid) && device.uuid) {
-                                doTheUpdateAnyway = true
+                                doTheUpdateAnyway = true;
                                 huntingPartyData.users[i].deviceId = device.uuid
                               }
                             }
@@ -6063,15 +5952,12 @@ function getTheData() {
                         if (device !== undefined || !userInList || doTheUpdateAnyway) {
                           if (!userInList || doTheUpdateAnyway) {
                             if (!userInList) {
-                              console.log('not in the list')
-                              var deviceId = ''
-                              var regId = ''
+                              console.log('not in the list');
+                              let deviceId = '';
+                              let regId = '';
                               if (device) {
                                 deviceId = device.uuid
                               }
-                              // if (localStorage.getItem('registrationId')) {
-                              //   regId = localStorage.getItem('registrationId')
-                              // }
                               huntingPartyData.users.push({
                                 userId: currentUser._id,
                                 name: currentUser.firstName + ' ' + currentUser.lastName,
@@ -6080,19 +5966,18 @@ function getTheData() {
                                 regId: regId,
                                 tosRead: 0,
                                 points: 0
-                              })
-                              tosRead = 0
-                              var newsString = ''
-                              var newsItem = {
+                              });
+                              tosRead = 0;
+                              let newsItem = {
                                 type: 'user',
                                 body: currentUser.firstName + ' ' + currentUser.lastName + ' joined Hunting Party'
-                              }
+                              };
                               generateNewsItem(newsItem)
                             }
-                            var xhttpHPD = new XMLHttpRequest();
-                            xhttpHPD.onreadystatechange = function() {
-                              if (xhttpHPD.readyState == 4 && xhttpHPD.status == 200) {
-                                huntingPartyData = JSON.parse(xhttpHPD.responseText);
+                            let xHttpHuntingPartyDataPut = new XMLHttpRequest();
+                            xHttpHuntingPartyDataPut.onreadystatechange = function() {
+                              if (xHttpHuntingPartyDataPut.readyState == 4 && xHttpHuntingPartyDataPut.status == 200) {
+                                huntingPartyData = JSON.parse(xHttpHuntingPartyDataPut.responseText);
                                 if (tosRead < 1) {
                                   document.getElementById("loading").classList.add('inactive');
                                   document.getElementById("tos-popup").classList.remove('inactive');
@@ -6103,18 +5988,17 @@ function getTheData() {
                                   startMainApp()
                                 }
                               }
-                            }
-                            xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
-                            xhttpHPD.setRequestHeader('Content-type','application/json; charset=utf-8');
-                            xhttpHPD.send(JSON.stringify(huntingPartyData));
+                            };
+                            xHttpHuntingPartyDataPut.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
+                            xHttpHuntingPartyDataPut.setRequestHeader('Content-type','application/json; charset=utf-8');
+                            xHttpHuntingPartyDataPut.send(JSON.stringify(huntingPartyData));
                           } else {
                             if (tosRead < 1) {
                               document.getElementById("loading").classList.add('inactive');
                               document.getElementById("tos-popup").classList.remove('inactive');
-                              // document.getElementById("login-register").classList.remove('inactive');
                             } else {
-                              document.getElementById("loading-details").innerHTML = 'Done'
-                              console.log('starting app')
+                              document.getElementById("loading-details").innerHTML = 'Done';
+                              console.log('starting app');
                               startMainApp()
                             }
                           }
@@ -6124,14 +6008,13 @@ function getTheData() {
                             document.getElementById("tos-popup").classList.remove('inactive');
                             // document.getElementById("login-register").classList.remove('inactive');
                           } else {
-                            document.getElementById("loading-details").innerHTML = 'Done'
+                            document.getElementById("loading-details").innerHTML = 'Done';
                             console.log('starting app')
                             startMainApp()
                           }
                         }
-                        //
                       }
-                    }
+                    };
                     if (!yourSearches) {
                       yourSearches = []
                     }
@@ -6141,44 +6024,40 @@ function getTheData() {
                         which: 2,
                         searches: yourSearches
                       }
-                      xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
-                      xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
-                      xhttp3b.send(JSON.stringify(proxyRequest));
+                      xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
+                      xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
+                      xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
                     } else {
                       var proxyRequest = {
                         startIndex: 0,
                         which: 2
                       }
-                      xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
-                      xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
-                      xhttp3b.send(JSON.stringify(proxyRequest));
+                      xHttpCompanyFilteredList.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+                      xHttpCompanyFilteredList.setRequestHeader('Content-type','application/json; charset=utf-8');
+                      xHttpCompanyFilteredList.send(JSON.stringify(proxyRequest));
                     }
                   }
                 }
-              }
-              xhttp4.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
-              xhttp4.send();
+              };
+              xHttpHuntingPartyDataCompany.open("GET", apiUrl+"/huntingpartydata/company/" + company._id, true);
+              xHttpHuntingPartyDataCompany.send();
             }
           }
-          xhttp3.open("GET", apiUrl+"/fbo/getsearchterms/", true);
-          xhttp3.send();
-          //   }
-          // };
-          // xobj.send(null);
+          xHttpGetSearchTerms.open("GET", apiUrl+"/fbo/getsearchterms/", true);
+          xHttpGetSearchTerms.send();
         }
       };
       if (currentUser.companyUserProxies.length > 0) {
-        var companyId = currentUser.companyUserProxies[0].company._id
-        xhttp2.open("GET", apiUrl+"/company/" + companyId + "/light/", true);
-        xhttp2.send();
+        let companyId = currentUser.companyUserProxies[0].company._id;
+        xHttpCompanyLight.open("GET", apiUrl+"/company/" + companyId + "/light/", true);
+        xHttpCompanyLight.send();
       } else {
         goToCompanyCreate()
-        // document.getElementById("loading-details").innerHTML = "Your profile doesn't have any companies so I'm going to stop the login right now! Eventually I'll get something for this"
       }
     }
   };
-  xhttp.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
-  xhttp.send();
+  xHttpGetTheDataUserInfo.open("GET", apiUrl+"/profiles/userInfo/" + id, true);
+  xHttpGetTheDataUserInfo.send();
 }
 
 function acceptTOS() {
@@ -6886,13 +6765,13 @@ function openSidebar() {
   document.getElementById("sidebar").classList.remove('inactive')
   document.getElementById("sidebar").classList.remove('sidebar-out')
   document.getElementById("sidebar").classList.add('sidebar-in')
-  profileDropdownOpen = true
+  profileDropDownOpen = true
 }
 
 function closeSidebar(){
   document.getElementById("sidebar").classList.add('sidebar-out');
   document.getElementById("sidebar").classList.remove('sidebar-in')
-  profileDropdownOpen = false
+  profileDropDownOpen = false
 }
 
 $(document).ready(function(){
@@ -7131,11 +7010,11 @@ function resetPassword() {
       $("#sidebar").removeClass('inactive')
       $("#sidebar").removeClass('sidebar-out')
       $("#sidebar").addClass('sidebar-in')
-      profileDropdownOpen = true
+      profileDropDownOpen = true
     }
     function closeSidebar(){
       $("#sidebar").addClass('sidebar-out');
       $("#sidebar").removeClass('sidebar-in')
-      profileDropdownOpen = false
+      profileDropDownOpen = false
     }
   });
