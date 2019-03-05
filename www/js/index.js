@@ -419,6 +419,112 @@ let fbosInUnread = 0;
 let pipelineUnread = 0;
 let loadInProgress = false;
 
+var app = {
+    // Application Constructor
+    initialize: function() {
+        if (localStorage.getItem('uid')) {
+            getTheData()
+        } else {
+            document.getElementById("loading").classList.add('inactive');
+            document.getElementById("main-view").classList.add('inactive');
+            document.getElementById("fbo-view").classList.add('inactive');
+            document.getElementById("login-register").classList.remove('inactive');
+        }
+        this.bindEvents();
+        if (typeof Keen === 'undefined') {
+            console.log('Analytics Disabled')
+            analyticsOn = false
+        } else {
+            console.log('Analytics Enabled')
+            analyticsOn = true
+            this.client = new Keen({
+                projectId: '5c5201c7c9e77c0001edb8cc',
+                readKey: '5E68E6FCDDF8227E7F3F47A7F53FB98C17C9721678EB55F1ED00B94C29AF600F272D14F97C79EB5FDD837E4068888807AE38FD80420239CEB95ABC52555AA5CDCEAA22FC07B8268D9D6E02FFD7A9295D269ACAEE475A3A4DDA587B0836BEAD01',
+                writeKey: '4FFBE9F457824B5D43E951608DFAF2449A110AD2C47164126EC5A6A0F39AEE2CFE13DD365190985DB255BCD4739F6B4DC677E16C7101261CF77E4F07A1535BBAA4FBFFF30F7958DEDFC63ECE42D0C7E6FBAE3D8EBA42203CD0AEA6A703E491A6'
+            });
+        }
+        self = this;
+
+        // window.plugins.uniqueDeviceID.get(success, fail);
+        // function success(uuid) {
+        //   console.log('ID IS THIS: ' + uuid);
+        // };
+        // renderChart()
+    },
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicitly call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+        // app.receivedEvent('deviceready');
+        app.push = PushNotification.init({
+            "android": {
+                "senderID": "416059724231"
+            },
+            "ios": {
+                "sound": true,
+                "vibration": true,
+                "badge": true
+            },
+            "windows": {}
+        });
+
+        app.push.on('registration', function(data) {
+            // console.log("registration event: " + data.registrationId);
+            // var oldRegId = localStorage.getItem('registrationId');
+            // if (oldRegId !== data.registrationId) {
+            //   // Save new registration ID
+            //   localStorage.setItem('registrationId', data.registrationId);
+            //   // Post registrationId to your app server as the value has changed
+            // }
+        });
+
+        app.push.on('error', function(e) {
+            console.log("push error = " + e.message);
+        });
+
+        app.push.on('notification', function(data) {
+            console.log('notification event');
+            navigator.notification.alert(
+                data.message,         // message
+                null,                 // callback
+                data.title,           // title
+                'Ok'                  // buttonName
+            );
+        });
+
+        if (!window.device) {
+            window.device = { platform: 'Browser' };
+        }
+
+        window.open = cordova.InAppBrowser.open
+        handleExternalURLs();
+    },
+
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        var parentElement = document.getElementById(id);
+        if (!parentElement) {
+            console.log("BUG: " + id + " isn't working with received event, i don't know why")
+        } else {
+            var listeningElement = parentElement.querySelector('.listening');
+            var receivedElement = parentElement.querySelector('.received');
+
+            listeningElement.setAttribute('style', 'display:none;');
+            receivedElement.setAttribute('style', 'display:block;');
+
+            console.log('Received Event: ' + id);
+        }
+    }
+};
+
 function checkLoginEmail() {
   let username = document.getElementById("email").value.toLowerCase();
   if (username.length < 1 || !invalidEmail(username)) {
@@ -427,7 +533,7 @@ function checkLoginEmail() {
   }
 }
 
-function checkLoginEmail2() {
+function checkLoginEmailBlur() {
   let username = document.getElementById("email").value.toLowerCase();
   if (invalidEmail(username)) {
     document.getElementById("login-name-popup").innerHTML = 'Invalid email';
@@ -437,6 +543,12 @@ function checkLoginEmail2() {
     document.getElementById("login-name-popup").classList.add('inactive');
     document.getElementById("email").classList.remove('invalid-input');
   }
+}
+
+function invalidEmail(email) {
+    if (email) {
+        return (email.length > 0 && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)))
+    }
 }
 
 function login() {
