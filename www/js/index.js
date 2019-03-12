@@ -5459,14 +5459,14 @@ function setActiveFbo(index, tab) {
                     '</p><p><span style="font-weight: bold">Office: </span>'+
                     companyFboProxy.fbo.office+
                     '</p><p><span style="font-weight: bold">Location: </span>'+
-                    companyFboProxy.fbo.offAdd+', '
-                '</p><p><span style="font-weight: bold">Setaside: </span>'+
-                companyFboProxy.fbo.setaside+
-                '</p><p><span style="font-weight: bold">Due Date: </span>'+
-                dueDateHtml+
-                '</p><p><span style="font-weight: bold">Contact: </span>'+
-                companyFboProxy.fbo.contact+
-                '</p><p style="font-weight: bold"><a href="'+companyFboProxy.fbo.url+'">More Info</a></p>'
+                    companyFboProxy.fbo.offAdd+', '+
+                    '</p><p><span style="font-weight: bold">Setaside: </span>'+
+                    companyFboProxy.fbo.setaside+
+                    '</p><p><span style="font-weight: bold">Due Date: </span>'+
+                    dueDateHtml+
+                    '</p><p><span style="font-weight: bold">Contact: </span>'+
+                    companyFboProxy.fbo.contact+
+                    '</p><p style="font-weight: bold"><a href="'+companyFboProxy.fbo.url+'">More Info</a></p>';
                 if (companyFboProxy.fbo.subject.length < 98) {
                     document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+companyFboProxy.fbo.subject+'</p>';
                 } else {
