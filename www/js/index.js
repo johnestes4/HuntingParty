@@ -2461,7 +2461,7 @@ function filterOpportunitiesBySearch(elem) {
         renderFbos()
       }
     };
-    xHttpCompanySomeFbosPut.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+    xHttpCompanySomeFbosPut.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/list/", true);
     xHttpCompanySomeFbosPut.setRequestHeader('Content-type','application/json; charset=utf-8');
     xHttpCompanySomeFbosPut.send(JSON.stringify(proxyRequest));
   }
