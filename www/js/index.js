@@ -5312,28 +5312,25 @@ function addInterestedVendor() {
 }
 
 function setActiveFbo(index, tab) {
-  yesRefer = []
-  noRefer = []
-  referRefer = []
-  let companyFboProxy
-  var a = document.getElementsByClassName('fbo-detail-middle-expanded')
-  for (i = 0; i < a.length; i++) {
+  yesRefer = [];
+  noRefer = [];
+  referRefer = [];
+  let companyFboProxy;
+  let a = document.getElementsByClassName('fbo-detail-middle-expanded');
+  for (let i = 0; i < a.length; i++) {
     if (!a[i].classList.contains('inactive')) {
-      // console.log(a[i].id.slice(a[i].id.length-1))
-      // console.log(i)
       openFboDetail(i)
     }
   }
   let fboId = 0;
 
-  if (tab == 0) {
+  if (tab === 0) {
     fboId = fbosIn[index].fbo._id;
-    document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(2)"><p>‹</p></div>'
-    // document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
+    document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(2)"><p>‹</p></div>';
     document.getElementById("fbo-details-comments").classList.add('inactive')
-  } else if (tab == 1) {
+  } else if (tab === 1) {
     fboId = fboPipeline[index].fbo._id;
-    document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(3)"><p>‹</p></div>'
+    document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(3)"><p>‹</p></div>';
     document.getElementById("fbo-details-comments").classList.remove('inactive')
   }
 
@@ -5345,19 +5342,19 @@ function setActiveFbo(index, tab) {
 
             if (companyFboProxy) {
               companyFboProxy = companyFboProxy[0];
-              if (!companyFboProxy.interestedVendors || companyFboProxy.fbo.interestedVendors == undefined) {
+              if (!companyFboProxy.interestedVendors || companyFboProxy.fbo.interestedVendors === undefined) {
                     companyFboProxy.fbo.interestedVendors = []
                 }
-                var partiesHtml = ''
-                var companyAlreadyInterested = false
-                document.getElementById("interested-vendors").innerHTML = ''
+                let partiesHtml = '';
+                let companyAlreadyInterested = false;
+                document.getElementById("interested-vendors").innerHTML = '';
                 if (companyFboProxy.fbo.interestedVendors.length < 1) {
                     partiesHtml = '<div class="interested-vendor">'+
                         'No interested vendors yet'+
                         '</div>'
                 } else {
-                    for (i = 0; i < companyFboProxy.fbo.interestedVendors.length; i++) {
-                        if (companyFboProxy.fbo.interestedVendors[i].id == company._id) {
+                    for (let i = 0; i < companyFboProxy.fbo.interestedVendors.length; i++) {
+                        if (companyFboProxy.fbo.interestedVendors[i].id === company._id) {
                             companyAlreadyInterested = true
                         }
                         partiesHtml = partiesHtml + '<div class="interested-vendor">'+
@@ -5365,50 +5362,50 @@ function setActiveFbo(index, tab) {
                             '</div>'
                     }
                 }
-                document.getElementById("interested-vendors").innerHTML = partiesHtml
+                document.getElementById("interested-vendors").innerHTML = partiesHtml;
                 if (companyAlreadyInterested) {
                     document.getElementById("interested-vendor-button").classList.add('inactive')
                 } else {
                     document.getElementById("interested-vendor-button").classList.remove('inactive')
                 }
-                var dueDateHtml = 'No Due Date'
+                let dueDateHtml = 'No Due Date';
                 if (companyFboProxy.fbo.respDate && companyFboProxy.fbo.respDate !== 'undefined') {
                     dueDateHtml = companyFboProxy.fbo.respDate.slice(0,2)+"/"+companyFboProxy.fbo.respDate.slice(2,4)+"/"+companyFboProxy.fbo.respDate.slice(4,6)
                 } else {
                     dueDateHtml = '<span style="font-size: 12px">No Due Date</span>'
                 }
-                var naicsHtml = ''
+                let naicsHtml = '';
                 if (companyFboProxy.fbo.naics) {
-                    var naicsToCheck = companyFboProxy.fbo.naics
-                    var naicsDesc = ''
+                    let naicsToCheck = companyFboProxy.fbo.naics;
+                    let naicsDesc = '';
                     if (searchTerms.naics) {
-                        console.log(naicsToCheck.slice(naicsToCheck.length-1))
+                        console.log(naicsToCheck.slice(naicsToCheck.length-1));
                         for (let i of searchTerms.naics) {
-                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i.code) {
+                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i.code) {
                                 naicsDesc = i.name
-                            } else if (i.code == naicsToCheck) {
+                            } else if (i.code === naicsToCheck) {
                                 naicsDesc = i.name
                             } else if (i.subcategories) {
                                 for (let i2 of i.subcategories) {
-                                    if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i2.code) {
+                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i2.code) {
                                         naicsDesc = i2.name
-                                    } else if (i2.code == naicsToCheck) {
+                                    } else if (i2.code === naicsToCheck) {
                                         naicsDesc = i2.name
                                     } else if (i2.subcategories) {
                                         for (let i3 of i2.subcategories) {
-                                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i3.code) {
+                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i3.code) {
                                                 naicsDesc = i3.name
-                                            } else if (i3.code == naicsToCheck) {
+                                            } else if (i3.code === naicsToCheck) {
                                                 naicsDesc = i3.name
                                             } else if (i3.subcategories) {
                                                 for (let i4 of i3.subcategories) {
-                                                    if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i4.code) {
+                                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i4.code) {
                                                         naicsDesc = i4.name
                                                     } else if (i4.code == naicsToCheck) {
                                                         naicsDesc = i4.name
                                                     } else if (i4.subcategories) {
                                                         for (let i5 of i4.subcategories) {
-                                                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i5.code) {
+                                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i5.code) {
                                                                 naicsDesc = i5.name
                                                             } else if (i5.code == naicsToCheck) {
                                                                 naicsDesc = i5.name
@@ -5426,13 +5423,13 @@ function setActiveFbo(index, tab) {
                     naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
                         companyFboProxy.fbo.naics + ' ' + naicsDesc
                 }
-                var psc = companyFboProxy.fbo.classCod
-                var pscFound = false
-                for (i = 0; i < searchTerms.psc.products.length; i++) {
-                    for (i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
-                        if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) == companyFboProxy.fbo.classCod) {
+                let psc = companyFboProxy.fbo.classCod;
+                let pscFound = false;
+                for (let i = 0; i < searchTerms.psc.products.length; i++) {
+                    for (let i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
+                        if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) === companyFboProxy.fbo.classCod) {
                             psc = searchTerms.psc.products[i].psc[i2].name
-                            pscFound = true
+                            pscFound = true;
                             break
                         }
                     }
@@ -5441,8 +5438,8 @@ function setActiveFbo(index, tab) {
                     }
                 }
                 if (!pscFound) {
-                    for (i = 0; i < searchTerms.psc.services.length; i++) {
-                        if (searchTerms.psc.services[i].name.slice(0,1) == companyFboProxy.fbo.classCod) {
+                    for (let i = 0; i < searchTerms.psc.services.length; i++) {
+                        if (searchTerms.psc.services[i].name.slice(0,1) === companyFboProxy.fbo.classCod) {
                             psc = searchTerms.psc.services[i].name
                             pscFound = true
                             break
@@ -5450,7 +5447,7 @@ function setActiveFbo(index, tab) {
                     }
                 }
                 // document.getElementById("fbo-details-input").value = ''
-                var dataText = '<p><span style="font-weight: bold">Item: </span>'+
+                let dataText = '<p><span style="font-weight: bold">Item: </span>'+
                     companyFboProxy.fbo.type +
                     '<p><span style="font-weight: bold">Solicitation Number: </span>'+
                     companyFboProxy.fbo.solnbr +
@@ -5475,30 +5472,26 @@ function setActiveFbo(index, tab) {
                 } else {
                     document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2" style="font-size: 14px; line-height: 13px!important;">'+companyFboProxy.fbo.subject+'</p>';
                 }
-                var fboDescHTML = ''
-                var outputArray2 = companyFboProxy.fboDesc
-                activeFboDesc = outputArray2
-                for (i = 0; i < outputArray2.length; i++) {
-                    if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
-                        var proxyCopy = outputArray2[i]
-                        // if (i == 0) {
-                        //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
-                        // } else {
-                        // }
+                let fboDescHTML = '';
+                let outputArray2 = companyFboProxy.fboDesc;
+                activeFboDesc = outputArray2;
+                for (let i = 0; i < outputArray2.length; i++) {
+                    if (outputArray2[i].slice(0,27) === '<span onclick="fboDescClick') {
+                        let proxyCopy = outputArray2[i];
                         outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
                     }
                     fboDescHTML = fboDescHTML + outputArray2[i]
                 }
                 document.getElementById("abstract-text").innerHTML = fboDescHTML;
                 document.getElementById("data-text").innerHTML = dataText;
-                var dueDate = ''
+                let dueDate = '';
                 if (companyFboProxy.fbo.respDate) {
-                    var today = getToday()
-                    var due = companyFboProxy.fbo.respDate.slice(0,2)+"/"+companyFboProxy.fbo.respDate.slice(2,4)+"/"+companyFboProxy.fbo.respDate.slice(4,6)
-                    var date2 = new Date(today);
-                    var date1 = new Date(due);
-                    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-                    var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    let today = getToday();
+                    let due = companyFboProxy.fbo.respDate.slice(0,2)+"/"+companyFboProxy.fbo.respDate.slice(2,4)+"/"+companyFboProxy.fbo.respDate.slice(4,6);
+                    let date2 = new Date(today);
+                    let date1 = new Date(due);
+                    let timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                    let timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
                     if (timeToDue >= 365) {
                         dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
                     } else if (timeToDue >= 60) {
@@ -5511,36 +5504,35 @@ function setActiveFbo(index, tab) {
                     // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
                     document.getElementById("fbo-details-date").innerHTML = due
                 } else {
-                    dueDate = "<span style='font-size: 10px'>No Due Date</span>"
+                    dueDate = "<span style='font-size: 10px'>No Due Date</span>";
                     document.getElementById("fbo-details-date").innerHTML = dueDate
                 }
-                // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
-                document.getElementById("fbo-details-likes").innerHTML = companyFboProxy.voteYes.length
-                document.getElementById("fbo-details-dislikes").innerHTML = companyFboProxy.voteNo.length
+                document.getElementById("fbo-details-likes").innerHTML = companyFboProxy.voteYes.length;
+                document.getElementById("fbo-details-dislikes").innerHTML = companyFboProxy.voteNo.length;
 
-                activeFbo = companyFboProxy
-                fboIndex = index
+                activeFbo = companyFboProxy;
+                fboIndex = index;
                 if (!companyFboProxy.viewed) {
                     companyFboProxy.viewed = []
                 }
                 if (!companyFboProxy.viewed.includes(currentUser._id)) {
-                    companyFboProxy.viewed.push(currentUser._id)
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onload = function() {
-                        if (xhttp.readyState == 4 && xhttp.status == 200) {
-                            console.log('marked as read')
+                    companyFboProxy.viewed.push(currentUser._id);
+                    let xHttp = new XMLHttpRequest();
+                    xHttp.onload = function() {
+                        if (xHttp.readyState === 4 && xHttp.status === 200) {
+                            console.log('marked as read');
                             checkProxiesViewed()
                         }
                     };
-                    xhttp.open("PUT", apiUrl+"/fbocompanyproxy/" + companyFboProxy._id, true);
-                    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-                    xhttp.send(JSON.stringify(companyFboProxy));
+                    xHttp.open("PUT", apiUrl+"/fbocompanyproxy/" + companyFboProxy._id, true);
+                    xHttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+                    xHttp.send(JSON.stringify(companyFboProxy));
                 }
-                renderChart()
-                updateComments(companyFboProxy)
+                renderChart();
+                updateComments(companyFboProxy);
                 checkVote(companyFboProxy, index)
             } else {
-                console.log('ERROR: no fbo on proxy')
+                console.log('ERROR: no fbo on proxy');
                 console.log(companyFboProxy)
             }
         }};
