@@ -5545,9 +5545,9 @@ function setActiveFbo(index, tab) {
 }
 
 function checkProxiesViewed() {
-  fbosInUnread = 0
-  pipelineUnread = 0
-  for (i = 0; i < fbosIn.length; i++) {
+  fbosInUnread = 0;
+  pipelineUnread = 0;
+  for (let i = 0; i < fbosIn.length; i++) {
     if (fbosIn[i].viewed) {
       if (!fbosIn[i].viewed.includes(currentUser._id)) {
         fbosInUnread++
@@ -5556,7 +5556,7 @@ function checkProxiesViewed() {
       fbosInUnread++
     }
   }
-  for (i = 0; i < fboPipeline.length; i++) {
+  for (let i = 0; i < fboPipeline.length; i++) {
     if (fboPipeline[i].viewed) {
       if (!fboPipeline[i].viewed.includes(currentUser._id)) {
         pipelineUnread++
@@ -5565,7 +5565,7 @@ function checkProxiesViewed() {
       pipelineUnread++
     }
   }
-  document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread
+  document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread;
   document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread
 
 }
