@@ -5342,6 +5342,9 @@ function setActiveFbo(index, tab) {
 
             if (companyFboProxy) {
               companyFboProxy = companyFboProxy[0];
+              activeFbo = companyFboProxy;
+              fboIndex = index;
+
               if (!companyFboProxy.interestedVendors || companyFboProxy.fbo.interestedVendors === undefined) {
                     companyFboProxy.fbo.interestedVendors = []
                 }
@@ -5510,8 +5513,7 @@ function setActiveFbo(index, tab) {
                 document.getElementById("fbo-details-likes").innerHTML = companyFboProxy.voteYes.length;
                 document.getElementById("fbo-details-dislikes").innerHTML = companyFboProxy.voteNo.length;
 
-                activeFbo = companyFboProxy;
-                fboIndex = index;
+
                 if (!companyFboProxy.viewed) {
                     companyFboProxy.viewed = []
                 }
