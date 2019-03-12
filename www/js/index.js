@@ -5315,7 +5315,7 @@ function setActiveFbo(index, tab) {
   yesRefer = []
   noRefer = []
   referRefer = []
-  var proxy
+  let companyFboProxy
   var a = document.getElementsByClassName('fbo-detail-middle-expanded')
   for (i = 0; i < a.length; i++) {
     if (!a[i].classList.contains('inactive')) {
@@ -5324,215 +5324,230 @@ function setActiveFbo(index, tab) {
       openFboDetail(i)
     }
   }
+  let fboId = 0;
+
   if (tab == 0) {
-    proxy = fbosIn[index]
+    fboId = fbosIn[index].fbo._id;
     document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(2)"><p>‹</p></div>'
     // document.getElementById("topbar-left").innerHTML = '<img id="topbar-back" class="topbar-side-img icon" src="./img/back.png" alt="" onclick="switchTab(2)">'
     document.getElementById("fbo-details-comments").classList.add('inactive')
   } else if (tab == 1) {
-    proxy = fboPipeline[index]
+    fboId = fboPipeline[index].fbo._id;
     document.getElementById("topbar-left").innerHTML = '<div id="topbar-back" onclick="switchTab(3)"><p>‹</p></div>'
     document.getElementById("fbo-details-comments").classList.remove('inactive')
   }
-  if (proxy.fbo) {
-    if (!proxy.fbo.interestedVendors || proxy.fbo.interestedVendors == undefined) {
-      proxy.fbo.interestedVendors = []
-    }
-    var partiesHtml = ''
-    var companyAlreadyInterested = false
-    document.getElementById("interested-vendors").innerHTML = ''
-    if (proxy.fbo.interestedVendors.length < 1) {
-      partiesHtml = '<div class="interested-vendor">'+
-      'No interested vendors yet'+
-      '</div>'
-    } else {
-      for (i = 0; i < proxy.fbo.interestedVendors.length; i++) {
-        if (proxy.fbo.interestedVendors[i].id == company._id) {
-          companyAlreadyInterested = true
-        }
-        partiesHtml = partiesHtml + '<div class="interested-vendor">'+
-        proxy.fbo.interestedVendors[i].name+
-        '</div>'
-      }
-    }
-    document.getElementById("interested-vendors").innerHTML = partiesHtml
-    if (companyAlreadyInterested) {
-      document.getElementById("interested-vendor-button").classList.add('inactive')
-    } else {
-      document.getElementById("interested-vendor-button").classList.remove('inactive')
-    }
-    var dueDateHtml = 'No Due Date'
-    if (proxy.fbo.respDate && proxy.fbo.respDate !== 'undefined') {
-      dueDateHtml = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-    } else {
-      dueDateHtml = '<span style="font-size: 12px">No Due Date</span>'
-    }
-    var naicsHtml = ''
-    if (proxy.fbo.naics) {
-      var naicsToCheck = proxy.fbo.naics
-      var naicsDesc = ''
-      if (searchTerms.naics) {
-        console.log(naicsToCheck.slice(naicsToCheck.length-1))
-        for (let i of searchTerms.naics) {
-          if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i.code) {
-            naicsDesc = i.name
-          } else if (i.code == naicsToCheck) {
-            naicsDesc = i.name
-          } else if (i.subcategories) {
-            for (let i2 of i.subcategories) {
-              if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i2.code) {
-                naicsDesc = i2.name
-              } else if (i2.code == naicsToCheck) {
-                naicsDesc = i2.name
-              } else if (i2.subcategories) {
-                for (let i3 of i2.subcategories) {
-                  if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i3.code) {
-                    naicsDesc = i3.name
-                  } else if (i3.code == naicsToCheck) {
-                    naicsDesc = i3.name
-                  } else if (i3.subcategories) {
-                    for (let i4 of i3.subcategories) {
-                      if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i4.code) {
-                        naicsDesc = i4.name
-                      } else if (i4.code == naicsToCheck) {
-                        naicsDesc = i4.name
-                      } else if (i4.subcategories) {
-                        for (let i5 of i4.subcategories) {
-                          if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i5.code) {
-                            naicsDesc = i5.name
-                          } else if (i5.code == naicsToCheck) {
-                            naicsDesc = i5.name
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
-      proxy.fbo.naics + ' ' + naicsDesc
-    }
-    var psc = proxy.fbo.classCod
-    var pscFound = false
-    for (i = 0; i < searchTerms.psc.products.length; i++) {
-      for (i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
-        if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) == proxy.fbo.classCod) {
-          psc = searchTerms.psc.products[i].psc[i2].name
-          pscFound = true
-          break
-        }
-      }
-      if (pscFound) {
-        break
-      }
-    }
-    if (!pscFound) {
-      for (i = 0; i < searchTerms.psc.services.length; i++) {
-        if (searchTerms.psc.services[i].name.slice(0,1) == proxy.fbo.classCod) {
-          psc = searchTerms.psc.services[i].name
-          pscFound = true
-          break
-        }
-      }
-    }
-    // document.getElementById("fbo-details-input").value = ''
-    var dataText = '<p><span style="font-weight: bold">Item: </span>'+
-    proxy.fbo.type +
-    '<p><span style="font-weight: bold">Solicitation Number: </span>'+
-    proxy.fbo.solnbr +
-    '</p><p><span style="font-weight: bold">Agency: </span>'+
-    proxy.fbo.agency+
-    '</p><p><span style="font-weight: bold">PSC: </span>'+
-    psc+
-    naicsHtml+
-    '</p><p><span style="font-weight: bold">Office: </span>'+
-    proxy.fbo.office+
-    '</p><p><span style="font-weight: bold">Location: </span>'+
-    proxy.fbo.offAdd+', '
-    '</p><p><span style="font-weight: bold">Setaside: </span>'+
-    proxy.fbo.setaside+
-    '</p><p><span style="font-weight: bold">Due Date: </span>'+
-    dueDateHtml+
-    '</p><p><span style="font-weight: bold">Contact: </span>'+
-    proxy.fbo.contact+
-    '</p><p style="font-weight: bold"><a href="'+proxy.fbo.url+'">More Info</a></p>'
-    if (proxy.fbo.subject.length < 98) {
-      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+proxy.fbo.subject+'</p>';
-    } else {
-      document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2" style="font-size: 14px; line-height: 13px!important;">'+proxy.fbo.subject+'</p>';
-    }
-    var fboDescHTML = ''
-    var outputArray2 = proxy.fboDesc
-    activeFboDesc = outputArray2
-    for (i = 0; i < outputArray2.length; i++) {
-      if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
-        var proxyCopy = outputArray2[i]
-        // if (i == 0) {
-        //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
-        // } else {
-        // }
-        outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
-      }
-      fboDescHTML = fboDescHTML + outputArray2[i]
-    }
-    document.getElementById("abstract-text").innerHTML = fboDescHTML;
-    document.getElementById("data-text").innerHTML = dataText;
-    var dueDate = ''
-    if (proxy.fbo.respDate) {
-      var today = getToday()
-      var due = proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)
-      var date2 = new Date(today);
-      var date1 = new Date(due);
-      var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-      var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      if (timeToDue >= 365) {
-        dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
-      } else if (timeToDue >= 60) {
-        dueDate = "<p>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
-      } else if (timeToDue >= 14) {
-        dueDate = "<p>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
-      } else {
-        dueDate = "<p>Due: "+timeToDue+" Days</p>"
-      }
-      // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
-      document.getElementById("fbo-details-date").innerHTML = due
-    } else {
-      dueDate = "<span style='font-size: 10px'>No Due Date</span>"
-      document.getElementById("fbo-details-date").innerHTML = dueDate
-    }
-    // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
-    document.getElementById("fbo-details-likes").innerHTML = proxy.voteYes.length
-    document.getElementById("fbo-details-dislikes").innerHTML = proxy.voteNo.length
 
-    activeFbo = proxy
-    fboIndex = index
-    if (!proxy.viewed) {
-      proxy.viewed = []
-    }
-    if (!proxy.viewed.includes(currentUser._id)) {
-      proxy.viewed.push(currentUser._id)
-      var xhttp = new XMLHttpRequest();
-      xhttp.onload = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          console.log('marked as read')
-          checkProxiesViewed()
-        }
-      };
-      xhttp.open("PUT", apiUrl+"/fbocompanyproxy/" + proxy._id, true);
-      xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-      xhttp.send(JSON.stringify(proxy));
-    }
-    renderChart()
-    updateComments(proxy)
-    checkVote(proxy, index)
-  } else {
-    console.log('ERROR: no fbo on proxy')
-    console.log(proxy)
-  }
+  let xHttpCompanyFbo = new XMLHttpRequest();
+  xHttpCompanyFbo.onreadystatechange = function() {
+
+        if (xHttpCompanyFbo.readyState === 4 && xHttpCompanyFbo.status === 200) {
+            companyFboProxy = JSON.parse(xHttpCompanyFbo.responseText);
+
+            if (companyFboProxy) {
+              companyFboProxy = companyFboProxy[0];
+              if (!companyFboProxy.interestedVendors || companyFboProxy.fbo.interestedVendors == undefined) {
+                    companyFboProxy.fbo.interestedVendors = []
+                }
+                var partiesHtml = ''
+                var companyAlreadyInterested = false
+                document.getElementById("interested-vendors").innerHTML = ''
+                if (companyFboProxy.fbo.interestedVendors.length < 1) {
+                    partiesHtml = '<div class="interested-vendor">'+
+                        'No interested vendors yet'+
+                        '</div>'
+                } else {
+                    for (i = 0; i < companyFboProxy.fbo.interestedVendors.length; i++) {
+                        if (companyFboProxy.fbo.interestedVendors[i].id == company._id) {
+                            companyAlreadyInterested = true
+                        }
+                        partiesHtml = partiesHtml + '<div class="interested-vendor">'+
+                            companyFboProxy.fbo.interestedVendors[i].name+
+                            '</div>'
+                    }
+                }
+                document.getElementById("interested-vendors").innerHTML = partiesHtml
+                if (companyAlreadyInterested) {
+                    document.getElementById("interested-vendor-button").classList.add('inactive')
+                } else {
+                    document.getElementById("interested-vendor-button").classList.remove('inactive')
+                }
+                var dueDateHtml = 'No Due Date'
+                if (companyFboProxy.fbo.respDate && companyFboProxy.fbo.respDate !== 'undefined') {
+                    dueDateHtml = companyFboProxy.fbo.respDate.slice(0,2)+"/"+companyFboProxy.fbo.respDate.slice(2,4)+"/"+companyFboProxy.fbo.respDate.slice(4,6)
+                } else {
+                    dueDateHtml = '<span style="font-size: 12px">No Due Date</span>'
+                }
+                var naicsHtml = ''
+                if (companyFboProxy.fbo.naics) {
+                    var naicsToCheck = companyFboProxy.fbo.naics
+                    var naicsDesc = ''
+                    if (searchTerms.naics) {
+                        console.log(naicsToCheck.slice(naicsToCheck.length-1))
+                        for (let i of searchTerms.naics) {
+                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i.code) {
+                                naicsDesc = i.name
+                            } else if (i.code == naicsToCheck) {
+                                naicsDesc = i.name
+                            } else if (i.subcategories) {
+                                for (let i2 of i.subcategories) {
+                                    if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i2.code) {
+                                        naicsDesc = i2.name
+                                    } else if (i2.code == naicsToCheck) {
+                                        naicsDesc = i2.name
+                                    } else if (i2.subcategories) {
+                                        for (let i3 of i2.subcategories) {
+                                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i3.code) {
+                                                naicsDesc = i3.name
+                                            } else if (i3.code == naicsToCheck) {
+                                                naicsDesc = i3.name
+                                            } else if (i3.subcategories) {
+                                                for (let i4 of i3.subcategories) {
+                                                    if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i4.code) {
+                                                        naicsDesc = i4.name
+                                                    } else if (i4.code == naicsToCheck) {
+                                                        naicsDesc = i4.name
+                                                    } else if (i4.subcategories) {
+                                                        for (let i5 of i4.subcategories) {
+                                                            if (naicsToCheck.slice(naicsToCheck.length-1) == '0' && naicsToCheck.slice(0,naicsToCheck.length-1) == i5.code) {
+                                                                naicsDesc = i5.name
+                                                            } else if (i5.code == naicsToCheck) {
+                                                                naicsDesc = i5.name
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    naicsHtml = '</p><p><span style="font-weight: bold">NAICS: </span>'+
+                        companyFboProxy.fbo.naics + ' ' + naicsDesc
+                }
+                var psc = companyFboProxy.fbo.classCod
+                var pscFound = false
+                for (i = 0; i < searchTerms.psc.products.length; i++) {
+                    for (i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
+                        if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) == companyFboProxy.fbo.classCod) {
+                            psc = searchTerms.psc.products[i].psc[i2].name
+                            pscFound = true
+                            break
+                        }
+                    }
+                    if (pscFound) {
+                        break
+                    }
+                }
+                if (!pscFound) {
+                    for (i = 0; i < searchTerms.psc.services.length; i++) {
+                        if (searchTerms.psc.services[i].name.slice(0,1) == companyFboProxy.fbo.classCod) {
+                            psc = searchTerms.psc.services[i].name
+                            pscFound = true
+                            break
+                        }
+                    }
+                }
+                // document.getElementById("fbo-details-input").value = ''
+                var dataText = '<p><span style="font-weight: bold">Item: </span>'+
+                    companyFboProxy.fbo.type +
+                    '<p><span style="font-weight: bold">Solicitation Number: </span>'+
+                    companyFboProxy.fbo.solnbr +
+                    '</p><p><span style="font-weight: bold">Agency: </span>'+
+                    companyFboProxy.fbo.agency+
+                    '</p><p><span style="font-weight: bold">PSC: </span>'+
+                    psc+
+                    naicsHtml+
+                    '</p><p><span style="font-weight: bold">Office: </span>'+
+                    companyFboProxy.fbo.office+
+                    '</p><p><span style="font-weight: bold">Location: </span>'+
+                    companyFboProxy.fbo.offAdd+', '
+                '</p><p><span style="font-weight: bold">Setaside: </span>'+
+                companyFboProxy.fbo.setaside+
+                '</p><p><span style="font-weight: bold">Due Date: </span>'+
+                dueDateHtml+
+                '</p><p><span style="font-weight: bold">Contact: </span>'+
+                companyFboProxy.fbo.contact+
+                '</p><p style="font-weight: bold"><a href="'+companyFboProxy.fbo.url+'">More Info</a></p>'
+                if (companyFboProxy.fbo.subject.length < 98) {
+                    document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2">'+companyFboProxy.fbo.subject+'</p>';
+                } else {
+                    document.getElementById("topbar-center-text").innerHTML = '<p class="topbar-center-text-2" style="font-size: 14px; line-height: 13px!important;">'+companyFboProxy.fbo.subject+'</p>';
+                }
+                var fboDescHTML = ''
+                var outputArray2 = companyFboProxy.fboDesc
+                activeFboDesc = outputArray2
+                for (i = 0; i < outputArray2.length; i++) {
+                    if (outputArray2[i].slice(0,27) == '<span onclick="fboDescClick') {
+                        var proxyCopy = outputArray2[i]
+                        // if (i == 0) {
+                        //   proxy.fboDesc[i] = proxyCopy.slice(0,6) + 'class="fbo-desc-word fbo-desc-word-start" ' + proxyCopy.slice(6)
+                        // } else {
+                        // }
+                        outputArray2[i] = proxyCopy.slice(0,5) + ' class="fbo-desc-word"' + proxyCopy.slice(5)
+                    }
+                    fboDescHTML = fboDescHTML + outputArray2[i]
+                }
+                document.getElementById("abstract-text").innerHTML = fboDescHTML;
+                document.getElementById("data-text").innerHTML = dataText;
+                var dueDate = ''
+                if (companyFboProxy.fbo.respDate) {
+                    var today = getToday()
+                    var due = companyFboProxy.fbo.respDate.slice(0,2)+"/"+companyFboProxy.fbo.respDate.slice(2,4)+"/"+companyFboProxy.fbo.respDate.slice(4,6)
+                    var date2 = new Date(today);
+                    var date1 = new Date(due);
+                    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                    var timeToDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    if (timeToDue >= 365) {
+                        dueDate = "<p>Due: "+Math.round(timeToDue / 365).toString()+" Years </p>"
+                    } else if (timeToDue >= 60) {
+                        dueDate = "<p>Due: "+Math.round(timeToDue / 30).toString()+" Months</p>"
+                    } else if (timeToDue >= 14) {
+                        dueDate = "<p>Due: "+Math.round(timeToDue / 7).toString()+" Weeks</p>"
+                    } else {
+                        dueDate = "<p>Due: "+timeToDue+" Days</p>"
+                    }
+                    // dueDate = "<p style='font-weight: bold;'>Due: "+proxy.fbo.respDate.slice(0,2)+"/"+proxy.fbo.respDate.slice(2,4)+"/"+proxy.fbo.respDate.slice(4,6)+"</p><p>"+timeToDue+"</p>"
+                    document.getElementById("fbo-details-date").innerHTML = due
+                } else {
+                    dueDate = "<span style='font-size: 10px'>No Due Date</span>"
+                    document.getElementById("fbo-details-date").innerHTML = dueDate
+                }
+                // document.getElementById("fbo-details-comments").innerHTML = proxy.voteYes.length + proxy.voteNo.length + ' Comments'
+                document.getElementById("fbo-details-likes").innerHTML = companyFboProxy.voteYes.length
+                document.getElementById("fbo-details-dislikes").innerHTML = companyFboProxy.voteNo.length
+
+                activeFbo = companyFboProxy
+                fboIndex = index
+                if (!companyFboProxy.viewed) {
+                    companyFboProxy.viewed = []
+                }
+                if (!companyFboProxy.viewed.includes(currentUser._id)) {
+                    companyFboProxy.viewed.push(currentUser._id)
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onload = function() {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            console.log('marked as read')
+                            checkProxiesViewed()
+                        }
+                    };
+                    xhttp.open("PUT", apiUrl+"/fbocompanyproxy/" + companyFboProxy._id, true);
+                    xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+                    xhttp.send(JSON.stringify(companyFboProxy));
+                }
+                renderChart()
+                updateComments(companyFboProxy)
+                checkVote(companyFboProxy, index)
+            } else {
+                console.log('ERROR: no fbo on proxy')
+                console.log(companyFboProxy)
+            }
+        }};
+    let companyId = currentUser.companyUserProxies[0].company._id;
+    xHttpCompanyFbo.open("GET", apiUrl + "/company/" + companyId + "/fboProxy/" + fboId, true);
+    xHttpCompanyFbo.send();
+
 }
 
 function checkProxiesViewed() {
