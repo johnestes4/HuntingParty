@@ -693,7 +693,7 @@ function getTheData() {
                                             if (xHttpCompanyFilteredList.readyState === 4 && xHttpCompanyFilteredList.status === 200) {
                                                 console.log('got the thing');
                                                 proxiesRes = JSON.parse(xHttpCompanyFilteredList.responseText);
-                                                console.log(proxiesRes);
+                                                //console.log(proxiesRes);
                                                 fbosIn = proxiesRes.fbosIn;
                                                 fboPipeline = proxiesRes.fboPipeline;
                                                 fbosInMax = proxiesRes.fbosInMax;
@@ -845,8 +845,8 @@ function getTheData() {
 }
 
 function startMainApp() {
-    console.log(fbosIn);
-    console.log(fboPipeline);
+    //console.log(fbosIn);
+    //console.log(fboPipeline);
     if (fbosIn.length + fboPipeline.length > 0) {
         // setActiveFbo(fboIndex)
         generateSearchHTML(1);
@@ -1266,11 +1266,11 @@ function renderFbos() {
         }
     }
     // sortFboRenders(fboPipeline, 1)
-    console.log(fboPipeline);
+    //console.log(fboPipeline);
     for (let i = 0; i < fboPipeline.length; i++) {
         parseProxy(fboPipeline[i], i)
     }
-    console.log(noProxies + ' busted proxies');
+    //console.log(noProxies + ' busted proxies');
     let fboHTMLContent = document.getElementById("fbo-items");
     let pipelineHTMLContent = document.getElementById("pipeline-items");
     if (fbosIn.length < 1) {
@@ -2480,7 +2480,7 @@ function deleteSearchTerms() {
         if (huntingPartyData.users[i].userId === currentUser._id) {
           if (huntingPartyData.users[i].searches) {
             deletedSearch = huntingPartyData.users[i].searches[activeSearchIndex];
-            console.log(huntingPartyData.users[i].searches[activeSearchIndex]);
+            //console.log(huntingPartyData.users[i].searches[activeSearchIndex]);
             huntingPartyData.users[i].searches.splice(activeSearchIndex,1);
             searchSucceeded = true;
             theindex = i;
@@ -3558,7 +3558,7 @@ function calculateSearch(elem) {
     console.log(elem.value)
     for (i = 0; i < searchTerms.psc.services.length; i++) {
       if (searchTerms.psc.services[i].name == elem.value) {
-        console.log(searchTerms.psc.services[i].name)
+        //console.log(searchTerms.psc.services[i].name)
         searchTerms.psc.services[i].value = elem.checked
         if (searchItemSuggestions.psc.it.includes(searchTerms.psc.services[i].name) && elem.checked == false) {
           document.getElementById("search-item-suggestion-2").checked = false
@@ -4031,7 +4031,7 @@ function saveSearchTerms() {
       saving = true
       document.getElementById('search-save-loading').classList.remove('inactive');
       document.getElementById('search-save-popup-bg').classList.remove('inactive');
-      console.log(emptySearchTerms)
+      //console.log(emptySearchTerms)
       searchTerms.keyword = document.getElementById("search-input-keyword").value;
       let terms = searchTerms;
       let creatingNew = false;
@@ -4053,7 +4053,7 @@ function saveSearchTerms() {
               huntingPartyData.users[i].searches = []
             }
             huntingPartyData.users[i].searches.push(terms);
-            console.log(terms.name);
+            //console.log(terms.name);
             break;
           }
         }
@@ -4106,7 +4106,7 @@ function saveSearchTerms() {
               userId: currentUser._id,
               searchTerms: terms
             };
-            console.log(searchTermsToSearch);
+            //console.log(searchTermsToSearch);
             let xHttpFboCompanyProxyNewBySearch = new XMLHttpRequest();
             xHttpFboCompanyProxyNewBySearch.onload = function() {
               if (xHttpFboCompanyProxyNewBySearch.readyState === 4 && xHttpFboCompanyProxyNewBySearch.status === 200) {
@@ -4333,7 +4333,7 @@ function addPoints(points) {
             }
           }
           console.log('updated your score')
-          console.log(huntingPartyData)
+          //console.log(huntingPartyData)
         }
       }
       xhttpHPD.open("PUT", apiUrl+"/huntingpartydata/" + huntingPartyData._id, true);
@@ -4610,7 +4610,7 @@ function fboDescClick(index, text, elem) {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
           console.log('saved the proxy')
           fbo = JSON.parse(xhttp.responseText)
-          console.log(fbo)
+          //console.log(fbo)
         }
       };
       xhttp.open("PUT", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
@@ -4872,7 +4872,7 @@ function goToCompanyCreate() {
         for (i = 0; i < allCompanies.length; i++) {
           if (allCompanies[i].emailDomains) {
             if (allCompanies[i].emailDomains.length > 0) {
-              console.log(allCompanies[i])
+              //console.log(allCompanies[i])
             }
             if (allCompanies[i].emailDomains.includes(userDomain)) {
               domainMatchingCompanies.push({
@@ -4884,7 +4884,7 @@ function goToCompanyCreate() {
         }
       }
       if (domainMatchingCompanies.length > 0) {
-        console.log(domainMatchingCompanies)
+        //console.log(domainMatchingCompanies)
         document.getElementById("company-search-view").classList.add('inactive')
         document.getElementById("company-domain-view").classList.remove('inactive')
         if (domainMatchingCompanies.length == 1) {
@@ -4926,7 +4926,7 @@ function goToCompanyCreate() {
 function pickCompanyFromList(index) {
   if (allCompanies[index]) {
     companyToJoin = allCompanies[index]
-    console.log(companyToJoin)
+    //console.log(companyToJoin)
     if (companyToJoin.avatar) {
       document.getElementById("company-domain-img-wrapper").innerHTML = '<div class="company-confirm-img-wrapper"><img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt=""></div>'
     } else {
@@ -4936,7 +4936,7 @@ function pickCompanyFromList(index) {
     }
     document.getElementById("company-domain-multiple-company-name").innerHTML = companyToJoin.name
     var a = document.getElementsByClassName('company-join-item')
-    console.log(a)
+    //console.log(a)
     for (i = 0; i < a.length; i++) {
       a[i].classList.remove('company-join-item-active')
     }
@@ -4996,7 +4996,7 @@ function pickCompanyToJoin(index) {
   xhttp.onload = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       companyToJoin = JSON.parse(xhttp.responseText);
-      console.log(companyToJoin)
+      //console.log(companyToJoin)
       document.getElementById("company-confirm-view").classList.remove('inactive')
       document.getElementById("company-search-view").classList.add('inactive')
       document.getElementById("company-confirm-img-wrapper").innerHTML = '<img class="company-confirm-img" src="'+companyToJoin.avatar+'" alt="">'
@@ -5037,7 +5037,7 @@ function sendCompanyRequest() {
   var xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
-      console.log(JSON.parse(xhttp.responseText))
+      //console.log(JSON.parse(xhttp.responseText))
       console.log('did it i think')
       document.getElementById("company-confirm-view").classList.add('inactive')
       document.getElementById("company-confirm-confirm-view").classList.remove('inactive')
@@ -5117,7 +5117,7 @@ function register() {
         console.log('registered')
         login()
       } else {
-        console.log(JSON.parse(xhttp.responseText))
+        //console.log(JSON.parse(xhttp.responseText))
       }
     }
     xhttp.open("POST", apiUrl+'/register/', true);
@@ -5382,7 +5382,7 @@ function setActiveFbo(index, tab) {
                     let naicsToCheck = companyFboProxy.fbo.naics;
                     let naicsDesc = '';
                     if (searchTerms.naics) {
-                        console.log(naicsToCheck.slice(naicsToCheck.length-1));
+                        //console.log(naicsToCheck.slice(naicsToCheck.length-1));
                         for (let i of searchTerms.naics) {
                             if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i.code) {
                                 naicsDesc = i.name
@@ -5535,7 +5535,7 @@ function setActiveFbo(index, tab) {
                 checkVote(companyFboProxy, index)
             } else {
                 console.log('ERROR: no fbo on proxy');
-                console.log(companyFboProxy)
+                //console.log(companyFboProxy)
             }
         }};
     let companyId = currentUser.companyUserProxies[0].company._id;
@@ -5745,7 +5745,7 @@ function calculateRefers(index, popup) {
         }
       }
       console.log('it should be gone now')
-      console.log(peopleToRefer)
+      //console.log(peopleToRefer)
     }
   } else {
     if (document.getElementById("refer-checkbox-"+index+"b").checked == true) {
@@ -5758,7 +5758,7 @@ function calculateRefers(index, popup) {
         }
       }
       console.log('it should be gone now')
-      console.log(peopleToRefer)
+      //console.log(peopleToRefer)
     }
   }
 }
@@ -5783,7 +5783,7 @@ function sendReferNotifications(sendingFromReferTab) {
     platform: 'android',
     deviceIds: deviceIds
   }
-  console.log(fbo)
+  //console.log(fbo)
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -5897,7 +5897,7 @@ function vote(index, yes) {
       vote.comment = document.getElementById("fbo-details-input").value
       fbo.voteNo.push(vote)
     }
-    console.log(vote)
+    //console.log(vote)
     var fboSubject = fbo.fbo.subject
     var req = {};
     req['voteYes'] = fbo.voteYes;
@@ -5913,7 +5913,7 @@ function vote(index, yes) {
           sendReferNotifications(false)
         }
         var newsString = ''
-        console.log(fbo)
+        //console.log(fbo)
         if (yes) {
           newsString = currentUser.firstName + ' ' + currentUser.lastName + ' voted YES on ' + fboSubject
         } else {
@@ -5969,7 +5969,7 @@ function updateComments(fbo) {
     if (xhttp2.readyState == 4 && xhttp2.status == 200) {
       // Typical action to be performed when the document is ready:
       var newFbo = JSON.parse(xhttp2.responseText)
-      console.log(newFbo)
+      //console.log(newFbo)
       fbo.voteYes = newFbo.voteYes
       fbo.voteNo = newFbo.voteNo
       var chatString = ''
@@ -6110,7 +6110,7 @@ function sendComment() {
       if (xhttp3.readyState == 4 && xhttp3.status == 200) {
         // Typical action to be performed when the document is ready:
         var newFbo = JSON.parse(xhttp3.responseText)
-        console.log(newFbo.comments)
+        //console.log(newFbo.comments)
         console.log('sent the comment i think')
         if (activeTab == 2) {
           fbosIn[fboIndex] = newFbo
@@ -6129,7 +6129,7 @@ function sendComment() {
     var savedId = fbo._id
     var toSend = fbo
     delete toSend['_id'];
-    console.log(toSend)
+    //console.log(toSend)
     xhttp3.send(JSON.stringify(toSend));
     toSend['_id'] = savedId
   }
@@ -6301,7 +6301,7 @@ function renderChart() {
   }
   if (!noFbo) {
     var currentFbo = proxy.fbo
-    console.log(currentFbo)
+    //(currentFbo)
     var nameFilters = [
       {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
       {fbo: 'Department of the Army', agency: false, fpds: 'DEPT OF THE ARMY'},
@@ -6339,7 +6339,7 @@ function renderChart() {
             if (queryResults.length > 1000) {
               queryResults = queryResults.slice(0,1000)
             }
-            console.log(queryResults)
+            //console.log(queryResults)
           }
           var prices = [
             0,
