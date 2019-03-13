@@ -5964,54 +5964,55 @@ function closeAd() {
 }
 
 function updateCommentsList(fbo) {
-  var xhttp2 = new XMLHttpRequest();
-  xhttp2.onreadystatechange = function() {
-    if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+  let xHttp2 = new XMLHttpRequest();
+  xHttp2.onreadystatechange = function() {
+    if (xHttp2.readyState === 4 && xHttp2.status === 200) {
       // Typical action to be performed when the document is ready:
-      var newFbo = JSON.parse(xhttp2.responseText)
+      let newFbo = JSON.parse(xHttp2.responseText);
       //console.log(newFbo)
-      fbo.voteYes = newFbo.voteYes
-      fbo.voteNo = newFbo.voteNo
-      var chatString = ''
-      var allComments = []
-      for (i = 0; i < newFbo.voteYes.length; i++) {
-        var vote = newFbo.voteYes[i]
-        vote.vote = 'yes'
+      fbo.voteYes = newFbo.voteYes;
+      fbo.voteNo = newFbo.voteNo;
+      let chatString = '';
+      let allComments = [];
+      for (let i = 0; i < newFbo.voteYes.length; i++) {
+        let vote = newFbo.voteYes[i];
+        vote.vote = 'yes';
         allComments.push(vote)
       }
-      for (i = 0; i < newFbo.voteNo.length; i++) {
-        var vote = newFbo.voteNo[i]
-        vote.vote = 'no'
+      for (let i = 0; i < newFbo.voteNo.length; i++) {
+        let vote = newFbo.voteNo[i];
+        vote.vote = 'no';
         allComments.push(vote)
       }
-      for (i = 0; i < newFbo.comments.length; i++) {
-        var vote = newFbo.comments[i]
+      for (let i = 0; i < newFbo.comments.length; i++) {
+        //note: vote variable below represents a comment
+        let vote = newFbo.comments[i];
         allComments.push(vote)
       }
       allComments.sort(function(vote1, vote2){
         return vote1.date - vote2.date
       });
-      for (i = 0; i < allComments.length; i++) {
-        var vote = allComments[i]
-        var voteString = 'No Text '
+      for (let i = 0; i < allComments.length; i++) {
+        let vote = allComments[i];
+        let voteString = 'No Text ';
         if (vote.comment) {
           voteString = vote.comment
         }
-        var avatar = './img/user.png'
+        let avatar = './img/user.png';
         if (vote.avatar) {
           avatar = vote.avatar
-          if (avatar.slice(0,13) == '../../assets/') {
+          if (avatar.slice(0,13) === '../../assets/') {
             avatar = './' + avatar.slice(13)
           }
         }
-        var imgString = ''
-        if (vote.vote == 'yes') {
+        let imgString = '';
+        if (vote.vote === 'yes') {
           imgString = '<img class="icon" src="./img/like-light.png" alt="">'
-        } else if (vote.vote == 'no') {
+        } else if (vote.vote === 'no') {
           imgString = '<img class="icon" src="./img/dislike-light.png" alt="">'
         }
-        if (vote.id == currentUser._id) {
-          var newString = '<div class="comment" style="padding-top: 8px;">'+
+        if (vote.id === currentUser._id) {
+          let newString = '<div class="comment" style="padding-top: 8px;">'+
           '<div class="comment-right">'+
           '<div class="comment-bubble-yours">'+
           // '<img class="comment-avatar-vote" src="./img/thumbsup.png" alt="">'+
@@ -6029,11 +6030,11 @@ function updateCommentsList(fbo) {
           '<img class="comment-avatar-img" src="'+avatar+'" alt="">'+
           '</div>'+
           '</div>'+
-          '</div>'
+          '</div>';
 
           chatString = chatString + newString
         } else {
-          var newString = '<div class="comment">'+
+          let newString = '<div class="comment">'+
           '<div class="comment-left">'+
           '<div class="comment-avatar-padding">'+
           '</div>'+
@@ -6057,7 +6058,7 @@ function updateCommentsList(fbo) {
         }
       }
       if (allComments.length < 1) {
-        var newString = '<div class="comment">'+
+        let newString = '<div class="comment">'+
         '<div class="comment-left">'+
         '</div>'+
         '<div class="comment-right">'+
@@ -6065,17 +6066,17 @@ function updateCommentsList(fbo) {
         '<div class="comment-text" style="padding: none!important">No Comments Yet</div>'+
         '</div>'+
         '</div>'+
-        '</div>'
+        '</div>';
         chatString = chatString + newString
       }
-      document.getElementById("fbo-details-comments").innerHTML = ''
+      document.getElementById("fbo-details-comments").innerHTML = '';
       document.getElementById("fbo-details-comments").innerHTML = chatString;
       console.log('comments updated')
     }
   };
-  xhttp2.open("GET", apiUrl+"/fbocompanyproxy/getComments/" + fbo._id, true);
-  xhttp2.setRequestHeader("Content-type", "application/json");
-  xhttp2.send();
+  xHttp2.open("GET", apiUrl+"/fbocompanyproxy/getComments/" + fbo._id, true);
+  xHttp2.setRequestHeader("Content-type", "application/json");
+  xHttp2.send();
 }
 
 function sendComment() {
