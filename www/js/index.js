@@ -5404,13 +5404,13 @@ function setActiveFbo(index, tab) {
                                                 for (let i4 of i3.subcategories) {
                                                     if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i4.code) {
                                                         naicsDesc = i4.name
-                                                    } else if (i4.code == naicsToCheck) {
+                                                    } else if (i4.code === naicsToCheck) {
                                                         naicsDesc = i4.name
                                                     } else if (i4.subcategories) {
                                                         for (let i5 of i4.subcategories) {
                                                             if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i5.code) {
                                                                 naicsDesc = i5.name
-                                                            } else if (i5.code == naicsToCheck) {
+                                                            } else if (i5.code === naicsToCheck) {
                                                                 naicsDesc = i5.name
                                                             }
                                                         }
@@ -5431,7 +5431,7 @@ function setActiveFbo(index, tab) {
                 for (let i = 0; i < searchTerms.psc.products.length; i++) {
                     for (let i2 = 0; i2 < searchTerms.psc.products[i].psc.length; i2++) {
                         if (searchTerms.psc.products[i].psc[i2].name.slice(0,2) === companyFboProxy.fbo.classCod) {
-                            psc = searchTerms.psc.products[i].psc[i2].name
+                            psc = searchTerms.psc.products[i].psc[i2].name;
                             pscFound = true;
                             break
                         }
@@ -5443,8 +5443,8 @@ function setActiveFbo(index, tab) {
                 if (!pscFound) {
                     for (let i = 0; i < searchTerms.psc.services.length; i++) {
                         if (searchTerms.psc.services[i].name.slice(0,1) === companyFboProxy.fbo.classCod) {
-                            psc = searchTerms.psc.services[i].name
-                            pscFound = true
+                            psc = searchTerms.psc.services[i].name;
+                            pscFound = true;
                             break
                         }
                     }
