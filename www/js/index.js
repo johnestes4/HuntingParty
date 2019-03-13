@@ -6275,14 +6275,14 @@ function handleExternalURLs() {
 }
 
 function renderChart(activeProxy) {
-  var chart1 = document.getElementById("chart1").getContext('2d');
-  var chart2 = document.getElementById("chart2").getContext('2d');
-  var chart3 = document.getElementById("chart3").getContext('2d');
+  let chart1 = document.getElementById("chart1").getContext('2d');
+  let chart2 = document.getElementById("chart2").getContext('2d');
+  let chart3 = document.getElementById("chart3").getContext('2d');
 
   if (activeProxy) {
-    var currentFbo = activeProxy.fbo
+    let currentFbo = activeProxy.fbo
     //(currentFbo)
-    var nameFilters = [
+    let nameFilters = [
       {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
       {fbo: 'Department of the Army', agency: false, fpds: 'DEPT OF THE ARMY'},
       {fbo: 'Department of the Navy', agency: false, fpds: 'DEPT OF THE NAVY'},
@@ -6294,12 +6294,12 @@ function renderChart(activeProxy) {
       {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'},
       {fbo: 'DEPARTMENT OF HEALTH AND HUMAN SERVICES', agency: true, fpds: 'DEPARTMENT OF HEALTH AND HUMAN SERVICES (HHS)'},
       {fbo: 'NATIONAL AERONAUTICS AND SPACE ADMINISTRATION', agency: true, fpds: 'NATIONAL AERONAUTICS AND SPACE ADMINISTRATION (NASA)'},
-    ]
+    ];
     if (activeProxy.chartData.offers.length === 0) {
-      console.log('no chart data')
-      var query = ''
+      console.log('no chart data');
+      let query = '';
       for (i = 0; i < nameFilters.length; i++) {
-        if (currentFbo.agency.toLowerCase() == nameFilters[i].fbo.toLowerCase()) {
+        if (currentFbo.agency.toLowerCase() === nameFilters[i].fbo.toLowerCase()) {
           if (nameFilters[i].agency) {
             query = {naics_code: parseInt(currentFbo.naics), agency_name: nameFilters[i].fpds, modification_number: '0'}
           } else {
@@ -6311,10 +6311,10 @@ function renderChart(activeProxy) {
       if (query.length < 1) {
         query = {naics_code: parseInt(currentFbo.naics), agency_name: currentFbo.agency.toUpperCase(), modification_number: '0'}
       }
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          var queryResults = JSON.parse(xhttp.responseText);
+      let xHttp = new XMLHttpRequest();
+      xHttp.onreadystatechange = function() {
+        if (xHttp.readyState === 4 && xHttp.status === 200) {
+          let queryResults = JSON.parse(xHttp.responseText);
           if (queryResults.length < 1) {
             console.log('no results found')
           } else {
@@ -6323,15 +6323,15 @@ function renderChart(activeProxy) {
             }
             //console.log(queryResults)
           }
-          var prices = [
+          let prices = [
             0,
             0,
             0,
             0,
             0
-          ]
-          for (i = 0; i < queryResults.length; i++) {
-            var bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
+          ];
+          for (let i = 0; i < queryResults.length; i++) {
+            let bigPrice = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value);
             if (bigPrice > 0 && bigPrice < 100000) {
               prices[0]++
             } else if (bigPrice >= 100000 && bigPrice < 250000) {
@@ -6347,7 +6347,7 @@ function renderChart(activeProxy) {
           // console.log('heres the prices')
           // console.log(prices)
           Chart.defaults.global.defaultFontColor = 'rgba(96,97,97,1)';
-          var myChart1 = new Chart(chart1, {
+          let myChart1 = new Chart(chart1, {
             type: 'bar',
             data: {
               labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
@@ -6394,14 +6394,14 @@ function renderChart(activeProxy) {
               }
             }
           });
-          var offers = [
+          let offers = [
             0,
             0,
             0,
             0
           ]
-          for (i = 0; i < queryResults.length; i++) {
-            if (queryResults[i].number_of_offers_received == 1) {
+          for (let i = 0; i < queryResults.length; i++) {
+            if (queryResults[i].number_of_offers_received === 1) {
               offers[0]++
             } else if (queryResults[i].number_of_offers_received >= 2 && queryResults[i].number_of_offers_received <= 3) {
               offers[1]++
@@ -6411,7 +6411,7 @@ function renderChart(activeProxy) {
               offers[3]++
             }
           }
-          var myChart2 = new Chart(chart2, {
+          let myChart2 = new Chart(chart2, {
             type: 'bar',
             data: {
               label: 'Prices',
@@ -6456,11 +6456,11 @@ function renderChart(activeProxy) {
               }
             }
           });
-          var scatterData = []
-          var colors = []
-          for (i = 0; i < queryResults.length; i++) {
-            var awardSize = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value)
-            scatterData.push({x: awardSize, y: queryResults[i].number_of_offers_received})
+          let scatterData = [];
+          let colors = [];
+          for (let i = 0; i < queryResults.length; i++) {
+            let awardSize = Math.max(queryResults[i].federal_action_obligation, queryResults[i].base_and_all_options_value, queryResults[i].base_and_exercised_options_value);
+            scatterData.push({x: awardSize, y: queryResults[i].number_of_offers_received});
             if (queryResults[i].type_of_set_aside !== 'N/A') {
               colors.push('rgba(255,50,50,0.4)')
             } else {
@@ -6469,7 +6469,7 @@ function renderChart(activeProxy) {
             }
           }
 
-          var myChart3 = new Chart(chart3, {
+          let myChart3 = new Chart(chart3, {
             type: 'scatter',
             data: {
               datasets: [{
@@ -6494,17 +6494,17 @@ function renderChart(activeProxy) {
                   position: 'bottom',
                   ticks: {
                     callback: function(value) {
-                      if (value.toString().length == 9) {
+                      if (value.toString().length === 9) {
                         return value.toString().substr(0, 3) + 'm'; //truncate
-                      } else if (value.toString().length == 8) {
+                      } else if (value.toString().length === 8) {
                         return value.toString().substr(0, 2) + 'm'; //truncate
-                      } else if (value.toString().length == 7) {
+                      } else if (value.toString().length === 7) {
                         return value.toString().substr(0, 1) + 'm'; //truncate
-                      } else if (value.toString().length == 6) {
+                      } else if (value.toString().length === 6) {
                         return value.toString().substr(0, 3) + 'k'; //truncate
-                      } else if (value.toString().length == 5) {
+                      } else if (value.toString().length === 5) {
                         return value.toString().substr(0, 2) + 'k'; //truncate
-                      } else if (value.toString().length == 4) {
+                      } else if (value.toString().length === 4) {
                         return value.toString().substr(0, 1) + 'k'; //truncate
                       } else {
                         return value
@@ -6520,12 +6520,12 @@ function renderChart(activeProxy) {
             }
           });
         }
-      }
-      xhttp.open("PUT", apiUrl+"/fpds/queryChart/", true);
-      xhttp.setRequestHeader("Content-type", "application/json");
-      xhttp.send(JSON.stringify(query));
+      };
+      xHttp.open("PUT", apiUrl+"/fpds/queryChart/", true);
+      xHttp.setRequestHeader("Content-type", "application/json");
+      xHttp.send(JSON.stringify(query));
     } else {
-      var myChart1 = new Chart(chart1, {
+      let myChart1 = new Chart(chart1, {
         type: 'bar',
         data: {
           labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
@@ -6572,7 +6572,7 @@ function renderChart(activeProxy) {
           }
         }
       });
-      var myChart2 = new Chart(chart2, {
+      let myChart2 = new Chart(chart2, {
         type: 'bar',
         data: {
           label: 'Prices',
@@ -6617,7 +6617,7 @@ function renderChart(activeProxy) {
           }
         }
       });
-      var myChart3 = new Chart(chart3, {
+      let myChart3 = new Chart(chart3, {
         type: 'scatter',
         data: {
           datasets: [{
@@ -6642,17 +6642,17 @@ function renderChart(activeProxy) {
               position: 'bottom',
               ticks: {
                 callback: function(value) {
-                  if (value.toString().length == 9) {
+                  if (value.toString().length === 9) {
                     return value.toString().substr(0, 3) + 'm'; //truncate
-                  } else if (value.toString().length == 8) {
+                  } else if (value.toString().length === 8) {
                     return value.toString().substr(0, 2) + 'm'; //truncate
-                  } else if (value.toString().length == 7) {
+                  } else if (value.toString().length === 7) {
                     return value.toString().substr(0, 1) + 'm'; //truncate
-                  } else if (value.toString().length == 6) {
+                  } else if (value.toString().length === 6) {
                     return value.toString().substr(0, 3) + 'k'; //truncate
-                  } else if (value.toString().length == 5) {
+                  } else if (value.toString().length === 5) {
                     return value.toString().substr(0, 2) + 'k'; //truncate
-                  } else if (value.toString().length == 4) {
+                  } else if (value.toString().length === 4) {
                     return value.toString().substr(0, 1) + 'k'; //truncate
                   } else {
                     return value
