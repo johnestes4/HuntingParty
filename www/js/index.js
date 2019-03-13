@@ -5531,7 +5531,7 @@ function setActiveFbo(index, tab) {
                     xHttp.send(JSON.stringify(companyFboProxy));
                 }
                 renderChart(companyFboProxy);
-                updateComments(companyFboProxy);
+                updateCommentsList(companyFboProxy);
                 checkVote(companyFboProxy, index)
             } else {
                 console.log('ERROR: no fbo on proxy');
@@ -5963,7 +5963,7 @@ function closeAd() {
   closePopups(true)
 }
 
-function updateComments(fbo) {
+function updateCommentsList(fbo) {
   var xhttp2 = new XMLHttpRequest();
   xhttp2.onreadystatechange = function() {
     if (xhttp2.readyState == 4 && xhttp2.status == 200) {
@@ -6073,7 +6073,7 @@ function updateComments(fbo) {
       console.log('comments updated')
     }
   };
-  xhttp2.open("GET", apiUrl+"/fbocompanyproxy/" + fbo._id, true);
+  xhttp2.open("GET", apiUrl+"/fbocompanyproxy/getComments/" + fbo._id, true);
   xhttp2.setRequestHeader("Content-type", "application/json");
   xhttp2.send();
 }
@@ -6117,7 +6117,7 @@ function sendComment() {
         } else if (activeTab == 3) {
           fboPipeline[fboIndex] = newFbo
         }
-        updateComments(fbo)
+        updateCommentsList(fbo)
         document.getElementById("new-comment-input").value = ''
       } else {
         console.log('it didnt send i dont know why')
