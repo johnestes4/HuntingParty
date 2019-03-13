@@ -5530,7 +5530,7 @@ function setActiveFbo(index, tab) {
                     xHttp.setRequestHeader('Content-type','application/json; charset=utf-8');
                     xHttp.send(JSON.stringify(companyFboProxy));
                 }
-                renderChart();
+                renderChart(companyFboProxy);
                 updateComments(companyFboProxy);
                 checkVote(companyFboProxy, index)
             } else {
@@ -6274,33 +6274,13 @@ function handleExternalURLs() {
   }
 }
 
-function renderChart() {
+function renderChart(activeProxy) {
   var chart1 = document.getElementById("chart1").getContext('2d');
   var chart2 = document.getElementById("chart2").getContext('2d');
   var chart3 = document.getElementById("chart3").getContext('2d');
-  var proxy
-  var noFbo = false
-  if (activeTab == 0) {
-    if (fboPipeline[fboIndex]) {
-      proxy = fboPipeline[fboIndex]
-    } else {
-      noFbo = true
-    }
-  } else if (activeTab == 2) {
-    if (fbosIn[fboIndex]) {
-      proxy = fbosIn[fboIndex]
-    } else {
-      noFbo = true
-    }
-  } else if (activeTab == 3) {
-    if (fboPipeline[fboIndex]) {
-      proxy = fboPipeline[fboIndex]
-    } else {
-      noFbo = true
-    }
-  }
-  if (!noFbo) {
-    var currentFbo = proxy.fbo
+
+  if (activeProxy) {
+    var currentFbo = activeProxy.fbo
     //(currentFbo)
     var nameFilters = [
       {fbo: 'Department of Defense', agency: true, fpds: 'DEPARTMENT OF DEFENSE (DOD)'},
@@ -6311,9 +6291,11 @@ function renderChart() {
       {fbo: 'Department of Agriculture', agency: true, fpds: 'DEPARTMENT OF AGRICULTURE (USDA)'},
       {fbo: 'Defense Logistics Agency', agency: false, fpds: 'DEFENSE LOGISTICS AGENCY'},
       {fbo: 'Department of Veterans Affairs', agency: true, fpds: 'DEPARTMENT OF VETERANS AFFAIRS (VA)'},
-      {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'}
+      {fbo: 'Department of Homeland Security', agency: true, fpds: 'DEPARTMENT OF HOMELAND SECURITY (DHS)'},
+      {fbo: 'DEPARTMENT OF HEALTH AND HUMAN SERVICES', agency: true, fpds: 'DEPARTMENT OF HEALTH AND HUMAN SERVICES (HHS)'},
+      {fbo: 'NATIONAL AERONAUTICS AND SPACE ADMINISTRATION', agency: true, fpds: 'NATIONAL AERONAUTICS AND SPACE ADMINISTRATION (NASA)'},
     ]
-    if (!currentFbo.chartData) {
+    if (activeProxy.chartData.offers.length === 0) {
       console.log('no chart data')
       var query = ''
       for (i = 0; i < nameFilters.length; i++) {
@@ -6539,7 +6521,7 @@ function renderChart() {
           });
         }
       }
-      xhttp.open("POST", apiUrl+"/fpds/query/", true);
+      xhttp.open("PUT", apiUrl+"/fpds/queryChart/", true);
       xhttp.setRequestHeader("Content-type", "application/json");
       xhttp.send(JSON.stringify(query));
     } else {
@@ -6549,7 +6531,7 @@ function renderChart() {
           labels: ["0-100k", "100k-250k", "250k-1m", "1m-5m", "5m+"],
           datasets: [{
             label: 'Prices',
-            data: currentFbo.chartData.prices,
+            data: activeProxy.chartData.prices,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
@@ -6596,7 +6578,7 @@ function renderChart() {
           label: 'Prices',
           labels: ["1", "2-3", "4-5", "6+"],
           datasets: [{
-            data: currentFbo.chartData.offers,
+            data: activeProxy.chartData.offers,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
@@ -6640,8 +6622,8 @@ function renderChart() {
         data: {
           datasets: [{
             label: 'Scatter Dataset',
-            data: currentFbo.chartData.scatterData,
-            backgroundColor: currentFbo.chartData.colors
+            data: activeProxy.chartData.scatterData,
+            backgroundColor: activeProxy.chartData.colors
           }]
         },
         options: {
