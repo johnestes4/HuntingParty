@@ -5345,7 +5345,7 @@ function setActiveFbo(index, tab) {
               activeFbo = companyFboProxy;
               fboIndex = index;
 
-              if (!companyFboProxy.interestedVendors || companyFboProxy.fbo.interestedVendors === undefined) {
+              if (companyFboProxy.fbo && companyFboProxy.fbo.interestedVendors === undefined) {
                     companyFboProxy.fbo.interestedVendors = []
                 }
                 let partiesHtml = '';
