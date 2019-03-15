@@ -5932,9 +5932,7 @@ function vote(index, yes) {
           showAd()
         } else {
           adCounter++
-          closePopups(true)
           closePopups(false)
-          renderFbos()
           switchTab(activeTab)
         }
         addPoints(50)
