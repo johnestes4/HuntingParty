@@ -1,4 +1,4 @@
-let apiUrl = 'https://localhost:4432';
+let apiUrl = 'https://efassembly.com:4432';
 // let apiUrl = 'http://18.218.170.246:4200';
 // let apiUrl = 'http://localhost:4200';
 
