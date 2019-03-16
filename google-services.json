@@ -36,37 +36,6 @@
           "status": 2
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:416059724231:android:e217212883767ff1",
-        "android_client_info": {
-          "package_name": "com.phonegap.pushnotifications"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "416059724231-2del6sm0tmdp92mkutrrmptl305fcki8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAoswlmYDVJcqzAmpXWwIvS_kA10mUffmo"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
     }
   ],
   "configuration_version": "1"
