@@ -5565,26 +5565,34 @@ function setActiveFbo(index, tab) {
 function checkProxiesViewed() {
   fbosInUnread = 0;
   pipelineUnread = 0;
-  for (let i = 0; i < fbosIn.length; i++) {
-    if (fbosIn[i].viewed) {
-      if (!fbosIn[i].viewed.includes(currentUser._id)) {
-        fbosInUnread++
+  for (let iFbo = 0; iFbo < fbosIn.length; iFbo++) {
+    if (fbosIn[iFbo].viewed) {
+      let userViewed = false;
+      for (let iViewed = 0; iViewed < fbosIn[iViewed].viewed.length; iViewed++) {
+        if (fbosIn[iFbo].viewed[iViewed] === currentUser._id) {
+          userViewed = true;
+        }
       }
+      if (!userViewed) fbosInUnread++;
     } else {
       fbosInUnread++
     }
   }
-  for (let i = 0; i < fboPipeline.length; i++) {
-    if (fboPipeline[i].viewed) {
-      if (!fboPipeline[i].viewed.includes(currentUser._id)) {
-        pipelineUnread++
-      }
+  for (let iPipeline = 0; iPipeline < fboPipeline.length; iPipeline++) {
+    if (fboPipeline[iPipeline].viewed) {
+        let userViewedPipeline = false;
+        for (let iViewed = 0; iViewed < fboPipeline[iViewed].viewed.length; iViewed++) {
+            if (fboPipeline[iPipeline].viewed[iViewed] === currentUser._id) {
+                userViewedPipeline = true;
+            }
+        }
+        if (!userViewedPipeline) pipelineUnread++;
     } else {
       pipelineUnread++
     }
   }
-  document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread;
-  document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread
+  document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread.toString();
+  document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread.toString();
 
 }
 
