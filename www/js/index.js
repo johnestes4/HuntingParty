@@ -2548,6 +2548,7 @@ function deleteSearchTerms() {
 function searchFilter(which) {
   let searchFilterElementString = document.getElementById("search-filter-" + which).value;
   let html = '';
+  let inactiveHtml = ' inactive';
   if (which === 0) {
     for (let i = 0; i < searchTerms.naics.length; i++) {
       let checkedHtml = '';
@@ -2734,7 +2735,7 @@ function searchFilter(which) {
             }
           }
         }
-        let inactiveHtml = ' inactive';
+        inactiveHtml = ' inactive';
         if (searchTerms.naics[i].code.toString().includes(searchFilterElementString) || searchFilterElementString.length < 1) {
           inactiveHtml = ''
         }
@@ -2744,7 +2745,7 @@ function searchFilter(which) {
         for (let i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
           let subCategoryHtml = '';
           let arrowHtml = '';
-          let inactiveHtml = ' inactive';
+          inactiveHtml = ' inactive';
           if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].code.toString().includes(searchFilterElementString)) {
             inactiveHtml = ''
           }
@@ -2752,7 +2753,7 @@ function searchFilter(which) {
             subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"';
             arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span>'
           }
-          let inactiveHtml = ' inactive';
+          inactiveHtml = ' inactive';
           if (searchTerms.naics[i].subcategories[i2].code.toString().includes(searchFilterElementString)) {
             inactiveHtml = ''
           }
@@ -2764,7 +2765,7 @@ function searchFilter(which) {
             for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
               subCategoryHtml = '';
               arrowHtml = '';
-              let inactiveHtml = ' inactive';
+              inactiveHtml = ' inactive';
               if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].code.toString().includes(searchFilterElementString)) {
                 inactiveHtml = ''
               }
@@ -2780,7 +2781,7 @@ function searchFilter(which) {
                 for (let i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
                   subCategoryHtml = '';
                   arrowHtml = '';
-                  let inactiveHtml = ' inactive';
+                  inactiveHtml = ' inactive';
                   if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.toString().includes(searchFilterElementString)) {
                     inactiveHtml = ''
                   }
@@ -2794,7 +2795,7 @@ function searchFilter(which) {
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
                     html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box'+inactive5+'">'
                     for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                      let inactiveHtml = ' inactive';
+                      inactiveHtml = ' inactive';
                       if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code.toString().includes(searchFilterElementString)) {
                         inactiveHtml = ''
                       }
@@ -2835,7 +2836,7 @@ function searchFilter(which) {
       }
       let matchFound = false;
       if (searchTerms.psc.products[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.psc.products[i].value == true) {
-        let inactiveHtml = '';
+        inactiveHtml = '';
         let arrowHtml = '<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▲</span>';
         if (document.getElementById("psc-product-subcategory-box-"+i).classList.contains('inactive')) {
           inactiveHtml = ' inactive';
@@ -2908,7 +2909,7 @@ function searchFilter(which) {
       } else if (searchTerms.agency[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.agency[i].value === true) {
         html = html + '<div class="search-box-checkbox-item">'+
         '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</div></div>'
-        let inactiveHtml = '';
+        inactiveHtml = '';
         if (document.getElementById("agency-subcategory-box-"+i+"").classList.contains('inactive')) {
           inactiveHtml = ' inactive'
         }
@@ -2955,7 +2956,7 @@ function searchFilter(which) {
       if (searchTerms.place[i].value === true) {
         checkedHtml = ' checked'
       }
-      let inactiveHtml = '';
+      inactiveHtml = '';
       if (!searchTerms.place[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) && searchTerms.place[i].value === false) {
         inactiveHtml = ' inactive'
       }
