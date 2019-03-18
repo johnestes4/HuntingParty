@@ -4186,7 +4186,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-document.addEventListener("click", (evt) => {
+document.addEventListener("click", function(evt){
     const profilePopup = document.getElementById("bottombar-popup");
     const profilePopupButton = document.getElementById("bottombar-img-profile");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropDownOpen);
