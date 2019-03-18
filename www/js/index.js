@@ -5386,37 +5386,50 @@ function setActiveFbo(index, tab) {
                 if (companyFboProxy.fbo.naics) {
                     let naicsToCheck = companyFboProxy.fbo.naics;
                     let naicsDesc = '';
+                    let currentNaicsCode = '';
+                    let currentNaicsName = '';
                     if (searchTerms.naics) {
                         //console.log(naicsToCheck.slice(naicsToCheck.length-1));
-                        for (let i of searchTerms.naics) {
-                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i.code) {
-                                naicsDesc = i.name
-                            } else if (i.code === naicsToCheck) {
-                                naicsDesc = i.name
-                            } else if (i.subcategories) {
-                                for (let i2 of i.subcategories) {
-                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i2.code) {
-                                        naicsDesc = i2.name
-                                    } else if (i2.code === naicsToCheck) {
-                                        naicsDesc = i2.name
+                        for (let i = 0; i < searchTerms.naics; i++) {
+                        //for (let i of searchTerms.naics) {
+                            currentNaicsCode = searchTerms.naics[i].code;
+                            currentNaicsName = searchTerms.naics[i].name;
+                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                naicsDesc = currentNaicsName
+                            } else if (currentNaicsCode === naicsToCheck) {
+                                naicsDesc = currentNaicsName
+                            } else if (searchTerms.naics[i].subcategories) {
+                                for (let i2 = 0; i2 < searchTerms.naics[i].subcategories; i2++) {
+                                    currentNaicsCode = searchTerms.naics[i].subcategories[i2].code;
+                                    currentNaicsName = searchTerms.naics[i].subcategories[i2].name;
+                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                        naicsDesc = currentNaicsName
+                                    } else if (currentNaicsCode === naicsToCheck) {
+                                        naicsDesc = currentNaicsName
                                     } else if (i2.subcategories) {
-                                        for (let i3 of i2.subcategories) {
-                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i3.code) {
-                                                naicsDesc = i3.name
-                                            } else if (i3.code === naicsToCheck) {
-                                                naicsDesc = i3.name
+                                        for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories; i3++) {
+                                            currentNaicsCode = searchTerms.naics[i].subcategories[i2].subcategories[i3].code;
+                                            currentNaicsName = searchTerms.naics[i].subcategories[i2].subcategories[i3].name;
+                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                                naicsDesc = currentNaicsName
+                                            } else if (currentNaicsCode === naicsToCheck) {
+                                                naicsDesc = currentNaicsName
                                             } else if (i3.subcategories) {
-                                                for (let i4 of i3.subcategories) {
-                                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i4.code) {
-                                                        naicsDesc = i4.name
-                                                    } else if (i4.code === naicsToCheck) {
-                                                        naicsDesc = i4.name
+                                                for (let i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories; i4++) {
+                                                    currentNaicsCode = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code;
+                                                    currentNaicsName = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name;
+                                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                                        naicsDesc = currentNaicsName
+                                                    } else if (currentNaicsCode === naicsToCheck) {
+                                                        naicsDesc = currentNaicsName
                                                     } else if (i4.subcategories) {
-                                                        for (let i5 of i4.subcategories) {
-                                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i5.code) {
-                                                                naicsDesc = i5.name
-                                                            } else if (i5.code === naicsToCheck) {
-                                                                naicsDesc = i5.name
+                                                        for (let i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories; i5++) {
+                                                            currentNaicsCode = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code;
+                                                            currentNaicsName = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].name;
+                                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                                                naicsDesc = currentNaicsName
+                                                            } else if (currentNaicsCode === naicsToCheck) {
+                                                                naicsDesc = currentNaicsName
                                                             }
                                                         }
                                                     }
