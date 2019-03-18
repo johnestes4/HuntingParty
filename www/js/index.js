@@ -525,6 +525,10 @@ let app = {
     }
 };
 
+document.addEventListener('DOMContentLoaded', function() {
+    app.initialize();
+}, false);
+
 function login() {
     let username = document.getElementById("email").value.toLowerCase();
     let password = document.getElementById("password").value;
