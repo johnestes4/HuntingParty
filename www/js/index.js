@@ -6803,11 +6803,11 @@ function getMoreProxies() {
           which: 0,
           searches: yourSearches
         }
-        xhttp.open("PUT", apiUrl+"/company/" + company._id + "/filtered/multi/", true);
+        xhttp.open("PUT", apiUrl+"/company/" + company._id + "/filtered/list/", true);
         xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
         xhttp.send(JSON.stringify(proxyRequest));
       } else {
-        xhttp.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+        xhttp.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/list/", true);
         xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
         xhttp.send(JSON.stringify(proxyRequest));
       }
@@ -6834,7 +6834,7 @@ function getMorePipelineProxies() {
         document.getElementById("fbo-item-load-buffer").classList.add('inactive');
       }
     }
-    xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/", true);
+    xhttp3b.open("PUT", apiUrl+"/company/" + company._id + "/somefbos/list/", true);
     xhttp3b.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhttp3b.send(JSON.stringify(proxyRequest));
   }
