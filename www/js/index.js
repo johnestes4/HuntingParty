@@ -525,6 +525,10 @@ let app = {
     }
 };
 
+document.addEventListener('DOMContentLoaded', function() {
+    app.initialize();
+}, false);
+
 function login() {
     let username = document.getElementById("email").value.toLowerCase();
     let password = document.getElementById("password").value;
@@ -2544,6 +2548,7 @@ function deleteSearchTerms() {
 function searchFilter(which) {
   let searchFilterElementString = document.getElementById("search-filter-" + which).value;
   let html = '';
+  let inactiveHtml = ' inactive';
   if (which === 0) {
     for (let i = 0; i < searchTerms.naics.length; i++) {
       let checkedHtml = '';
@@ -2730,7 +2735,7 @@ function searchFilter(which) {
             }
           }
         }
-        let inactiveHtml = ' inactive';
+        inactiveHtml = ' inactive';
         if (searchTerms.naics[i].code.toString().includes(searchFilterElementString) || searchFilterElementString.length < 1) {
           inactiveHtml = ''
         }
@@ -2740,7 +2745,7 @@ function searchFilter(which) {
         for (let i2 = 0; i2 < searchTerms.naics[i].subcategories.length; i2++) {
           let subCategoryHtml = '';
           let arrowHtml = '';
-          let inactiveHtml = ' inactive';
+          inactiveHtml = ' inactive';
           if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].code.toString().includes(searchFilterElementString)) {
             inactiveHtml = ''
           }
@@ -2748,7 +2753,7 @@ function searchFilter(which) {
             subCategoryHtml = ' onclick="calculateNaicsSearch(\''+i+'-'+i2+'\')"';
             arrowHtml = '<span id="naics-arrow-'+i+'-'+i2+'" class="checkbox-text-arrow">▼</span>'
           }
-          let inactiveHtml = ' inactive';
+          inactiveHtml = ' inactive';
           if (searchTerms.naics[i].subcategories[i2].code.toString().includes(searchFilterElementString)) {
             inactiveHtml = ''
           }
@@ -2760,7 +2765,7 @@ function searchFilter(which) {
             for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories.length; i3++) {
               subCategoryHtml = '';
               arrowHtml = '';
-              let inactiveHtml = ' inactive';
+              inactiveHtml = ' inactive';
               if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].code.toString().includes(searchFilterElementString)) {
                 inactiveHtml = ''
               }
@@ -2776,7 +2781,7 @@ function searchFilter(which) {
                 for (let i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories.length; i4++) {
                   subCategoryHtml = '';
                   arrowHtml = '';
-                  let inactiveHtml = ' inactive';
+                  inactiveHtml = ' inactive';
                   if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code.toString().includes(searchFilterElementString)) {
                     inactiveHtml = ''
                   }
@@ -2790,7 +2795,7 @@ function searchFilter(which) {
                   if (searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories) {
                     html = html + '<div id="naics-subcategory-box-'+i+'-'+i2+'-'+i3+'-'+i4+'" class="subcategory-box'+inactive5+'">'
                     for (i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories.length; i5++) {
-                      let inactiveHtml = ' inactive';
+                      inactiveHtml = ' inactive';
                       if (searchFilterElementString.length < 1 || searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code.toString().includes(searchFilterElementString)) {
                         inactiveHtml = ''
                       }
@@ -2831,7 +2836,7 @@ function searchFilter(which) {
       }
       let matchFound = false;
       if (searchTerms.psc.products[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.psc.products[i].value == true) {
-        let inactiveHtml = '';
+        inactiveHtml = '';
         let arrowHtml = '<span id="psc-product-arrow-'+i+'" class="checkbox-text-arrow">▲</span>';
         if (document.getElementById("psc-product-subcategory-box-"+i).classList.contains('inactive')) {
           inactiveHtml = ' inactive';
@@ -2904,7 +2909,7 @@ function searchFilter(which) {
       } else if (searchTerms.agency[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) || searchTerms.agency[i].value === true) {
         html = html + '<div class="search-box-checkbox-item">'+
         '<input class="search-box-checkbox checkbox-agency" type="checkbox" name="" onclick="calculateSearch(this)" '+checkedHtml+'> <div class="search-box-checkbox-text" onclick="calculateAgencySearch('+i+')"> '+searchTerms.agency[i].name+'</div></div>'
-        let inactiveHtml = '';
+        inactiveHtml = '';
         if (document.getElementById("agency-subcategory-box-"+i+"").classList.contains('inactive')) {
           inactiveHtml = ' inactive'
         }
@@ -2951,7 +2956,7 @@ function searchFilter(which) {
       if (searchTerms.place[i].value === true) {
         checkedHtml = ' checked'
       }
-      let inactiveHtml = '';
+      inactiveHtml = '';
       if (!searchTerms.place[i].name.toLowerCase().includes(searchFilterElementString.toLowerCase()) && searchTerms.place[i].value === false) {
         inactiveHtml = ' inactive'
       }
@@ -4181,7 +4186,7 @@ function toggleHamburgerMenu() {
     }
   }
 
-document.addEventListener("click", (evt) => {
+document.addEventListener("click", function(evt){
     const profilePopup = document.getElementById("bottombar-popup");
     const profilePopupButton = document.getElementById("bottombar-img-profile");
     const voteDropdown = document.getElementById("vote-circle-dropdown-"+voteDropDownOpen);
@@ -5381,37 +5386,50 @@ function setActiveFbo(index, tab) {
                 if (companyFboProxy.fbo.naics) {
                     let naicsToCheck = companyFboProxy.fbo.naics;
                     let naicsDesc = '';
+                    let currentNaicsCode = '';
+                    let currentNaicsName = '';
                     if (searchTerms.naics) {
                         //console.log(naicsToCheck.slice(naicsToCheck.length-1));
-                        for (let i of searchTerms.naics) {
-                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i.code) {
-                                naicsDesc = i.name
-                            } else if (i.code === naicsToCheck) {
-                                naicsDesc = i.name
-                            } else if (i.subcategories) {
-                                for (let i2 of i.subcategories) {
-                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i2.code) {
-                                        naicsDesc = i2.name
-                                    } else if (i2.code === naicsToCheck) {
-                                        naicsDesc = i2.name
+                        for (let i = 0; i < searchTerms.naics; i++) {
+                        //for (let i of searchTerms.naics) {
+                            currentNaicsCode = searchTerms.naics[i].code;
+                            currentNaicsName = searchTerms.naics[i].name;
+                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                naicsDesc = currentNaicsName
+                            } else if (currentNaicsCode === naicsToCheck) {
+                                naicsDesc = currentNaicsName
+                            } else if (searchTerms.naics[i].subcategories) {
+                                for (let i2 = 0; i2 < searchTerms.naics[i].subcategories; i2++) {
+                                    currentNaicsCode = searchTerms.naics[i].subcategories[i2].code;
+                                    currentNaicsName = searchTerms.naics[i].subcategories[i2].name;
+                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                        naicsDesc = currentNaicsName
+                                    } else if (currentNaicsCode === naicsToCheck) {
+                                        naicsDesc = currentNaicsName
                                     } else if (i2.subcategories) {
-                                        for (let i3 of i2.subcategories) {
-                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i3.code) {
-                                                naicsDesc = i3.name
-                                            } else if (i3.code === naicsToCheck) {
-                                                naicsDesc = i3.name
+                                        for (let i3 = 0; i3 < searchTerms.naics[i].subcategories[i2].subcategories; i3++) {
+                                            currentNaicsCode = searchTerms.naics[i].subcategories[i2].subcategories[i3].code;
+                                            currentNaicsName = searchTerms.naics[i].subcategories[i2].subcategories[i3].name;
+                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                                naicsDesc = currentNaicsName
+                                            } else if (currentNaicsCode === naicsToCheck) {
+                                                naicsDesc = currentNaicsName
                                             } else if (i3.subcategories) {
-                                                for (let i4 of i3.subcategories) {
-                                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i4.code) {
-                                                        naicsDesc = i4.name
-                                                    } else if (i4.code === naicsToCheck) {
-                                                        naicsDesc = i4.name
+                                                for (let i4 = 0; i4 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories; i4++) {
+                                                    currentNaicsCode = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].code;
+                                                    currentNaicsName = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].name;
+                                                    if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                                        naicsDesc = currentNaicsName
+                                                    } else if (currentNaicsCode === naicsToCheck) {
+                                                        naicsDesc = currentNaicsName
                                                     } else if (i4.subcategories) {
-                                                        for (let i5 of i4.subcategories) {
-                                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === i5.code) {
-                                                                naicsDesc = i5.name
-                                                            } else if (i5.code === naicsToCheck) {
-                                                                naicsDesc = i5.name
+                                                        for (let i5 = 0; i5 < searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories; i5++) {
+                                                            currentNaicsCode = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].code;
+                                                            currentNaicsName = searchTerms.naics[i].subcategories[i2].subcategories[i3].subcategories[i4].subcategories[i5].name;
+                                                            if (naicsToCheck.slice(naicsToCheck.length-1) === '0' && naicsToCheck.slice(0,naicsToCheck.length-1) === currentNaicsCode) {
+                                                                naicsDesc = currentNaicsName
+                                                            } else if (currentNaicsCode === naicsToCheck) {
+                                                                naicsDesc = currentNaicsName
                                                             }
                                                         }
                                                     }
@@ -5547,26 +5565,34 @@ function setActiveFbo(index, tab) {
 function checkProxiesViewed() {
   fbosInUnread = 0;
   pipelineUnread = 0;
-  for (let i = 0; i < fbosIn.length; i++) {
-    if (fbosIn[i].viewed) {
-      if (!fbosIn[i].viewed.includes(currentUser._id)) {
-        fbosInUnread++
+  for (let iFbo = 0; iFbo < fbosIn.length; iFbo++) {
+    if (fbosIn[iFbo].viewed) {
+      let userViewed = false;
+      for (let iViewed = 0; iViewed < fbosIn[iViewed].viewed.length; iViewed++) {
+        if (fbosIn[iFbo].viewed[iViewed] === currentUser._id) {
+          userViewed = true;
+        }
       }
+      if (!userViewed) fbosInUnread++;
     } else {
       fbosInUnread++
     }
   }
-  for (let i = 0; i < fboPipeline.length; i++) {
-    if (fboPipeline[i].viewed) {
-      if (!fboPipeline[i].viewed.includes(currentUser._id)) {
-        pipelineUnread++
-      }
+  for (let iPipeline = 0; iPipeline < fboPipeline.length; iPipeline++) {
+    if (fboPipeline[iPipeline].viewed) {
+        let userViewedPipeline = false;
+        for (let iViewed = 0; iViewed < fboPipeline[iViewed].viewed.length; iViewed++) {
+            if (fboPipeline[iPipeline].viewed[iViewed] === currentUser._id) {
+                userViewedPipeline = true;
+            }
+        }
+        if (!userViewedPipeline) pipelineUnread++;
     } else {
       pipelineUnread++
     }
   }
-  document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread;
-  document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread
+  document.getElementById("sidebar-item-unread-popup-fbosin").innerHTML = fbosInUnread.toString();
+  document.getElementById("sidebar-item-unread-popup-pipeline").innerHTML = pipelineUnread.toString();
 
 }
 
